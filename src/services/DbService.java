@@ -26,10 +26,12 @@ import static org.junit.Assert.fail;
 @Service
 public class DbService extends SystemObjectImpl {
 
+	private static final String SQL_SERVER_DRIVER_CLASS = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
 	private JdbcTemplate jdbcTemplate;
 	private final String db_connect_string = "jdbc:sqlserver://BACKQA:1433;databaseName=EDODOTNet3;integratedSecurity=true;";
 	private final String db_userid = "EDUSOFT2k\\omers";
 	private final String db_password = "Shu111";
+	private final int MAX_DB_TIMEOUT = 120;
 	// private DataSource dataSource;
 
 	@Autowired
@@ -369,17 +371,21 @@ public class DbService extends SystemObjectImpl {
 			return count;
 		}
 	}
-
 	public String getStringFromQuery(String sql) throws Exception {
+		return getStringFromQuery(sql,10);
+	}
+
+	public String getStringFromQuery(String sql,int intervals) throws Exception {
 		// System.out.println(configuration.getProperty("db.connection"));
 		report.report("Query is: " + sql);
 		System.out.println(sql);
 		ResultSet rs = null;
 		Statement statement = null;
 		String str = null;
+		int elapsedTimeInSec = 0;
 
 		try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			Class.forName(SQL_SERVER_DRIVER_CLASS);
 
 			conn = DriverManager.getConnection(db_connect_string, db_userid,
 					db_password);
@@ -388,14 +394,29 @@ public class DbService extends SystemObjectImpl {
 			if (conn.isClosed() == true) {
 				System.out.println("connection is closed");
 			}
+
 			statement = conn.createStatement();
+			outerloop:
+			while (elapsedTimeInSec < MAX_DB_TIMEOUT) {
+				rs = statement.executeQuery(sql);
+				while (rs.next()) {
+					// System.out.println(rs.getString(1));
+					str = rs.getString(1);
 
-			rs = statement.executeQuery(sql);
-			while (rs.next()) {
-				// System.out.println(rs.getString(1));
-				str = rs.getString(1);
+				}
+				if (str!=null) {
+					report.report("DB result found");
+					
+					break outerloop;
 
+				} else {
+					Thread.sleep(intervals*1000);	
+					report.report("Waiting for DB. sleeping for "+intervals+" seconds");
+					elapsedTimeInSec=elapsedTimeInSec+intervals;
+				}
 			}
+
+			
 			conn.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -414,7 +435,7 @@ public class DbService extends SystemObjectImpl {
 		SQLXML str = null;
 
 		try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			Class.forName(SQL_SERVER_DRIVER_CLASS);
 
 			conn = DriverManager.getConnection(db_connect_string, db_userid,
 					db_password);

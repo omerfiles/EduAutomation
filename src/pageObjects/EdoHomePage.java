@@ -81,13 +81,14 @@ public class EdoHomePage extends GenericPage {
 	}
 
 	public EdoHomePage ClickOnComponentsStage(int stageNumber) throws Exception {
+//		stageNumber = stageNumber - 1;
+		if (stageNumber > 5) {
+			clickOnNextComponent(stageNumber);
+		}
+//		else{
+//			clickOnNextComponent(4);
+//		}
 		stageNumber = stageNumber - 1;
-		if (stageNumber > 4) {
-			clickOnNextComponent(5);
-		}
-		else{
-			clickOnNextComponent(4);
-		}
 		webDriver.waitForElement("//li[@ind='" + stageNumber + "']", "xpath")
 				.click();
 		return this;
@@ -98,6 +99,7 @@ public class EdoHomePage extends GenericPage {
 		for (int i = 0; i < iterations; i++) {
 			webDriver.waitForElement("//a[@class='tasksBtnext']", "xpath")
 					.click();
+			Thread.sleep(500);
 		}
 		return this;
 	}

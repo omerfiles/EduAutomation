@@ -135,13 +135,13 @@ public class EraterService extends SystemObjectImpl {
 	public void compareJsonAndXmlByWritingId(String writingId) throws Exception {
 		String sqlxml = dbService
 				.getStringFromQuery("select EraterXML from Erater where writingId="
-						+ writingId);
+						+ writingId,10);
 		report.report("RAW XML: " + sqlxml);
 		List<String[]> xmlList = netService.getListFromXmlNode(
 				netService.getXmlFromString(sqlxml), "/WAT:DetailInfo");
 		String jsonStr = dbService
 				.getStringFromQuery("select EraterJson from Erater where writingId="
-						+ writingId);
+						+ writingId,10);
 		report.report("RAW JSON: " + jsonStr);
 		List<String[]> jsonList = netService.getListFromJson(jsonStr,
 				"sections", "details", new String[] { "feedback", "length",

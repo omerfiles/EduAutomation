@@ -17,7 +17,7 @@ public class EdusoftTest extends SystemTestCase4 {
 	
 	GenericWebDriver webDriver;
 	protected TextService textService;
-	Configuration configuration;
+	Configuration config;
 	DbService dbService;
 	NetService netService;
 	EraterService  eraterService;
@@ -27,7 +27,7 @@ public class EdusoftTest extends SystemTestCase4 {
 	public void setup() throws Exception{
 //		System.setProperty("java.ibrary.path","C:\\Users\\omers\\Downloads\\Microsoft JDBC Driver 4.0 for SQL Server\\sqljdbc_4.0\\enu\\auth\\x86");
 		ctx=new ClassPathXmlApplicationContext("beans.xml");
-		configuration=(Configuration)ctx.getBean("configuration");
+		config=(Configuration)ctx.getBean("configuration");
 		webDriver=(GenericWebDriver)ctx.getBean("GenericWebDriver");
 		
 		textService=(TextService)ctx.getBean("TextSerivce");
@@ -36,7 +36,7 @@ public class EdusoftTest extends SystemTestCase4 {
 		eraterService=(EraterService)ctx.getBean("EraterService");
 		
 		
-		webDriver.init(configuration.getProperty("remote.machine"), null);
+		webDriver.init(config.getProperty("remote.machine"), null);
 		
 		
 //		dbService.dbConnect(configuration.getProperty("db.connection"), configuration.getProperty("db.connection.username"), configuration.getProperty("db.connection.password"));

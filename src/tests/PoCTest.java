@@ -151,6 +151,8 @@ public class PoCTest extends EdusoftTest {
 		// // rs.first();
 		// System.out.println(rs.getString(0));
 		// }
+		String userId=dbService.getUserIdByUserName("auto6");
+		report.report(userId);
 	}
 
 	@Test

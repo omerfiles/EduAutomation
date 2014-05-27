@@ -83,8 +83,8 @@ public class EraterTests extends EdusoftTest {
 		report.report("using file: "+textFile);
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
 		edoLoginPage.openEdoLoginPage();
-		String userName="auto4";
-		edoLoginPage.typeUserNameAndPass(userName, "12345");
+		String userName=config.getProperty("student.user.name");
+		edoLoginPage.typeUserNameAndPass(userName, config.getProperty("student.user.password"));
 		EdoHomePage edoHomePage = edoLoginPage.submitLogin();
 		report.stopLevel();
 
@@ -100,8 +100,8 @@ public class EraterTests extends EdusoftTest {
 		edoHomePage.ClickOnComponentsStage(unitStage);
 		Thread.sleep(10000);
 		edoHomePage.submitWritingAssignment(textFile,textService);
-		System.out.println("sleeping for 60 seconds");
-		Thread.sleep(60000);
+//		System.out.println("sleeping for 60 seconds");
+//		Thread.sleep(60000);
 		
 		report.startLevel("start checking the xml and json",EnumReportLevel.CurrentPlace);
 		String userId=dbService.getUserIdByUserName(userName);
