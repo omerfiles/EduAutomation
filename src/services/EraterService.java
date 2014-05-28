@@ -76,7 +76,9 @@ public class EraterService extends SystemObjectImpl {
 					break;
 				}
 			} else {
-				if (arr[0].equals(code) && arr[2].equals(suggestionId)) {
+				int sugggestionid=Integer.valueOf(suggestionId);
+				sugggestionid=sugggestionid+1;
+				if (arr[0].equals(code) && arr[2].equals(String.valueOf(sugggestionid))) {
 					feedback = arr[1];
 					break;
 				}
@@ -132,7 +134,7 @@ public class EraterService extends SystemObjectImpl {
 		return list;
 	}
 
-	public void compareJsonAndXmlByWritingId(String writingId) throws Exception {
+	public boolean compareJsonAndXmlByWritingId(String writingId) throws Exception {
 		String sqlxml = dbService
 				.getStringFromQuery("select EraterXML from Erater where writingId="
 						+ writingId,10);
@@ -159,7 +161,7 @@ public class EraterService extends SystemObjectImpl {
 
 		report.report("json list length is: " + jsonList.size());
 		report.report("xml list length is: " + xmlList.size());
-		AssertJsonAndXmlLists(xmlList, jsonList);
+		return AssertJsonAndXmlLists(xmlList, jsonList);
 //		Assert.assertTrue("Some unmatches found",
 //				AssertJsonAndXmlLists(xmlList, jsonList));
 		// Assert.assertEquals("Json list and xml list are not in the same size",
@@ -204,5 +206,13 @@ public class EraterService extends SystemObjectImpl {
 		String result = dbService.getStringFromQuery(sql);
 		return result;
 	}
+	public void checkWritingIdsByCSV()throws Exception{
+		 List<String[]>writingIds=textService.getStr2dimArrFromCsv("files/csvFiles/writingIds.csv");
+		 for(int i=0;i<writingIds.size();i++){
+			 
+			 compareJsonAndXmlByWritingId(writingIds.get(i)[0]);
+		 }
+	}
+	
 
 }

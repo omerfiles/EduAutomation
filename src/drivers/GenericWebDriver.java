@@ -459,7 +459,8 @@ public class GenericWebDriver extends SystemTestCaseImpl {
 
 			newFileName= System.getProperty("user.dir") + "/log//current/"
 				+"ScreenShot"+message.replace(" ", "")	+ sig + ".png";
-			path = System.getProperty("user.dir") + "//" + "log//current/";
+//			path = System.getProperty("user.dir") + "//" + "log//current/";
+			path=configuration.getProperty("logserver")+"//"+configuration.getProperty("screenshotFolder");
 			path = path + sig + ".png";
 			FileOutputStream fos = new FileOutputStream(new File(newFileName));
 			fos.write(decodedScreenshot);

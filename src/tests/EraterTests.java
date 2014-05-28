@@ -18,45 +18,45 @@ public class EraterTests extends EdusoftTest {
 	
 	@Test
 	public void testSubmitTextToEraterAndCheckJsonInDb1()throws Exception{
-		submitTextToErater("files/assayFiles/text14.txt","Basic 3 2012","Tickets, Please!","Tickets, Please!",7);
+		submitTextToErater("files/assayFiles/text1.txt","Basic 3 2012","Tickets, Please!","Tickets, Please!",7);
 	}
 	@Test
 	public void testSubmitTextToEraterAndCheckJsonInDb2()throws Exception{
-		submitTextToErater("files/assayFiles/text15.txt","Basic 1 2012","Meet A Rock Star","Meet Me!",5);
+		submitTextToErater("files/assayFiles/text2.txt","Basic 1 2012","Meet A Rock Star","Meet Me!",5);
 	}
 	@Test
 	public void testSubmitTextToEraterAndCheckJsonInDb3()throws Exception{
-		submitTextToErater("files/assayFiles/text16.txt","Basic 1 2012","At The Restaurant","New Mexican Restaurant",5);
+		submitTextToErater("files/assayFiles/text3.txt","Basic 1 2012","At The Restaurant","New Mexican Restaurant",5);
 	}
 	@Test
 	public void testSubmitTextToEraterAndCheckJsonInDb4()throws Exception{
-		submitTextToErater("files/assayFiles/text17.txt","Basic 1 2012","On A Business Trip","More Women Traveling",6);
+		submitTextToErater("files/assayFiles/text4.txt","Basic 1 2012","On A Business Trip","More Women Traveling",6);
 	}
 	
 	@Test
 	public void testSubmitTextToEraterAndCheckJsonInDb5()throws Exception{
-		submitTextToErater("files/assayFiles/text18.txt","Basic 1 2012","Going Out","Richard's Romance",6);
+		submitTextToErater("files/assayFiles/text5.txt","Basic 1 2012","Going Out","Richard's Romance",6);
 	}
 
 	@Test
 	public void testSubmitTextToEraterAndCheckJsonInDb6()throws Exception{
-		submitTextToErater("files/assayFiles/text19.txt","Basic 1 2012","About People","Monaco",6);
+		submitTextToErater("files/assayFiles/text6.txt","Basic 1 2012","About People","Monaco",6);
 	}
 	@Test
 	public void testSubmitTextToEraterAndCheckJsonInDb7()throws Exception{
-		submitTextToErater("files/assayFiles/text20.txt","Basic 1 2012","For Sale","Car for Sale",5);
+		submitTextToErater("files/assayFiles/text7.txt","Basic 1 2012","For Sale","Car for Sale",5);
 	}
 	@Test
 	public void testSubmitTextToEraterAndCheckJsonInDb8()throws Exception{
-		submitTextToErater("files/assayFiles/text21.txt","Basic 1 2012","On The Move","Susan's Train Ride",6);
+		submitTextToErater("files/assayFiles/text8.txt","Basic 1 2012","On The Move","Susan's Train Ride",6);
 	}
 	@Test
 	public void testSubmitTextToEraterAndCheckJsonInDb9()throws Exception{
-		submitTextToErater("files/assayFiles/text22.txt","Basic 2 2012","Buying And Selling","Wrong Color",5);
+		submitTextToErater("files/assayFiles/text9.txt","Basic 2 2012","Buying And Selling","Wrong Color",5);
 	}
 	@Test
 	public void testSubmitTextToEraterAndCheckJsonInDb10()throws Exception{
-		submitTextToErater("files/assayFiles/text23.txt","Basic 2 2012","Healthy Eating","Dieters Are Feeling Great!",5);
+		submitTextToErater("files/assayFiles/text10.txt","Basic 2 2012","Healthy Eating","Dieters Are Feeling Great!",5);
 	}
 	@Test
 	public void testSubmitTextToEraterAndCheckJsonInDb11()throws Exception{

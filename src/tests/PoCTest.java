@@ -142,17 +142,7 @@ public class PoCTest extends EdusoftTest {
 
 	@Test
 	public void testDB() throws Exception {
-		// dbService.dbConnect("jdbc:sqlserver://BACKQA:1433;integratedSecurity=true;databaseName=EDODOTNet3","EDUSOFT2k\\omers","Shu111!");
-		// ResultSet rs=dbService.getRS(configuration, db_userid, db_password,
-		// // sql)
-		// String str = dbService
-		// .getStringFromQuery("select EraterXML from Erater where writingId=1");
-		// report.report(str);
-		// // rs.first();
-		// System.out.println(rs.getString(0));
-		// }
-		String userId=dbService.getUserIdByUserName("auto6");
-		report.report(userId);
+		webDriver.printScreen();
 	}
 
 	@Test
@@ -211,18 +201,21 @@ public class PoCTest extends EdusoftTest {
 		// eraterService.compareJsonAndXmlByWritingId("320");
 		// eraterService.compareJsonAndXmlByWritingId("319");
 
-		// eraterService.compareJsonAndXmlByWritingId("297");
-		// eraterService.compareJsonAndXmlByWritingId("296");
-		// eraterService.compareJsonAndXmlByWritingId("295");
-//		 eraterService.compareJsonAndXmlByWritingId("419");
-		 
-		 List<String[]>writingIds=textService.getStr2dimArrFromCsv("files/csvFiles/writingIds.csv");
-		 for(int i=0;i<writingIds.size();i++){
-			 report.startLevel("Writing id: "+writingIds.get(i)[0]);
-			 eraterService.compareJsonAndXmlByWritingId(writingIds.get(i)[0]);
-			 report.stopLevel();
-		 }
+		// eraterService.compareJsonAndXmlByWritingId("434");
+		// eraterService.compareJsonAndXmlByWritingId("437");
+		// eraterService.compareJsonAndXmlByWritingId("468");
 
+		List<String[]> writingIds = textService
+				.getStr2dimArrFromCsv("files/csvFiles/writingIds.csv");
+		boolean pass = true;
+		for (int i = 0; i < writingIds.size(); i++) {
+
+			if (eraterService
+					.compareJsonAndXmlByWritingId(writingIds.get(i)[0]) == false) {
+				pass = false;
+			}
+		}
+		Assert.assertTrue("Some unmatches found",pass);
 		//
 
 	}
@@ -256,13 +249,14 @@ public class PoCTest extends EdusoftTest {
 		for (int i = 0; i < feedbacks.size(); i++) {
 			String feedbackId = feedbacks.get(i)[0];
 			// System.out.println(feedbackId);
-			String sql = "select count(*) from Erater where EraterJson like '%feedback\":\""+ feedbackId + "\"%'";
+			String sql = "select count(*) from Erater where EraterJson like '%feedback\":\""
+					+ feedbackId + "\"%'";
 
 			String result = dbService.getStringFromQuery(sql);
 			report.report("Count for feedback: " + feedbackId + " is: "
-			
-					+ result);
-			
+
+			+ result);
+
 		}
 
 	}
