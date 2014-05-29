@@ -1,16 +1,18 @@
 package pageObjects;
 
-import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import services.TextService;
+import services.Configuration;
 import drivers.GenericWebDriver;
 
 public abstract class GenericPage {
 	@Autowired
-	GenericWebDriver webDriver;
+	protected GenericWebDriver webDriver;
+	
+	@Autowired
+	protected Configuration configuration;
 
 	
 	protected static final Logger logger = LoggerFactory.getLogger(GenericPage.class);
@@ -21,4 +23,5 @@ public abstract class GenericPage {
 	
 	}
 	public abstract GenericPage waitForPageToLoad()throws Exception;
+	abstract GenericPage OpenPage(String url)throws Exception;
 }

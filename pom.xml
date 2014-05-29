@@ -27,6 +27,8 @@
         <artifactId>selenium-java</artifactId>
         <version>2.41.0</version>
     </dependency> 
+     
+        
     <dependency>
     <groupId>org.slf4j</groupId>
     <artifactId>slf4j-log4j12</artifactId>
@@ -111,23 +113,16 @@
                 <systemProperties>
                     <property>
                         <name>remoteUrl</name>
-                        <value>http://192.168.14.81:5555</value>
+                        <value>http://10.1.0.81:5555</value>
                     </property>
 
                     <property>
-                        <name>companyId</name>
-                        <value>0</value>
+                        <name></name>
+                        <value></value>
                     </property>
                 </systemProperties>
             <runOrder>alphabetical</runOrder>
-                <includes>
-
-                    <!--<include>**/Applicant/**</include>-->
-                    <include>**/HRAdmin/**</include>
-                    <!--<include>**/Referrer/**</include>-->
-                    <include>**/ZaoFinal/**</include>
-
-                </includes>
+                
             <excludes>
             <exclude>**/HrDashboard.java</exclude>
             </excludes>

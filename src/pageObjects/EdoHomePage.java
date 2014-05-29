@@ -211,4 +211,10 @@ public class EdoHomePage extends GenericPage {
 		return this;
 	}
 
+	@Override
+	GenericPage OpenPage(String url) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

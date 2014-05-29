@@ -52,6 +52,7 @@ public class EraterTests extends EdusoftWebTest {
 	}
 	@Test
 	public void testSubmitTextToEraterAndCheckJsonInDb9()throws Exception{
+		
 		submitTextToErater("files/assayFiles/text9.txt","Basic 2 2012","Buying And Selling","Wrong Color",5);
 	}
 	@Test
@@ -82,7 +83,7 @@ public class EraterTests extends EdusoftWebTest {
 		report.startLevel("Login to Edo", EnumReportLevel.CurrentPlace);
 		report.report("using file: "+textFile);
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
-		edoLoginPage.openEdoLoginPage();
+		edoLoginPage.OpenPage(config.getProperty("sut.url")+"//"+config.getProperty("institutaion.subdomain"));
 		String userName=config.getProperty("student.user.name");
 		edoLoginPage.typeUserNameAndPass(userName, config.getProperty("student.user.password"));
 		EdoHomePage edoHomePage = edoLoginPage.submitLogin();

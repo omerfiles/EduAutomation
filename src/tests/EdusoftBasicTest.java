@@ -45,6 +45,11 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 		
 	}
 	
+	public void sleep(int seconds)throws Exception{
+		report.report("Sleeping for "+seconds+ "seconds");
+		Thread.sleep(seconds*1000);
+	}
+	
 	@After
 	public void tearDown()throws Exception{
 		

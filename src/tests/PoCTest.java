@@ -31,7 +31,7 @@ public class PoCTest extends EdusoftBasicTest {
 	public void testAssignment() throws Exception {
 		report.startLevel("Login to Edo", EnumReportLevel.CurrentPlace);
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
-		edoLoginPage.openEdoLoginPage();
+//		edoLoginPage.openPage();
 		edoLoginPage.typeUserNameAndPass("isr4", "12345");
 		EdoHomePage edoHomePage = edoLoginPage.submitLogin();
 		report.stopLevel();
@@ -83,8 +83,8 @@ public class PoCTest extends EdusoftBasicTest {
 	@Test
 	public void testLoginLogout() throws Exception {
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
-		edoLoginPage
-				.openEdoLoginPage("http://edo.engdis.com/aeonreading/Runtime/LoginNew.aspx");
+//		edoLoginPage
+//				.openEdoLoginPage("http://edo.engdis.com/aeonreading/Runtime/LoginNew.aspx");
 		edoLoginPage.typeUserNameAndPass("teach55", "teach55");
 		EdoHomePage edoHomePage = edoLoginPage.submitLogin();
 		edoHomePage.waitForPageToLoad();
@@ -120,8 +120,8 @@ public class PoCTest extends EdusoftBasicTest {
 		report.startLevel("Creating student for teacher:" + user);
 		webDriver.init("http://localhost:4444", null);
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
-		edoLoginPage
-				.openEdoLoginPage("http://edo.engdis.com/aeonreading/Runtime/LoginNew.aspx");
+//		edoLoginPage
+//				.openEdoLoginPage("http://edo.engdis.com/aeonreading/Runtime/LoginNew.aspx");
 		edoLoginPage.typeUserNameAndPass(user, password);
 		EdoHomePage edoHomePage = edoLoginPage.submitLogin();
 		edoHomePage.waitForPageToLoad();
@@ -149,7 +149,7 @@ public class PoCTest extends EdusoftBasicTest {
 	public void testPrintScreen() throws Exception {
 		report.startLevel("Login to Edo", EnumReportLevel.CurrentPlace);
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
-		edoLoginPage.openEdoLoginPage();
+//		edoLoginPage.openPage();
 		webDriver.printScreen();
 
 		// webDriver.printScreen();
@@ -177,33 +177,7 @@ public class PoCTest extends EdusoftBasicTest {
 	@Test
 	@TestProperties(name = "testConvertEraterXml")
 	public void testConvertEraterXml() throws Exception {
-		// String sqlxml = dbService
-		// .getStringFromQuery("select EraterXML from Erater where writingId=10");
-		// List<String[]>arrListXML=
-		// netService.getListFromXmlNode(netService.getXmlFromString(sqlxml),
-		// "/WAT:DetailInfo");
-		//
-		// String jsonStr = dbService
-		// .getStringFromQuery("select EraterJson from Erater where writingId=10");
-		// List<String[]> jsonList =
-		// netService.getListFromJson(jsonStr,"sections","details",new
-		// String[]{"feedback","length","offset"});
-		// eraterService.printArrayList(jsonList);
-		// System.out.println("**********   after the sort *************");
-		// jsonList=eraterService.sortArrayList(jsonList);
-		// eraterService.printArrayList(jsonList);
-		// arrListXML=eraterService.removeHiddenCodesAndConvertToFeedbackCodes(arrListXML);
-		// System.out.println("**********   after the convert *************");
-		// eraterService.printArrayList(arrListXML);
-		// arrListXML= eraterService.sortArrayList(arrListXML);
-		// System.out.println("**********   after the sort *************");
-		// eraterService.printArrayList(arrListXML);
-		// eraterService.compareJsonAndXmlByWritingId("320");
-		// eraterService.compareJsonAndXmlByWritingId("319");
 
-		// eraterService.compareJsonAndXmlByWritingId("434");
-		// eraterService.compareJsonAndXmlByWritingId("437");
-		// eraterService.compareJsonAndXmlByWritingId("468");
 
 		List<String[]> writingIds = textService
 				.getStr2dimArrFromCsv("files/csvFiles/writingIds.csv");

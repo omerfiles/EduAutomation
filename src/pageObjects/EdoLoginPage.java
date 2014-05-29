@@ -33,11 +33,14 @@ public class EdoLoginPage extends LoginPage {
 		webDriver.waitForElement("//div[@class='blueButton']", "xpath").click();
 		return new EdoHomePage(webDriver);
 	}
-	public EdoLoginPage openEdoLoginPage()throws Exception{
-		webDriver.openUrl("http://edonew.qa.com/5html.aspx");
-		return this;
-	}
-	public EdoLoginPage openEdoLoginPage(String url)throws Exception{
+
+//	public EdoLoginPage openEdoLoginPage(String url)throws Exception{
+//		webDriver.openUrl(url);
+//		return this;
+//	}
+
+	@Override
+	public EdoLoginPage OpenPage(String url) throws Exception {
 		webDriver.openUrl(url);
 		return this;
 	}

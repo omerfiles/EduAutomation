@@ -183,7 +183,7 @@ public class EraterService extends SystemObjectImpl {
 						&& jsonStrArr[2].equals(xmlStrArr[2])) {
 					report.report("Match found for entry: " + xmlStrArr[0]
 							+ " " + xmlStrArr[1] + " " + xmlStrArr[2],
-							Reporter.WARNING);
+							Reporter.PASS);
 					found = true;
 					break innerloop;
 				}
@@ -193,7 +193,7 @@ public class EraterService extends SystemObjectImpl {
 				unmatchFound = false;
 				report.report("entry not found: " + xmlStrArr[0] + " "
 						+ xmlStrArr[1] + " " + xmlStrArr[2],
-						ReportAttribute.BOLD);
+						Reporter.WARNING);
 			}
 		}
 		return unmatchFound;
