@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry including="**/*.java" kind="src" output="target/classes" path="src">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="main"/>
+	<classpathentry kind="src" path="java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/omers/Downloads/jsystem-runner-6.1.00.tar/jsystem-runner-6.1.00/runner/lib/cli.jar"/>
+	<classpathentry kind="lib" path="C:/Users/omers/Downloads/jsystem-runner-6.1.00.tar/jsystem-runner-6.1.00/runner/lib/embeddedCatalina.jar"/>
+	<classpathentry kind="lib" path="C:/Users/omers/Downloads/jsystem-runner-6.1.00.tar/jsystem-runner-6.1.00/runner/lib/FileTransfer.jar"/>
+	<classpathentry kind="lib" path="C:/Users/omers/Downloads/sqljdbc_4.0.2206.100_enu.tar/sqljdbc_4.0.2206.100_enu/sqljdbc_4.0/enu/sqljdbc4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/omers/Downloads/java2html_50/java2html.jar"/>
+	<classpathentry kind="lib" path="lib/cli.jar"/>
+	<classpathentry kind="lib" path="lib/embeddedCatalina.jar"/>
+	<classpathentry kind="lib" path="lib/FileTransfer.jar"/>
+	<classpathentry kind="lib" path="lib/jsystem-launcher.jar"/>
+	<classpathentry kind="lib" path="lib/jsystemAgent.jar"/>
+	<classpathentry kind="lib" path="lib/jsystemAnt.jar"/>
+	<classpathentry kind="lib" path="lib/jsystemApp.jar"/>
+	<classpathentry kind="lib" path="lib/jsystemCommon.jar"/>
+	<classpathentry kind="lib" path="lib/jsystemCore.jar"/>
+	<classpathentry kind="lib" path="lib/java2html.jar"/>
+	<classpathentry kind="output" path="target/classes"/>
+</classpath>
