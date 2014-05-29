@@ -27,6 +27,7 @@ public abstract class LoginPage extends GenericPage {
 	}
 
 	@Override
-	protected abstract GenericPage OpenPage(String url) throws Exception;
+	public
+	abstract GenericPage OpenPage(String url) throws Exception;
 
 }

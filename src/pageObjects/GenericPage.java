@@ -23,5 +23,5 @@ public abstract class GenericPage {
 	
 	}
 	public abstract GenericPage waitForPageToLoad()throws Exception;
-	abstract GenericPage OpenPage(String url)throws Exception;
+	public abstract GenericPage OpenPage(String url)throws Exception;
 }

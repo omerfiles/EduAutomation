@@ -1,5 +1,6 @@
 package pageObjects.tms;
 
+import Objects.UserObject;
 import drivers.GenericWebDriver;
 import pageObjects.EdoLoginPage;
 import pageObjects.GenericPage;
@@ -17,6 +18,16 @@ public class tmsLoginPage extends LoginPage {
 		webDriver.openUrl(url);
 		return this;
 	}
+	
+	
+	public GenericPage Login(UserObject userObject)throws Exception{
+		webDriver.waitForElement("userName", "name").sendKeys(userObject.getUserName());
+		webDriver.waitForElement("password", "name").sendKeys(userObject.getPassword());
+		webDriver.waitForElement("//input[@value='login']", "xpath").click();
+		return new TmsHomePage(webDriver);
+		
+	}
+	
 
 
 

@@ -16,6 +16,7 @@ public class EdoCompenentPage extends GenericPage {
 	}
 
 	@Override
+	public
 	GenericPage OpenPage(String url) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
