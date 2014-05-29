@@ -20,7 +20,7 @@ import org.junit.Test;
 import pageObjects.EdoHomePage;
 import pageObjects.EdoLoginPage;
 
-public class PoCTest extends EdusoftTest {
+public class PoCTest extends EdusoftBasicTest {
 
 	@Before
 	public void setup() throws Exception {

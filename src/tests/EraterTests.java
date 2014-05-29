@@ -9,7 +9,7 @@ import org.junit.Test;
 import pageObjects.EdoHomePage;
 import pageObjects.EdoLoginPage;
 
-public class EraterTests extends EdusoftTest {
+public class EraterTests extends EdusoftWebTest {
 	
 	@Before
 	public void setup()throws Exception{

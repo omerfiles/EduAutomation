@@ -13,7 +13,7 @@ import drivers.GenericWebDriver;
 import junit.framework.SystemTestCase4;
 import junit.framework.TestCase;
 
-public class EdusoftTest extends SystemTestCase4 {
+public class EdusoftBasicTest extends SystemTestCase4 {
 	
 	GenericWebDriver webDriver;
 	protected TextService textService;
@@ -28,7 +28,7 @@ public class EdusoftTest extends SystemTestCase4 {
 //		System.setProperty("java.ibrary.path","C:\\Users\\omers\\Downloads\\Microsoft JDBC Driver 4.0 for SQL Server\\sqljdbc_4.0\\enu\\auth\\x86");
 		ctx=new ClassPathXmlApplicationContext("beans.xml");
 		config=(Configuration)ctx.getBean("configuration");
-		webDriver=(GenericWebDriver)ctx.getBean("GenericWebDriver");
+//		webDriver=(GenericWebDriver)ctx.getBean("GenericWebDriver");
 		
 		textService=(TextService)ctx.getBean("TextSerivce");
 		dbService=(DbService)ctx.getBean("DbService");
@@ -36,7 +36,7 @@ public class EdusoftTest extends SystemTestCase4 {
 		eraterService=(EraterService)ctx.getBean("EraterService");
 		
 		
-		webDriver.init(config.getProperty("remote.machine"), null);
+//		webDriver.init(config.getProperty("remote.machine"), null);
 		
 		
 //		dbService.dbConnect(configuration.getProperty("db.connection"), configuration.getProperty("db.connection.username"), configuration.getProperty("db.connection.password"));
@@ -47,11 +47,7 @@ public class EdusoftTest extends SystemTestCase4 {
 	
 	@After
 	public void tearDown()throws Exception{
-		if(this.isPass()!=true){
-			webDriver.printScreen("Test failed", null);
-			
-		}
-		webDriver.closeBrowser();
+		
 //		dbService.closeConnection();
 	}
 
