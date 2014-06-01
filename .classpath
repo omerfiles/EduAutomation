@@ -21,7 +21,6 @@
 	<classpathentry kind="lib" path="C:/Users/omers/Downloads/jsystem-runner-6.1.00.tar/jsystem-runner-6.1.00/runner/lib/cli.jar"/>
 	<classpathentry kind="lib" path="C:/Users/omers/Downloads/jsystem-runner-6.1.00.tar/jsystem-runner-6.1.00/runner/lib/embeddedCatalina.jar"/>
 	<classpathentry kind="lib" path="C:/Users/omers/Downloads/jsystem-runner-6.1.00.tar/jsystem-runner-6.1.00/runner/lib/FileTransfer.jar"/>
-	<classpathentry kind="lib" path="C:/Users/omers/Downloads/sqljdbc_4.0.2206.100_enu.tar/sqljdbc_4.0.2206.100_enu/sqljdbc_4.0/enu/sqljdbc4.jar"/>
 	<classpathentry kind="lib" path="C:/Users/omers/Downloads/java2html_50/java2html.jar"/>
 	<classpathentry kind="lib" path="lib/cli.jar"/>
 	<classpathentry kind="lib" path="lib/embeddedCatalina.jar"/>
@@ -30,8 +29,6 @@
 	<classpathentry kind="lib" path="lib/jsystemAgent.jar"/>
 	<classpathentry kind="lib" path="lib/jsystemAnt.jar"/>
 	<classpathentry kind="lib" path="lib/jsystemApp.jar"/>
-	<classpathentry kind="lib" path="lib/jsystemCommon.jar"/>
-	<classpathentry kind="lib" path="lib/jsystemCore.jar"/>
 	<classpathentry kind="lib" path="lib/java2html.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
