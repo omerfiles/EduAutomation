@@ -4,6 +4,7 @@ import java.nio.charset.Charset;
 
 import org.openqa.selenium.WebElement;
 
+import pageObjects.tms.TmsHomePage;
 import services.TextService;
 import junit.framework.Assert;
 import drivers.GenericWebDriver;
@@ -209,6 +210,12 @@ public class EdoHomePage extends GenericPage {
 
 		}
 		return this;
+	}
+	
+	public TmsHomePage openTeachersCorner()throws Exception{
+		webDriver.waitForElement("Teacher's Corner", "linkText").click();
+		webDriver.switchToFrame("mainFrame");
+		return new TmsHomePage(webDriver);
 	}
 
 	@Override

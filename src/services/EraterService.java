@@ -76,9 +76,10 @@ public class EraterService extends SystemObjectImpl {
 					break;
 				}
 			} else {
-				int sugggestionid=Integer.valueOf(suggestionId);
-				sugggestionid=sugggestionid+1;
-				if (arr[0].equals(code) && arr[2].equals(String.valueOf(sugggestionid))) {
+				int sugggestionid = Integer.valueOf(suggestionId);
+				sugggestionid = sugggestionid + 1;
+				if (arr[0].equals(code)
+						&& arr[2].equals(String.valueOf(sugggestionid))) {
 					feedback = arr[1];
 					break;
 				}
@@ -134,41 +135,45 @@ public class EraterService extends SystemObjectImpl {
 		return list;
 	}
 
-	public boolean compareJsonAndXmlByWritingId(String writingId) throws Exception {
+	public boolean compareJsonAndXmlByWritingId(String writingId)
+			throws Exception {
+		List<String[]> xmlList = null;
+		List<String[]> jsonList = null;
 		String sqlxml = dbService
-				.getStringFromQuery("select EraterXML from Erater where writingId="
-						+ writingId,10);
+				.getStringFromQuery(
+						"select EraterXML from Erater where writingId="
+								+ writingId, 10);
 		report.report("RAW XML: " + sqlxml);
-		List<String[]> xmlList = netService.getListFromXmlNode(
-				netService.getXmlFromString(sqlxml), "/WAT:DetailInfo");
-		String jsonStr = dbService
-				.getStringFromQuery("select EraterJson from Erater where writingId="
-						+ writingId,10);
-		report.report("RAW JSON: " + jsonStr);
-		List<String[]> jsonList = netService.getListFromJson(jsonStr,
-				"sections", "details", new String[] { "feedback", "length",
-						"offset" });
-		report.startLevel("Printing json list", EnumReportLevel.CurrentPlace);
-		printArrayList(jsonList);
-		report.stopLevel();
-		// jsonList = sortArrayList(jsonList);
-		xmlList = removeHiddenCodesAndConvertToFeedbackCodes(xmlList);
-		// xmlList = sortArrayList(xmlList);
+		try {
+			xmlList = netService.getListFromXmlNode(
+					netService.getXmlFromString(sqlxml), "/WAT:DetailInfo");
+			String jsonStr = dbService.getStringFromQuery(
+					"select EraterJson from Erater where writingId="
+							+ writingId, 10);
+			report.report("RAW JSON: " + jsonStr);
+			jsonList = netService.getListFromJson(jsonStr, "sections",
+					"details", new String[] { "feedback", "length", "offset" });
+			report.startLevel("Printing json list",
+					EnumReportLevel.CurrentPlace);
+			printArrayList(jsonList);
+			report.stopLevel();
+			// jsonList = sortArrayList(jsonList);
+			xmlList = removeHiddenCodesAndConvertToFeedbackCodes(xmlList);
+			// xmlList = sortArrayList(xmlList);
 
-		report.startLevel("Printing xml list", EnumReportLevel.CurrentPlace);
-		printArrayList(xmlList);
-		report.stopLevel();
+			report.startLevel("Printing xml list", EnumReportLevel.CurrentPlace);
+			printArrayList(xmlList);
+			report.stopLevel();
 
-		report.report("json list length is: " + jsonList.size());
-		report.report("xml list length is: " + xmlList.size());
-		return AssertJsonAndXmlLists(xmlList, jsonList);
-//		Assert.assertTrue("Some unmatches found",
-//				AssertJsonAndXmlLists(xmlList, jsonList));
-		// Assert.assertEquals("Json list and xml list are not in the same size",
-		// jsonList.size(), xmlList.size());
+			report.report("json list length is: " + jsonList.size());
+			report.report("xml list length is: " + xmlList.size());
+		} catch (Exception e) {
+			Assert.fail("Test failed during comparing json and xml");
+		} finally {
+			return AssertJsonAndXmlLists(xmlList, jsonList);
+		}
+
 	}
-	
-	
 
 	public boolean AssertJsonAndXmlLists(List<String[]> xmlList,
 			List<String[]> jsonList) {
@@ -192,8 +197,7 @@ public class EraterService extends SystemObjectImpl {
 			if (found == false) {
 				unmatchFound = false;
 				report.report("entry not found: " + xmlStrArr[0] + " "
-						+ xmlStrArr[1] + " " + xmlStrArr[2],
-						Reporter.WARNING);
+						+ xmlStrArr[1] + " " + xmlStrArr[2], Reporter.WARNING);
 			}
 		}
 		return unmatchFound;
@@ -206,13 +210,14 @@ public class EraterService extends SystemObjectImpl {
 		String result = dbService.getStringFromQuery(sql);
 		return result;
 	}
-	public void checkWritingIdsByCSV()throws Exception{
-		 List<String[]>writingIds=textService.getStr2dimArrFromCsv("files/csvFiles/writingIds.csv");
-		 for(int i=0;i<writingIds.size();i++){
-			 
-			 compareJsonAndXmlByWritingId(writingIds.get(i)[0]);
-		 }
+
+	public void checkWritingIdsByCSV() throws Exception {
+		List<String[]> writingIds = textService
+				.getStr2dimArrFromCsv("files/csvFiles/writingIds.csv");
+		for (int i = 0; i < writingIds.size(); i++) {
+
+			compareJsonAndXmlByWritingId(writingIds.get(i)[0]);
+		}
 	}
-	
 
 }

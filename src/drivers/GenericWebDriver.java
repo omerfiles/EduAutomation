@@ -32,48 +32,29 @@ import services.DbService;
 import jsystem.framework.report.Reporter;
 import jsystem.framework.system.SystemObjectImpl;
 import junit.framework.SystemTestCaseImpl;
+
 @Service
-public class GenericWebDriver extends SystemTestCaseImpl {
+public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	protected static final Logger logger = LoggerFactory
 			.getLogger(GenericWebDriver.class);
 	public String sutUrl = null;
 	protected RemoteWebDriver webDriver;
 	private int timeout = 10;
+	private String browserName;
+	private boolean initialized;
 	// private Config configuration;
-	private DbService dbService;
+	protected DbService dbService;
 	@Autowired
 	private services.Configuration configuration;
-	
-	private String logsFolder;
 
-	public void init(String remoteUrl, String folderName) throws Exception {
-		dbService = new DbService();
-		report.report("Remote url from pom file is: " + remoteUrl);
-		// sutUrl = configuration.getProperty("sut.url");
-		logsFolder = folderName;
-		try {
-			if (remoteUrl == null) {
-				// remoteUrl = configuration.getProperty("remote.machine");
-			}
-			report.startLevel("Initializing WebDriver",
-					Reporter.EnumReportLevel.CurrentPlace);
+	protected String logsFolder;
 
-			DesiredCapabilities capabilities = DesiredCapabilities.chrome();
-			ChromeOptions options = new ChromeOptions();
-			options.addArguments("--disable-extensions");
-			capabilities.setCapability("chrome.switches",
-					Arrays.asList("--start-maximized"));
-			capabilities.setCapability(ChromeOptions.CAPABILITY, options);
-			// capabilities.setCapability("platform", "Windows 2003");
-			webDriver = new RemoteWebDriver(new URL(remoteUrl + "/wd/hub"),
-					capabilities);
-			// webDriver = new RemoteWebDriver( capabilities);
+	abstract public void init(String remoteUrl, String folderName)
+			throws Exception;
 
-			report.stopLevel();
-		} catch (Exception e) {
-			logger.error("Cannot register node or start the remote driver! ", e);
-		}
+	public void init() throws Exception {
+		init(configuration.getProperty("remote.machine"), null);
 	}
 
 	public String getSutUrl() {
@@ -255,9 +236,18 @@ public class GenericWebDriver extends SystemTestCaseImpl {
 	}
 
 	public void closeBrowser() throws Exception {
-		// StopService();
+		if (initialized == true) {
+			try {
+				report.report("Closing browser: " + this.getBrowserName());
+				deleteCookiesAndCache();
+				webDriver.close();
+			
+			} catch (Exception e) {
+				report.report("Closing " + this.getBrowserName() + "failed. "
+						+ e.toString());
+			}
+		}
 
-		webDriver.quit();
 	}
 
 	public void refresh() throws Exception {
@@ -311,7 +301,8 @@ public class GenericWebDriver extends SystemTestCaseImpl {
 		webDriver.switchTo().frame(frameName);
 		return currentWindow;
 	}
-	public String switchToFrame(WebElement element)throws Exception{
+
+	public String switchToFrame(WebElement element) throws Exception {
 		String currentWindow = webDriver.getWindowHandle();
 		webDriver.switchTo().frame(element);
 		return currentWindow;
@@ -437,7 +428,8 @@ public class GenericWebDriver extends SystemTestCaseImpl {
 		}
 		return text;
 	}
-	public String printScreen()throws Exception{
+
+	public String printScreen() throws Exception {
 		return printScreen("", null);
 	}
 
@@ -457,10 +449,11 @@ public class GenericWebDriver extends SystemTestCaseImpl {
 							OutputType.BASE64).getBytes());
 			// InetAddress inetAddress = InetAddress.getLocalHost();
 
-			newFileName= System.getProperty("user.dir") + "/log//current/"
-				+"ScreenShot"+message.replace(" ", "")	+ sig + ".png";
-//			path = System.getProperty("user.dir") + "//" + "log//current/";
-			path=configuration.getProperty("logserver")+"//"+configuration.getProperty("screenshotFolder");
+			newFileName = System.getProperty("user.dir") + "/log//current/"
+					+ "ScreenShot" + message.replace(" ", "") + sig + ".png";
+			// path = System.getProperty("user.dir") + "//" + "log//current/";
+			path = configuration.getProperty("logserver") + "//"
+					+ configuration.getProperty("screenshotFolder");
 			path = path + sig + ".png";
 			FileOutputStream fos = new FileOutputStream(new File(newFileName));
 			fos.write(decodedScreenshot);
@@ -470,7 +463,7 @@ public class GenericWebDriver extends SystemTestCaseImpl {
 			report.report("Taking the screenshot failed: " + e.getStackTrace());
 		} finally {
 			report.addLink("Screenshot", path);
-			
+
 			return path;
 		}
 
@@ -482,11 +475,27 @@ public class GenericWebDriver extends SystemTestCaseImpl {
 				"//table[@id='" + tableId + "']//tr[" + yIndex + "]//td["
 						+ xIndex + "]", "xpath").click();
 	}
-	
-	public void pasteTextFromClipboard(WebElement element)throws Exception{
+
+	public void pasteTextFromClipboard(WebElement element) throws Exception {
 		element.click();
-		element.sendKeys(Keys.chord(Keys.CONTROL,"v"));
-		
+		element.sendKeys(Keys.chord(Keys.CONTROL, "v"));
+
+	}
+
+	public String getBrowserName() {
+		return browserName;
+	}
+
+	public void setBrowserName(String browserName) {
+		this.browserName = browserName;
+	}
+
+	public boolean isInitialized() {
+		return initialized;
+	}
+
+	public void setInitialized(boolean initialized) {
+		this.initialized = initialized;
 	}
 
 }

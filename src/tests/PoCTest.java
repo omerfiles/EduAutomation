@@ -17,10 +17,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import Objects.Student;
+import drivers.GenericWebDriver;
 import pageObjects.EdoHomePage;
 import pageObjects.EdoLoginPage;
 
-public class PoCTest extends EdusoftBasicTest {
+public class PoCTest extends EdusoftWebTest {
 
 	@Before
 	public void setup() throws Exception {
@@ -142,7 +144,11 @@ public class PoCTest extends EdusoftBasicTest {
 
 	@Test
 	public void testDB() throws Exception {
-		webDriver.printScreen();
+		Student student = new Student();
+		student.setUserName(config.getProperty("student.user.name"));
+		student.setPassword(config.getProperty("student.user.password"));
+		String userId = dbService.getUserIdByUserName(student.getUserName());
+		report.report(userId);
 	}
 
 	@Test
@@ -233,5 +239,21 @@ public class PoCTest extends EdusoftBasicTest {
 
 		}
 
+	}
+	@Test
+	public void testIE()throws Exception{
+		ieWebDriver.init();
+		ieWebDriver.openUrl("http://tms.engdis.com/");
+		
+	}
+	
+	@Test
+	public void testChrome()throws Exception{
+		testOpenURL(chromeWebDriver);
+	}
+	
+	public void testOpenURL(GenericWebDriver webDriver)throws Exception{
+		webDriver.init();
+		webDriver.openUrl("http://tms.engdis.com/");
 	}
 }

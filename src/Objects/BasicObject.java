@@ -1,9 +1,16 @@
 package Objects;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import services.Configuration;
+
 abstract class BasicObject {
 	private String id;
 	
 	private String name;
+	
+	@Autowired
+	Configuration configuration;
 	
 	
 	void create(){};

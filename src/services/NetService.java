@@ -28,6 +28,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import jsystem.framework.system.SystemObjectImpl;
+import junit.framework.Assert;
 
 @Service
 public class NetService extends SystemObjectImpl {
@@ -47,6 +48,7 @@ public class NetService extends SystemObjectImpl {
 					new StringReader(xmlString)));
 		} catch (Exception e) {
 			e.printStackTrace();
+			Assert.fail("Test failed during getting xml form sring");
 		} finally {
 			return document;
 		}

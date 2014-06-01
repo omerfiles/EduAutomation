@@ -404,7 +404,7 @@ public class DbService extends SystemObjectImpl {
 					str = rs.getString(1);
 
 				}
-				if (str!=null) {
+				if (str!=null ) {
 					report.report("DB result found");
 					
 					break outerloop;

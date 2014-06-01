@@ -5,8 +5,8 @@ import java.util.Arrays;
 
 import jsystem.framework.report.Reporter;
 
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.springframework.stereotype.Service;
@@ -14,12 +14,10 @@ import org.springframework.stereotype.Service;
 import services.DbService;
 
 @Service
-public class IEWebDriver extends GenericWebDriver {
+public class FirefoxDriver extends GenericWebDriver {
 	
 	@Override
 	public void init(String remoteUrl, String folderName) throws Exception {
-		setBrowserName("Internet Exporer");
-		setInitialized(true);
 		dbService = new DbService();
 		report.report("Remote url from pom file is: " + remoteUrl);
 		// sutUrl = configuration.getProperty("sut.url");
@@ -31,10 +29,9 @@ public class IEWebDriver extends GenericWebDriver {
 			report.startLevel("Initializing WebDriver",
 					Reporter.EnumReportLevel.CurrentPlace);
 
-			 DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();
-		        capabilities.setCapability(CapabilityType.ForSeleniumServer.ENSURING_CLEAN_SESSION, true);
+//			 DesiredCapabilities capabilities = new DesiredCapabilities("firefox", "29.0.1", Platform.WINDOWS);
 			webDriver = new RemoteWebDriver(new URL(remoteUrl + "/wd/hub"),
-					capabilities);
+					DesiredCapabilities.firefox());
 			// webDriver = new RemoteWebDriver( capabilities);
 
 			report.stopLevel();
@@ -42,5 +39,6 @@ public class IEWebDriver extends GenericWebDriver {
 			logger.error("Cannot register node or start the remote driver! ", e);
 		}
 	}
+	
 
 }
