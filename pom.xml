@@ -28,7 +28,7 @@
 				<configuration>
 					<testSourceDirectory>${project.basedir}/src/tests</testSourceDirectory>
 					<includes>
-						<include>EraterTests.java</include>
+						<include>**/Test*.java </include>
 					</includes>
 
 				</configuration>
