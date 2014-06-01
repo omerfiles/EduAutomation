@@ -1,10 +1,11 @@
-package pageObjects;
+package pageObjects.tms;
 
 import drivers.GenericWebDriver;
+import pageObjects.GenericPage;
 
-public class EdoCompenentPage extends GenericPage {
+public class TmsHomePage extends GenericPage {
 
-	public EdoCompenentPage(GenericWebDriver webDriver) {
+	public TmsHomePage(GenericWebDriver webDriver) {
 		super(webDriver);
 		// TODO Auto-generated constructor stub
 	}
@@ -16,10 +17,11 @@ public class EdoCompenentPage extends GenericPage {
 	}
 
 	@Override
-	public
-	GenericPage OpenPage(String url) throws Exception {
+	public GenericPage OpenPage(String url) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	
 
 }
