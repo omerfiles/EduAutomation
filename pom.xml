@@ -165,9 +165,7 @@
 						<version>2.17</version>
 						<configuration>
 						<testSourceDirectory>${project.basedir}/src/tests</testSourceDirectory>
-							<includes>
-								<include>EraterTests.java</include>
-							</includes>
+							
 						</configuration>
 
 						<dependencies>
