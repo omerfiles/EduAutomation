@@ -141,6 +141,13 @@
 			<systemPath>${project.basedir}/lib/jsystemCore-6.1.00.jar</systemPath>
 			<scope>system</scope>
 		</dependency>
+		<dependency>
+			<groupId>sqljdbc</groupId>
+			<artifactId>microsoft.sql</artifactId>
+			<version>1.0</version>
+			<systemPath>${project.basedir}/lib/sqljdbc4.jar</systemPath>
+			<scope>system</scope>
+		</dependency>
 
 	</dependencies>
 
@@ -178,12 +185,10 @@
 								</property>
 							</systemProperties>
 							<runOrder>alphabetical</runOrder>
-							<includes>
-							**/tests/EraterTests.java
-							</includes>
+						
 
 							<excludes>
-								
+
 							</excludes>
 						</configuration>
 					</plugin>
