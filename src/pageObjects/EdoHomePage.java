@@ -3,8 +3,10 @@ package pageObjects;
 import java.nio.charset.Charset;
 
 import org.openqa.selenium.WebElement;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import Enums.ByTypes;
+import Objects.Course;
 import pageObjects.tms.TmsHomePage;
 import services.TextService;
 import jsystem.framework.report.Reporter.ReportAttribute;
@@ -12,6 +14,9 @@ import junit.framework.Assert;
 import drivers.GenericWebDriver;
 
 public class EdoHomePage extends GenericPage {
+
+	@Autowired
+	TextService textService;
 
 	public EdoHomePage(GenericWebDriver webDriver) {
 		super(webDriver);
@@ -84,13 +89,13 @@ public class EdoHomePage extends GenericPage {
 	}
 
 	public EdoHomePage ClickOnComponentsStage(int stageNumber) throws Exception {
-//		stageNumber = stageNumber - 1;
+		// stageNumber = stageNumber - 1;
 		if (stageNumber > 5) {
 			clickOnNextComponent(stageNumber);
 		}
-//		else{
-//			clickOnNextComponent(4);
-//		}
+		// else{
+		// clickOnNextComponent(4);
+		// }
 		stageNumber = stageNumber - 1;
 		webDriver.waitForElement("//li[@ind='" + stageNumber + "']", "xpath")
 				.click();
@@ -101,6 +106,15 @@ public class EdoHomePage extends GenericPage {
 
 		for (int i = 0; i < iterations; i++) {
 			webDriver.waitForElement("//a[@class='tasksBtnext']", "xpath")
+					.click();
+			Thread.sleep(500);
+		}
+		return this;
+	}
+	public EdoHomePage clickOnLastComponent(int iterations) throws Exception {
+
+		for (int i = 0; i < iterations; i++) {
+			webDriver.waitForElement("//a[@class='tasksBtprev']", "xpath")
 					.click();
 			Thread.sleep(500);
 		}
@@ -127,15 +141,33 @@ public class EdoHomePage extends GenericPage {
 		return this;
 	}
 
-	public EdoHomePage submitWritingAssignment(String assayTextFileName,TextService textService)
-			throws Exception {
+	public EdoHomePage AddWritingAssignmentWithOutSubmit(String assayTextFileName,
+			TextService textService) throws Exception {
 		String assayText = textService.getTextFromFile(assayTextFileName,
 				Charset.defaultCharset());
 		textService.setClipboardText(assayText);
-//		webDriver.swithcToFrameAndSendKeys("//body[@id='tinymce']", assayText,
-//				"elm1_ifr");
-	String mainWindow=	webDriver.switchToFrame("elm1_ifr");
-		WebElement textArea=	webDriver.waitForElement("//body[@id='tinymce']", "xpath");
+		// webDriver.swithcToFrameAndSendKeys("//body[@id='tinymce']",
+		// assayText,
+		// "elm1_ifr");
+		String mainWindow = webDriver.switchToFrame("elm1_ifr");
+		WebElement textArea = webDriver.waitForElement("//body[@id='tinymce']",
+				"xpath");
+		webDriver.pasteTextFromClipboard(textArea);
+		webDriver.switchToMainWindow(mainWindow);
+		return this;
+	}
+	
+	public EdoHomePage submitWritingAssignment(String assayTextFileName,
+			TextService textService) throws Exception {
+		String assayText = textService.getTextFromFile(assayTextFileName,
+				Charset.defaultCharset());
+		textService.setClipboardText(assayText);
+		// webDriver.swithcToFrameAndSendKeys("//body[@id='tinymce']",
+		// assayText,
+		// "elm1_ifr");
+		String mainWindow = webDriver.switchToFrame("elm1_ifr");
+		WebElement textArea = webDriver.waitForElement("//body[@id='tinymce']",
+				"xpath");
 		webDriver.pasteTextFromClipboard(textArea);
 		webDriver.switchToMainWindow(mainWindow);
 		Thread.sleep(3000);
@@ -155,15 +187,20 @@ public class EdoHomePage extends GenericPage {
 		webDriver.waitForElement("myAssignments", "id").click();
 		return this;
 	}
-	public EdoHomePage switchToAssignmentsFrame()throws Exception{
-		webDriver.switchToFrame(webDriver.waitForElement("cboxIframe", "class"));
+
+	public EdoHomePage switchToAssignmentsFrame() throws Exception {
+		webDriver
+				.switchToFrame(webDriver.waitForElement("cboxIframe", "class"));
 		return this;
 	}
-	public EdoHomePage clickOnWritingAssignmentsTab()throws Exception{
+
+	public EdoHomePage clickOnWritingAssignmentsTab() throws Exception {
 		webDriver.waitForElement("spWriting", "id").click();
 		return this;
 	}
-	public EdoHomePage clickToViewAssignment(String courseName)throws Exception{
+
+	public EdoHomePage clickToViewAssignment(String courseName)
+			throws Exception {
 		webDriver.waitForElement(courseName, "linkText").click();
 		webDriver.waitForElement("View", "linkText").click();
 		return this;
@@ -213,24 +250,67 @@ public class EdoHomePage extends GenericPage {
 		}
 		return this;
 	}
-	
-	public TmsHomePage openTeachersCorner()throws Exception{
+
+	public TmsHomePage openTeachersCorner() throws Exception {
 		webDriver.waitForElement("Teacher's Corner", "linkText").click();
 		webDriver.sleep(2000);
 		webDriver.switchToNewWindow();
-		System.out.println("URL:"+webDriver.getUrl());
+		System.out.println("URL:" + webDriver.getUrl());
 		webDriver.switchToFrame(0);
-//		webDriver.waitForElement("a5", "id").click();
-//		webDriver.waitForElement("//a[@href='../Report/writingAssignments.aspx']", ByTypes.xpath.toString()).click();
+		// webDriver.waitForElement("a5", "id").click();
+		// webDriver.waitForElement("//a[@href='../Report/writingAssignments.aspx']",
+		// ByTypes.xpath.toString()).click();
 		return new TmsHomePage(webDriver);
 	}
+
+	public EdoHomePage addWritingAssignment(Course course, String textFile)
+			throws Exception {
+		clickOnCourses();
+		// String courseName = "Basic 3 2012";
+		clickOnCourseByName(course.getName());
+		waitForCourseDetailsToBeDisplayed(course.getName());
+		clickOnCourseUnit(course.getCourseUnits().get(0).getName());
+		clickOntUnitComponent(course.getCourseUnits().get(0).getUnitComponent()
+				.get(0).getName(), "Practice");
+		ClickOnComponentsStage(Integer.valueOf((course.getCourseUnits().get(0)
+				.getUnitComponent().get(0).getStageNumber())));
+		Thread.sleep(10000);
+		submitWritingAssignment(textFile, textService);
+		return this;
+	}
+
+	public EdoHomePage addWritingAssignmentWithoutSubmitting(Course course,
+			String textFile) throws Exception {
+		clickOnCourses();
+		// String courseName = "Basic 3 2012";
+		clickOnCourseByName(course.getName());
+		waitForCourseDetailsToBeDisplayed(course.getName());
+		clickOnCourseUnit(course.getCourseUnits().get(0).getName());
+		clickOntUnitComponent(course.getCourseUnits().get(0).getUnitComponent()
+				.get(0).getName(), "Practice");
+		ClickOnComponentsStage(Integer.valueOf((course.getCourseUnits().get(0)
+				.getUnitComponent().get(0).getStageNumber())));
+		
+		AddWritingAssignmentWithOutSubmit(textFile, textService);
+
+		return this;
+	}
+
+	public EdoHomePage clickToSaveAssignment() throws Exception {
+		webDriver.waitForElement("elm1_save_", ByTypes.id.toString()).click();
+		String alertText = webDriver.getAlertText(10);
+		Assert.assertEquals("Your draft has been saved", alertText);
+		Assert.assertTrue("Save button is not disable", webDriver
+				.waitForElement("elm1_save_", ByTypes.id.toString())
+				.isEnabled() == false);
+		return this;
+	}
+	
 
 	@Override
 	public GenericPage OpenPage(String url) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	
 
 }

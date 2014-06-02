@@ -237,6 +237,7 @@ public class EraterService extends SystemObjectImpl {
 
 			UnitComponent unitComponent = new UnitComponent();
 			unitComponent.setName(courses.get(i)[2]);
+			unitComponent.setStageNumber(courses.get(i)[3]);
 
 			courseUnit.addUnitComponent(unitComponent);
 

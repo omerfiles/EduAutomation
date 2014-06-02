@@ -55,7 +55,10 @@ public class EdoLoginPage extends LoginPage {
 	public EdoHomePage login(UserObject user) throws Exception {
 		typeUserNameAndPass(user.getUserName(), user.getPassword());
 		webDriver.waitForElement("//div[@class='blueButton']", "xpath").click();
-		return new EdoHomePage(webDriver);
+		EdoHomePage edoHomePage=new EdoHomePage(webDriver);
+		edoHomePage.waitForPageToLoad();
+		return edoHomePage;
+		
 	}
 
 }
