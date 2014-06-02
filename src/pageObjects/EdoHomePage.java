@@ -4,8 +4,10 @@ import java.nio.charset.Charset;
 
 import org.openqa.selenium.WebElement;
 
+import Enums.ByTypes;
 import pageObjects.tms.TmsHomePage;
 import services.TextService;
+import jsystem.framework.report.Reporter.ReportAttribute;
 import junit.framework.Assert;
 import drivers.GenericWebDriver;
 
@@ -214,7 +216,12 @@ public class EdoHomePage extends GenericPage {
 	
 	public TmsHomePage openTeachersCorner()throws Exception{
 		webDriver.waitForElement("Teacher's Corner", "linkText").click();
-		webDriver.switchToFrame("mainFrame");
+		webDriver.sleep(2000);
+		webDriver.switchToNewWindow();
+		System.out.println("URL:"+webDriver.getUrl());
+		webDriver.switchToFrame(0);
+//		webDriver.waitForElement("a5", "id").click();
+//		webDriver.waitForElement("//a[@href='../Report/writingAssignments.aspx']", ByTypes.xpath.toString()).click();
 		return new TmsHomePage(webDriver);
 	}
 
@@ -223,5 +230,7 @@ public class EdoHomePage extends GenericPage {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	
 
 }

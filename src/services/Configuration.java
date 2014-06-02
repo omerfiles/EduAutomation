@@ -92,6 +92,13 @@ public class Configuration {
 
 		return getProperty(key, key + " not found");
 	}
+	
+	public String getStudentUserName(){
+		return getProperty("student.username");
+	}
+	public String getStudentPassword(){
+		return getProperty("student.password");
+	}
 
 	public Set<Object> getKeys() {
 		return properties.keySet();

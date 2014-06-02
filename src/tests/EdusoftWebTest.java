@@ -9,9 +9,9 @@ import drivers.IEWebDriver;
 
 public class EdusoftWebTest extends EdusoftBasicTest {
 
-	FirefoxDriver firefoxDriver;
-	IEWebDriver ieWebDriver;
-	ChromeWebDriver chromeWebDriver;
+	protected FirefoxDriver firefoxDriver;
+	protected IEWebDriver ieWebDriver;
+	protected ChromeWebDriver chromeWebDriver;
 
 	@Override
 	public void setup() throws Exception {

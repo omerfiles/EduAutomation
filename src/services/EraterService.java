@@ -14,6 +14,10 @@ import junit.framework.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import Objects.Course;
+import Objects.CourseUnit;
+import Objects.UnitComponent;
+
 @Service
 public class EraterService extends SystemObjectImpl {
 
@@ -218,6 +222,33 @@ public class EraterService extends SystemObjectImpl {
 
 			compareJsonAndXmlByWritingId(writingIds.get(i)[0]);
 		}
+	}
+
+	public List<Course> loadCoursedDetailsFromCsv() throws Exception {
+		List<String[]> courses = textService
+				.getStr2dimArrFromCsv("files/csvFiles/Courses.csv");
+		List<Course> coursesList = null;
+		for (int i = 0; i < courses.size(); i++) {
+			Course course = new Course();
+			course.setName(courses.get(i)[0]);
+
+			CourseUnit courseUnit = new CourseUnit();
+			courseUnit.setName(courses.get(i)[1]);
+
+			UnitComponent unitComponent = new UnitComponent();
+			unitComponent.setName(courses.get(i)[2]);
+
+			courseUnit.addUnitComponent(unitComponent);
+
+			course.AddUnit(courseUnit);
+
+			coursesList.add(course);
+
+			// courseUnit.setUnitComponent(unitComponent);
+
+		}
+		return coursesList;
+
 	}
 
 }

@@ -19,10 +19,10 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 	protected GenericWebDriver webDriver;
 
 	protected TextService textService;
-	Configuration config;
-	DbService dbService;
+	protected Configuration config;
+	protected DbService dbService;
 	NetService netService;
-	EraterService eraterService;
+	protected EraterService eraterService;
 	public ClassPathXmlApplicationContext ctx;
 
 	@Before

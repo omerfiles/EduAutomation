@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import javax.security.auth.login.Configuration;
@@ -118,7 +119,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 							.xpath(idValue)));
 					element = webDriver.findElement(By.xpath(idValue));
 				} else {
-					if (byType.equals("class")) {
+					if (byType.equals("className")) {
 						wait.until(ExpectedConditions
 								.visibilityOfElementLocated(By
 										.className(idValue)));
@@ -238,10 +239,11 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	public void closeBrowser() throws Exception {
 		if (initialized == true) {
 			try {
+
 				report.report("Closing browser: " + this.getBrowserName());
 				deleteCookiesAndCache();
 				webDriver.close();
-			
+
 			} catch (Exception e) {
 				report.report("Closing " + this.getBrowserName() + "failed. "
 						+ e.toString());
@@ -469,6 +471,48 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	}
 
+	public WebElement getTableTdByName(String tableId,String text) throws Exception {
+		WebElement result = null;
+		WebElement table = waitForElement(tableId, "xpath");
+		List<WebElement> allrows = table.findElements(By.tagName("tr"));
+		for (WebElement row : allrows) {
+			List<WebElement> cells = row.findElements(By.tagName("td"));
+			for (WebElement cell : cells) {
+				System.out.println(cell.getText());
+				if (cell.getText().equals(text)) {
+					result = cell;
+				}
+			}
+		}
+		return result;
+	}
+
+	public int getTableRowIndexByParam(String tableId, String tdIndex,
+			String tdText, String byType) throws Exception {
+		String result = "";
+		int index = 0;
+		try {
+			while (result != null) {
+				String xpath = "//table[@id='" + tableId
+						+ "']//tbody//tr[@role='row'][" + index + "]//td["
+						+ tdIndex + "]//div";
+				System.out.println(xpath);
+				String text = waitForElement(xpath, byType, false, 10)
+						.getText();
+				if (text.equals(tdText)) {
+					result = text;
+					System.out.println("text is:" + text);
+				}
+				index++;
+			}
+		} catch (Exception e) {
+			System.out.println(e.toString());
+			Assert.fail();
+		} finally {
+			return index;
+		}
+	}
+
 	public void clickOnTableCell(String tableId, int xIndex, int yIndex)
 			throws Exception {
 		waitForElement(
@@ -496,6 +540,11 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	public void setInitialized(boolean initialized) {
 		this.initialized = initialized;
+	}
+
+	public String getUrl() throws Exception {
+		return webDriver.getCurrentUrl();
+	
 	}
 
 }
