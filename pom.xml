@@ -28,6 +28,9 @@
 				<configuration>
 					<testSourceDirectory>${basedir}/src/tests/</testSourceDirectory>
                     <testClassesDirectory>${project.build.directory}/classes/</testClassesDirectory>
+                   <includes>
+                  <include>PoCTest.java</include>
+                   </includes>
 					
 
 				</configuration>
