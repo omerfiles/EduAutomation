@@ -27,7 +27,7 @@
 				<version>2.17</version>
 				<configuration>
 					<testSourceDirectory>${basedir}/src/tests/</testSourceDirectory>
-                    <testClassesDirectory>${project.build.directory}/classes/</testClassesDirectory>
+                    <testClassesDirectory>${project.build.directory}/target/classes/</testClassesDirectory>
                    <includes>
                <include>**/EraterTests.java</include>
                    </includes>
