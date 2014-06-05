@@ -8,7 +8,7 @@
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>
 			<plugin>
-				<groupId>org.jsystemtest</groupId>
+				<groupId>org.jsystem</groupId>
 				<artifactId>jsystem-maven-plugin</artifactId>
 				<version>6.0.02</version>
 				<dependencies>
