@@ -170,6 +170,34 @@
 			<scope>system</scope>
 		</dependency>
 		<dependency>
+			<groupId>JsystemLauncher</groupId>
+			<artifactId>org.jsystem</artifactId>
+			<version>1.00</version>
+			<systemPath>${project.basedir}/lib/jsystem-launcher.jar</systemPath>
+			<scope>system</scope>
+		</dependency>
+		<dependency>
+			<groupId>JsystemAgent</groupId>
+			<artifactId>org.jsystem</artifactId>
+			<version>1.00</version>
+			<systemPath>${project.basedir}/lib/jsystemAgent.jar</systemPath>
+			<scope>system</scope>
+		</dependency>
+		<dependency>
+			<groupId>JsystemApp</groupId>
+			<artifactId>org.jsystem</artifactId>
+			<version>1.00</version>
+			<systemPath>${project.basedir}/lib/jsystemApp.jar</systemPath>
+			<scope>system</scope>
+		</dependency>
+		<dependency>
+			<groupId>JsystemAnt</groupId>
+			<artifactId>org.jsystem</artifactId>
+			<version>1.00</version>
+			<systemPath>${project.basedir}/lib/jsystemAnt.jar</systemPath>
+			<scope>system</scope>
+		</dependency>
+		<dependency>
 			<groupId>sqljdbc</groupId>
 			<artifactId>microsoft.sql</artifactId>
 			<version>1.0</version>
