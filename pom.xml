@@ -183,7 +183,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.jsystem</groupId>
+			<groupId>jsystemMaven</groupId>
 			<artifactId>jsystem-maven-plugin</artifactId>
 			<systemPath>${project.basedir}/lib/jsystem-maven-plugin-6.1.00.jar</systemPath>
 			<scope>system</scope>
