@@ -13,7 +13,7 @@
 				<version>6.0.02</version>
 				<dependencies>
 					<dependency>
-						<groupId>org.jsystemtest</groupId>
+						<groupId>org.jsystem</groupId>
 						<artifactId>jsystem-maven-plugin</artifactId>
 						<systemPath>${project.basedir}/lib/jsystem-maven-plugin-6.1.00.jar</systemPath>
 						<scope>system</scope>
@@ -170,14 +170,14 @@
 
 		<dependency>
 			<groupId>JsystemCommon</groupId>
-			<artifactId>org.jsysteme</artifactId>
+			<artifactId>org.jsystem</artifactId>
 			<version>1.0</version>
 			<scope>system</scope>
 			<systemPath>${project.basedir}/lib/JsystemCommon.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>JsystemCore</groupId>
-			<artifactId>org.jsysteme</artifactId>
+			<artifactId>org.jsystem</artifactId>
 			<version>6.1.00</version>
 			<systemPath>${project.basedir}/lib/jsystemCore-6.1.00.jar</systemPath>
 			<scope>system</scope>
