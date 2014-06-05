@@ -207,7 +207,7 @@
 						</dependencies>
 						<configuration>
 							<testSourceDirectory>${project.basedir}/src/tests/</testSourceDirectory>
-							
+							<testClassesDirectory>${project.basedir}/target/classes/</testClassesDirectory>
 
 						</configuration>
 					</plugin>
