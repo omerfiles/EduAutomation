@@ -191,6 +191,13 @@
 			<scope>system</scope>
 		</dependency>
 		<dependency>
+			<groupId>java2html</groupId>
+			<artifactId>java2html</artifactId>
+			<version>1.00</version>
+			<systemPath>${project.basedir}/lib/java2html.jar</systemPath>
+			<scope>system</scope>
+		</dependency>
+		<dependency>
 			<groupId>JsystemAnt</groupId>
 			<artifactId>org.jsystem</artifactId>
 			<version>1.00</version>
@@ -220,6 +227,9 @@
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
+			<properties>
+                <remoteMachine>10.1.0.81:5555</remoteMachine>
+            </properties>
 			<build>
 				<plugins>
 					<plugin>

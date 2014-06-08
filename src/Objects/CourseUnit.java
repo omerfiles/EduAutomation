@@ -1,9 +1,10 @@
 package Objects;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CourseUnit extends BasicObject {
-	List<UnitComponent>unitComponenst;
+	List<UnitComponent>unitComponenst=new ArrayList<UnitComponent>();
 
 	public List<UnitComponent> getUnitComponent() {
 		return unitComponenst;

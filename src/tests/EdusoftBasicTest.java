@@ -2,7 +2,13 @@ package tests;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.ClassRule;
+import org.junit.Rule;
+import org.junit.rules.Timeout;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import com.aqua.anttask.jsystem.JUnitTest;
+import com.thoughtworks.selenium.webdriven.commands.SetTimeout;
 
 import services.Configuration;
 import services.DbService;
@@ -25,9 +31,16 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 	protected EraterService eraterService;
 	public ClassPathXmlApplicationContext ctx;
 
+	
+	@ClassRule
+	public Timeout GlobalTimeOut=new Timeout(1000);
+	
 	@Before
 	public void setup() throws Exception {
 		// System.setProperty("java.ibrary.path","C:\\Users\\omers\\Downloads\\Microsoft JDBC Driver 4.0 for SQL Server\\sqljdbc_4.0\\enu\\auth\\x86");
+		
+		Timeout GlobalTimeOut=new Timeout(1000);
+	
 		ctx = new ClassPathXmlApplicationContext("beans.xml");
 		config = (Configuration) ctx.getBean("configuration");
 		// webDriver=(GenericWebDriver)ctx.getBean("GenericWebDriver");
@@ -42,6 +55,7 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 		// dbService.dbConnect(configuration.getProperty("db.connection"),
 		// configuration.getProperty("db.connection.username"),
 		// configuration.getProperty("db.connection.password"));
+		
 
 	}
 
@@ -49,14 +63,12 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 		report.report("Sleeping for " + seconds + "seconds");
 		Thread.sleep(seconds * 1000);
 	}
+	
 
 	@After
 	public void tearDown() throws Exception {
 
-		if (this.isPass() != true) {
-			webDriver.printScreen("Test failed", null);
-
-		}
+		
 	}
 
 }

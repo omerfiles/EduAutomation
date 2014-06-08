@@ -371,11 +371,40 @@ public class DbService extends SystemObjectImpl {
 			return count;
 		}
 	}
+
 	public String getStringFromQuery(String sql) throws Exception {
-		return getStringFromQuery(sql,10);
+		return getStringFromQuery(sql, 10);
 	}
 
-	public String getStringFromQuery(String sql,int intervals) throws Exception {
+	public void runDeleteUpdateSql(String sql) throws Exception {
+		report.report("Query is: " + sql);
+		System.out.println(sql);
+		Statement statement = null;
+		try {
+			Class.forName(SQL_SERVER_DRIVER_CLASS);
+			conn = DriverManager.getConnection(db_connect_string, db_userid,
+					db_password);
+			System.out.println("connected");
+
+			if (conn.isClosed() == true) {
+				System.out.println("connection is closed");
+			}
+
+			statement = conn.createStatement();
+			statement.executeUpdate(sql);
+			conn.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (statement != null) {
+				statement.close();
+			}
+		}
+
+	}
+
+	public String getStringFromQuery(String sql, int intervals)
+			throws Exception {
 		// System.out.println(configuration.getProperty("db.connection"));
 		report.report("Query is: " + sql);
 		System.out.println(sql);
@@ -396,27 +425,26 @@ public class DbService extends SystemObjectImpl {
 			}
 
 			statement = conn.createStatement();
-			outerloop:
-			while (elapsedTimeInSec < MAX_DB_TIMEOUT) {
+			outerloop: while (elapsedTimeInSec < MAX_DB_TIMEOUT) {
 				rs = statement.executeQuery(sql);
 				while (rs.next()) {
 					// System.out.println(rs.getString(1));
 					str = rs.getString(1);
 
 				}
-				if (str!=null ) {
+				if (str != null) {
 					report.report("DB result found");
-					
+
 					break outerloop;
 
 				} else {
-					Thread.sleep(intervals*1000);	
-					report.report("Waiting for DB. sleeping for "+intervals+" seconds");
-					elapsedTimeInSec=elapsedTimeInSec+intervals;
+					Thread.sleep(intervals * 1000);
+					report.report("Waiting for DB. sleeping for " + intervals
+							+ " seconds");
+					elapsedTimeInSec = elapsedTimeInSec + intervals;
 				}
 			}
 
-			
 			conn.close();
 		} catch (Exception e) {
 			e.printStackTrace();

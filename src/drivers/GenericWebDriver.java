@@ -242,7 +242,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 				report.report("Closing browser: " + this.getBrowserName());
 				deleteCookiesAndCache();
-				webDriver.close();
+				webDriver.quit();
 
 			} catch (Exception e) {
 				report.report("Closing " + this.getBrowserName() + "failed. "
@@ -299,8 +299,11 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	}
 
 	public String switchToFrame(String frameName) throws Exception {
+
 		String currentWindow = webDriver.getWindowHandle();
-		webDriver.switchTo().frame(frameName);
+		WebDriverWait wait = new WebDriverWait(webDriver, 10);
+		wait.until(ExpectedConditions
+				.frameToBeAvailableAndSwitchToIt(frameName));
 		return currentWindow;
 	}
 
@@ -403,6 +406,10 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		checkElementNotExist(xpath, null);
 	}
 
+	public void checkElementIsDisabled(WebElement webElement) throws Exception {
+		Assert.assertTrue(webElement.isEnabled() == false);
+	}
+
 	public WebElement getElement(By by) {
 		WebElement element = webDriver.findElement(by);
 		return element;
@@ -453,9 +460,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 			newFileName = System.getProperty("user.dir") + "/log//current/"
 					+ "ScreenShot" + message.replace(" ", "") + sig + ".png";
-			// path = System.getProperty("user.dir") + "//" + "log//current/";
-			path = configuration.getProperty("logserver") + "//"
-					+ configuration.getProperty("screenshotFolder");
+			path = System.getProperty("user.dir") + "//" + "log//current/";
+			// path = configuration.getProperty("logserver") + "//"
+			// + configuration.getProperty("screenshotFolder");
 			path = path + sig + ".png";
 			FileOutputStream fos = new FileOutputStream(new File(newFileName));
 			fos.write(decodedScreenshot);
@@ -471,7 +478,8 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	}
 
-	public WebElement getTableTdByName(String tableId,String text) throws Exception {
+	public WebElement getTableTdByName(String tableId, String text)
+			throws Exception {
 		WebElement result = null;
 		WebElement table = waitForElement(tableId, "xpath");
 		List<WebElement> allrows = table.findElements(By.tagName("tr"));
@@ -544,7 +552,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	public String getUrl() throws Exception {
 		return webDriver.getCurrentUrl();
-	
+
 	}
 
 }

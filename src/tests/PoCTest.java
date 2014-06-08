@@ -152,13 +152,11 @@ public class PoCTest extends EdusoftWebTest {
 	}
 
 	@Test
-	public void testPrintScreen() throws Exception {
-		report.startLevel("Login to Edo", EnumReportLevel.CurrentPlace);
-		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
-//		edoLoginPage.openPage();
-		webDriver.printScreen();
-
-		// webDriver.printScreen();
+	public void testDbDelete() throws Exception {
+		ieWebDriver.init();
+		ieWebDriver.openUrl(getSutAndSubDomain());
+		
+		this.isPass=false;
 	}
 
 	@Test
@@ -250,6 +248,7 @@ public class PoCTest extends EdusoftWebTest {
 	@Test
 	public void testChrome()throws Exception{
 		testOpenURL(chromeWebDriver);
+		Thread.sleep(3000);
 	}
 	
 	public void testOpenURL(GenericWebDriver webDriver)throws Exception{

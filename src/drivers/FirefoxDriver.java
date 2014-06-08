@@ -18,6 +18,8 @@ public class FirefoxDriver extends GenericWebDriver {
 	
 	@Override
 	public void init(String remoteUrl, String folderName) throws Exception {
+		setBrowserName("firefox");
+		setInitialized(true);
 		dbService = new DbService();
 		report.report("Remote url from pom file is: " + remoteUrl);
 		// sutUrl = configuration.getProperty("sut.url");

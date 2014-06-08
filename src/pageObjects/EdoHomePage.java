@@ -97,8 +97,12 @@ public class EdoHomePage extends GenericPage {
 		// clickOnNextComponent(4);
 		// }
 		stageNumber = stageNumber - 1;
-		webDriver.waitForElement("//li[@ind='" + stageNumber + "']", "xpath")
-				.click();
+		webDriver.waitForElement(
+				"//ul[@class='ulTasks']//li[@ind='" + stageNumber + "']//a",
+				"xpath").click();
+		
+		
+	
 		return this;
 	}
 
@@ -111,6 +115,7 @@ public class EdoHomePage extends GenericPage {
 		}
 		return this;
 	}
+
 	public EdoHomePage clickOnLastComponent(int iterations) throws Exception {
 
 		for (int i = 0; i < iterations; i++) {
@@ -141,14 +146,16 @@ public class EdoHomePage extends GenericPage {
 		return this;
 	}
 
-	public EdoHomePage AddWritingAssignmentWithOutSubmit(String assayTextFileName,
+	public EdoHomePage AddWritingAssignmentWithOutSubmit(String text,
 			TextService textService) throws Exception {
-		String assayText = textService.getTextFromFile(assayTextFileName,
-				Charset.defaultCharset());
+		// String assayText = textService.getTextFromFile(assayTextFileName,
+		// Charset.defaultCharset());
+		String assayText = text;
 		textService.setClipboardText(assayText);
 		// webDriver.swithcToFrameAndSendKeys("//body[@id='tinymce']",
 		// assayText,
 		// "elm1_ifr");
+		webDriver.waitForElement("elm1_ifr", ByTypes.id.toString());
 		String mainWindow = webDriver.switchToFrame("elm1_ifr");
 		WebElement textArea = webDriver.waitForElement("//body[@id='tinymce']",
 				"xpath");
@@ -156,7 +163,7 @@ public class EdoHomePage extends GenericPage {
 		webDriver.switchToMainWindow(mainWindow);
 		return this;
 	}
-	
+
 	public EdoHomePage submitWritingAssignment(String assayTextFileName,
 			TextService textService) throws Exception {
 		String assayText = textService.getTextFromFile(assayTextFileName,
@@ -165,16 +172,33 @@ public class EdoHomePage extends GenericPage {
 		// webDriver.swithcToFrameAndSendKeys("//body[@id='tinymce']",
 		// assayText,
 		// "elm1_ifr");
+		Thread.sleep(3000);
 		String mainWindow = webDriver.switchToFrame("elm1_ifr");
 		WebElement textArea = webDriver.waitForElement("//body[@id='tinymce']",
 				"xpath");
 		webDriver.pasteTextFromClipboard(textArea);
 		webDriver.switchToMainWindow(mainWindow);
 		Thread.sleep(3000);
+		// webDriver.waitForElement("//a[@title='Submit']", "xpath").click();
+		// webDriver.closeAlertByAccept();
+		// webDriver.closeAlertByAccept();
+		clickOnSubmitAssignment();
+		return this;
+	}
+
+	public EdoHomePage clickOnSubmitAssignment() throws Exception {
 		webDriver.waitForElement("//a[@title='Submit']", "xpath").click();
 		webDriver.closeAlertByAccept();
 		webDriver.closeAlertByAccept();
 		return this;
+	}
+
+	public String getAssignmentTextFromEditor() throws Exception {
+		String mainWindow = webDriver.switchToFrame("elm1_ifr");
+		String text = webDriver
+				.waitForElement("//body[@id='tinymce']", "xpath").getText();
+		webDriver.switchToMainWindow(mainWindow);
+		return text;
 	}
 
 	public EdoHomePage checkEraterNoticeAppear() throws Exception {
@@ -280,7 +304,7 @@ public class EdoHomePage extends GenericPage {
 	}
 
 	public EdoHomePage addWritingAssignmentWithoutSubmitting(Course course,
-			String textFile) throws Exception {
+			String text, TextService textService) throws Exception {
 		clickOnCourses();
 		// String courseName = "Basic 3 2012";
 		clickOnCourseByName(course.getName());
@@ -290,22 +314,25 @@ public class EdoHomePage extends GenericPage {
 				.get(0).getName(), "Practice");
 		ClickOnComponentsStage(Integer.valueOf((course.getCourseUnits().get(0)
 				.getUnitComponent().get(0).getStageNumber())));
-		
-		AddWritingAssignmentWithOutSubmit(textFile, textService);
+
+		AddWritingAssignmentWithOutSubmit(text, textService);
 
 		return this;
 	}
 
 	public EdoHomePage clickToSaveAssignment() throws Exception {
-		webDriver.waitForElement("elm1_save_", ByTypes.id.toString()).click();
+		WebElement saveBtn = webDriver.waitForElement("elm1_save_",
+				ByTypes.id.toString());
+		saveBtn.click();
 		String alertText = webDriver.getAlertText(10);
-		Assert.assertEquals("Your draft has been saved", alertText);
-		Assert.assertTrue("Save button is not disable", webDriver
-				.waitForElement("elm1_save_", ByTypes.id.toString())
-				.isEnabled() == false);
+		Assert.assertEquals("Your draft has been saved.", alertText);
+		webDriver.closeAlertByAccept();
+		webDriver
+				.waitForElement(
+						"//a[@id='elm1_save_']//span[@class='mceIcon mce_save_ disable']",
+						ByTypes.xpath.toString());
 		return this;
 	}
-	
 
 	@Override
 	public GenericPage OpenPage(String url) throws Exception {

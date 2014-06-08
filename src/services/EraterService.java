@@ -30,6 +30,8 @@ public class EraterService extends SystemObjectImpl {
 	private DbService dbService;
 	@Autowired
 	private NetService netService;
+	@Autowired
+	Configuration configuration;
 
 	List<String[]> feedbackList = new ArrayList<String[]>();
 
@@ -214,6 +216,12 @@ public class EraterService extends SystemObjectImpl {
 		String result = dbService.getStringFromQuery(sql);
 		return result;
 	}
+	
+	public String getWritingIdByUserId(String userId)throws Exception{
+		String sql="select writingId from writing where userId='"+userId+"'";
+		String result=dbService.getStringFromQuery(sql);
+		return result;
+	}
 
 	public void checkWritingIdsByCSV() throws Exception {
 		List<String[]> writingIds = textService
@@ -227,7 +235,7 @@ public class EraterService extends SystemObjectImpl {
 	public List<Course> loadCoursedDetailsFromCsv() throws Exception {
 		List<String[]> courses = textService
 				.getStr2dimArrFromCsv("files/csvFiles/Courses.csv");
-		List<Course> coursesList = null;
+		List<Course> coursesList = new ArrayList<Course>();
 		for (int i = 0; i < courses.size(); i++) {
 			Course course = new Course();
 			course.setName(courses.get(i)[0]);
@@ -251,5 +259,21 @@ public class EraterService extends SystemObjectImpl {
 		return coursesList;
 
 	}
+	
+	public void deleteStudentAssignments(String userId)throws Exception{
+		String sql="delete  from writing where userid="+userId;
+		dbService.runDeleteUpdateSql(sql);
+	}
+	public void setEraterTeacherFirst()throws Exception{
+		String instId=configuration.getProperty("institution.id");
+		String sql="update dbo.Institutions set teacherfirst=1  where institutionid="+instId;
+		dbService.runDeleteUpdateSql(sql);
+	}
+	public void setEraterTeacherLast()throws Exception{
+		String instId=configuration.getProperty("institution.id");
+		String sql="update dbo.Institutions set teacherfirst=0  where institutionid="+instId;
+		dbService.runDeleteUpdateSql(sql);
+	}
 
+	
 }

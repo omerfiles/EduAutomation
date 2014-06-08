@@ -29,6 +29,15 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 	@After
 	public void tearDown() throws Exception {
 
+		if (this.isPass == false) {
+			if (chromeWebDriver.isInitialized() == true) {
+				chromeWebDriver.printScreen();
+			} else if (ieWebDriver.isInitialized() == true) {
+				ieWebDriver.printScreen();
+			} else if (firefoxDriver.isInitialized() == true) {
+				firefoxDriver.printScreen();
+			}
+		}
 
 		chromeWebDriver.closeBrowser();
 		firefoxDriver.closeBrowser();

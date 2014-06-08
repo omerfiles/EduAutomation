@@ -94,10 +94,10 @@ public class Configuration {
 	}
 	
 	public String getStudentUserName(){
-		return getProperty("student.username");
+		return getProperty("student.user.name");
 	}
 	public String getStudentPassword(){
-		return getProperty("student.password");
+		return getProperty("student.user.password");
 	}
 
 	public Set<Object> getKeys() {
