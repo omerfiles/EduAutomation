@@ -31,11 +31,11 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 
 		if (this.isPass == false) {
 			if (chromeWebDriver.isInitialized() == true) {
-				chromeWebDriver.printScreen();
+				chromeWebDriver.printScreen(this.getMethodName(),null);
 			} else if (ieWebDriver.isInitialized() == true) {
-				ieWebDriver.printScreen();
+				ieWebDriver.printScreen(this.getMethodName(),null);
 			} else if (firefoxDriver.isInitialized() == true) {
-				firefoxDriver.printScreen();
+				firefoxDriver.printScreen(this.getMethodName(),null);
 			}
 		}
 

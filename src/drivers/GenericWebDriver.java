@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import Enums.ByTypes;
 import services.DbService;
 import jsystem.framework.report.Reporter;
 import jsystem.framework.system.SystemObjectImpl;
@@ -109,36 +110,36 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		WebElement element = null;
 		try {
 			WebDriverWait wait = new WebDriverWait(webDriver, timeout, 1000);
-			if (byType.equals("id")) {
+			if (byType.equals(ByTypes.id.toString())) {
 				wait.until(ExpectedConditions.visibilityOfElementLocated(By
 						.id(idValue)));
 				element = webDriver.findElement(By.id(idValue));
 			} else {
-				if (byType.equals("xpath")) {
+				if (byType.equals(ByTypes.xpath.toString())) {
 					wait.until(ExpectedConditions.visibilityOfElementLocated(By
 							.xpath(idValue)));
 					element = webDriver.findElement(By.xpath(idValue));
 				} else {
-					if (byType.equals("className")) {
+					if (byType.equals(ByTypes.className.toString())) {
 						wait.until(ExpectedConditions
 								.visibilityOfElementLocated(By
 										.className(idValue)));
 						element = webDriver.findElement(By.className(idValue));
 					} else {
-						if (byType.equals("name")) {
+						if (byType.equals(ByTypes.name.toString())) {
 							wait.until(ExpectedConditions
 									.visibilityOfElementLocated(By
 											.name(idValue)));
 							element = webDriver.findElement(By.name(idValue));
 						} else {
-							if (byType.equals("linkText")) {
+							if (byType.equals(ByTypes.linkText.toString())) {
 								wait.until(ExpectedConditions
 										.visibilityOfElementLocated(By
 												.linkText(idValue)));
 								element = webDriver.findElement(By
 										.linkText(idValue));
 							} else {
-								if (byType.equals("partialLinkText")) {
+								if (byType.equals(ByTypes.partialLinkText.toString())) {
 									wait.until(ExpectedConditions
 											.visibilityOfElementLocated(By
 													.partialLinkText(idValue)));
@@ -293,8 +294,10 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		if (clear == true) {
 			element.clear();
 		}
-
-		sendKey(keys);
+//
+//		sendKey(keys);
+//		element.sendKeys(keys);
+		element.sendKeys(keys);
 		webDriver.switchTo().window(currentWindow);
 	}
 
@@ -414,6 +417,14 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		WebElement element = webDriver.findElement(by);
 		return element;
 	}
+	
+	public void switchToAlert(){
+		WebDriverWait wait = new WebDriverWait(webDriver, 20, 1000);
+
+		if (wait.until(ExpectedConditions.alertIsPresent()) != null) {
+			webDriver.switchTo().alert();
+		}
+	}
 
 	public void closeAlertByAccept() {
 		WebDriverWait wait = new WebDriverWait(webDriver, 20, 1000);
@@ -422,6 +433,13 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			webDriver.switchTo().alert().accept();
 		}
 
+	}
+	public void closeAlertByDismiss(){
+		WebDriverWait wait = new WebDriverWait(webDriver, 20, 1000);
+
+		if (wait.until(ExpectedConditions.alertIsPresent()) != null) {
+			webDriver.switchTo().alert().dismiss();
+		}
 	}
 
 	public String getAlertText(int timeOut) {
@@ -463,7 +481,8 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			path = System.getProperty("user.dir") + "//" + "log//current/";
 			// path = configuration.getProperty("logserver") + "//"
 			// + configuration.getProperty("screenshotFolder");
-			path = path + sig + ".png";
+			
+			path = path + sig+ ".png";
 			FileOutputStream fos = new FileOutputStream(new File(newFileName));
 			fos.write(decodedScreenshot);
 			fos.close();
@@ -487,8 +506,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			List<WebElement> cells = row.findElements(By.tagName("td"));
 			for (WebElement cell : cells) {
 				System.out.println(cell.getText());
-				if (cell.getText().equals(text)) {
+				if (cell.getText().contains(text)) {
 					result = cell;
+					break;
 				}
 			}
 		}
@@ -553,6 +573,12 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	public String getUrl() throws Exception {
 		return webDriver.getCurrentUrl();
 
+	}
+
+
+
+	public DbService getDbService() {
+		return dbService;
 	}
 
 }

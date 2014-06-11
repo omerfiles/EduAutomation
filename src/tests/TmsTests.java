@@ -26,6 +26,7 @@ public class TmsTests extends EdusoftWebTest {
 		Teacher teacher=new Teacher();
 		teacher.setUserName(config.getProperty("teacher.username"));
 		teacher.setPassword(config.getProperty("teacher.password"));
+	
 		EdoLoginPage edoLoginPage=new EdoLoginPage(webDriver);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
 		edoLoginPage.login(teacher);

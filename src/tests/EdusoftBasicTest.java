@@ -21,6 +21,8 @@ import junit.framework.SystemTestCase4;
 import junit.framework.TestCase;
 
 public class EdusoftBasicTest extends SystemTestCase4 {
+	
+	
 
 	protected GenericWebDriver webDriver;
 
@@ -32,8 +34,7 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 	public ClassPathXmlApplicationContext ctx;
 
 	
-	@ClassRule
-	public Timeout GlobalTimeOut=new Timeout(1000);
+	
 	
 	@Before
 	public void setup() throws Exception {

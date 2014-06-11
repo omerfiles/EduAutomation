@@ -4,6 +4,7 @@ import org.openqa.selenium.WebElement;
 
 import Enums.ByTypes;
 import drivers.GenericWebDriver;
+import pageObjects.EdoHomePage;
 import pageObjects.GenericPage;
 
 public class TmsHomePage extends GenericPage {
@@ -50,31 +51,61 @@ public class TmsHomePage extends GenericPage {
 		// "4", courseName,ByTypes.partialLinkText.toString());
 		// webDriver.waitForElement("//table[@id='tblTestsReportGrid']//tr["+index+"]//td[3]//div",
 		// ByTypes.xpath.toString()).click();
-		System.out.println(webDriver.getUrl());
 		Thread.sleep(2000);
-		webDriver.switchToFrame("ReviewRequiredReport");
+		String mainFrame = webDriver.switchToFrame("ReviewRequiredReport");
 		Thread.sleep(2000);
-		WebElement td = webDriver.getTableTdByName("//*[@id='tblTestsReportGrid']",
-				studentName);
-		td.click();
+		int elapsedTime = 0;
+		int maxTime = 120;
+		WebElement td = null;
+		while (elapsedTime < maxTime) {
+			td = webDriver.getTableTdByName("//*[@id='tblTestsReportGrid']",
+					studentName);
+			if(td!=null){
+				break;
+			}
+			else{
+				logger.info("Waiting for student assignment for another 5 seconds");
+				elapsedTime=elapsedTime+5;
+				Thread.sleep(5000);
+			}
+		}
 
+		td.click();
+		webDriver.switchToMainWindow(mainFrame);
 		return this;
 	}
-	public TmsHomePage clickOnAssignmentSummary()throws Exception{
-		
+
+	public TmsHomePage clickOnAssignmentSummary() throws Exception {
+
+		webDriver.switchToFrame("mainFrame");
+		String mainFrame = webDriver.switchToFrame(webDriver.waitForElement(
+				"//div[@id='cboxLoadedContent']//iframe",
+				ByTypes.xpath.toString()));
+		webDriver.waitForElement("//div[@class='right closeBt']", "xpath")
+				.click();
 		webDriver.waitForElement("Summary", "linkText").click();
+//		webDriver.switchToMainWindow(mainFrame);
 		return this;
 	}
-	public TmsHomePage clickOnApproveAssignmentButton()throws Exception{
-		webDriver.waitForElement("Approve", ByTypes.partialLinkText.toString());
+
+	public TmsHomePage clickOnApproveAssignmentButton() throws Exception {
+		webDriver.waitForElement("Approve", ByTypes.partialLinkText.toString()).click();
 		return this;
 	}
-	public TmsHomePage reteAssignment(int rating)throws Exception{
-		webDriver.waitForElement("//tr//td//input[@id='"+rating+"']", "xpath").click();
+
+	public TmsHomePage reteAssignment(int rating) throws Exception {
+		webDriver.waitForElement("//tr//td//input[@id='" + rating + "']",
+				"xpath").click();
 		return this;
 	}
-	public TmsHomePage sendFeedback()throws Exception{
+
+	public TmsHomePage sendFeedback() throws Exception {
 		webDriver.waitForElement("btSubmit", "id").click();
+		return this;
+	}
+
+	public TmsHomePage clickOnRateAssignmentButton() throws Exception {
+		webDriver.waitForElement("Rate", ByTypes.linkText.toString()).click();
 		return this;
 	}
 

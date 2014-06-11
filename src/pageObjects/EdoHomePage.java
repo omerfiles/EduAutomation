@@ -2,6 +2,7 @@ package pageObjects;
 
 import java.nio.charset.Charset;
 
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -15,8 +16,16 @@ import drivers.GenericWebDriver;
 
 public class EdoHomePage extends GenericPage {
 
+	private static final String RATING1_TEXT = "Very Good!";
+
+	private static final String RATING2_TEXT = null;
+
+	private static final String RATING3_TEXT = null;
+
 	@Autowired
 	TextService textService;
+
+	public String mainWindowName = null;
 
 	public EdoHomePage(GenericWebDriver webDriver) {
 		super(webDriver);
@@ -100,9 +109,7 @@ public class EdoHomePage extends GenericPage {
 		webDriver.waitForElement(
 				"//ul[@class='ulTasks']//li[@ind='" + stageNumber + "']//a",
 				"xpath").click();
-		
-		
-	
+
 		return this;
 	}
 
@@ -168,6 +175,8 @@ public class EdoHomePage extends GenericPage {
 			TextService textService) throws Exception {
 		String assayText = textService.getTextFromFile(assayTextFileName,
 				Charset.defaultCharset());
+
+		System.out.println("Clipboard text is set to: " + assayText);
 		textService.setClipboardText(assayText);
 		// webDriver.swithcToFrameAndSendKeys("//body[@id='tinymce']",
 		// assayText,
@@ -188,8 +197,11 @@ public class EdoHomePage extends GenericPage {
 
 	public EdoHomePage clickOnSubmitAssignment() throws Exception {
 		webDriver.waitForElement("//a[@title='Submit']", "xpath").click();
+		Thread.sleep(3000);
 		webDriver.closeAlertByAccept();
+		Thread.sleep(3000);
 		webDriver.closeAlertByAccept();
+		Thread.sleep(3000);
 		return this;
 	}
 
@@ -213,19 +225,29 @@ public class EdoHomePage extends GenericPage {
 	}
 
 	public EdoHomePage switchToAssignmentsFrame() throws Exception {
-		webDriver
-				.switchToFrame(webDriver.waitForElement("cboxIframe", "class"));
+		mainWindowName = webDriver.switchToFrame(webDriver.waitForElement(
+				"cboxIframe", ByTypes.className.toString()));
 		return this;
+
 	}
 
-	public EdoHomePage clickOnWritingAssignmentsTab() throws Exception {
+	public EdoHomePage clickOnWritingAssignmentsTab(String courseName)
+			throws Exception {
 		webDriver.waitForElement("spWriting", "id").click();
+		WebElement td = webDriver.getTableTdByName("//*[@id='myWritingTbl']",
+				courseName);
+		td.click();
+		// webDriver.waitForElement(courseName,
+		// ByTypes.partialLinkText.toString()).click();
+		// webDriver.waitForElement("View", "linkText").click();
 		return this;
 	}
 
 	public EdoHomePage clickToViewAssignment(String courseName)
 			throws Exception {
-		webDriver.waitForElement(courseName, "linkText").click();
+		webDriver
+				.waitForElement(courseName, ByTypes.partialLinkText.toString())
+				.click();
 		webDriver.waitForElement("View", "linkText").click();
 		return this;
 	}
@@ -312,6 +334,7 @@ public class EdoHomePage extends GenericPage {
 		clickOnCourseUnit(course.getCourseUnits().get(0).getName());
 		clickOntUnitComponent(course.getCourseUnits().get(0).getUnitComponent()
 				.get(0).getName(), "Practice");
+		Thread.sleep(5000);
 		ClickOnComponentsStage(Integer.valueOf((course.getCourseUnits().get(0)
 				.getUnitComponent().get(0).getStageNumber())));
 
@@ -338,6 +361,75 @@ public class EdoHomePage extends GenericPage {
 	public GenericPage OpenPage(String url) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public EdoHomePage clickOnSeeFeedback() throws Exception {
+		webDriver.waitForElement("See Feedback", ByTypes.linkText.toString())
+				.click();
+		;
+		return this;
+	}
+
+	public EdoHomePage clickOnSeeFeedbackAndTryAgsin() throws Exception {
+		webDriver.waitForElement("See feedback and try again",
+				ByTypes.linkText.toString()).click();
+		;
+		return this;
+	}
+
+	public EdoHomePage clickOnFeedbackMoreDetails() throws Exception {
+		webDriver.waitForElement("//div[@id='okButton']//a",
+				ByTypes.xpath.toString()).click();
+		;
+		return this;
+
+	}
+
+	public EdoHomePage editFeedbackAssignmentText(String newText)
+			throws Exception {
+		webDriver.switchToMainWindow(mainWindowName);
+		webDriver.switchToFrame(webDriver.waitForElement(
+				"//div[@id='cboxLoadedContent']//iframe",
+				ByTypes.xpath.toString()));
+		webDriver.switchToFrame(webDriver.waitForElement(
+				"//div[@id='cboxLoadedContent']//iframe",
+				ByTypes.xpath.toString()));
+		webDriver.swithcToFrameAndSendKeys("//*[@id='tinymce']", newText,
+				false, "elm1_ifr");
+		return this;
+
+	}
+
+	public EdoHomePage clickOnFeedbackSubmitBtn() throws Exception {
+		webDriver.switchToFrame(webDriver.waitForElement(
+				"//div[@id='cboxLoadedContent']//iframe",
+				ByTypes.xpath.toString()));
+		webDriver.switchToFrame(webDriver.waitForElement(
+				"//div[@id='cboxLoadedContent']//iframe",
+				ByTypes.xpath.toString()));
+
+		webDriver.waitForElement("//div[@id='btSubmit']/a",
+				ByTypes.xpath.toString()).click();
+		Thread.sleep(3000);
+		webDriver.closeAlertByAccept();
+		Thread.sleep(3000);
+		// webDriver.switchToAlert();
+		// webDriver.sendKey(Keys.ENTER);
+		webDriver.closeAlertByAccept();
+		Thread.sleep(5000);
+		return this;
+	}
+
+	public EdoHomePage checkRatingFromTeacher(int rating) throws Exception {
+		switch (rating) {
+		case 1:webDriver.waitForElement(RATING1_TEXT, ByTypes.linkText.toString());break;
+		case 2:webDriver.waitForElement(RATING2_TEXT,  ByTypes.linkText.toString());break;
+		case 3:
+			webDriver.waitForElement(RATING3_TEXT,  ByTypes.linkText.toString());break;
+			
+		}
+		return this;
+
 	}
 
 }

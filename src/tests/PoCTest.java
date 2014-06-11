@@ -18,9 +18,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import Objects.Student;
+import Objects.Teacher;
 import drivers.GenericWebDriver;
 import pageObjects.EdoHomePage;
 import pageObjects.EdoLoginPage;
+import pageObjects.tms.TmsHomePage;
 
 public class PoCTest extends EdusoftWebTest {
 
@@ -28,12 +30,42 @@ public class PoCTest extends EdusoftWebTest {
 	public void setup() throws Exception {
 		super.setup();
 	}
+	
+	@Test
+	public void OpenTmsCloseItAndOpenEdoAndLogin()throws Exception{
+		webDriver=chromeWebDriver;
+		webDriver.init();
+		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
+		edoLoginPage.OpenPage(getSutAndSubDomain());
+
+		Student student = new Student();
+		student.setUserName(config.getStudentUserName());
+		student.setPassword(config.getStudentPassword());
+		student.setId(dbService.getUserIdByUserName(student.getUserName()));
+		EdoHomePage edoHomePage = edoLoginPage.login(student);
+		
+		webDriver.deleteCookiesAndRefresh();
+		Teacher teacher = new Teacher(config.getProperty("teacher.username"),
+				config.getProperty("teacher.password"));
+		edoLoginPage.OpenPage(getSutAndSubDomain());
+		edoHomePage = edoLoginPage.login(teacher);
+		edoHomePage.waitForPageToLoad();
+		TmsHomePage tmsHomePage = edoHomePage.openTeachersCorner();
+		
+		
+		
+		
+		webDriver.closeBrowser();
+		webDriver.init();
+		webDriver.openUrl(getSutAndSubDomain());
+		edoLoginPage.login(student);
+	}
 
 	@Test
 	public void testAssignment() throws Exception {
 		report.startLevel("Login to Edo", EnumReportLevel.CurrentPlace);
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
-//		edoLoginPage.openPage();
+		// edoLoginPage.openPage();
 		edoLoginPage.typeUserNameAndPass("isr4", "12345");
 		EdoHomePage edoHomePage = edoLoginPage.submitLogin();
 		report.stopLevel();
@@ -54,15 +86,15 @@ public class PoCTest extends EdusoftWebTest {
 		edoHomePage.checkEraterNoticeAppear();
 		edoHomePage.clickOnMyAssignments();
 		edoHomePage.switchToAssignmentsFrame();
-		edoHomePage.clickOnWritingAssignmentsTab();
+		// edoHomePage.clickOnWritingAssignmentsTab();
 
 		report.stopLevel();
 
 	}
 
 	@Test
-	public void testReadTextFromFile() throws Exception {
-
+	public void getUserId() throws Exception {
+	System.out.println(dbService.getUserIdByUserName(config.getStudentUserName()));	
 	}
 
 	@Test
@@ -85,8 +117,8 @@ public class PoCTest extends EdusoftWebTest {
 	@Test
 	public void testLoginLogout() throws Exception {
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
-//		edoLoginPage
-//				.openEdoLoginPage("http://edo.engdis.com/aeonreading/Runtime/LoginNew.aspx");
+		// edoLoginPage
+		// .openEdoLoginPage("http://edo.engdis.com/aeonreading/Runtime/LoginNew.aspx");
 		edoLoginPage.typeUserNameAndPass("teach55", "teach55");
 		EdoHomePage edoHomePage = edoLoginPage.submitLogin();
 		edoHomePage.waitForPageToLoad();
@@ -122,8 +154,8 @@ public class PoCTest extends EdusoftWebTest {
 		report.startLevel("Creating student for teacher:" + user);
 		webDriver.init("http://localhost:4444", null);
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
-//		edoLoginPage
-//				.openEdoLoginPage("http://edo.engdis.com/aeonreading/Runtime/LoginNew.aspx");
+		// edoLoginPage
+		// .openEdoLoginPage("http://edo.engdis.com/aeonreading/Runtime/LoginNew.aspx");
 		edoLoginPage.typeUserNameAndPass(user, password);
 		EdoHomePage edoHomePage = edoLoginPage.submitLogin();
 		edoHomePage.waitForPageToLoad();
@@ -155,8 +187,8 @@ public class PoCTest extends EdusoftWebTest {
 	public void testDbDelete() throws Exception {
 		ieWebDriver.init();
 		ieWebDriver.openUrl(getSutAndSubDomain());
-		
-		this.isPass=false;
+
+		this.isPass = false;
 	}
 
 	@Test
@@ -182,7 +214,6 @@ public class PoCTest extends EdusoftWebTest {
 	@TestProperties(name = "testConvertEraterXml")
 	public void testConvertEraterXml() throws Exception {
 
-
 		List<String[]> writingIds = textService
 				.getStr2dimArrFromCsv("files/csvFiles/writingIds.csv");
 		boolean pass = true;
@@ -193,7 +224,7 @@ public class PoCTest extends EdusoftWebTest {
 				pass = false;
 			}
 		}
-		Assert.assertTrue("Some unmatches found",pass);
+		Assert.assertTrue("Some unmatches found", pass);
 		//
 
 	}
@@ -238,20 +269,21 @@ public class PoCTest extends EdusoftWebTest {
 		}
 
 	}
+
 	@Test
-	public void testIE()throws Exception{
+	public void testIE() throws Exception {
 		ieWebDriver.init();
 		ieWebDriver.openUrl("http://tms.engdis.com/");
-		
+
 	}
-	
+
 	@Test
-	public void testChrome()throws Exception{
+	public void testChrome() throws Exception {
 		testOpenURL(chromeWebDriver);
 		Thread.sleep(3000);
 	}
-	
-	public void testOpenURL(GenericWebDriver webDriver)throws Exception{
+
+	public void testOpenURL(GenericWebDriver webDriver) throws Exception {
 		webDriver.init();
 		webDriver.openUrl("http://tms.engdis.com/");
 	}

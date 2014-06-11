@@ -496,10 +496,15 @@ public class DbService extends SystemObjectImpl {
 	}
 
 	public String getUserIdByUserName(String userName) throws Exception {
+		String institutionid=configuration.getProperty("institution.id");
 		String sql = "select UserId from users where UserName='" + userName
-				+ "'";
+				+ "' and institutionid="+institutionid;
 		String result = getStringFromQuery(sql);
 		return result;
+	}
+
+	public void setUserLoginToNull(String id) {
+		String sql="Update users set logedin = null where userid="+id;
 	}
 
 }

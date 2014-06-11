@@ -212,14 +212,29 @@ public class EraterService extends SystemObjectImpl {
 	public String getWritingIdByUserIdAndTextStart(String userId,
 			String textStart) throws Exception {
 		String sql = "  select * from writing where UserId='" + userId
-				+ "' and EssayText like '" + textStart + "%'";
+				+ "' and EssayText like '%" + textStart + "%'";
 		String result = dbService.getStringFromQuery(sql);
+
+		Assert.assertFalse("writing id is null", result.equals("null"));
 		return result;
 	}
-	
-	public String getWritingIdByUserId(String userId)throws Exception{
-		String sql="select writingId from writing where userId='"+userId+"'";
-		String result=dbService.getStringFromQuery(sql);
+
+	public boolean checkWritingJsonInEraterTable(String writingId)
+			throws Exception {
+		String sql = "select EraterJson from Erater where writingid="
+				+ writingId;
+		String result = dbService.getStringFromQuery(sql);
+		if (result.length() > 5) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public String getWritingIdByUserId(String userId) throws Exception {
+		String sql = "select writingId from writing where userId='" + userId
+				+ "'";
+		String result = dbService.getStringFromQuery(sql);
 		return result;
 	}
 
@@ -259,21 +274,55 @@ public class EraterService extends SystemObjectImpl {
 		return coursesList;
 
 	}
-	
-	public void deleteStudentAssignments(String userId)throws Exception{
-		String sql="delete  from writing where userid="+userId;
-		dbService.runDeleteUpdateSql(sql);
-	}
-	public void setEraterTeacherFirst()throws Exception{
-		String instId=configuration.getProperty("institution.id");
-		String sql="update dbo.Institutions set teacherfirst=1  where institutionid="+instId;
-		dbService.runDeleteUpdateSql(sql);
-	}
-	public void setEraterTeacherLast()throws Exception{
-		String instId=configuration.getProperty("institution.id");
-		String sql="update dbo.Institutions set teacherfirst=0  where institutionid="+instId;
+
+	public void deleteStudentAssignments(String userId) throws Exception {
+
+		String sqlForDeleteWritingHistory = "delete from writingHistory where writingid in(select writingid from writing where userid="
+				+ userId + ")";
+		String sqlForDeleteEraterHistory = "delete from EraterHistory where writingid in(select writingid from writing where userid="
+				+ userId + ")";
+		String sqlDeleteEraterErrorServiceLog = "delete from ERaterServiceErrorLog where writingid in (select writingid from writing where userid="
+				+ userId + ")";
+		String sql = "delete  from writing where userid=" + userId;
+		dbService.runDeleteUpdateSql(sqlForDeleteEraterHistory);
+		dbService.runDeleteUpdateSql(sqlForDeleteWritingHistory);
+		dbService.runDeleteUpdateSql(sqlDeleteEraterErrorServiceLog);
 		dbService.runDeleteUpdateSql(sql);
 	}
 
-	
+	public void deleteWritngFromDb(String writingId) throws Exception {
+		String sqlWritingHistory = "delete from writingHistory where writingid="
+				+ writingId;
+		String sqlEraterHistory = " delete from eraterHistory where writingid="
+				+ writingId;
+		dbService.runDeleteUpdateSql(sqlWritingHistory);
+		dbService.runDeleteUpdateSql(sqlEraterHistory);
+
+	}
+
+	public void setEraterTeacherFirst() throws Exception {
+		String instId = configuration.getProperty("institution.id");
+		String sql = "update dbo.Institutions set teacherfirst=1  where institutionid="
+				+ instId;
+		dbService.runDeleteUpdateSql(sql);
+	}
+
+	public void setEraterTeacherLast() throws Exception {
+		String instId = configuration.getProperty("institution.id");
+		String sql = "update dbo.Institutions set teacherfirst=0  where institutionid="
+				+ instId;
+		dbService.runDeleteUpdateSql(sql);
+	}
+
+	public void checkWritingIsProcessed(String writingId) throws Exception {
+		String institutionSubmissions = dbService
+				.getStringFromQuery(" select NumberOfSubmissions from institutions where institutionid="
+						+ configuration.getProperty("institution.id"));
+		String sql = "select writingid from writing where Processed=1 and Submissions="
+				+ institutionSubmissions
+				+ " and reviewed=0  and writingid="
+				+ writingId;
+		dbService.getStringFromQuery(sql);
+	}
+
 }

@@ -29,6 +29,7 @@ public class TextService extends SystemObjectImpl {
 
 		} catch (IOException e) {
 			report.report(e.toString());
+			
 		} finally {
 			return new String(encoded, encoding);
 		}
@@ -99,4 +100,5 @@ public class TextService extends SystemObjectImpl {
 		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 		clipboard.setContents(selection, selection);
 	}
+
 }

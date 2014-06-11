@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import services.Configuration;
+import services.DbService;
 import drivers.GenericWebDriver;
 
 public abstract class GenericPage {
@@ -13,12 +14,16 @@ public abstract class GenericPage {
 	
 	@Autowired
 	protected Configuration configuration;
+	
+	
+	protected DbService dbService;
 
 	
 	protected static final Logger logger = LoggerFactory.getLogger(GenericPage.class);
 	
 	public GenericPage(GenericWebDriver webDriver){
 		this.webDriver=webDriver;
+		this.dbService=webDriver.getDbService();
 //		textService=new TextService();
 	
 	}
