@@ -42,7 +42,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			.getLogger(GenericWebDriver.class);
 	public String sutUrl = null;
 	protected RemoteWebDriver webDriver;
-	private int timeout = 10;
+	protected int timeout = 10;
 	private String browserName;
 	private boolean initialized;
 	// private Config configuration;
@@ -176,6 +176,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	public WebElement waitForElement(String idValue, String byType)
 			throws Exception {
 		return waitForElement(idValue, byType, timeout, true);
+	}
+	public void waitForElementAndClick(String idValue, String byType)throws Exception{
+		 waitForElement(idValue, byType, timeout, true).click();
 	}
 
 	public WebElement waitForElement(String idValue, String byType,
@@ -579,6 +582,11 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	public DbService getDbService() {
 		return dbService;
+	}
+
+	public void clickOnElement(WebElement td) {
+		td.click();
+		
 	}
 
 }

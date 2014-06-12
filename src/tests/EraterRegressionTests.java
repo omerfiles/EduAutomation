@@ -163,8 +163,11 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		// edoHomePage.clickToViewAssignment(courseName);
 		edoHomePage.clickOnSeeFeedback();
 		edoHomePage.switchToAssignmentsFrame();
-		edoHomePage.clickOnFeedbackMoreDetails();
+		Thread.sleep(3000);
+//		edoHomePage.switchToAssignmentsFrame();
 		edoHomePage.checkRatingFromTeacher(rating);
+//		edoHomePage.clickOnFeedbackMoreDetails();
+	
 		
 		report.stopLevel();
 

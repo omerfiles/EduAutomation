@@ -7,6 +7,7 @@ import jsystem.framework.report.Reporter;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -45,6 +46,18 @@ public class FirefoxDriver extends GenericWebDriver {
 		} catch (Exception e) {
 			logger.error("Cannot register node or start the remote driver! ", e);
 		}
+	}
+	@Override
+	public void waitForElementAndClick(String idValue, String byType)throws Exception{
+		 waitForElement(idValue, byType, timeout, true).sendKeys(Keys.ENTER);
+	}
+	
+	@Override
+	public void clickOnElement(WebElement td) {
+//		td.sendKeys(Keys.ENTER);
+		JavascriptExecutor executor = (JavascriptExecutor) webDriver;
+		executor.executeScript("arguments[0].click();", td);
+		
 	}
 	
 //	@Override

@@ -32,6 +32,17 @@ public class PoCTest extends EdusoftWebTest {
 	}
 	
 	@Test
+	public void IEPrintScreen()throws Exception{
+		webDriver=ieWebDriver;
+		webDriver.init();
+		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
+		edoLoginPage.OpenPage(getSutAndSubDomain());
+		webDriver.printScreen();
+		
+
+	}
+	
+	@Test
 	public void OpenTmsCloseItAndOpenEdoAndLogin()throws Exception{
 		webDriver=chromeWebDriver;
 		webDriver.init();

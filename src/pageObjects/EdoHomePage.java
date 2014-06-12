@@ -18,9 +18,9 @@ public class EdoHomePage extends GenericPage {
 
 	private static final String RATING1_TEXT = "Very Good!";
 
-	private static final String RATING2_TEXT = null;
+	private static final String RATING2_TEXT = "Good!";
 
-	private static final String RATING3_TEXT = null;
+	private static final String RATING3_TEXT = "Keep Working!";
 
 	@Autowired
 	TextService textService;
@@ -116,8 +116,10 @@ public class EdoHomePage extends GenericPage {
 	public EdoHomePage clickOnNextComponent(int iterations) throws Exception {
 
 		for (int i = 0; i < iterations; i++) {
-			webDriver.waitForElement("//a[@class='tasksBtnext']", "xpath")
-					.click();
+			// webDriver.waitForElement("//a[@class='tasksBtnext']", "xpath")
+			// .click();
+			webDriver.waitForElementAndClick("//a[@class='tasksBtnext']",
+					"xpath");
 			Thread.sleep(500);
 		}
 		return this;
@@ -220,7 +222,7 @@ public class EdoHomePage extends GenericPage {
 	}
 
 	public EdoHomePage clickOnMyAssignments() throws Exception {
-		webDriver.waitForElement("myAssignments", "id").click();
+		webDriver.waitForElementAndClick("myAssignments", "id");
 		return this;
 	}
 
@@ -421,13 +423,29 @@ public class EdoHomePage extends GenericPage {
 	}
 
 	public EdoHomePage checkRatingFromTeacher(int rating) throws Exception {
+		// String mainWin =
+		// webDriver.switchToFrame(webDriver.waitForElement("//iframe[class='cboxIframe']",
+		// "xpath"));
+		// webDriver.switchToFrame(webDriver.waitForElement("//iframe[class='cboxIframe']",
+		// "xpath"));
+		// webDriver.switchToFrame(webDriver.waitForElement(
+		// "cboxIframe", ByTypes.className.toString()));
+
+		String grade = webDriver.waitForElement("//div[@class='choosenGrade']",
+				"xpath").getText();
+
 		switch (rating) {
-		case 1:webDriver.waitForElement(RATING1_TEXT, ByTypes.linkText.toString());break;
-		case 2:webDriver.waitForElement(RATING2_TEXT,  ByTypes.linkText.toString());break;
+		case 1:
+			Assert.assertEquals(grade, RATING1_TEXT);
+		case 2:
+			Assert.assertEquals(grade, RATING2_TEXT);
+			break;
 		case 3:
-			webDriver.waitForElement(RATING3_TEXT,  ByTypes.linkText.toString());break;
-			
+			Assert.assertEquals(grade, RATING3_TEXT);
+			break;
+
 		}
+		// webDriver.switchToMainWindow(mainWin);
 		return this;
 
 	}

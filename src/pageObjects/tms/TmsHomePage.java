@@ -70,7 +70,8 @@ public class TmsHomePage extends GenericPage {
 			}
 		}
 
-		td.click();
+//		td.click();
+		webDriver.clickOnElement(td);
 		webDriver.switchToMainWindow(mainFrame);
 		return this;
 	}
