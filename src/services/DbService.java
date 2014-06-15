@@ -346,6 +346,11 @@ public class DbService extends SystemObjectImpl {
 			throw e;
 		}
 	}
+	
+	public String sig(int size) throws Exception{
+		String str=sig();
+		return str.substring(str.length()-size, str.length());
+	}
 
 	public String sig() throws Exception {
 		return String.valueOf(System.currentTimeMillis());
@@ -505,6 +510,12 @@ public class DbService extends SystemObjectImpl {
 
 	public void setUserLoginToNull(String id) {
 		String sql="Update users set logedin = null where userid="+id;
+	}
+
+	public String getInstituteNameById(String id) throws Exception {
+		String sql="select name from institutions where institutionId="+id;
+		String result=getStringFromQuery(sql);
+		return result;
 	}
 
 }

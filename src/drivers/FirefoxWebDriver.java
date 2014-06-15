@@ -20,7 +20,7 @@ import com.gargoylesoftware.htmlunit.javascript.background.JavaScriptExecutor;
 import services.DbService;
 
 @Service
-public class FirefoxDriver extends GenericWebDriver {
+public class FirefoxWebDriver extends GenericWebDriver {
 	
 	@Override
 	public void init(String remoteUrl, String folderName) throws Exception {

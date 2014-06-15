@@ -1,29 +1,28 @@
 package tests;
 
 import org.junit.After;
+import org.openqa.selenium.safari.SafariDriver;
 
 import drivers.ChromeWebDriver;
-import drivers.FirefoxDriver;
+import drivers.FirefoxWebDriver;
 import drivers.GenericWebDriver;
 import drivers.IEWebDriver;
+import drivers.SafariWebDriver;
 
 public class EdusoftWebTest extends EdusoftBasicTest {
 
-	protected FirefoxDriver firefoxDriver;
+	protected FirefoxWebDriver firefoxDriver;
 	protected IEWebDriver ieWebDriver;
 	protected ChromeWebDriver chromeWebDriver;
+	protected SafariWebDriver  safariDriver;
 
 	@Override
 	public void setup() throws Exception {
 		super.setup();
-		// webDriver = (GenericWebDriver) ctx.getBean("GenericWebDriver");
-		// webDriver.init(config.getProperty("remote.machine"), null);
-		firefoxDriver = (FirefoxDriver) ctx.getBean("FirefoxDriver");
-		// firefoxDriver.init(config.getProperty("remote.machine"), null);
+		firefoxDriver = (FirefoxWebDriver) ctx.getBean("FirefoxWebDriver");
 		ieWebDriver = (IEWebDriver) ctx.getBean("IEWebDriver");
-		// ieWebDriver.init(config.getProperty("remote.machine"), null);
 		chromeWebDriver = (ChromeWebDriver) ctx.getBean("ChromeWebDriver");
-		// chromeWebDriver.init(config.getProperty("remote.machine"), null);
+		safariDriver=(SafariWebDriver)ctx.getBean("SafariWebDriver");
 	}
 
 	@After
@@ -37,11 +36,15 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 			} else if (firefoxDriver.isInitialized() == true) {
 				firefoxDriver.printScreen(this.getMethodName(),null);
 			}
+			else if(safariDriver.isInitialized()==true){
+				safariDriver.printScreen(this.getMethodName(),null);
+			}
 		}
 
 		chromeWebDriver.closeBrowser();
 		firefoxDriver.closeBrowser();
 		ieWebDriver.closeBrowser();
+		safariDriver.closeBrowser();
 		super.tearDown();
 	}
 

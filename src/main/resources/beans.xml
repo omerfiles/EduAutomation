@@ -10,8 +10,11 @@
 	<context:component-scan base-package="drivers" />
 
 	<bean id="ChromeWebDriver" class="drivers.ChromeWebDriver"/>
- 	<bean id="FirefoxDriver" class="drivers.FirefoxDriver"/>
+ 	<bean id="FirefoxWebDriver" class="drivers.FirefoxWebDriver"/>
 	<bean id="IEWebDriver" class="drivers.IEWebDriver"/>
+	<bean id="SafariWebDriver" class="drivers.SafariWebDriver"/>
+
+
 
 	<bean id="configuration" class="services.Configuration"
 		factory-method="getInstance" />

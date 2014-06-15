@@ -139,7 +139,8 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 								element = webDriver.findElement(By
 										.linkText(idValue));
 							} else {
-								if (byType.equals(ByTypes.partialLinkText.toString())) {
+								if (byType.equals(ByTypes.partialLinkText
+										.toString())) {
 									wait.until(ExpectedConditions
 											.visibilityOfElementLocated(By
 													.partialLinkText(idValue)));
@@ -177,8 +178,10 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			throws Exception {
 		return waitForElement(idValue, byType, timeout, true);
 	}
-	public void waitForElementAndClick(String idValue, String byType)throws Exception{
-		 waitForElement(idValue, byType, timeout, true).click();
+
+	public void waitForElementAndClick(String idValue, String byType)
+			throws Exception {
+		waitForElement(idValue, byType, timeout, true).click();
 	}
 
 	public WebElement waitForElement(String idValue, String byType,
@@ -246,7 +249,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 				report.report("Closing browser: " + this.getBrowserName());
 				deleteCookiesAndCache();
-				webDriver.quit();
+				
+					webDriver.quit();
+				
 
 			} catch (Exception e) {
 				report.report("Closing " + this.getBrowserName() + "failed. "
@@ -297,9 +302,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		if (clear == true) {
 			element.clear();
 		}
-//
-//		sendKey(keys);
-//		element.sendKeys(keys);
+		//
+		// sendKey(keys);
+		// element.sendKeys(keys);
 		element.sendKeys(keys);
 		webDriver.switchTo().window(currentWindow);
 	}
@@ -420,8 +425,8 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		WebElement element = webDriver.findElement(by);
 		return element;
 	}
-	
-	public void switchToAlert(){
+
+	public void switchToAlert() {
 		WebDriverWait wait = new WebDriverWait(webDriver, 20, 1000);
 
 		if (wait.until(ExpectedConditions.alertIsPresent()) != null) {
@@ -437,7 +442,8 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		}
 
 	}
-	public void closeAlertByDismiss(){
+
+	public void closeAlertByDismiss() {
 		WebDriverWait wait = new WebDriverWait(webDriver, 20, 1000);
 
 		if (wait.until(ExpectedConditions.alertIsPresent()) != null) {
@@ -484,8 +490,8 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			path = System.getProperty("user.dir") + "//" + "log//current/";
 			// path = configuration.getProperty("logserver") + "//"
 			// + configuration.getProperty("screenshotFolder");
-			
-			path = path + sig+ ".png";
+
+			path = path + sig + ".png";
 			FileOutputStream fos = new FileOutputStream(new File(newFileName));
 			fos.write(decodedScreenshot);
 			fos.close();
@@ -578,14 +584,17 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	}
 
-
-
 	public DbService getDbService() {
 		return dbService;
 	}
 
 	public void clickOnElement(WebElement td) {
 		td.click();
+
+	}
+
+	public void quit() {
+		// TODO Auto-generated method stub
 		
 	}
 

@@ -15,7 +15,7 @@ import services.DbService;
 import services.EraterService;
 import services.NetService;
 import services.TextService;
-import drivers.FirefoxDriver;
+import drivers.FirefoxWebDriver;
 import drivers.GenericWebDriver;
 import junit.framework.SystemTestCase4;
 import junit.framework.TestCase;

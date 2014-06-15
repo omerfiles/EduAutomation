@@ -16,8 +16,9 @@ public class TmsHomePage extends GenericPage {
 
 	@Override
 	public GenericPage waitForPageToLoad() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		webDriver.switchToFrame("mainFrame");
+		webDriver.waitForElement("homelink", "id");
+		return this;
 	}
 
 	@Override
@@ -60,17 +61,16 @@ public class TmsHomePage extends GenericPage {
 		while (elapsedTime < maxTime) {
 			td = webDriver.getTableTdByName("//*[@id='tblTestsReportGrid']",
 					studentName);
-			if(td!=null){
+			if (td != null) {
 				break;
-			}
-			else{
+			} else {
 				logger.info("Waiting for student assignment for another 5 seconds");
-				elapsedTime=elapsedTime+5;
+				elapsedTime = elapsedTime + 5;
 				Thread.sleep(5000);
 			}
 		}
 
-//		td.click();
+		// td.click();
 		webDriver.clickOnElement(td);
 		webDriver.switchToMainWindow(mainFrame);
 		return this;
@@ -85,12 +85,13 @@ public class TmsHomePage extends GenericPage {
 		webDriver.waitForElement("//div[@class='right closeBt']", "xpath")
 				.click();
 		webDriver.waitForElement("Summary", "linkText").click();
-//		webDriver.switchToMainWindow(mainFrame);
+		// webDriver.switchToMainWindow(mainFrame);
 		return this;
 	}
 
 	public TmsHomePage clickOnApproveAssignmentButton() throws Exception {
-		webDriver.waitForElement("Approve", ByTypes.partialLinkText.toString()).click();
+		webDriver.waitForElement("Approve", ByTypes.partialLinkText.toString())
+				.click();
 		return this;
 	}
 
@@ -108,6 +109,86 @@ public class TmsHomePage extends GenericPage {
 	public TmsHomePage clickOnRateAssignmentButton() throws Exception {
 		webDriver.waitForElement("Rate", ByTypes.linkText.toString()).click();
 		return this;
+	}
+
+	public TmsHomePage clickOnTeachers() throws Exception {
+		webDriver.waitForElement("Teachers", ByTypes.linkText.toString())
+				.click();
+		return this;
+
+	}
+
+	public TmsHomePage selectInstitute(String instituteName, String id)
+			throws Exception {
+		String mainWin = webDriver.switchToFrame("FormFrame");
+		webDriver.waitForElementAndClick("SelectSchool", ByTypes.id.toString());
+		Thread.sleep(1000);
+		webDriver.waitForElement(
+				"//select[@id='SelectSchool']//option[@value='" + id + "#"
+						+ instituteName + "']", "xpath").click();
+		webDriver.waitForElement("//input[@value='  GO  ']", "xpath").click();
+		webDriver.switchToFrame("mainFrame");
+		return this;
+	}
+
+	public TeacherDetailsPage clickOnAddNewTeacher() throws Exception {
+		webDriver.waitForElementAndClick("//input[@value='Add New Teacher']",
+				"xpath");
+		webDriver.switchToNewWindow();
+		return new TeacherDetailsPage(webDriver);
+
+	}
+
+	public TmsHomePage clickOnStudents() throws Exception {
+		webDriver.waitForElement("Students", ByTypes.linkText.toString())
+				.click();
+		return this;
+
+	}
+
+	public TmsHomePage selectClass(String className) throws Exception {
+
+		String mainWin = webDriver.switchToFrame("FormFrame");
+		webDriver.waitForElementAndClick("SelectClass", ByTypes.id.toString());
+		Thread.sleep(1000);
+		webDriver.waitForElement("//select[@id='SelectClass']//option[2]",
+				"xpath").click();
+		;
+		webDriver.waitForElement("//input[@value='  GO  ']", "xpath").click();
+		webDriver.switchToFrame("mainFrame");
+
+		return this;
+
+	}
+
+	public TmsHomePage swithchToMainFrame() throws Exception {
+		webDriver.switchToFrame("mainFrame");
+		return this;
+
+	}
+
+	public TmsHomePage enterStudentDetails(String studentName) throws Exception {
+		webDriver.waitForElement("FirstName", "id").sendKeys(studentName);
+		webDriver.waitForElement("LastName", "id").sendKeys(studentName);
+		webDriver.waitForElement("UserName", "id").sendKeys(studentName);
+		webDriver.waitForElement("//input[@value='Add']", "xpath").click();
+		return this;
+	}
+
+	public TmsHomePage enterStudentPassword(String userId, String password)
+			throws Exception {
+		String mainWin = webDriver.switchToFrame("tableFrame");
+		webDriver.waitForElement("//*[@id='info" + userId + "']/a/img", "xpath")
+				.click();
+		webDriver.switchToNewWindow();
+		String mainPopupWin= webDriver.switchToFrame("FormFrame");
+		webDriver.waitForElement("Password", "id").clear();
+		webDriver.waitForElement("Password", "id").sendKeys(password);
+		webDriver.switchToMainWindow(mainPopupWin);
+		webDriver.waitForElement("//input[@value='Submit ']", "xpath").click();
+		
+		return this;
+
 	}
 
 }
