@@ -40,17 +40,12 @@ public class TmsTests extends EdusoftWebTest {
 	}
 
 	@Test
-	public void RegisterTeacherAndLoginChrome() throws Exception {
-		RegisterTeacherAndLogin(chromeWebDriver);
-	}
-
-	public void RegisterTeacherAndLogin(GenericWebDriver webDriver)
-			throws Exception {
+	public void RegisterTeacherAndLogin() throws Exception {
 		report.startLevel("Open TMS and login as TMS Admin",
 				EnumReportLevel.CurrentPlace);
 		String teacherName = "teacher" + dbService.sig(6);
 		String teacherPassword = "12345";
-		webDriver.init();
+		
 		TmsLoginPage tmsLoginPage = new TmsLoginPage(webDriver);
 		UserObject tmsAdmin = new UserObject();
 		tmsAdmin.setUserName(config.getProperty("tmsadmin.user"));
@@ -84,7 +79,7 @@ public class TmsTests extends EdusoftWebTest {
 
 		report.startLevel("Logout from TMS and login as the new teacher",
 				EnumReportLevel.CurrentPlace);
-		webDriver.closeBrowser();
+		webDriver.quitBrowser();
 		webDriver.init();
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
@@ -95,19 +90,25 @@ public class TmsTests extends EdusoftWebTest {
 
 	}
 
-	@Test
-	public void RegisterStudentAndLoginChrome() throws Exception {
-		RegisterStudentAndLogin(chromeWebDriver);
-	}
+	// @Test
+	// public void RegisterStudentAndLogin() throws Exception {
+	// RegisterStudentAndLogin(chromeWebDriver);
+	// }
 
-	public void RegisterStudentAndLogin(GenericWebDriver webDriver)
-			throws Exception {
+	// public void RegisterStudentAndLoginIE() throws Exception {
+	// RegisterStudentAndLogin(ieWebDriver);
+	// }
+	// @Test
+	// public void RegisterStudentAndLoginFirefox() throws Exception {
+	// RegisterStudentAndLogin(firefoxDriver);
+	// }
+	@Test
+	public void RegisterStudentAndLogin() throws Exception {
 		report.startLevel("Open TMS and login as TMS Admin",
 				EnumReportLevel.CurrentPlace);
 
 		String studentName = "student" + dbService.sig(6);
 		String studentPassword = "12345";
-		webDriver.init();
 		TmsLoginPage tmsLoginPage = new TmsLoginPage(webDriver);
 		UserObject tmsAdmin = new UserObject();
 		tmsAdmin.setUserName(config.getProperty("tmsadmin.user"));
@@ -123,6 +124,7 @@ public class TmsTests extends EdusoftWebTest {
 		String institutionId = config.getProperty("institution.id");
 		String instituteName = dbService.getInstituteNameById(institutionId);
 		tmsHomePage.selectInstitute(instituteName, institutionId);
+		Thread.sleep(1000);
 		tmsHomePage.selectClass(config.getProperty("classname"));
 
 		report.stopLevel();

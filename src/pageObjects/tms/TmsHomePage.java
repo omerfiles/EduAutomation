@@ -186,6 +186,7 @@ public class TmsHomePage extends GenericPage {
 		webDriver.waitForElement("Password", "id").sendKeys(password);
 		webDriver.switchToMainWindow(mainPopupWin);
 		webDriver.waitForElement("//input[@value='Submit ']", "xpath").click();
+		webDriver.switchToMainWindow(mainWin);
 		
 		return this;
 

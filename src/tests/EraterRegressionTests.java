@@ -45,18 +45,18 @@ public class EraterRegressionTests extends EdusoftWebTest {
 	@Test
 	public void testSubmitTextAsStudentAndCheckFeedbackAsTeacherAndSendAgainChrome()
 			throws Exception {
-		testSubmitTextAsStudentAndCheckFeedbackAsTeacherAndSendAgain(chromeWebDriver);
+		testSubmitTextAsStudentAndCheckFeedbackAsTeacherAndSendAgain(webDriver);
 	}
 
 	@Test
 	public void testSubmitTextAsStudentAndCheckFeedbackAsTeacherAndSendAgainFirefox()
 			throws Exception {
-		testSubmitTextAsStudentAndCheckFeedbackAsTeacherAndSendAgain(firefoxDriver);
+		testSubmitTextAsStudentAndCheckFeedbackAsTeacherAndSendAgain(webDriver);
 	}
 	@Test
 	public void testSubmitTextAsStudentAndCheckFeedbackAsTeacherAndSendAgainIE()
 			throws Exception {
-		testSubmitTextAsStudentAndCheckFeedbackAsTeacherAndSendAgain(ieWebDriver);
+		testSubmitTextAsStudentAndCheckFeedbackAsTeacherAndSendAgain(webDriver);
 	}
 
 	public void testSubmitTextAsStudentAndCheckFeedbackAsTeacherAndSendAgain(
@@ -153,7 +153,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		report.stopLevel();
 		
 		report.startLevel("Login again as student and check the feedback from the teacher",EnumReportLevel.CurrentPlace);
-		webDriver.closeBrowser();
+		webDriver.quitBrowser();
 		webDriver.init();
 		webDriver.openUrl(getSutAndSubDomain());
 		edoLoginPage.login(student);
@@ -175,17 +175,17 @@ public class EraterRegressionTests extends EdusoftWebTest {
 
 	@Test
 	public void testSaveAssignmentAndSendChrome() throws Exception {
-		testSaveAssignmentAndSend(chromeWebDriver);
+		testSaveAssignmentAndSend(webDriver);
 
 	}
 	@Test
 	public void testSaveAssignmentAndSendFirefox() throws Exception {
-		testSaveAssignmentAndSend(firefoxDriver);
+		testSaveAssignmentAndSend(webDriver);
 
 	}
 	@Test
 	public void testSaveAssignmentAndSendIE() throws Exception {
-		testSaveAssignmentAndSend(ieWebDriver);
+		testSaveAssignmentAndSend(webDriver);
 
 	}
 

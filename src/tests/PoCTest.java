@@ -33,8 +33,7 @@ public class PoCTest extends EdusoftWebTest {
 	
 	@Test
 	public void IEPrintScreen()throws Exception{
-		webDriver=ieWebDriver;
-		webDriver.init();
+		
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
 		webDriver.printScreen();
@@ -43,17 +42,21 @@ public class PoCTest extends EdusoftWebTest {
 	}
 	@Test
 	public void TestSafari()throws Exception{
-		webDriver=safariDriver;
+		
 		webDriver.init();
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
 		webDriver.printScreen();
 	}
+	@Test
+	public void testDbNullQuery()throws Exception{
+		String sql="select * from writing where UserId='52313630000004' and EssayText like '%You are do%'";
+		dbService.getStringFromQuery(sql);
+	}
 	
 	@Test
 	public void OpenTmsCloseItAndOpenEdoAndLogin()throws Exception{
-		webDriver=chromeWebDriver;
-		webDriver.init();
+		
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
 
@@ -74,7 +77,7 @@ public class PoCTest extends EdusoftWebTest {
 		
 		
 		
-		webDriver.closeBrowser();
+		webDriver.quitBrowser();
 		webDriver.init();
 		webDriver.openUrl(getSutAndSubDomain());
 		edoLoginPage.login(student);
@@ -161,7 +164,7 @@ public class PoCTest extends EdusoftWebTest {
 
 	@After
 	public void tearDown() throws Exception {
-		EdoHomePage edoHomePage = new EdoHomePage(webDriver);
+//		EdoHomePage edoHomePage = new EdoHomePage(webDriver);
 		// edoHomePage.logOut();
 		super.tearDown();
 
@@ -189,7 +192,7 @@ public class PoCTest extends EdusoftWebTest {
 		edoHomePage.registerStudent("studentTestAuto" + index,
 				"studentTestAuto" + index, "TestAuto" + index, "TestAuto"
 						+ index, classNumber);
-		webDriver.closeBrowser();
+		webDriver.quitBrowser();
 		report.stopLevel();
 	}
 
@@ -202,13 +205,7 @@ public class PoCTest extends EdusoftWebTest {
 		report.report(userId);
 	}
 
-	@Test
-	public void testDbDelete() throws Exception {
-		ieWebDriver.init();
-		ieWebDriver.openUrl(getSutAndSubDomain());
 
-		this.isPass = false;
-	}
 
 	@Test
 	public void testGetNodesList() throws Exception {
@@ -289,18 +286,9 @@ public class PoCTest extends EdusoftWebTest {
 
 	}
 
-	@Test
-	public void testIE() throws Exception {
-		ieWebDriver.init();
-		ieWebDriver.openUrl("http://tms.engdis.com/");
+	
 
-	}
-
-	@Test
-	public void testChrome() throws Exception {
-		testOpenURL(chromeWebDriver);
-		Thread.sleep(3000);
-	}
+	
 
 	public void testOpenURL(GenericWebDriver webDriver) throws Exception {
 		webDriver.init();

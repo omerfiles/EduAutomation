@@ -3,6 +3,7 @@ package tests;
 import org.junit.After;
 import org.openqa.selenium.safari.SafariDriver;
 
+import Enums.Browsers;
 import drivers.ChromeWebDriver;
 import drivers.FirefoxWebDriver;
 import drivers.GenericWebDriver;
@@ -11,40 +12,63 @@ import drivers.SafariWebDriver;
 
 public class EdusoftWebTest extends EdusoftBasicTest {
 
-	protected FirefoxWebDriver firefoxDriver;
-	protected IEWebDriver ieWebDriver;
-	protected ChromeWebDriver chromeWebDriver;
-	protected SafariWebDriver  safariDriver;
+//	protected FirefoxWebDriver firefoxDriver;
+//	protected IEWebDriver ieWebDriver;
+//	protected ChromeWebDriver chromeWebDriver;
+//	protected SafariWebDriver safariDriver;
+	
+	protected GenericWebDriver webDriver;
+
+	String browser = null;
 
 	@Override
 	public void setup() throws Exception {
 		super.setup();
-		firefoxDriver = (FirefoxWebDriver) ctx.getBean("FirefoxWebDriver");
-		ieWebDriver = (IEWebDriver) ctx.getBean("IEWebDriver");
-		chromeWebDriver = (ChromeWebDriver) ctx.getBean("ChromeWebDriver");
-		safariDriver=(SafariWebDriver)ctx.getBean("SafariWebDriver");
+		browser = System.getProperty("browser");// getting browser name from
+												// pom.xml when running frm
+												// Jenkins
+		if (browser == null) {
+			browser = config.getProperty("browser");// getting browser name from
+													// properties file
+		}
+		if (browser.equals(Browsers.chrome.toString())) {
+			webDriver = (ChromeWebDriver) ctx.getBean("ChromeWebDriver");
+		} else if (browser.equals(Browsers.safari.toString())) {
+			webDriver = (SafariWebDriver) ctx.getBean("SafariWebDriver");
+		} else if (browser.equals(Browsers.IE.toString())) {
+			webDriver = (IEWebDriver) ctx.getBean("IEWebDriver");
+		} else if (browser.equals(Browsers.firefox.toString())) {
+			webDriver = (FirefoxWebDriver) ctx.getBean("FirefoxWebDriver");
+		}
+		
+		webDriver.init();
+
 	}
 
 	@After
 	public void tearDown() throws Exception {
 
+//		if (this.isPass == false) {
+//			if (chromeWebDriver.isInitialized() == true) {
+//				chromeWebDriver.printScreen(this.getMethodName(), null);
+//			} else if (ieWebDriver.isInitialized() == true) {
+//				ieWebDriver.printScreen(this.getMethodName(), null);
+//			} else if (firefoxDriver.isInitialized() == true) {
+//				firefoxDriver.printScreen(this.getMethodName(), null);
+//			} else if (safariDriver.isInitialized() == true) {
+//				safariDriver.printScreen(this.getMethodName(), null);
+//			}
+//		}
+//
+//		chromeWebDriver.quitBrowser();
+//		firefoxDriver.quitBrowser();
+//		ieWebDriver.quitBrowser();
+//		safariDriver.quitBrowser();
 		if (this.isPass == false) {
-			if (chromeWebDriver.isInitialized() == true) {
-				chromeWebDriver.printScreen(this.getMethodName(),null);
-			} else if (ieWebDriver.isInitialized() == true) {
-				ieWebDriver.printScreen(this.getMethodName(),null);
-			} else if (firefoxDriver.isInitialized() == true) {
-				firefoxDriver.printScreen(this.getMethodName(),null);
-			}
-			else if(safariDriver.isInitialized()==true){
-				safariDriver.printScreen(this.getMethodName(),null);
-			}
+			webDriver.printScreen(this.getMethodName(), null);
 		}
-
-		chromeWebDriver.closeBrowser();
-		firefoxDriver.closeBrowser();
-		ieWebDriver.closeBrowser();
-		safariDriver.closeBrowser();
+		webDriver.quitBrowser();
+		
 		super.tearDown();
 	}
 

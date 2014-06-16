@@ -31,7 +31,7 @@ public class DbService extends SystemObjectImpl {
 	private final String db_connect_string = "jdbc:sqlserver://BACKQA:1433;databaseName=EDODOTNet3;integratedSecurity=true;";
 	private final String db_userid = "EDUSOFT2k\\omers";
 	private final String db_password = "Shu111";
-	private final int MAX_DB_TIMEOUT = 120;
+	private final int MAX_DB_TIMEOUT = 20;
 	// private DataSource dataSource;
 
 	@Autowired
@@ -452,11 +452,23 @@ public class DbService extends SystemObjectImpl {
 
 			conn.close();
 		} catch (Exception e) {
+			
 			e.printStackTrace();
 		} finally {
+			
+			try{
+				if(str==null){
+					Assert.fail("Query result is null. Query was: "+sql);
+				}
+			}
+			catch(Exception e){
+				
+			}
+			
 			if (statement != null) {
 				statement.close();
 			}
+			
 		}
 		return str;
 	}

@@ -243,15 +243,14 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		report.stopLevel();
 	}
 
-	public void closeBrowser() throws Exception {
+	public void quitBrowser() throws Exception {
 		if (initialized == true) {
 			try {
 
 				report.report("Closing browser: " + this.getBrowserName());
 				deleteCookiesAndCache();
-				
-					webDriver.quit();
-				
+
+				webDriver.quit();
 
 			} catch (Exception e) {
 				report.report("Closing " + this.getBrowserName() + "failed. "
@@ -259,6 +258,19 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			}
 		}
 
+	}
+	public void closeBrowser()throws Exception{
+		try {
+
+			report.report("Closing browser: " + this.getBrowserName());
+			deleteCookiesAndCache();
+
+			webDriver.close();
+
+		} catch (Exception e) {
+			report.report("Closing " + this.getBrowserName() + "failed. "
+					+ e.toString());
+		}
 	}
 
 	public void refresh() throws Exception {
@@ -310,12 +322,17 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	}
 
 	public String switchToFrame(String frameName) throws Exception {
-
-		String currentWindow = webDriver.getWindowHandle();
-		WebDriverWait wait = new WebDriverWait(webDriver, 10);
-		wait.until(ExpectedConditions
-				.frameToBeAvailableAndSwitchToIt(frameName));
-		return currentWindow;
+		String currentWindow =null;
+		try {
+			currentWindow	= webDriver.getWindowHandle();
+			WebDriverWait wait = new WebDriverWait(webDriver, 10);
+			wait.until(ExpectedConditions
+					.frameToBeAvailableAndSwitchToIt(frameName));
+		} catch (TimeoutException e) {
+				Assert.fail("Frame waw not found");
+		} finally {
+			return currentWindow;
+		}
 	}
 
 	public String switchToFrame(WebElement element) throws Exception {
@@ -595,7 +612,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	public void quit() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

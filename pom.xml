@@ -229,6 +229,7 @@
 			</activation>
 			<properties>
                 <remoteMachine>10.1.0.81:5555</remoteMachine>
+                <browser>chrome</browser>
             </properties>
 			<build>
 				<plugins>

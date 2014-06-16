@@ -23,37 +23,37 @@ public class TestsErater extends EdusoftWebTest {
 	@Test
 	public void testSubmitTextToEraterAndCheckJsonInDb1() throws Exception {
 		submitTextToErater("files/assayFiles/text1.txt", "Basic 3 2012",
-				"Tickets, Please!", "Tickets, Please!", 7,chromeWebDriver);
+				"Tickets, Please!", "Tickets, Please!", 7);
 	}
 
 	@Test
 	public void testSubmitTextToEraterAndCheckJsonInDb2() throws Exception {
 		submitTextToErater("files/assayFiles/text2.txt", "Basic 1 2012",
-				"Meet A Rock Star", "Meet Me!", 5,chromeWebDriver);
+				"Meet A Rock Star", "Meet Me!", 5);
 	}
 //
 	@Test
 	public void testSubmitTextToEraterAndCheckJsonInDb3() throws Exception {
 		submitTextToErater("files/assayFiles/text3.txt", "Basic 1 2012",
-				"At The Restaurant", "New Mexican Restaurant", 5,ieWebDriver);
+				"At The Restaurant", "New Mexican Restaurant", 5);
 	}
 //
 	@Test
 	public void testSubmitTextToEraterAndCheckJsonInDb4() throws Exception {
 		submitTextToErater("files/assayFiles/text4.txt", "Basic 1 2012",
-				"On A Business Trip", "More Women Traveling", 6,firefoxDriver);
+				"On A Business Trip", "More Women Traveling", 6);
 	}
 //
 	@Test
 	public void testSubmitTextToEraterAndCheckJsonInDb5() throws Exception {
 		submitTextToErater("files/assayFiles/text5.txt", "Basic 1 2012",
-				"Going Out", "Richard's Romance", 6,chromeWebDriver);
+				"Going Out", "Richard's Romance", 6);
 	}
 //
 	@Test
 	public void testSubmitTextToEraterAndCheckJsonInDb6() throws Exception {
 		submitTextToErater("files/assayFiles/text6.txt", "Basic 1 2012",
-				"About People", "Monaco", 6,chromeWebDriver);
+				"About People", "Monaco", 6);
 	}
 //
 //	@Test
@@ -105,7 +105,7 @@ public class TestsErater extends EdusoftWebTest {
 	}
 
 	public void submitTextToErater(String textFile, String courseName,
-			String courseUnit, String unitComponent, int unitStage,GenericWebDriver webDriver)
+			String courseUnit, String unitComponent, int unitStage)
 			throws Exception {
 		report.startLevel("Login to Edo", EnumReportLevel.CurrentPlace);
 		webDriver.init();
