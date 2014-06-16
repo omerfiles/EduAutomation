@@ -403,6 +403,10 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	}
 
 	public void switchToNewWindow() throws Exception {
+		Thread.sleep(3000);
+		Set<String>winhandles=webDriver.getWindowHandles();
+		System.out.println("windows count:"+ winhandles.size());
+
 		for (String winHandle : webDriver.getWindowHandles()) {
 			webDriver.switchTo().window(winHandle);
 		}
@@ -613,6 +617,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	public void quit() {
 		// TODO Auto-generated method stub
 
+	}
+	public void switchToParentFrame(){
+		webDriver.switchTo().defaultContent();
 	}
 
 }

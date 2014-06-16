@@ -216,6 +216,11 @@
 			<artifactId>junit-dep</artifactId>
 			<version>4.8.2</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>3.0.1.RELEASE</version>
+		</dependency>
 
 
 
@@ -228,9 +233,9 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<properties>
-                <remoteMachine>10.1.0.81:5555</remoteMachine>
-                <browser>chrome</browser>
-            </properties>
+				<remoteMachine>10.1.0.81:5555</remoteMachine>
+				<browser>chrome</browser>
+			</properties>
 			<build>
 				<plugins>
 					<plugin>

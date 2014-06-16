@@ -127,11 +127,12 @@ public class TmsHomePage extends GenericPage {
 				"//select[@id='SelectSchool']//option[@value='" + id + "#"
 						+ instituteName + "']", "xpath").click();
 		webDriver.waitForElement("//input[@value='  GO  ']", "xpath").click();
-		webDriver.switchToFrame("mainFrame");
+		webDriver.switchToParentFrame();
 		return this;
 	}
 
 	public TeacherDetailsPage clickOnAddNewTeacher() throws Exception {
+		
 		webDriver.waitForElementAndClick("//input[@value='Add New Teacher']",
 				"xpath");
 		webDriver.switchToNewWindow();
@@ -168,6 +169,8 @@ public class TmsHomePage extends GenericPage {
 	}
 
 	public TmsHomePage enterStudentDetails(String studentName) throws Exception {
+		webDriver.switchToParentFrame();
+		webDriver.switchToFrame("mainFrame");
 		webDriver.waitForElement("FirstName", "id").sendKeys(studentName);
 		webDriver.waitForElement("LastName", "id").sendKeys(studentName);
 		webDriver.waitForElement("UserName", "id").sendKeys(studentName);
@@ -177,11 +180,16 @@ public class TmsHomePage extends GenericPage {
 
 	public TmsHomePage enterStudentPassword(String userId, String password)
 			throws Exception {
+		
 		String mainWin = webDriver.switchToFrame("tableFrame");
 		webDriver.waitForElement("//*[@id='info" + userId + "']/a/img", "xpath")
 				.click();
 		webDriver.switchToNewWindow();
+		
+		Thread.sleep(1000);
+//		webDriver.switchToParentFrame();
 		String mainPopupWin= webDriver.switchToFrame("FormFrame");
+		System.out.println(webDriver.getUrl()); 
 		webDriver.waitForElement("Password", "id").clear();
 		webDriver.waitForElement("Password", "id").sendKeys(password);
 		webDriver.switchToMainWindow(mainPopupWin);

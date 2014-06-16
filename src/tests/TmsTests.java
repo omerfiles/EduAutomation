@@ -2,11 +2,13 @@ package tests;
 
 import jsystem.framework.report.Reporter.EnumReportLevel;
 
+import org.hamcrest.core.IsInstanceOf;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import drivers.GenericWebDriver;
+import drivers.IEWebDriver;
 import pageObjects.EdoHomePage;
 import pageObjects.EdoLoginPage;
 import pageObjects.tms.TeacherDetailsPage;
@@ -65,6 +67,7 @@ public class TmsTests extends EdusoftWebTest {
 
 		report.startLevel("Enter new teacher details",
 				EnumReportLevel.CurrentPlace);
+		tmsHomePage.swithchToMainFrame();
 		TeacherDetailsPage teacherDetailsPage = tmsHomePage
 				.clickOnAddNewTeacher();
 
@@ -132,6 +135,10 @@ public class TmsTests extends EdusoftWebTest {
 		report.startLevel("Enter new student details",
 				EnumReportLevel.CurrentPlace);
 
+		if(webDriver instanceof IEWebDriver){
+			Thread.sleep(1000);
+		}
+		
 		tmsHomePage.enterStudentDetails(studentName);
 		String userId = dbService.getUserIdByUserName(studentName);
 		tmsHomePage.enterStudentPassword(userId, studentPassword);
