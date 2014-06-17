@@ -44,6 +44,7 @@ public class EdoHomePage extends GenericPage {
 	}
 
 	public EdoHomePage clickOnCourseByName(String courseName) throws Exception {
+		report.report("Clicking on couse: " + courseName);
 		webDriver.waitForElement(courseName, "linkText").click();
 		return this;
 	}
@@ -446,6 +447,45 @@ public class EdoHomePage extends GenericPage {
 
 		}
 		// webDriver.switchToMainWindow(mainWin);
+		return this;
+
+	}
+
+	public EdoHomePage clickOnPlayButton() throws Exception {
+		webDriver.waitForElementAndClick("CTrackerPlayBtn", "id");
+		return this;
+
+	}
+
+	public EdoHomePage clickOnSeeExplanation() throws Exception {
+		webDriver.waitForElementAndClick("seeExplanation", "id");
+		return this;
+
+	}
+
+	public EdoHomePage checkExplanationPopupOpens() throws Exception {
+		
+		webDriver.switchToNewWindow();
+		webDriver.waitForElement("See Explanation",
+				ByTypes.partialLinkText.toString()).isDisplayed();
+		webDriver.waitForElementAndClick("Close Window", "linkText");
+//		webDriver.switchToMainWindow(mainWin);
+		return this;
+	}
+
+	public EdoHomePage clickOnSeeText() throws Exception {
+		webDriver.waitForElementAndClick("SeeText", "id");
+		return this;
+	}
+
+	public EdoHomePage checkSeeTextPopupOpens() throws Exception {
+		String mainWin = webDriver.switchToPopup();
+		webDriver
+				.waitForElement("See Text", ByTypes.partialLinkText.toString())
+				.isDisplayed();
+		webDriver.waitForElementAndClick("Close Window", "linkText");
+		webDriver.switchToMainWindow(mainWin);
+
 		return this;
 
 	}

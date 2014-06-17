@@ -29,7 +29,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 	@Before
 	public void setup() throws Exception {
 		super.setup();
-		courses = eraterService.loadCoursedDetailsFromCsv();
+		courses = edoService.getCourses();
 		report.startLevel("delete all student assignments",
 				Reporter.EnumReportLevel.CurrentPlace);
 		String userId = dbService.getUserIdByUserName(config

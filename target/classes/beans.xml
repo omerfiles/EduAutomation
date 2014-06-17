@@ -13,10 +13,12 @@
  	<bean id="FirefoxWebDriver" class="drivers.FirefoxWebDriver"/>
 	<bean id="IEWebDriver" class="drivers.IEWebDriver"/>
 	<bean id="SafariWebDriver" class="drivers.SafariWebDriver"/>
-
+	
+	<bean id="EdoService" class="services.EdoService"/>
 
 
 	<bean id="configuration" class="services.Configuration"
+
 		factory-method="getInstance" />
 	<bean id="TextSerivce" class="services.TextService" />
 	<bean id="DbService" class="services.DbService">

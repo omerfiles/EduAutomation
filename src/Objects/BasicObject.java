@@ -1,16 +1,21 @@
 package Objects;
 
+import jsystem.framework.system.SystemObjectImpl;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import services.Configuration;
+import services.EdoService;
 
-abstract class BasicObject {
+abstract class BasicObject{
 	private String id;
 	
 	private String name;
 	
 	@Autowired
 	Configuration configuration;
+	
+
 	
 	
 	void create(){};

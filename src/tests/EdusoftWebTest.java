@@ -3,6 +3,7 @@ package tests;
 import org.junit.After;
 import org.openqa.selenium.safari.SafariDriver;
 
+import services.EdoService;
 import Enums.Browsers;
 import drivers.ChromeWebDriver;
 import drivers.FirefoxWebDriver;
@@ -18,6 +19,7 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 //	protected SafariWebDriver safariDriver;
 	
 	protected GenericWebDriver webDriver;
+	protected EdoService edoService;
 
 	String browser = null;
 
@@ -42,6 +44,9 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 		}
 		
 		webDriver.init();
+		webDriver.maximize();
+		edoService=(EdoService)ctx.getBean("EdoService");
+		edoService.init(webDriver);
 
 	}
 

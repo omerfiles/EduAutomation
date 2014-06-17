@@ -34,7 +34,7 @@ public class FirefoxWebDriver extends GenericWebDriver {
 			if (remoteUrl == null) {
 				// remoteUrl = configuration.getProperty("remote.machine");
 			}
-			report.startLevel("Initializing WebDriver",
+			report.startLevel("Initializing FirefoxWebDriver",
 					Reporter.EnumReportLevel.CurrentPlace);
 
 //			 DesiredCapabilities capabilities = new DesiredCapabilities("firefox", "29.0.1", Platform.WINDOWS);

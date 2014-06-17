@@ -25,7 +25,7 @@ public class ChromeWebDriver extends GenericWebDriver {
 			if (remoteUrl == null) {
 				// remoteUrl = configuration.getProperty("remote.machine");
 			}
-			report.startLevel("Initializing WebDriver",
+			report.startLevel("Initializing ChromeWebDriver",
 					Reporter.EnumReportLevel.CurrentPlace);
 
 			DesiredCapabilities capabilities = DesiredCapabilities.chrome();

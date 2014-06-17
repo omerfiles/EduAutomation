@@ -247,33 +247,33 @@ public class EraterService extends SystemObjectImpl {
 		}
 	}
 
-	public List<Course> loadCoursedDetailsFromCsv() throws Exception {
-		List<String[]> courses = textService
-				.getStr2dimArrFromCsv("files/csvFiles/Courses.csv");
-		List<Course> coursesList = new ArrayList<Course>();
-		for (int i = 0; i < courses.size(); i++) {
-			Course course = new Course();
-			course.setName(courses.get(i)[0]);
-
-			CourseUnit courseUnit = new CourseUnit();
-			courseUnit.setName(courses.get(i)[1]);
-
-			UnitComponent unitComponent = new UnitComponent();
-			unitComponent.setName(courses.get(i)[2]);
-			unitComponent.setStageNumber(courses.get(i)[3]);
-
-			courseUnit.addUnitComponent(unitComponent);
-
-			course.AddUnit(courseUnit);
-
-			coursesList.add(course);
-
-			// courseUnit.setUnitComponent(unitComponent);
-
-		}
-		return coursesList;
-
-	}
+//	public List<Course> loadCoursedDetailsFromCsv() throws Exception {
+//		List<String[]> courses = textService
+//				.getStr2dimArrFromCsv("files/csvFiles/Courses.csv");
+//		List<Course> coursesList = new ArrayList<Course>();
+//		for (int i = 0; i < courses.size(); i++) {
+//			Course course = new Course();
+//			course.setName(courses.get(i)[0]);
+//
+//			CourseUnit courseUnit = new CourseUnit();
+//			courseUnit.setName(courses.get(i)[1]);
+//
+//			UnitComponent unitComponent = new UnitComponent();
+//			unitComponent.setName(courses.get(i)[2]);
+//			unitComponent.setStageNumber(courses.get(i)[3]);
+//
+//			courseUnit.addUnitComponent(unitComponent);
+//
+//			course.AddUnit(courseUnit);
+//
+//			coursesList.add(course);
+//
+//			// courseUnit.setUnitComponent(unitComponent);
+//
+//		}
+//		return coursesList;
+//
+//	}
 
 	public void deleteStudentAssignments(String userId) throws Exception {
 

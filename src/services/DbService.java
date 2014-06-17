@@ -20,6 +20,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Service;
 
+import Objects.Institution;
 import Objects.MailMessage;
 import static org.junit.Assert.fail;
 
@@ -528,6 +529,12 @@ public class DbService extends SystemObjectImpl {
 		String sql="select name from institutions where institutionId="+id;
 		String result=getStringFromQuery(sql);
 		return result;
+	}
+
+	public void verifyInstitutionCreated(Institution institution) throws Exception {
+		String sql=  "select institutionId from institutions where Name='"+institution.getName()+"' and cannonicalDomain='"+institution.getHost()+"'";
+		String result=getStringFromQuery(sql);
+		report.report("Institution id is: "+result);
 	}
 
 }

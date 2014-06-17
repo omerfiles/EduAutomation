@@ -3,6 +3,7 @@ package pageObjects.tms;
 import org.openqa.selenium.WebElement;
 
 import Enums.ByTypes;
+import Objects.Institution;
 import drivers.GenericWebDriver;
 import pageObjects.EdoHomePage;
 import pageObjects.GenericPage;
@@ -132,7 +133,7 @@ public class TmsHomePage extends GenericPage {
 	}
 
 	public TeacherDetailsPage clickOnAddNewTeacher() throws Exception {
-		
+
 		webDriver.waitForElementAndClick("//input[@value='Add New Teacher']",
 				"xpath");
 		webDriver.switchToNewWindow();
@@ -167,6 +168,11 @@ public class TmsHomePage extends GenericPage {
 		return this;
 
 	}
+	public TmsHomePage swithchToFormFrame() throws Exception {
+		webDriver.switchToFrame("FormFrame");
+		return this;
+
+	}
 
 	public TmsHomePage enterStudentDetails(String studentName) throws Exception {
 		webDriver.switchToParentFrame();
@@ -180,22 +186,91 @@ public class TmsHomePage extends GenericPage {
 
 	public TmsHomePage enterStudentPassword(String userId, String password)
 			throws Exception {
-		
+
 		String mainWin = webDriver.switchToFrame("tableFrame");
-		webDriver.waitForElement("//*[@id='info" + userId + "']/a/img", "xpath")
+		webDriver
+				.waitForElement("//*[@id='info" + userId + "']/a/img", "xpath")
 				.click();
 		webDriver.switchToNewWindow();
-		
+
 		Thread.sleep(1000);
-//		webDriver.switchToParentFrame();
-		String mainPopupWin= webDriver.switchToFrame("FormFrame");
-		System.out.println(webDriver.getUrl()); 
+		// webDriver.switchToParentFrame();
+		String mainPopupWin = webDriver.switchToFrame("FormFrame");
+		System.out.println(webDriver.getUrl());
 		webDriver.waitForElement("Password", "id").clear();
 		webDriver.waitForElement("Password", "id").sendKeys(password);
 		webDriver.switchToMainWindow(mainPopupWin);
 		webDriver.waitForElement("//input[@value='Submit ']", "xpath").click();
 		webDriver.switchToMainWindow(mainWin);
-		
+
+		return this;
+
+	}
+
+	public TmsHomePage clickOnInstitutions() throws Exception {
+		webDriver.waitForElementAndClick("Institutions",
+				ByTypes.linkText.toString());
+		return this;
+	}
+
+	public TmsHomePage clickOnAddNewSchool() throws Exception {
+		webDriver.waitForElementAndClick("//input[@value='Add New School']",
+				"xpath");
+		webDriver.switchToNewWindow();
+		Thread.sleep(1000);
+		return this;
+
+	}
+
+	public TmsHomePage enterNewSchoolDetails(Institution institution)
+			throws Exception {
+		swithchToFormFrame();
+		webDriver.waitForElement("SchoolName", "id").sendKeys(
+				institution.getName());
+		webDriver.waitForElement("Phone", "name").sendKeys(
+				institution.getPhone());
+		webDriver.waitForElement("Dname", "id").sendKeys(institution.getHost());
+		webDriver.waitForElement("NumOfCustomComp", "id").sendKeys(
+				institution.getNumberOfComonents());
+		webDriver.waitForElement("NumOfUsers", "id").sendKeys(
+				institution.getNumberOfUsers());
+		webDriver.waitForElement("NumOfConc", "id").sendKeys(
+				institution.getConcurrentUsers());
+		webDriver.waitForElement("impType", "id").click();
+		String implType = null;
+		switch (institution.getSchoolImpType()) {
+		case additional:
+			implType = "3";
+			;
+			break;
+		case blended:
+			implType = "1";
+			;
+			break;
+		case distance:
+			implType = "2";
+			break;
+		}
+		webDriver.waitForElement(
+				"//select[@id='impType']//option[@value=" + implType + "]",
+				"xpath").click();
+		webDriver.switchToParentFrame();
+		webDriver.waitForElement("//*[@id='Administrator']/a", "xpath").click();
+		webDriver.switchToFrame("FormFrame");
+
+		webDriver.waitForElement("FirstName", "name").sendKeys(
+				institution.getSchoolAdmin().getName());
+		webDriver.waitForElement("LastName", "name").sendKeys(
+				institution.getSchoolAdmin().getName());
+		webDriver.waitForElement("UserName", "name").sendKeys(
+				institution.getSchoolAdmin().getUserName());
+		webDriver.waitForElement("Password", "name").sendKeys(
+				institution.getSchoolAdmin().getPassword());
+		webDriver.waitForElement("Email", "name").sendKeys(
+				institution.getSchoolAdmin().getEmail());
+		webDriver.switchToParentFrame();
+		webDriver.waitForElement("Submitbutton", "name").click();
+
 		return this;
 
 	}

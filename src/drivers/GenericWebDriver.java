@@ -3,6 +3,7 @@ package drivers;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -42,7 +43,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			.getLogger(GenericWebDriver.class);
 	public String sutUrl = null;
 	protected RemoteWebDriver webDriver;
-	protected int timeout = 10;
+	protected int timeout = 20;
 	private String browserName;
 	private boolean initialized;
 	// private Config configuration;
@@ -248,7 +249,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			try {
 
 				report.report("Closing browser: " + this.getBrowserName());
-				deleteCookiesAndCache();
+				// deleteCookiesAndCache();
 
 				webDriver.quit();
 
@@ -259,7 +260,8 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		}
 
 	}
-	public void closeBrowser()throws Exception{
+
+	public void closeBrowser() throws Exception {
 		try {
 
 			report.report("Closing browser: " + this.getBrowserName());
@@ -322,14 +324,14 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	}
 
 	public String switchToFrame(String frameName) throws Exception {
-		String currentWindow =null;
+		String currentWindow = null;
 		try {
-			currentWindow	= webDriver.getWindowHandle();
+			currentWindow = webDriver.getWindowHandle();
 			WebDriverWait wait = new WebDriverWait(webDriver, 10);
 			wait.until(ExpectedConditions
 					.frameToBeAvailableAndSwitchToIt(frameName));
 		} catch (TimeoutException e) {
-				Assert.fail("Frame waw not found");
+			Assert.fail("Frame waw not found");
 		} finally {
 			return currentWindow;
 		}
@@ -403,13 +405,18 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	}
 
 	public void switchToNewWindow() throws Exception {
-		Thread.sleep(3000);
-		Set<String>winhandles=webDriver.getWindowHandles();
-		System.out.println("windows count:"+ winhandles.size());
+		switchToNewWindow(1);
+	}
 
-		for (String winHandle : webDriver.getWindowHandles()) {
-			webDriver.switchTo().window(winHandle);
-		}
+	public void switchToNewWindow(int windowId) throws Exception {
+		Thread.sleep(3000);
+		Set<String> winhandles = webDriver.getWindowHandles();
+		List<String> windows = new ArrayList<String>();
+		windows.addAll(winhandles);
+		System.out.println("before switch: " + webDriver.getWindowHandle());
+		webDriver.switchTo().window(windows.get(1));
+		System.out.println("after switch: " + webDriver.getWindowHandle());
+
 	}
 
 	public void checkElementNotExist(String xpath, String message)
@@ -618,7 +625,8 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		// TODO Auto-generated method stub
 
 	}
-	public void switchToParentFrame(){
+
+	public void switchToParentFrame() {
 		webDriver.switchTo().defaultContent();
 	}
 

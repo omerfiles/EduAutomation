@@ -1,5 +1,6 @@
 package tests;
 
+import jsystem.framework.report.Reporter;
 import jsystem.framework.report.Reporter.EnumReportLevel;
 
 import org.hamcrest.core.IsInstanceOf;
@@ -14,6 +15,9 @@ import pageObjects.EdoLoginPage;
 import pageObjects.tms.TeacherDetailsPage;
 import pageObjects.tms.TmsHomePage;
 import pageObjects.tms.TmsLoginPage;
+import Enums.SchoolImpTypes;
+import Objects.Institution;
+import Objects.SchoolAdmin;
 import Objects.Student;
 import Objects.Teacher;
 import Objects.UserObject;
@@ -135,9 +139,9 @@ public class TmsTests extends EdusoftWebTest {
 		report.startLevel("Enter new student details",
 				EnumReportLevel.CurrentPlace);
 
-		if(webDriver instanceof IEWebDriver){
-			Thread.sleep(1000);
-		}
+//		if(webDriver instanceof IEWebDriver){
+//			Thread.sleep(1000);
+//		}
 		
 		tmsHomePage.enterStudentDetails(studentName);
 		String userId = dbService.getUserIdByUserName(studentName);
@@ -157,6 +161,52 @@ public class TmsTests extends EdusoftWebTest {
 
 		report.stopLevel();
 
+	}
+	
+	@Test
+	public void createNewInstitution()throws Exception{
+		report.startLevel("Open TMS and login as TMS Admin",
+				EnumReportLevel.CurrentPlace);
+
+		TmsLoginPage tmsLoginPage = new TmsLoginPage(webDriver);
+		UserObject tmsAdmin = new UserObject();
+		tmsAdmin.setUserName(config.getProperty("tmsadmin.user"));
+		tmsAdmin.setPassword(config.getProperty("tmsadmin.password"));
+		tmsLoginPage.OpenPage(config.getProperty("tms.url"));
+		TmsHomePage tmsHomePage = tmsLoginPage.Login(tmsAdmin);
+		tmsHomePage.waitForPageToLoad();
+		report.stopLevel();
+		
+		report.startLevel("Click on Institutions and click on Add new school",EnumReportLevel.CurrentPlace);
+		tmsHomePage.clickOnInstitutions();
+		tmsHomePage.clickOnAddNewSchool();
+		
+		report.stopLevel();
+		report.startLevel("Enter new institution details",EnumReportLevel.CurrentPlace);
+		Institution institution=new Institution();
+		institution.setName("autoSchool"+dbService.sig(5));
+		report.report("School name is: "+institution.getName());
+		institution.setPhone("985644456");
+		institution.setConcurrentUsers("100");
+		institution.setNumberOfComonents("20");
+		institution.setNumberOfUsers("100");
+		institution.setSchoolImpType(SchoolImpTypes.blended);
+		institution.setHost(config.getProperty("sut.url").replace("http://", "")+institution.getName());
+		SchoolAdmin schoolAdmin=new SchoolAdmin();
+		String adminUserName="admin"+dbService.sig(6);
+		schoolAdmin.setUserName(adminUserName);
+		schoolAdmin.setName(adminUserName);
+		schoolAdmin.setPassword("12345");
+		schoolAdmin.setEmail(adminUserName+"@edusoft.co.il");
+		institution.setSchoolAdmin(schoolAdmin);
+		institution.setEmail(adminUserName+"@edusoft.co.il");
+		tmsHomePage.enterNewSchoolDetails(institution);
+		
+		report.stopLevel();
+
+		report.startLevel("Verify in the DB that institution is created",EnumReportLevel.CurrentPlace);
+		dbService.verifyInstitutionCreated(institution);
+		report.stopLevel();
 	}
 
 	@After

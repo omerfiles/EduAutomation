@@ -1,5 +1,7 @@
 package tests;
 
+import java.io.IOException;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -17,6 +19,7 @@ import services.NetService;
 import services.TextService;
 import drivers.FirefoxWebDriver;
 import drivers.GenericWebDriver;
+import jsystem.framework.report.Reporter.EnumReportLevel;
 import junit.framework.SystemTestCase4;
 import junit.framework.TestCase;
 
@@ -32,6 +35,8 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 	NetService netService;
 	protected EraterService eraterService;
 	public ClassPathXmlApplicationContext ctx;
+	
+	protected boolean inStep=false;
 
 	
 	
@@ -40,8 +45,8 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 	public void setup() throws Exception {
 		// System.setProperty("java.ibrary.path","C:\\Users\\omers\\Downloads\\Microsoft JDBC Driver 4.0 for SQL Server\\sqljdbc_4.0\\enu\\auth\\x86");
 		
-		Timeout GlobalTimeOut=new Timeout(1000);
 	
+//		ctx = new ClassPathXmlApplicationContext("beans.xml");
 		ctx = new ClassPathXmlApplicationContext("beans.xml");
 		config = (Configuration) ctx.getBean("configuration");
 		// webDriver=(GenericWebDriver)ctx.getBean("GenericWebDriver");
@@ -68,8 +73,20 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 
 	@After
 	public void tearDown() throws Exception {
-
 		
 	}
+	
+	public void startStep(String stepName) throws Exception{
+		if(inStep==true){
+			report.stopLevel();
+		}
+//		report.step(stepName);
+		report.startLevel(stepName, EnumReportLevel.CurrentPlace);
+		inStep=true;
+	}
+	public void endStep()throws Exception{
+		report.stopLevel();
+	}
+	
 
 }
