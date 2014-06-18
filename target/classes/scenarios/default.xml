@@ -16,16 +16,6 @@
     <target name="execute scenario">
         <antcallback target="t0"/>
         <antcallback target="t1"/>
-        <antcallback target="t2"/>
-        <jsystemdatadriven delimiter=";" fullUuid="${jsystem.parent.uuid}.${jsystem.uuid}.24b925c7-cec6-46e4-9770-ac7703720229" parentName="${jsystem.parent.name}.${ant.project.name}">
-            <!--#Jsystem#-->
-            <sequential>
-                <echo message="Data Driven"/>
-                <jsystemsetantproperties>
-                    <!--Task for updating the ant parameters file - used for reference parameters-->
-                </jsystemsetantproperties>
-            </sequential>
-        </jsystemdatadriven>
     </target>
     <target name="t0">
         <jsystem showoutput="true">
@@ -41,14 +31,6 @@
             <sysproperty key="jsystem.parent.uuid" value="${jsystem.parent.uuid}.${jsystem.uuid}"/>
             <sysproperty key="jsystem.parent.name" value="${jsystem.parent.name}.${ant.project.name}"/>
             <test name="tests.TmsTests.testLoginToEdoAsTeacher"/>
-        </jsystem>
-    </target>
-    <target name="t2">
-        <jsystem showoutput="true">
-            <sysproperty key="jsystem.uuid" value="e27dedc3-f712-4a50-97e7-1c2267e3d40c"/>
-            <sysproperty key="jsystem.parent.uuid" value="${jsystem.parent.uuid}.${jsystem.uuid}"/>
-            <sysproperty key="jsystem.parent.name" value="${jsystem.parent.name}.${ant.project.name}"/>
-            <test name="tests.JsystemPoc.testReadFile"/>
         </jsystem>
     </target>
 </project>

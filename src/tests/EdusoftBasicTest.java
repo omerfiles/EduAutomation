@@ -45,7 +45,7 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 	public void setup() throws Exception {
 		// System.setProperty("java.ibrary.path","C:\\Users\\omers\\Downloads\\Microsoft JDBC Driver 4.0 for SQL Server\\sqljdbc_4.0\\enu\\auth\\x86");
 		
-	
+		report.report( "user dir: "+ System.getProperty("user.dir"));
 //		ctx = new ClassPathXmlApplicationContext("beans.xml");
 		ctx = new ClassPathXmlApplicationContext("beans.xml");
 		config = (Configuration) ctx.getBean("configuration");

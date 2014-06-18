@@ -20,6 +20,7 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -29,6 +30,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.aqua.sysobj.conn.action.Action;
 
 import Enums.ByTypes;
 import services.DbService;
@@ -43,7 +46,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			.getLogger(GenericWebDriver.class);
 	public String sutUrl = null;
 	protected RemoteWebDriver webDriver;
-	protected int timeout = 20;
+	protected int timeout = 10;
 	private String browserName;
 	private boolean initialized;
 	// private Config configuration;
@@ -404,18 +407,20 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	}
 
-	public void switchToNewWindow() throws Exception {
-		switchToNewWindow(1);
+	public String switchToNewWindow() throws Exception {
+		return switchToNewWindow(1);
 	}
 
-	public void switchToNewWindow(int windowId) throws Exception {
-		Thread.sleep(3000);
+	public String switchToNewWindow(int windowId) throws Exception {
+		
 		Set<String> winhandles = webDriver.getWindowHandles();
 		List<String> windows = new ArrayList<String>();
 		windows.addAll(winhandles);
 		System.out.println("before switch: " + webDriver.getWindowHandle());
-		webDriver.switchTo().window(windows.get(1));
+		String oldWindow = webDriver.getWindowHandle();
+		webDriver.switchTo().window(windows.get(windowId));
 		System.out.println("after switch: " + webDriver.getWindowHandle());
+		return oldWindow;
 
 	}
 
@@ -424,15 +429,17 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		boolean elementFound = false;
 		try {
 
-			WebDriverWait wait = new WebDriverWait(webDriver, timeout, 1000);
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By
-					.xpath(xpath)));
-			waitForElement(xpath, "xpath");
-			elementFound = true;
+			// WebDriverWait wait = new WebDriverWait(webDriver, timeout, 1000);
+			// wait.until(ExpectedConditions.visibilityOfElementLocated(By
+			// .xpath(xpath)));
+			WebElement element = waitForElement(xpath, "xpath", false, 10);
+			if (element != null) {
+				elementFound = true;
+			}
 			// printScreen("Element was found when it should not");
 
 		} catch (Exception e) {
-
+			report.report("Exceptin found during checkElementNotExist");
 		} finally {
 
 			Assert.assertEquals("Element with xpath " + xpath
@@ -628,6 +635,17 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	public void switchToParentFrame() {
 		webDriver.switchTo().defaultContent();
+	}
+
+	public void switchToMainWindow() throws Exception {
+		switchToNewWindow(0);
+
+	}
+
+	public void dragAndDropElement(WebElement from, WebElement to) {
+
+		(new Actions(webDriver)).dragAndDrop(from, to).perform();
+
 	}
 
 }
