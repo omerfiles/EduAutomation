@@ -11,6 +11,9 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.firefox.internal.ProfilesIni;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.springframework.stereotype.Service;
@@ -21,10 +24,10 @@ import services.DbService;
 
 @Service
 public class FirefoxWebDriver extends GenericWebDriver {
-	
+
 	@Override
 	public void init(String remoteUrl, String folderName) throws Exception {
-		this.timeout=30;
+		this.timeout = 30;
 		setBrowserName("firefox");
 		setInitialized(true);
 		dbService = new DbService();
@@ -37,10 +40,12 @@ public class FirefoxWebDriver extends GenericWebDriver {
 			}
 			report.startLevel("Initializing FirefoxWebDriver",
 					Reporter.EnumReportLevel.CurrentPlace);
-
-//			 DesiredCapabilities capabilities = new DesiredCapabilities("firefox", "29.0.1", Platform.WINDOWS);
+			ProfilesIni profile = new ProfilesIni();
+			FirefoxProfile firefoxProfile = profile.getProfile("automation");
+			DesiredCapabilities capabilities = DesiredCapabilities.firefox();
+			capabilities.setCapability(FirefoxDriver.PROFILE, firefoxProfile);
 			webDriver = new RemoteWebDriver(new URL(remoteUrl + "/wd/hub"),
-					DesiredCapabilities.firefox());
+					capabilities);
 			// webDriver = new RemoteWebDriver( capabilities);
 
 			report.stopLevel();
@@ -48,42 +53,22 @@ public class FirefoxWebDriver extends GenericWebDriver {
 			logger.error("Cannot register node or start the remote driver! ", e);
 		}
 	}
+
 	@Override
-	public void waitForElementAndClick(String idValue, String byType)throws Exception{
-		 waitForElement(idValue, byType, timeout, true).sendKeys(Keys.ENTER);
+	public void waitForElementAndClick(String idValue, String byType)
+			throws Exception {
+		waitForElement(idValue, byType, this.timeout, true)
+				.sendKeys(Keys.ENTER);
 	}
-	
+
 	@Override
 	public void clickOnElement(WebElement td) {
-//		td.sendKeys(Keys.ENTER);
+		// td.sendKeys(Keys.ENTER);
 		JavascriptExecutor executor = (JavascriptExecutor) webDriver;
 		executor.executeScript("arguments[0].click();", td);
-		
+
 	}
-	
-//	@Override
-//	public void swithcToFrameAndSendKeys(String xpathExpression, String keys,
-//			boolean clear, String frameId) throws Exception {
-//		String currentWindow = webDriver.getWindowHandle();
-//		webDriver.switchTo().frame(frameId);
-//		// webDriver.findElement(By.xpath(xpathExpression)).click();
-//		// webDriver.findElement(By.xpath(xpathExpression)).sendKeys(keys);
-//
-//		WebElement element = webDriver.findElement(By.xpath(xpathExpression));
-//
-//		element.click();
-//		if (clear == true) {
-//			element.clear();
-//		}
-//		JavascriptExecutor executor = (JavascriptExecutor)webDriver;
-//		executor.executeScript("arguments[0].innerHTML = '<h1>"+keys+"</h1>'", element);
-//		
-////
-////		sendKey(keys);
-////		element.sendKeys(keys);
-//		
-//		webDriver.switchTo().window(currentWindow);
-//	}
-	
+
+	// }
 
 }

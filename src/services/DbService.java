@@ -347,10 +347,10 @@ public class DbService extends SystemObjectImpl {
 			throw e;
 		}
 	}
-	
-	public String sig(int size) throws Exception{
-		String str=sig();
-		return str.substring(str.length()-size, str.length());
+
+	public String sig(int size) throws Exception {
+		String str = sig();
+		return str.substring(str.length() - size, str.length());
 	}
 
 	public String sig() throws Exception {
@@ -453,23 +453,22 @@ public class DbService extends SystemObjectImpl {
 
 			conn.close();
 		} catch (Exception e) {
-			
+
 			e.printStackTrace();
 		} finally {
-			
-			try{
-				if(str==null){
-					Assert.fail("Query result is null. Query was: "+sql);
+
+			try {
+				if (str == null) {
+					Assert.fail("Query result is null. Query was: " + sql);
 				}
+			} catch (Exception e) {
+
 			}
-			catch(Exception e){
-				
-			}
-			
+
 			if (statement != null) {
 				statement.close();
 			}
-			
+
 		}
 		return str;
 	}
@@ -514,27 +513,38 @@ public class DbService extends SystemObjectImpl {
 	}
 
 	public String getUserIdByUserName(String userName) throws Exception {
-		String institutionid=configuration.getProperty("institution.id");
+		String institutionid = configuration.getProperty("institution.id");
 		String sql = "select UserId from users where UserName='" + userName
-				+ "' and institutionid="+institutionid;
+				+ "' and institutionid=" + institutionid;
 		String result = getStringFromQuery(sql);
 		return result;
 	}
 
 	public void setUserLoginToNull(String id) {
-		String sql="Update users set logedin = null where userid="+id;
+		String sql = "Update users set logedin = null where userid=" + id;
 	}
 
 	public String getInstituteNameById(String id) throws Exception {
-		String sql="select name from institutions where institutionId="+id;
-		String result=getStringFromQuery(sql);
+		String sql = "select name from institutions where institutionId=" + id;
+		String result = getStringFromQuery(sql);
 		return result;
 	}
 
-	public void verifyInstitutionCreated(Institution institution) throws Exception {
-		String sql=  "select institutionId from institutions where Name='"+institution.getName()+"' and cannonicalDomain='"+institution.getHost()+"'";
-		String result=getStringFromQuery(sql);
-		report.report("Institution id is: "+result);
+	public void verifyInstitutionCreated(Institution institution)
+			throws Exception {
+		String sql = "select institutionId from institutions where Name='"
+				+ institution.getName() + "' and cannonicalDomain='"
+				+ institution.getHost() + "'";
+		String result = getStringFromQuery(sql);
+		report.report("Institution id is: " + result);
+	}
+
+	public String getClassIdByName(String classNae) throws Exception {
+		String institutionId = configuration.getProperty("institution.id");
+		String sql = "select classId from class where Name='" + classNae
+				+ "' and institutionId=" + institutionId + "";
+		String result = getStringFromQuery(sql);
+		return result;
 	}
 
 }

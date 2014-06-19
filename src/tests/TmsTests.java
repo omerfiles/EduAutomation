@@ -1,5 +1,7 @@
 package tests;
 
+import javax.print.attribute.standard.PageRanges;
+
 import jsystem.framework.report.Reporter;
 import jsystem.framework.report.Reporter.EnumReportLevel;
 
@@ -51,7 +53,7 @@ public class TmsTests extends EdusoftWebTest {
 				EnumReportLevel.CurrentPlace);
 		String teacherName = "teacher" + dbService.sig(6);
 		String teacherPassword = "12345";
-		
+
 		TmsLoginPage tmsLoginPage = new TmsLoginPage(webDriver);
 		UserObject tmsAdmin = new UserObject();
 		tmsAdmin.setUserName(config.getProperty("tmsadmin.user"));
@@ -139,10 +141,10 @@ public class TmsTests extends EdusoftWebTest {
 		report.startLevel("Enter new student details",
 				EnumReportLevel.CurrentPlace);
 
-//		if(webDriver instanceof IEWebDriver){
-//			Thread.sleep(1000);
-//		}
-		
+		// if(webDriver instanceof IEWebDriver){
+		// Thread.sleep(1000);
+		// }
+
 		tmsHomePage.enterStudentDetails(studentName);
 		String userId = dbService.getUserIdByUserName(studentName);
 		tmsHomePage.enterStudentPassword(userId, studentPassword);
@@ -162,9 +164,9 @@ public class TmsTests extends EdusoftWebTest {
 		report.stopLevel();
 
 	}
-	
+
 	@Test
-	public void createNewInstitution()throws Exception{
+	public void createNewInstitution() throws Exception {
 		report.startLevel("Open TMS and login as TMS Admin",
 				EnumReportLevel.CurrentPlace);
 
@@ -176,37 +178,89 @@ public class TmsTests extends EdusoftWebTest {
 		TmsHomePage tmsHomePage = tmsLoginPage.Login(tmsAdmin);
 		tmsHomePage.waitForPageToLoad();
 		report.stopLevel();
-		
-		report.startLevel("Click on Institutions and click on Add new school",EnumReportLevel.CurrentPlace);
+
+		report.startLevel("Click on Institutions and click on Add new school",
+				EnumReportLevel.CurrentPlace);
 		tmsHomePage.clickOnInstitutions();
 		tmsHomePage.clickOnAddNewSchool();
-		
+
 		report.stopLevel();
-		report.startLevel("Enter new institution details",EnumReportLevel.CurrentPlace);
-		Institution institution=new Institution();
-		institution.setName("autoSchool"+dbService.sig(5));
-		report.report("School name is: "+institution.getName());
+		report.startLevel("Enter new institution details",
+				EnumReportLevel.CurrentPlace);
+		Institution institution = new Institution();
+		institution.setName("autoSchool" + dbService.sig(5));
+		report.report("School name is: " + institution.getName());
 		institution.setPhone("985644456");
 		institution.setConcurrentUsers("100");
 		institution.setNumberOfComonents("20");
 		institution.setNumberOfUsers("100");
 		institution.setSchoolImpType(SchoolImpTypes.blended);
-		institution.setHost(config.getProperty("sut.url").replace("http://", "")+institution.getName());
-		SchoolAdmin schoolAdmin=new SchoolAdmin();
-		String adminUserName="admin"+dbService.sig(6);
+		institution.setHost(config.getProperty("sut.url")
+				.replace("http://", "") + institution.getName());
+		SchoolAdmin schoolAdmin = new SchoolAdmin();
+		String adminUserName = "admin" + dbService.sig(6);
 		schoolAdmin.setUserName(adminUserName);
 		schoolAdmin.setName(adminUserName);
 		schoolAdmin.setPassword("12345");
-		schoolAdmin.setEmail(adminUserName+"@edusoft.co.il");
+		schoolAdmin.setEmail(adminUserName + "@edusoft.co.il");
 		institution.setSchoolAdmin(schoolAdmin);
-		institution.setEmail(adminUserName+"@edusoft.co.il");
+		institution.setEmail(adminUserName + "@edusoft.co.il");
 		tmsHomePage.enterNewSchoolDetails(institution);
-		
+
 		report.stopLevel();
 
-		report.startLevel("Verify in the DB that institution is created",EnumReportLevel.CurrentPlace);
+		report.startLevel("Verify in the DB that institution is created",
+				EnumReportLevel.CurrentPlace);
 		dbService.verifyInstitutionCreated(institution);
 		report.stopLevel();
+	}
+
+	@Test
+	public void testSelfRegistration() throws Exception {
+
+		startStep("Open TMS and create new class");
+
+		TmsHomePage tmsHomePage = pageHelper.loginToTmsAsAdmin();
+		tmsHomePage.clickOnClasses();
+		String institutionId = config.getProperty("institution.id");
+		String instituteName = dbService.getInstituteNameById(institutionId);
+		tmsHomePage.selectInstitute(instituteName, institutionId);
+		String className="class"+dbService.sig(3);
+		report.report("Class name is: "+className);
+		tmsHomePage.swithchToMainFrame();
+		tmsHomePage.enterClassName(className);
+		tmsHomePage.clickOnAddClass();
+		startStep("Set class for self registration");
+		tmsHomePage.clickOnSettings();
+		tmsHomePage.clickOnFeatures();
+		String feature="SR";
+		tmsHomePage.swithchToFormFrame();
+		tmsHomePage.selectFeature(feature);
+		tmsHomePage.selectInstitute(instituteName, institutionId);
+		tmsHomePage.swithchToMainFrame();
+		tmsHomePage.clickOnSelfRegistration();
+		String classId=dbService.getClassIdByName(className);
+		tmsHomePage.selectClassForFelfRegistration(classId);
+		tmsHomePage.clickOnSaveFeature();
+		
+		startStep("Open institution URL and self register as a student");
+		webDriver.closeBrowser();
+		webDriver.init();
+		EdoLoginPage edoLoginPage=new EdoLoginPage(webDriver);
+		edoLoginPage.OpenPage(getSutAndSubDomain());
+		edoLoginPage.clickOnSelfRegistraton();
+		webDriver.switchToNewWindow(1);
+		String studentName="student"+dbService.sig(6);
+		webDriver.switchToFrame("content");
+		edoLoginPage.enterStudentRegUserName(studentName);
+		edoLoginPage.enterStudentRegFirstName(studentName);
+		edoLoginPage.enterStudentRegLastName(studentName);
+		edoLoginPage.enterStudentRegPassword("12345");
+		edoLoginPage.enterStudentEmail(studentName+"@edusoft.co.il");
+		edoLoginPage.clickOnRegister();
+		
+		startStep("Check that user is added to the class");
+
 	}
 
 	@After

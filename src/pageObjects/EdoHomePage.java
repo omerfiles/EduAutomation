@@ -458,7 +458,8 @@ public class EdoHomePage extends GenericPage {
 	}
 
 	public EdoHomePage clickOnSeeExplanation() throws Exception {
-		webDriver.waitForElementAndClick("seeExplanation", "id");
+		// webDriver.waitForElementAndClick("seeExplanation", "id");
+		webDriver.waitForElement("seeExplanation", "id").click();
 		return this;
 
 	}
@@ -473,13 +474,15 @@ public class EdoHomePage extends GenericPage {
 		org.junit.Assert.assertEquals("See Explanation", webDriver
 				.waitForElement("PopupTitle", ByTypes.className.toString())
 				.getText());
-		webDriver.waitForElementAndClick("Close Window", "linkText");
+		webDriver.waitForElement("Close Window", "linkText").click();
+		;
 		webDriver.switchToMainWindow(mainWin);
 		return this;
 	}
 
 	public EdoHomePage clickOnSeeText() throws Exception {
-		webDriver.waitForElementAndClick("SeeText", "id");
+		webDriver.waitForElement("SeeText", "id").click();
+		;
 		return this;
 	}
 
@@ -490,7 +493,8 @@ public class EdoHomePage extends GenericPage {
 				"See Text",
 				webDriver.waitForElement("PopupTitle",
 						ByTypes.className.toString()).getText());
-		webDriver.waitForElementAndClick("Close Window", "linkText");
+		webDriver.waitForElement("Close Window", "linkText").click();
+		;
 		webDriver.switchToMainWindow(mainWin);
 
 		return this;
@@ -498,8 +502,8 @@ public class EdoHomePage extends GenericPage {
 	}
 
 	public EdoHomePage clickOnPracticeTab() throws Exception {
-		webDriver.waitForElementAndClick("//ul[@class='ulSteps']//li[@id=2]",
-				"xpath");
+		webDriver.waitForElement("//ul[@class='ulSteps']//li[@id=2]", "xpath")
+				.click();
 		return this;
 
 	}
@@ -515,7 +519,8 @@ public class EdoHomePage extends GenericPage {
 	}
 
 	public EdoHomePage clickOnClearAnswer() throws Exception {
-		webDriver.waitForElementAndClick("Restart", "id");
+		webDriver.waitForElement("Restart", "id").click();
+		;
 		return this;
 
 	}
@@ -528,28 +533,60 @@ public class EdoHomePage extends GenericPage {
 	}
 
 	public EdoHomePage clickOnTestTab() throws Exception {
-		webDriver.waitForElementAndClick("//ul[@class='ulSteps']//li[@id=3]",
-				"xpath");
+		webDriver.waitForElement("//ul[@class='ulSteps']//li[@id=3]", "xpath")
+				.click();
+		;
 		return this;
 
 	}
 
 	public EdoHomePage clickOnStartTest() throws Exception {
-		webDriver.waitForElementAndClick("//div[@id='testIntro']//a", "xpath");
+		webDriver.waitForElement("//div[@id='testIntro']//a", "xpath").click();
+		;
 		return this;
 
 	}
 
 	public EdoHomePage clickOnSubmitTest() throws Exception {
-		webDriver.waitForElementAndClick("Submit", ByTypes.linkText.toString());
+		webDriver.waitForElement("Submit", ByTypes.linkText.toString()).click();
+		;
 		return this;
 	}
 
 	public EdoHomePage approveTest() throws Exception {
-		
+
 		String mainWin = webDriver.switchToNewWindow(1);
-		webDriver.waitForElementAndClick("btnOk", "id");
+		webDriver.waitForElement("btnOk", "id").click();
+		;
 		webDriver.switchToMainWindow();
 		return this;
+	}
+
+	public EdoHomePage checkStudentScore(String score) throws Exception {
+		String actualScore = webDriver.waitForElement(
+				"//span[@class='TestCongratulation']", "xpath").getText();
+		Assert.assertEquals("Score is incorrect or not found", score,
+				actualScore);
+		return this;
+	}
+
+	public EdoHomePage clickOnExploreTab() throws Exception {
+		webDriver.waitForElement("//ul[@class='ulSteps']//li[@id=1]", "xpath")
+				.click();
+		return this;
+
+	}
+
+	public EdoHomePage checkUnitHeaderText(String expectedHeaderText) throws Exception {
+		String text = webDriver.waitForElement(
+				"//div[@class='mainAreaDivShort']//h1", "xpath").getText();
+		Assert.assertEquals("Text not found", text, expectedHeaderText);
+		return this;
+
+	}
+
+	public void markVocabRadioBtnAnswer(String questionId, String answerId)throws Exception {
+		webDriver.waitForElement("//div[@id='q"+questionId+"a"+answerId+"']", "xpath").click();
+		
 	}
 }

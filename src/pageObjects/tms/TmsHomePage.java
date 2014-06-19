@@ -168,6 +168,7 @@ public class TmsHomePage extends GenericPage {
 		return this;
 
 	}
+
 	public TmsHomePage swithchToFormFrame() throws Exception {
 		webDriver.switchToFrame("FormFrame");
 		return this;
@@ -271,6 +272,76 @@ public class TmsHomePage extends GenericPage {
 		webDriver.switchToParentFrame();
 		webDriver.waitForElement("Submitbutton", "name").click();
 
+		return this;
+
+	}
+
+	public TmsHomePage clickOnClasses() throws Exception {
+		webDriver.waitForElement("Classes", ByTypes.linkText.toString())
+				.click();
+		return this;
+
+	}
+
+	public TmsHomePage enterClassName(String classNae) throws Exception {
+		webDriver.waitForElement("ClassName", "id").sendKeys(classNae);
+		return this;
+
+	}
+
+	public TmsHomePage clickOnAddClass() throws Exception {
+		webDriver.waitForElement("AddClass", ByTypes.name.toString()).click();
+		return this;
+	}
+
+	public TmsHomePage clickOnSettings() throws Exception {
+		webDriver.waitForElement("Settings", ByTypes.linkText.toString())
+				.click();
+		return this;
+
+	}
+
+	public TmsHomePage clickOnFeatures() throws Exception {
+		webDriver.waitForElement("Features", ByTypes.linkText.toString())
+				.click();
+		return this;
+
+	}
+
+	public TmsHomePage selectFeature(String feature) throws Exception {
+		webDriver.waitForElement("//select[@id='SelectFeature']",
+				ByTypes.xpath.toString()).click();
+		webDriver.waitForElement(
+				"//select[@id='SelectFeature']//option[@value='" + feature
+						+ "']", ByTypes.xpath.toString()).click();
+		return this;
+
+	}
+
+	public TmsHomePage clickOnSelfRegistration() throws Exception {
+
+		if (webDriver.waitForElement("SelfRegistrationCheckBox", "id")
+				.isSelected()==false) {
+			webDriver.waitForElement("SelfRegistrationCheckBox", "id").click();
+			webDriver.waitForElement("insertClass", "id").click();
+		}
+
+		return this;
+
+	}
+
+	public TmsHomePage selectClassForFelfRegistration(String id)
+			throws Exception {
+		webDriver.waitForElement("selectClass", "id").click();
+
+		webDriver.waitForElement(
+				"//select[@id='selectClass']//option[@value='" + id + "']",
+				"xpath").click();
+		return this;
+	}
+
+	public TmsHomePage clickOnSaveFeature() throws Exception {
+		webDriver.waitForElement("//td[@id='SaveTd1']//span", "xpath").click();
 		return this;
 
 	}

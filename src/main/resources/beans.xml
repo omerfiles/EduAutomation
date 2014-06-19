@@ -14,7 +14,7 @@
 	<bean id="IEWebDriver" class="drivers.IEWebDriver"/>
 	<bean id="SafariWebDriver" class="drivers.SafariWebDriver"/>
 	
-	<bean id="EdoService" class="services.EdoService"/>
+	<bean id="PageHelperService" class="services.PageHelperService"/>
 
 
 	<bean id="configuration" class="services.Configuration"

@@ -32,7 +32,7 @@ public class PoCTest extends EdusoftWebTest {
 	}
 	
 	@Test
-	public void IEPrintScreen()throws Exception{
+	public void testFirefox()throws Exception{
 		
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
 		edoLoginPage.OpenPage(getSutAndSubDomain());

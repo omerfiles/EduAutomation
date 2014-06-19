@@ -6,6 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import services.DbService;
+import Enums.ByTypes;
 import Objects.Student;
 import Objects.UserObject;
 import drivers.GenericWebDriver;
@@ -65,6 +66,44 @@ public class EdoLoginPage extends LoginPage {
 		edoHomePage.waitForPageToLoad();
 		return edoHomePage;
 		
+	}
+
+	public EdoLoginPage clickOnSelfRegistraton()throws Exception {
+		webDriver.waitForElement("Self Registration", ByTypes.linkText.toString()).click();
+		return this;
+		
+	}
+
+	public EdoLoginPage enterStudentRegUserName(String studentName)throws Exception {
+		report.report("User name is: "+studentName);
+		webDriver.waitForElement("UserName", "id").sendKeys(studentName);
+		return this;
+		
+	}
+	public EdoLoginPage enterStudentRegFirstName(String studentName)throws Exception {
+		webDriver.waitForElement("FirstName", "id").sendKeys(studentName);
+		return this;
+		
+	}
+	public EdoLoginPage enterStudentRegLastName(String studentName)throws Exception {
+		webDriver.waitForElement("LastName", "id").sendKeys(studentName);
+		return this;	
+	}
+
+	public EdoLoginPage enterStudentRegPassword(String password)throws Exception {
+		webDriver.waitForElement("Password", "id").sendKeys(password);
+		webDriver.waitForElement("ConfirmPassword", "id").sendKeys(password);
+		return this;	
+	}
+
+	public EdoLoginPage enterStudentEmail(String email)throws Exception {
+		webDriver.waitForElement("Email", "id").sendKeys(email);
+		return this;
+	}
+
+	public EdoLoginPage clickOnRegister()throws Exception {
+		webDriver.waitForElement("Submit", "id").click();
+		return this;
 	}
 
 }

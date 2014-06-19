@@ -5,7 +5,7 @@ import jsystem.framework.system.SystemObjectImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import services.Configuration;
-import services.EdoService;
+import services.PageHelperService;
 
 abstract class BasicObject{
 	private String id;
