@@ -32,7 +32,7 @@ public class DbService extends SystemObjectImpl {
 	private final String db_connect_string = "jdbc:sqlserver://BACKQA:1433;databaseName=EDODOTNet3;integratedSecurity=true;";
 	private final String db_userid = "EDUSOFT2k\\omers";
 	private final String db_password = "Shu111";
-	private final int MAX_DB_TIMEOUT = 20;
+	private final int MAX_DB_TIMEOUT = 120;
 	// private DataSource dataSource;
 
 	@Autowired
