@@ -412,7 +412,7 @@ public class DbService extends SystemObjectImpl {
 	public String getStringFromQuery(String sql, int intervals)
 			throws Exception {
 		// System.out.println(configuration.getProperty("db.connection"));
-		report.report("Query is: " + sql);
+		report.report("Query is: " + sql+". Max db time out is: "+MAX_DB_TIMEOUT);
 		System.out.println(sql);
 		ResultSet rs = null;
 		Statement statement = null;

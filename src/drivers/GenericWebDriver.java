@@ -60,7 +60,18 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			throws Exception;
 
 	public void init() throws Exception {
-		init(configuration.getProperty("remote.machine"), null);
+		String remoteMachine=null;
+		//getting remote machine for running the tests from properties file - while developing/debugging
+		remoteMachine=configuration.getProperty("remote.machine");
+		if(remoteMachine==null){
+			//getting remote machine from pom profile while executing tests using maven/Jenkins
+			remoteMachine=System.getProperty("remote.machine");
+		}
+		if(remoteMachine==null){
+			Assert.fail("Remote machine value is null");
+		}
+		
+		init(remoteMachine, null);
 	}
 
 	public String getSutUrl() {
@@ -645,6 +656,11 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 		(new Actions(webDriver)).dragAndDrop(from, to).perform();
 
+	}
+
+	public void maximize() {
+		webDriver.manage().window().maximize();
+		
 	}
 
 }

@@ -46,6 +46,7 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 		}
 		
 		webDriver.init();
+		webDriver.maximize();
 //		webDriver.maximize();
 		pageHelper=(PageHelperService)ctx.getBean("PageHelperService");
 		pageHelper.init(webDriver);

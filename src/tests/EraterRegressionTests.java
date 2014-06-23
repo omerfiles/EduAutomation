@@ -63,7 +63,6 @@ public class EraterRegressionTests extends EdusoftWebTest {
 			GenericWebDriver webDriver) throws Exception {
 		report.startLevel("Login to Edo", EnumReportLevel.CurrentPlace);
 		int courseId=2;
-		webDriver.init();
 		String textFile = "files/assayFiles/text24.txt";
 		report.report("using file: " + textFile);
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
@@ -193,7 +192,6 @@ public class EraterRegressionTests extends EdusoftWebTest {
 			throws Exception {
 
 		report.startLevel("Test setup", Reporter.CurrentPlace);
-		webDriver.init();
 		Student student = new Student();
 		student.setUserName(config.getStudentUserName());
 		student.setPassword(config.getStudentPassword());

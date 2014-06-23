@@ -15,16 +15,15 @@ public class ChromeWebDriver extends GenericWebDriver {
 	
 	@Override
 	public void init(String remoteUrl, String folderName) throws Exception {
+		System.out.println("remote url in chrome webdriver: "+remoteUrl);
 		setBrowserName("chrome");
 		setInitialized(true);
 		dbService = new DbService();
-		report.report("Remote url from pom file is: " + remoteUrl);
+		
 		// sutUrl = configuration.getProperty("sut.url");
 		logsFolder = folderName;
 		try {
-			if (remoteUrl == null) {
-				// remoteUrl = configuration.getProperty("remote.machine");
-			}
+			
 			report.startLevel("Initializing ChromeWebDriver",
 					Reporter.EnumReportLevel.CurrentPlace);
 
