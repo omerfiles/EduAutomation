@@ -91,7 +91,7 @@ public class Configuration {
 
 	public String getProperty(String key) {
 
-		return getProperty(key, key + " not found");
+		return getProperty(key, null);
 	}
 	
 	public String getStudentUserName(){
