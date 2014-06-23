@@ -1,5 +1,7 @@
 package services;
 
+import static org.junit.Assert.fail;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -13,16 +15,14 @@ import jsystem.framework.report.Reporter;
 import jsystem.framework.report.Reporter.EnumReportLevel;
 import jsystem.framework.system.SystemObjectImpl;
 
-import org.apache.log4j.Logger;
 import org.junit.Assert;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Service;
 
 import Objects.Institution;
-import Objects.MailMessage;
-import static org.junit.Assert.fail;
 
 @Service
 public class DbService extends SystemObjectImpl {
@@ -40,7 +40,7 @@ public class DbService extends SystemObjectImpl {
 
 	Connection conn;
 
-	private static final Logger logger = Logger.getLogger(DbService.class);
+//	private static final Logger logger = Logger.getLogger(DbService.class);
 
 	public DbService() throws Exception {
 		jdbcTemplate = new JdbcTemplate();

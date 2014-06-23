@@ -1,8 +1,5 @@
 package Objects;
 
-
-
-
 import org.json.JSONObject;
 
 public class MailMessage {

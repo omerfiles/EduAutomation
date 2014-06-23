@@ -244,15 +244,12 @@
 
 	<profiles>
 		<profile>
-			<id>reg1</id>
 			<activation>
-				<activeByDefault>true</activeByDefault>
+
 			</activation>
-			<properties>
-				<remoteMachine>10.1.0.81:5555</remoteMachine>
-				<browser>chrome</browser>
-			</properties>
+			<id>reg1</id>
 			<build>
+
 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -266,9 +263,64 @@
 							</dependency>
 						</dependencies>
 						<configuration>
+						<systemProperties>
+								<property>
+									<name>browser</name>
+									<value>chrome</value>
+								</property>
+								<property>
+									<name>remote.machine</name>
+									<value>http://10.1.0.37:5555</value>
+								</property>
+
+							</systemProperties>
 							<testSourceDirectory>${project.basedir}/src/tests/</testSourceDirectory>
 							<testClassesDirectory>${project.basedir}/target/classes/</testClassesDirectory>
+							<includes>
+								<include>**/MavenTests.java</include>
+							</includes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
 
+		</profile>
+		<profile>
+			<activation>
+
+			</activation>
+			<id>reg2</id>
+			<build>
+
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>2.11</version>
+						<dependencies>
+							<dependency>
+								<groupId>org.apache.maven.surefire</groupId>
+								<artifactId>surefire-junit47</artifactId>
+								<version>2.12</version>
+							</dependency>
+						</dependencies>
+						<configuration>
+							<systemProperties>
+								<property>
+									<name>browser</name>
+									<value>IE</value>
+								</property>
+								<property>
+									<name>remote.machine</name>
+									<value>http://10.1.0.37:5555</value>
+								</property>
+
+							</systemProperties>
+							<testSourceDirectory>${project.basedir}/src/tests/</testSourceDirectory>
+							<testClassesDirectory>${project.basedir}/target/classes/</testClassesDirectory>
+							<includes>
+								<include>**/MavenTests.java</include>
+							</includes>
 						</configuration>
 					</plugin>
 				</plugins>

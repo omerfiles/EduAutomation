@@ -26,9 +26,11 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 	@Override
 	public void setup() throws Exception {
 		super.setup();
+		System.out.println("remote machine: "+ System.getProperty("remote.machine"));
 		browser = System.getProperty("browser");// getting browser name from
 												// pom.xml when running frm
 												// Jenkins
+		System.out.println("browser name loaded from maven profile: "+browser);
 		if (browser == null) {
 			browser = config.getProperty("browser");// getting browser name from
 													// properties file
@@ -44,7 +46,7 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 		}
 		
 		webDriver.init();
-		webDriver.maximize();
+//		webDriver.maximize();
 		pageHelper=(PageHelperService)ctx.getBean("PageHelperService");
 		pageHelper.init(webDriver);
 

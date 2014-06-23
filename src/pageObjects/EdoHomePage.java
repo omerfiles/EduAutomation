@@ -33,8 +33,7 @@ public class EdoHomePage extends GenericPage {
 	}
 
 	public EdoHomePage checkEraterNotice() throws Exception {
-		Assert.assertTrue(webDriver.waitForElement("ERaterNotice", "id")
-				.isDisplayed());
+		Assert.assertTrue(webDriver.waitForElement("ERaterNotice", "id").isDisplayed());
 		return this;
 	}
 
@@ -507,6 +506,15 @@ public class EdoHomePage extends GenericPage {
 		return this;
 
 	}
+	public EdoHomePage dragAnswerToElement(String dataId,WebElement toElement) throws Exception {
+		WebElement answer = webDriver.waitForElement("//div[@data-id='"
+				+ dataId + "']", "xpath");
+//		WebElement questionFiled = webDriver.waitForElement(
+//				"//span[@data-id='1_1']", "xpath");
+		webDriver.dragAndDropElement(answer, toElement);
+		return this;
+
+	}
 
 	public EdoHomePage dragAnswer(String dataId) throws Exception {
 		WebElement answer = webDriver.waitForElement("//div[@data-id='"
@@ -577,7 +585,8 @@ public class EdoHomePage extends GenericPage {
 
 	}
 
-	public EdoHomePage checkUnitHeaderText(String expectedHeaderText) throws Exception {
+	public EdoHomePage checkUnitHeaderText(String expectedHeaderText)
+			throws Exception {
 		String text = webDriver.waitForElement(
 				"//div[@class='mainAreaDivShort']//h1", "xpath").getText();
 		Assert.assertEquals("Text not found", text, expectedHeaderText);
@@ -585,8 +594,36 @@ public class EdoHomePage extends GenericPage {
 
 	}
 
-	public void markVocabRadioBtnAnswer(String questionId, String answerId)throws Exception {
-		webDriver.waitForElement("//div[@id='q"+questionId+"a"+answerId+"']", "xpath").click();
-		
+	public void markVocabRadioBtnAnswer(String questionId, String answer)
+			throws Exception {
+		webDriver
+				.waitForElement(
+						"//div[contains(@id,'q"
+								+ questionId
+								+ "')][@name='txt_div']//div//div//div//span[contains(text(),'"
+								+ answer + "')]", "xpath").click();
+
+	}
+
+	public void checkVacabRadioBtnAnswer(String questionId, boolean trueAnswer,
+			String answer) throws Exception {
+		String check;
+		if (trueAnswer == true) {
+			check = "vCheck";
+		} else {
+			check = "xCheck";
+		}
+		// webDriver.waitForElement("//div[contains(@id,'q"+questionId+"')][contains(@class,'"+check+"']",
+		// "xpath");
+		webDriver.waitForElement("//div[contains(@id,'q" + questionId
+				+ "')][@name='txt_div'][contains(@class,'" + check
+				+ "')]//div//div//div//span[contains(text(),'" + answer + "')]",
+				"xpath");
+	}
+
+	public EdoHomePage clickOnCheckAnswers() throws Exception {
+		webDriver.waitForElement("CheckAnswer", "id").click();
+		return this;
+
 	}
 }

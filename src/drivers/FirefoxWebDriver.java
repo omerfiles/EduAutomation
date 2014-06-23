@@ -18,8 +18,6 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.springframework.stereotype.Service;
 
-import com.gargoylesoftware.htmlunit.javascript.background.JavaScriptExecutor;
-
 import services.DbService;
 
 @Service

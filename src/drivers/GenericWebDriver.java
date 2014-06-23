@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.aqua.sysobj.conn.action.Action;
+
 
 import Enums.ByTypes;
 import services.DbService;
@@ -95,9 +95,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		report.stopLevel();
 	}
 
-	public void maximize() throws Exception {
-		webDriver.manage().window().maximize();
-	}
+//	public void maximize() throws Exception {
+//		webDriver.manage().window().maximize();
+//	}
 
 	public String getElementProperty(WebElement element, String propertyname)
 			throws Exception {
@@ -115,8 +115,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		try {
 			WebDriverWait wait = new WebDriverWait(webDriver, timeout, 1000);
 			if (byType.equals(ByTypes.id.toString())) {
-				wait.until(ExpectedConditions.visibilityOfElementLocated(By
-						.id(idValue)));
+				wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(idValue)));
 				element = webDriver.findElement(By.id(idValue));
 			} else {
 				if (byType.equals(ByTypes.xpath.toString())) {
