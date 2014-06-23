@@ -308,7 +308,7 @@
 							<systemProperties>
 								<property>
 									<name>browser</name>
-									<value>IE</value>
+									<value>chrome</value>
 								</property>
 								<property>
 									<name>remote.machine</name>
@@ -319,7 +319,7 @@
 							<testSourceDirectory>${project.basedir}/src/tests/</testSourceDirectory>
 							<testClassesDirectory>${project.basedir}/target/classes/</testClassesDirectory>
 							<includes>
-								<include>**/MavenTests.java</include>
+								<include>**/TestsErater.java</include>
 							</includes>
 						</configuration>
 					</plugin>
