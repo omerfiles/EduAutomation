@@ -312,14 +312,14 @@
 								</property>
 								<property>
 									<name>remote.machine</name>
-									<value>http://10.1.0.56:5555</value>
+									<value>http://10.1.0.37:5555</value>
 								</property>
 
 							</systemProperties>
 							<testSourceDirectory>${project.basedir}/src/tests/</testSourceDirectory>
 							<testClassesDirectory>${project.basedir}/target/classes/</testClassesDirectory>
 							<includes>
-								<include>**/TestsErater.java</include>
+								<include>**/EraterRegressionTests.java</include>
 							</includes>
 						</configuration>
 					</plugin>
