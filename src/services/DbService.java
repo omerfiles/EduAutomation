@@ -421,7 +421,7 @@ public class DbService extends SystemObjectImpl {
 
 		try {
 			Class.forName(SQL_SERVER_DRIVER_CLASS);
-
+			System.out.println("DB user id is: "+db_userid);
 			conn = DriverManager.getConnection(db_connect_string, db_userid,
 					db_password);
 			System.out.println("connected");
