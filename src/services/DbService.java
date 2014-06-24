@@ -30,8 +30,8 @@ public class DbService extends SystemObjectImpl {
 	private static final String SQL_SERVER_DRIVER_CLASS = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
 	private JdbcTemplate jdbcTemplate;
 	private final String db_connect_string = "jdbc:sqlserver://BACKQA:1433;databaseName=EDODOTNet3;integratedSecurity=true;";
-	private final String db_userid = "EDUSOFT2k\\OMERS";
-	private final String db_password = "Shu111!";
+	private  String db_userid = null;
+	private  String db_password = null;
 	private final int MAX_DB_TIMEOUT = 120;
 	// private DataSource dataSou   rce;
 
@@ -413,6 +413,8 @@ public class DbService extends SystemObjectImpl {
 			throws Exception {
 		// System.out.println(configuration.getProperty("db.connection"));
 		report.report("Query is: " + sql+". Max db time out is: "+MAX_DB_TIMEOUT);
+		db_userid=configuration.getProperty("db.connection.username");
+		db_password=configuration.getProperty("db.connection.password");
 		System.out.println(sql);
 		ResultSet rs = null;
 		Statement statement = null;
