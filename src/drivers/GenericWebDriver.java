@@ -31,8 +31,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
-
 import Enums.ByTypes;
 import services.DbService;
 import jsystem.framework.report.Reporter;
@@ -60,17 +58,20 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			throws Exception;
 
 	public void init() throws Exception {
-		String remoteMachine=null;
-		//getting remote machine for running the tests from properties file - while developing/debugging
-		remoteMachine=configuration.getProperty("remote.machine");
-		if(remoteMachine==null){
-			//getting remote machine from pom profile while executing tests using maven/Jenkins
-			remoteMachine=System.getProperty("remote.machine");
+		String remoteMachine = null;
+
+		// getting remote machine from pom profile while executing tests using
+		// maven/Jenkins
+		remoteMachine = System.getProperty("remote.machine");
+		if (remoteMachine == null) {
+			// getting remote machine for running the tests from properties file
+			// - while developing/debugging
+			remoteMachine = configuration.getProperty("remote.machine");
 		}
-		if(remoteMachine==null){
+		if (remoteMachine == null) {
 			Assert.fail("Remote machine value is null");
 		}
-		
+
 		init(remoteMachine, null);
 	}
 
@@ -106,9 +107,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		report.stopLevel();
 	}
 
-//	public void maximize() throws Exception {
-//		webDriver.manage().window().maximize();
-//	}
+	// public void maximize() throws Exception {
+	// webDriver.manage().window().maximize();
+	// }
 
 	public String getElementProperty(WebElement element, String propertyname)
 			throws Exception {
@@ -126,7 +127,8 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		try {
 			WebDriverWait wait = new WebDriverWait(webDriver, timeout, 1000);
 			if (byType.equals(ByTypes.id.toString())) {
-				wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(idValue)));
+				wait.until(ExpectedConditions.visibilityOfElementLocated(By
+						.id(idValue)));
 				element = webDriver.findElement(By.id(idValue));
 			} else {
 				if (byType.equals(ByTypes.xpath.toString())) {
@@ -422,7 +424,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	}
 
 	public String switchToNewWindow(int windowId) throws Exception {
-		
+
 		Set<String> winhandles = webDriver.getWindowHandles();
 		List<String> windows = new ArrayList<String>();
 		windows.addAll(winhandles);
@@ -660,7 +662,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	public void maximize() {
 		webDriver.manage().window().maximize();
-		
+
 	}
 
 }
