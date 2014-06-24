@@ -415,6 +415,7 @@ public class DbService extends SystemObjectImpl {
 		report.report("Query is: " + sql+". Max db time out is: "+MAX_DB_TIMEOUT);
 		db_userid=configuration.getProperty("db.connection.username");
 		db_password=configuration.getProperty("db.connection.password");
+		report.report(db_userid+"  "+db_password);
 		System.out.println(sql);
 		ResultSet rs = null;
 		Statement statement = null;
