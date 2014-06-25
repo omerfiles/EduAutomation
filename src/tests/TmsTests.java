@@ -134,7 +134,7 @@ public class TmsTests extends EdusoftWebTest {
 		tmsHomePage.clickOnStudents();
 		String institutionId = config.getProperty("institution.id");
 		String instituteName = dbService.getInstituteNameById(institutionId);
-		tmsHomePage.selectInstitute(instituteName, institutionId);
+		tmsHomePage.selectInstitute(instituteName, institutionId,false);
 		Thread.sleep(1000);
 		tmsHomePage.selectClass(config.getProperty("classname"));
 
@@ -310,6 +310,7 @@ public class TmsTests extends EdusoftWebTest {
 		webDriver.switchToNewWindow(1);
 		
 		tmsHomePage.selectLevel(lavalName);
+		tmsHomePage.selectPackage("1");
 
 	}
 

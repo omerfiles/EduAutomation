@@ -1,4 +1,4 @@
-package tests.edo;
+package tests.edoRegression;
 
 import org.junit.After;
 import org.junit.Before;
