@@ -99,6 +99,7 @@ public class TmsHomePage extends GenericPage {
 	public TmsHomePage reteAssignment(int rating) throws Exception {
 		webDriver.waitForElement("//tr//td//input[@id='" + rating + "']",
 				"xpath").click();
+		webDriver.printScreen("Rating student as teacher", null);
 		return this;
 	}
 
@@ -271,6 +272,8 @@ public class TmsHomePage extends GenericPage {
 				institution.getSchoolAdmin().getEmail());
 		webDriver.switchToParentFrame();
 		webDriver.waitForElement("Submitbutton", "name").click();
+	
+	
 
 		return this;
 
@@ -361,7 +364,7 @@ public class TmsHomePage extends GenericPage {
 
 	public TmsHomePage selectLevel(String levelName) throws Exception{
 		webDriver.waitForElement("selectLevel", ByTypes.name.toString()).click();
-		webDriver.waitForElement("//select[@name='selectLevel']//option[@]", "xpath").click();
+		webDriver.waitForElement("//select[@name='selectLevel']//option[text()='"+levelName+"']", "xpath").click();
 		return this;
 		
 	}
