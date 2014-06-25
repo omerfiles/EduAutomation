@@ -319,7 +319,7 @@
 							<testSourceDirectory>${project.basedir}/src/tests/</testSourceDirectory>
 							<testClassesDirectory>${project.basedir}/target/classes/</testClassesDirectory>
 							<includes>
-								<include>**/EraterRegressionTests.java</include>
+								<include>**/MavenTests.java</include>
 							</includes>
 						</configuration>
 					</plugin>
