@@ -434,7 +434,7 @@ public class EdoHomePage extends GenericPage {
 		// "xpath"));
 		// webDriver.switchToFrame(webDriver.waitForElement(
 		// "cboxIframe", ByTypes.className.toString()));
-
+		report.report("Rating is: "+rating);
 		String grade = webDriver.waitForElement("//div[@class='choosenGrade']",
 				"xpath").getText();
 
