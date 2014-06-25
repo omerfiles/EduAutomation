@@ -384,6 +384,8 @@ public class DbService extends SystemObjectImpl {
 
 	public void runDeleteUpdateSql(String sql) throws Exception {
 		report.report("Query is: " + sql);
+		db_userid=configuration.getProperty("db.connection.username");
+		db_password=configuration.getProperty("db.connection.password");
 		System.out.println(sql);
 		Statement statement = null;
 		try {
