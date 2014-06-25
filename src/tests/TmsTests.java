@@ -9,6 +9,7 @@ import org.hamcrest.core.IsInstanceOf;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import drivers.GenericWebDriver;
 import drivers.IEWebDriver;
@@ -26,17 +27,17 @@ import Objects.UserObject;
 
 public class TmsTests extends EdusoftWebTest {
 
+	
+
 	@Before
 	public void setup() throws Exception {
 		super.setup();
 	}
 
-	@Test
-	public void testLoginToTms() throws Exception {
+	
 
-	}
 
-	@Test
+	
 	public void testLoginToEdoAsTeacher() throws Exception {
 		Teacher teacher = new Teacher();
 		teacher.setUserName(config.getProperty("teacher.username"));
@@ -51,7 +52,7 @@ public class TmsTests extends EdusoftWebTest {
 	public void RegisterTeacherAndLogin() throws Exception {
 		report.startLevel("Open TMS and login as TMS Admin",
 				EnumReportLevel.CurrentPlace);
-		this.testCaseId="5782";
+		this.testCaseId = "5782";
 		String teacherName = "teacher" + dbService.sig(6);
 		String teacherPassword = "12345";
 
@@ -116,7 +117,7 @@ public class TmsTests extends EdusoftWebTest {
 	public void RegisterStudentAndLogin() throws Exception {
 		report.startLevel("Open TMS and login as TMS Admin",
 				EnumReportLevel.CurrentPlace);
-		this.testCaseId="5783";
+		this.testCaseId = "5783";
 		String studentName = "student" + dbService.sig(6);
 		String studentPassword = "12345";
 		TmsLoginPage tmsLoginPage = new TmsLoginPage(webDriver);
@@ -170,7 +171,7 @@ public class TmsTests extends EdusoftWebTest {
 	public void createNewInstitution() throws Exception {
 		report.startLevel("Open TMS and login as TMS Admin",
 				EnumReportLevel.CurrentPlace);
-		this.testCaseId="5779";
+		this.testCaseId = "5779";
 		TmsLoginPage tmsLoginPage = new TmsLoginPage(webDriver);
 		UserObject tmsAdmin = new UserObject();
 		tmsAdmin.setUserName(config.getProperty("tmsadmin.user"));
@@ -216,7 +217,7 @@ public class TmsTests extends EdusoftWebTest {
 		report.stopLevel();
 	}
 
-	@Test
+
 	public void testSelfRegistration() throws Exception {
 
 		startStep("Open TMS and create new class");
@@ -226,52 +227,52 @@ public class TmsTests extends EdusoftWebTest {
 		String institutionId = config.getProperty("institution.id");
 		String instituteName = dbService.getInstituteNameById(institutionId);
 		tmsHomePage.selectInstitute(instituteName, institutionId);
-		String className="class"+dbService.sig(3);
-		report.report("Class name is: "+className);
+		String className = "class" + dbService.sig(3);
+		report.report("Class name is: " + className);
 		tmsHomePage.swithchToMainFrame();
 		tmsHomePage.enterClassName(className);
 		tmsHomePage.clickOnAddClass();
 		startStep("Set class for self registration");
 		tmsHomePage.clickOnSettings();
 		tmsHomePage.clickOnFeatures();
-		String feature="SR";
+		String feature = "SR";
 		tmsHomePage.swithchToFormFrame();
 		tmsHomePage.selectFeature(feature);
 		tmsHomePage.selectInstitute(instituteName, institutionId);
 		tmsHomePage.swithchToMainFrame();
 		tmsHomePage.clickOnSelfRegistration();
-		String classId=dbService.getClassIdByName(className);
+		String classId = dbService.getClassIdByName(className);
 		tmsHomePage.selectClassForFelfRegistration(classId);
 		tmsHomePage.clickOnSaveFeature();
-		
+
 		startStep("Open institution URL and self register as a student");
 		webDriver.closeBrowser();
 		webDriver.init();
-		EdoLoginPage edoLoginPage=new EdoLoginPage(webDriver);
+		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
 		edoLoginPage.clickOnSelfRegistraton();
 		webDriver.switchToNewWindow(1);
-		String studentName="student"+dbService.sig(6);
+		String studentName = "student" + dbService.sig(6);
 		webDriver.switchToFrame("content");
 		edoLoginPage.enterStudentRegUserName(studentName);
 		edoLoginPage.enterStudentRegFirstName(studentName);
 		edoLoginPage.enterStudentRegLastName(studentName);
 		edoLoginPage.enterStudentRegPassword("12345");
-		edoLoginPage.enterStudentEmail(studentName+"@edusoft.co.il");
+		edoLoginPage.enterStudentEmail(studentName + "@edusoft.co.il");
 		edoLoginPage.clickOnRegister();
-		
+
 		startStep("Check that user is added to the class");
 
 	}
-	@Test
-	public void testAssigningValidPackagesToInstitution()throws Exception{
+
+
+	public void testAssigningValidPackagesToInstitution() throws Exception {
 		startStep("Init test data");
-		this.testCaseId="7663";
+		this.testCaseId = "7663";
 		String institutionId = config.getProperty("institution.id");
 		String instituteName = dbService.getInstituteNameById(institutionId);
-		String lavalName="FA3";
-		
-		
+		String lavalName = "F-A3";
+
 		startStep("Login to TMS as Admin");
 		TmsHomePage tmsHomePage = pageHelper.loginToTmsAsAdmin();
 		startStep("Create new instutution");
@@ -296,15 +297,20 @@ public class TmsTests extends EdusoftWebTest {
 		tmsHomePage.clickOnInstitutions();
 		tmsHomePage.clickOnAddNewSchool();
 		tmsHomePage.enterNewSchoolDetails(institution);
-		
+		sleep(10);
+
 		startStep("Assign package to the institution");
+
+		webDriver.switchToMainWindow();
+		tmsHomePage.swithchToMainFrame();
 		tmsHomePage.clickOnInstitutionPackages();
 		tmsHomePage.selectInstitute(instituteName, institutionId);
 		tmsHomePage.swithchToMainFrame();
 		tmsHomePage.clickOnAddPackages();
 		webDriver.switchToNewWindow(1);
-		tmsHomePage.selectLevel(lavalName);
 		
+		tmsHomePage.selectLevel(lavalName);
+
 	}
 
 	@After

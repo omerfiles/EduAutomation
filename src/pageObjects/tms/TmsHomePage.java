@@ -364,7 +364,9 @@ public class TmsHomePage extends GenericPage {
 
 	public TmsHomePage selectLevel(String levelName) throws Exception{
 		webDriver.waitForElement("selectLevel", ByTypes.name.toString()).click();
+		Thread.sleep(1000);
 		webDriver.waitForElement("//select[@name='selectLevel']//option[text()='"+levelName+"']", "xpath").click();
+		webDriver.waitForElement("//button[@name='go']", "xpath").click();
 		return this;
 		
 	}

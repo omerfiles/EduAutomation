@@ -631,6 +631,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	}
 
 	public String getUrl() throws Exception {
+		System.out.println(webDriver.getCurrentUrl());
 		return webDriver.getCurrentUrl();
 
 	}
@@ -654,7 +655,8 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	}
 
 	public void switchToMainWindow() throws Exception {
-		switchToNewWindow(0);
+		webDriver.switchTo().window((String) webDriver.getWindowHandles().toArray()[0]);
+		
 
 	}
 
