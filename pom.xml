@@ -402,6 +402,8 @@
 							<testClassesDirectory>${project.basedir}/target/classes/</testClassesDirectory>
 							<includes>
 								<include>**/TmsTests.java</include>
+								<include>**/GrammerTests.java</include>
+								
 							</includes>
 
 						</configuration>
