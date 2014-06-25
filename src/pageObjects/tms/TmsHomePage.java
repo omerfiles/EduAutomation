@@ -122,13 +122,21 @@ public class TmsHomePage extends GenericPage {
 
 	public TmsHomePage selectInstitute(String instituteName, String id)
 			throws Exception {
+		return selectInstitute(instituteName, id, true);
+	}
+
+	public TmsHomePage selectInstitute(String instituteName, String id,
+			boolean clickGo) throws Exception {
 		String mainWin = webDriver.switchToFrame("FormFrame");
 		webDriver.waitForElementAndClick("SelectSchool", ByTypes.id.toString());
 		Thread.sleep(1000);
 		webDriver.waitForElement(
 				"//select[@id='SelectSchool']//option[@value='" + id + "#"
 						+ instituteName + "']", "xpath").click();
-		webDriver.waitForElement("//input[@value='  GO  ']", "xpath").click();
+		if (clickGo == true) {
+			webDriver.waitForElement("//input[@value='  GO  ']", "xpath")
+					.click();
+		}
 		webDriver.switchToParentFrame();
 		return this;
 	}
@@ -151,12 +159,12 @@ public class TmsHomePage extends GenericPage {
 
 	public TmsHomePage selectClass(String className) throws Exception {
 
+		swithchToMainFrame();
 		String mainWin = webDriver.switchToFrame("FormFrame");
 		webDriver.waitForElementAndClick("SelectClass", ByTypes.id.toString());
 		Thread.sleep(1000);
 		webDriver.waitForElement("//select[@id='SelectClass']//option[2]",
 				"xpath").click();
-		;
 		webDriver.waitForElement("//input[@value='  GO  ']", "xpath").click();
 		webDriver.switchToFrame("mainFrame");
 
@@ -272,8 +280,6 @@ public class TmsHomePage extends GenericPage {
 				institution.getSchoolAdmin().getEmail());
 		webDriver.switchToParentFrame();
 		webDriver.waitForElement("Submitbutton", "name").click();
-	
-	
 
 		return this;
 
@@ -324,7 +330,7 @@ public class TmsHomePage extends GenericPage {
 	public TmsHomePage clickOnSelfRegistration() throws Exception {
 
 		if (webDriver.waitForElement("SelfRegistrationCheckBox", "id")
-				.isSelected()==false) {
+				.isSelected() == false) {
 			webDriver.waitForElement("SelfRegistrationCheckBox", "id").click();
 			webDriver.waitForElement("insertClass", "id").click();
 		}
@@ -349,26 +355,38 @@ public class TmsHomePage extends GenericPage {
 
 	}
 
-	public TmsHomePage clickOnInstitutionPackages()throws Exception {
-		webDriver.waitForElement("Institution Packages", ByTypes.linkText.toString()).click();
+	public TmsHomePage clickOnInstitutionPackages() throws Exception {
+		webDriver.waitForElement("Institution Packages",
+				ByTypes.linkText.toString()).click();
 		return this;
-		
+
 	}
 
-	public TmsHomePage clickOnAddPackages()throws Exception {
-		webDriver.waitForElement("//input[@value='Add Packages']", "xpath").click();
+	public TmsHomePage clickOnAddPackages() throws Exception {
+		webDriver.waitForElement("//input[@value='Add Packages']", "xpath")
+				.click();
 		return this;
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	public TmsHomePage selectLevel(String levelName) throws Exception{
-		webDriver.waitForElement("selectLevel", ByTypes.name.toString()).click();
+	public TmsHomePage selectLevel(String levelName) throws Exception {
+		webDriver.waitForElement("selectLevel", ByTypes.name.toString())
+				.click();
 		Thread.sleep(1000);
-		webDriver.waitForElement("//select[@name='selectLevel']//option[text()='"+levelName+"']", "xpath").click();
+		webDriver.waitForElement(
+				"//select[@name='selectLevel']//option[text()='" + levelName
+						+ "']", "xpath").click();
 		webDriver.waitForElement("//button[@name='go']", "xpath").click();
 		return this;
-		
+
+	}
+
+	public TmsHomePage selectPackage(String packageID) throws Exception {
+		webDriver.waitForElement("//table//tr[" + packageID + "]//td[1]",
+				"xpath").click();
+		return this;
+
 	}
 
 }
