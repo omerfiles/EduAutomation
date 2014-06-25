@@ -1,6 +1,7 @@
 package tests;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,6 +21,10 @@ public class MavenTests extends EdusoftWebTest {
 		webDriver.printScreen();
 		
 
+	}
+	@Test
+	public void failTest()throws Exception{
+		Assert.fail();
 	}
 
 	@After
