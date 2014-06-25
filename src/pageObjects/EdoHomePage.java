@@ -160,16 +160,20 @@ public class EdoHomePage extends GenericPage {
 		// String assayText = textService.getTextFromFile(assayTextFileName,
 		// Charset.defaultCharset());
 		String assayText = text;
-		textService.setClipboardText(assayText);
-		// webDriver.swithcToFrameAndSendKeys("//body[@id='tinymce']",
-		// assayText,
-		// "elm1_ifr");
-		webDriver.waitForElement("elm1_ifr", ByTypes.id.toString());
-		String mainWindow = webDriver.switchToFrame("elm1_ifr");
-		WebElement textArea = webDriver.waitForElement("//body[@id='tinymce']",
-				"xpath");
-		webDriver.pasteTextFromClipboard(textArea);
-		webDriver.switchToMainWindow(mainWindow);
+//		textService.setClipboardText(assayText);
+		 webDriver.swithcToFrameAndSendKeys("//body[@id='tinymce']",
+		 assayText,
+		 "elm1_ifr");
+		
+		
+		
+		
+//		webDriver.waitForElement("elm1_ifr", ByTypes.id.toString());
+//		String mainWindow = webDriver.switchToFrame("elm1_ifr");
+//		WebElement textArea = webDriver.waitForElement("//body[@id='tinymce']",
+//				"xpath");
+//		webDriver.pasteTextFromClipboard(textArea);
+//		webDriver.switchToMainWindow(mainWindow);
 		return this;
 	}
 
@@ -178,17 +182,17 @@ public class EdoHomePage extends GenericPage {
 		String assayText = textService.getTextFromFile(assayTextFileName,
 				Charset.defaultCharset());
 
-		System.out.println("Clipboard text is set to: " + assayText);
-		textService.setClipboardText(assayText);
-		// webDriver.swithcToFrameAndSendKeys("//body[@id='tinymce']",
-		// assayText,
-		// "elm1_ifr");
+//		System.out.println("Clipboard text is set to: " + assayText);
+//		textService.setClipboardText(assayText);
+		 webDriver.swithcToFrameAndSendKeys("//body[@id='tinymce']",
+		 assayText,
+		 "elm1_ifr");
 		Thread.sleep(3000);
-		String mainWindow = webDriver.switchToFrame("elm1_ifr");
-		WebElement textArea = webDriver.waitForElement("//body[@id='tinymce']",
-				"xpath");
-		webDriver.pasteTextFromClipboard(textArea);
-		webDriver.switchToMainWindow(mainWindow);
+//		String mainWindow = webDriver.switchToFrame("elm1_ifr");
+//		WebElement textArea = webDriver.waitForElement("//body[@id='tinymce']",
+//				"xpath");
+//		webDriver.pasteTextFromClipboard(textArea);
+//		webDriver.switchToMainWindow(mainWindow);
 		Thread.sleep(3000);
 		// webDriver.waitForElement("//a[@title='Submit']", "xpath").click();
 		// webDriver.closeAlertByAccept();

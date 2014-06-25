@@ -51,6 +51,7 @@ public class TmsTests extends EdusoftWebTest {
 	public void RegisterTeacherAndLogin() throws Exception {
 		report.startLevel("Open TMS and login as TMS Admin",
 				EnumReportLevel.CurrentPlace);
+		this.testCaseId="5782";
 		String teacherName = "teacher" + dbService.sig(6);
 		String teacherPassword = "12345";
 
@@ -115,7 +116,7 @@ public class TmsTests extends EdusoftWebTest {
 	public void RegisterStudentAndLogin() throws Exception {
 		report.startLevel("Open TMS and login as TMS Admin",
 				EnumReportLevel.CurrentPlace);
-
+		this.testCaseId="5783";
 		String studentName = "student" + dbService.sig(6);
 		String studentPassword = "12345";
 		TmsLoginPage tmsLoginPage = new TmsLoginPage(webDriver);
@@ -169,7 +170,7 @@ public class TmsTests extends EdusoftWebTest {
 	public void createNewInstitution() throws Exception {
 		report.startLevel("Open TMS and login as TMS Admin",
 				EnumReportLevel.CurrentPlace);
-
+		this.testCaseId="5779";
 		TmsLoginPage tmsLoginPage = new TmsLoginPage(webDriver);
 		UserObject tmsAdmin = new UserObject();
 		tmsAdmin.setUserName(config.getProperty("tmsadmin.user"));
@@ -261,6 +262,49 @@ public class TmsTests extends EdusoftWebTest {
 		
 		startStep("Check that user is added to the class");
 
+	}
+	@Test
+	public void testAssigningValidPackagesToInstitution()throws Exception{
+		startStep("Init test data");
+		this.testCaseId="7663";
+		String institutionId = config.getProperty("institution.id");
+		String instituteName = dbService.getInstituteNameById(institutionId);
+		String lavalName="FA3";
+		
+		
+		startStep("Login to TMS as Admin");
+		TmsHomePage tmsHomePage = pageHelper.loginToTmsAsAdmin();
+		startStep("Create new instutution");
+		Institution institution = new Institution();
+		institution.setName("autoSchool" + dbService.sig(5));
+		report.report("School name is: " + institution.getName());
+		institution.setPhone("985644456");
+		institution.setConcurrentUsers("100");
+		institution.setNumberOfComonents("20");
+		institution.setNumberOfUsers("100");
+		institution.setSchoolImpType(SchoolImpTypes.blended);
+		institution.setHost(config.getProperty("sut.url")
+				.replace("http://", "") + institution.getName());
+		SchoolAdmin schoolAdmin = new SchoolAdmin();
+		String adminUserName = "admin" + dbService.sig(6);
+		schoolAdmin.setUserName(adminUserName);
+		schoolAdmin.setName(adminUserName);
+		schoolAdmin.setPassword("12345");
+		schoolAdmin.setEmail(adminUserName + "@edusoft.co.il");
+		institution.setSchoolAdmin(schoolAdmin);
+		institution.setEmail(adminUserName + "@edusoft.co.il");
+		tmsHomePage.clickOnInstitutions();
+		tmsHomePage.clickOnAddNewSchool();
+		tmsHomePage.enterNewSchoolDetails(institution);
+		
+		startStep("Assign package to the institution");
+		tmsHomePage.clickOnInstitutionPackages();
+		tmsHomePage.selectInstitute(instituteName, institutionId);
+		tmsHomePage.swithchToMainFrame();
+		tmsHomePage.clickOnAddPackages();
+		webDriver.switchToNewWindow(1);
+		tmsHomePage.selectLevel(lavalName);
+		
 	}
 
 	@After

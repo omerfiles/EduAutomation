@@ -23,9 +23,17 @@ public class MavenTests extends EdusoftWebTest {
 
 	}
 	@Test
-	public void failTest()throws Exception{
-		Assert.fail();
+	public void testFirefox1()throws Exception{
+		
+		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
+		edoLoginPage.OpenPage(getSutAndSubDomain());
+		webDriver.printScreen();
+		edoLoginPage.login(null);
+		
+		
+
 	}
+	
 
 	@After
 	public void tearDown() throws Exception {

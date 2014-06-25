@@ -1,5 +1,7 @@
 package tests;
 
+import jsystem.framework.report.Reporter.EnumReportLevel;
+
 import org.junit.After;
 import org.openqa.selenium.safari.SafariDriver;
 
@@ -73,6 +75,7 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 //		ieWebDriver.quitBrowser();
 //		safariDriver.quitBrowser();
 		if (this.isPass == false) {
+			report.startLevel("Test failed",EnumReportLevel.MainFrame);
 			webDriver.printScreen(this.getMethodName(), null);
 		}
 		webDriver.quitBrowser();

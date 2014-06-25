@@ -346,4 +346,24 @@ public class TmsHomePage extends GenericPage {
 
 	}
 
+	public TmsHomePage clickOnInstitutionPackages()throws Exception {
+		webDriver.waitForElement("Institution Packages", ByTypes.linkText.toString()).click();
+		return this;
+		
+	}
+
+	public TmsHomePage clickOnAddPackages()throws Exception {
+		webDriver.waitForElement("//input[@value='Add Packages']", "xpath").click();
+		return this;
+		// TODO Auto-generated method stub
+		
+	}
+
+	public TmsHomePage selectLevel(String levelName) throws Exception{
+		webDriver.waitForElement("selectLevel", ByTypes.name.toString()).click();
+		webDriver.waitForElement("//select[@name='selectLevel']//option[@]", "xpath").click();
+		return this;
+		
+	}
+
 }

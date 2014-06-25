@@ -30,6 +30,7 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 	public ClassPathXmlApplicationContext ctx;
 	
 	protected boolean inStep=false;
+	protected String testCaseId=null;
 
 	
 	

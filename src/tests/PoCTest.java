@@ -45,12 +45,12 @@ public class PoCTest extends EdusoftWebTest {
 		
 		webDriver.init();
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
-		edoLoginPage.OpenPage(getSutAndSubDomain());
+	
 		webDriver.printScreen();
 	}
 	@Test
 	public void testDbNullQuery()throws Exception{
-		String sql="select * from writing where UserId='52313630000004' and EssayText like '%You are do%'";
+		String sql="select * from writing where UserId='52313630000004'";
 		dbService.getStringFromQuery(sql);
 	}
 	

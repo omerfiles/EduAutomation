@@ -63,7 +63,11 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		// getting remote machine from pom profile while executing tests using
 		// maven/Jenkins
 		remoteMachine = System.getProperty("remote.machine");
+		if(remoteMachine!=null){
+			report.report("Got remote machine from pom file");
+		}
 		if (remoteMachine == null) {
+			
 			// getting remote machine for running the tests from properties file
 			// - while developing/debugging
 			remoteMachine = configuration.getProperty("remote.machine");
