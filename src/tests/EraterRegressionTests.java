@@ -65,7 +65,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 	public void testSubmitTextAsStudentAndCheckFeedbackAsTeacherAndSendAgain()
 			throws Exception {
 		startStep("Login to Edo");
-		int courseId = 2;
+		int courseId = 1;
 		String textFile = "files/assayFiles/text24.txt";
 		report.report("using file: " + textFile);
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
@@ -92,6 +92,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		int unitStage = Integer.valueOf(courses.get(courseId).getCourseUnits()
 				.get(0).getUnitComponent().get(0).getStageNumber());
 		edoHomePage.ClickOnComponentsStage(unitStage);
+		sleep(3);
 
 		edoHomePage.submitWritingAssignment(textFile, textService);
 		// System.out.println("sleeping for 60 seconds");

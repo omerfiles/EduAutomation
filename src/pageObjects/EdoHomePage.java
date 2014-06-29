@@ -33,7 +33,8 @@ public class EdoHomePage extends GenericPage {
 	}
 
 	public EdoHomePage checkEraterNotice() throws Exception {
-		Assert.assertTrue(webDriver.waitForElement("ERaterNotice", "id").isDisplayed());
+		Assert.assertTrue(webDriver.waitForElement("ERaterNotice", "id")
+				.isDisplayed());
 		return this;
 	}
 
@@ -160,20 +161,17 @@ public class EdoHomePage extends GenericPage {
 		// String assayText = textService.getTextFromFile(assayTextFileName,
 		// Charset.defaultCharset());
 		String assayText = text;
-//		textService.setClipboardText(assayText);
-		 webDriver.swithcToFrameAndSendKeys("//body[@id='tinymce']",
-		 assayText,
-		 "elm1_ifr");
-		
-		
-		
-		
-//		webDriver.waitForElement("elm1_ifr", ByTypes.id.toString());
-//		String mainWindow = webDriver.switchToFrame("elm1_ifr");
-//		WebElement textArea = webDriver.waitForElement("//body[@id='tinymce']",
-//				"xpath");
-//		webDriver.pasteTextFromClipboard(textArea);
-//		webDriver.switchToMainWindow(mainWindow);
+		// textService.setClipboardText(assayText);
+		webDriver.swithcToFrameAndSendKeys("//body[@id='tinymce']", assayText,
+				"elm1_ifr");
+
+		// webDriver.waitForElement("elm1_ifr", ByTypes.id.toString());
+		// String mainWindow = webDriver.switchToFrame("elm1_ifr");
+		// WebElement textArea =
+		// webDriver.waitForElement("//body[@id='tinymce']",
+		// "xpath");
+		// webDriver.pasteTextFromClipboard(textArea);
+		// webDriver.switchToMainWindow(mainWindow);
 		return this;
 	}
 
@@ -182,17 +180,17 @@ public class EdoHomePage extends GenericPage {
 		String assayText = textService.getTextFromFile(assayTextFileName,
 				Charset.defaultCharset());
 
-//		System.out.println("Clipboard text is set to: " + assayText);
-//		textService.setClipboardText(assayText);
-		 webDriver.swithcToFrameAndSendKeys("//body[@id='tinymce']",
-		 assayText,
-		 "elm1_ifr");
+		// System.out.println("Clipboard text is set to: " + assayText);
+		// textService.setClipboardText(assayText);
+		webDriver.swithcToFrameAndSendKeys("//body[@id='tinymce']", assayText,
+				"elm1_ifr");
 		Thread.sleep(3000);
-//		String mainWindow = webDriver.switchToFrame("elm1_ifr");
-//		WebElement textArea = webDriver.waitForElement("//body[@id='tinymce']",
-//				"xpath");
-//		webDriver.pasteTextFromClipboard(textArea);
-//		webDriver.switchToMainWindow(mainWindow);
+		// String mainWindow = webDriver.switchToFrame("elm1_ifr");
+		// WebElement textArea =
+		// webDriver.waitForElement("//body[@id='tinymce']",
+		// "xpath");
+		// webDriver.pasteTextFromClipboard(textArea);
+		// webDriver.switchToMainWindow(mainWindow);
 		Thread.sleep(3000);
 		// webDriver.waitForElement("//a[@title='Submit']", "xpath").click();
 		// webDriver.closeAlertByAccept();
@@ -434,18 +432,20 @@ public class EdoHomePage extends GenericPage {
 		// "xpath"));
 		// webDriver.switchToFrame(webDriver.waitForElement(
 		// "cboxIframe", ByTypes.className.toString()));
-		report.report("Rating is: "+rating);
+		report.report("Rating is: " + rating);
 		String grade = webDriver.waitForElement("//div[@class='choosenGrade']",
 				"xpath").getText();
 
 		switch (rating) {
 		case 1:
-			Assert.assertEquals(grade, RATING1_TEXT);
-		case 2:
-			Assert.assertEquals(grade, RATING2_TEXT);
+			Assert.assertEquals(RATING1_TEXT, grade);
 			break;
+		case 2:
+			Assert.assertEquals(RATING2_TEXT, grade);
+			break;
+
 		case 3:
-			Assert.assertEquals(grade, RATING3_TEXT);
+			Assert.assertEquals(RATING3_TEXT, grade);
 			break;
 
 		}
@@ -510,11 +510,13 @@ public class EdoHomePage extends GenericPage {
 		return this;
 
 	}
-	public EdoHomePage dragAnswerToElement(String dataId,WebElement toElement) throws Exception {
+
+	public EdoHomePage dragAnswerToElement(String dataId, WebElement toElement)
+			throws Exception {
 		WebElement answer = webDriver.waitForElement("//div[@data-id='"
 				+ dataId + "']", "xpath");
-//		WebElement questionFiled = webDriver.waitForElement(
-//				"//span[@data-id='1_1']", "xpath");
+		// WebElement questionFiled = webDriver.waitForElement(
+		// "//span[@data-id='1_1']", "xpath");
 		webDriver.dragAndDropElement(answer, toElement);
 		return this;
 
@@ -619,10 +621,11 @@ public class EdoHomePage extends GenericPage {
 		}
 		// webDriver.waitForElement("//div[contains(@id,'q"+questionId+"')][contains(@class,'"+check+"']",
 		// "xpath");
-		webDriver.waitForElement("//div[contains(@id,'q" + questionId
-				+ "')][@name='txt_div'][contains(@class,'" + check
-				+ "')]//div//div//div//span[contains(text(),'" + answer + "')]",
-				"xpath");
+		webDriver.waitForElement(
+				"//div[contains(@id,'q" + questionId
+						+ "')][@name='txt_div'][contains(@class,'" + check
+						+ "')]//div//div//div//span[contains(text(),'" + answer
+						+ "')]", "xpath");
 	}
 
 	public EdoHomePage clickOnCheckAnswers() throws Exception {
