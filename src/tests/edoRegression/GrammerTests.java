@@ -19,6 +19,7 @@ public class GrammerTests extends EdusoftWebTest {
 
 		startStep("Init test data");
 		int courseId = 4;
+		this.testCaseId="7283";
 		Course course = pageHelper.initCouse(courseId);
 
 		startStep("Login to EDO as student");
@@ -46,6 +47,7 @@ public class GrammerTests extends EdusoftWebTest {
 	@Test
 	public void testGrammerB1PracticeTab() throws Exception {
 		startStep("Init test data");
+		this.testCaseId="7284";
 		int courseId = 4;
 		Course course = pageHelper.initCouse(courseId);
 		String answerId = "66";
@@ -69,6 +71,7 @@ public class GrammerTests extends EdusoftWebTest {
 	@Test
 	public void testGrammerB1TestTab() throws Exception {
 		startStep("Init test data");
+		this.testCaseId="7285";
 		int courseId = 4;
 		Course course = pageHelper.initCouse(courseId);
 		String answerId = "66";

@@ -121,9 +121,13 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		value = element.getAttribute(propertyname);
 		return value;
 	}
-
 	public WebElement waitForElement(String idValue, String byType,
 			int timeout, boolean isElementMandatory) throws Exception {
+		return waitForElement(idValue, byType, timeout, isElementMandatory, null);
+	}
+
+	public WebElement waitForElement(String idValue, String byType,
+			int timeout, boolean isElementMandatory,String message) throws Exception {
 
 		report.startLevel("waiting for element " + idValue + " by trpe "
 				+ byType + " for " + timeout + " seconds");
@@ -186,27 +190,34 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		} finally {
 
 			if (isElementMandatory == true && element == null) {
-
+				if(message.equals(null)==false){
+					report.report(message);
+				}
 				Assert.fail("Element: " + idValue + " not found");
 			}
 			report.stopLevel();
 			return element;
 		}
 	}
+	
+	public WebElement waitForElement(String idValue, String byType,String message)
+			throws Exception {
+		return waitForElement(idValue, byType, timeout, true,message);
+	}
 
 	public WebElement waitForElement(String idValue, String byType)
 			throws Exception {
-		return waitForElement(idValue, byType, timeout, true);
+		return waitForElement(idValue, byType, timeout, true,null);
 	}
 
 	public void waitForElementAndClick(String idValue, String byType)
 			throws Exception {
-		waitForElement(idValue, byType, timeout, true).click();
+		waitForElement(idValue, byType, timeout, true,null).click();
 	}
 
 	public WebElement waitForElement(String idValue, String byType,
 			boolean isElementMandatory, int timeout) throws Exception {
-		return waitForElement(idValue, byType, timeout, isElementMandatory);
+		return waitForElement(idValue, byType, timeout, isElementMandatory,null);
 	}
 
 	public void sendKey(Keys keys) throws Exception {

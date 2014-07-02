@@ -1,5 +1,6 @@
 package services;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import pageObjects.tms.TmsHomePage;
 import pageObjects.tms.TmsLoginPage;
 import Objects.Course;
 import Objects.CourseUnit;
+import Objects.Recording;
 import Objects.SchoolAdmin;
 import Objects.Student;
 import Objects.UnitComponent;
@@ -28,8 +30,15 @@ public class PageHelperService extends SystemObjectImpl {
 	Configuration configuration;
 	@Autowired
 	TextService textService;
+	
+	@Autowired
+	DbService dbService;
+	
+	@Autowired
+	AudioService audioService;
 
 	List<Course> courses = null;
+	List<Recording>recordings=null;
 
 	public PageHelperService() {
 
@@ -38,6 +47,7 @@ public class PageHelperService extends SystemObjectImpl {
 	public void init(GenericWebDriver webDriver) throws Exception {
 		this.webDriver = webDriver;
 		courses = loadCoursedDetailsFromCsv();
+		recordings=loadRecordings();
 
 	}
 
@@ -119,5 +129,37 @@ public class PageHelperService extends SystemObjectImpl {
 				.getStageNumber()));
 		return course;
 	}
+
+	public void checkClassWasCreated(String className, String institutionId) throws Exception {
+		String sql="select * from Class where Name='"+className+"' and institutionId="+institutionId;
+		dbService.getStringFromQuery(sql);
+	}
+	
+	public void startRecording(String fileName) throws Exception{
+		//TODO 1. click on the recored button
+		audioService.sendSoundToVirtualMic(new File(fileName));
+	}
+	public List<Recording> loadRecordings() throws Exception {
+		List<String[]> recordingsCsv = textService
+				.getStr2dimArrFromCsv("files/csvFiles/recordingResults.csv");
+		List<Recording> recordings = new ArrayList<Recording>();
+		for (int i = 0; i < recordingsCsv.size(); i++) {
+			Recording recording = new Recording();
+			recording.setId(recordingsCsv.get(i)[0]);
+			recording.setWordsScores(textService
+					.splitStringToArray(recordingsCsv.get(i)[3]));
+			recording.setFileName(new File(recordingsCsv.get(i)[4]));
+			recordings.add(recording);
+
+		}
+
+		return recordings;
+
+	}
+
+	public List<Recording> getRecordings() {
+		return recordings;
+	}
+	
 
 }

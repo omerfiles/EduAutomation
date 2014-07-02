@@ -75,7 +75,7 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 //		ieWebDriver.quitBrowser();
 //		safariDriver.quitBrowser();
 		if (this.isPass == false) {
-			report.startLevel("Test failed",EnumReportLevel.MainFrame);
+			
 			webDriver.printScreen(this.getMethodName(), null);
 		}
 		webDriver.quitBrowser();

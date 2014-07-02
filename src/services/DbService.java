@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLXML;
 import java.sql.Statement;
+import java.util.Calendar;
 
 import javax.sql.DataSource;
 
@@ -37,6 +38,9 @@ public class DbService extends SystemObjectImpl {
 
 	@Autowired
 	Configuration configuration;
+	
+	@Autowired
+	InstitutionService institutionService;
 
 	Connection conn;
 
@@ -518,7 +522,7 @@ public class DbService extends SystemObjectImpl {
 	}
 
 	public String getUserIdByUserName(String userName) throws Exception {
-		String institutionid = configuration.getProperty("institution.id");
+		String institutionid = institutionService.getInstitution().getInstitutionId();
 		String sql = "select UserId from users where UserName='" + userName
 				+ "' and institutionid=" + institutionid;
 		String result = getStringFromQuery(sql);
@@ -534,6 +538,13 @@ public class DbService extends SystemObjectImpl {
 		String result = getStringFromQuery(sql);
 		return result;
 	}
+	
+	public String getInstituteIdByName(String name) throws Exception {
+		String sql = "select institutionId from institutions where name='" + name+"'";
+		String result = getStringFromQuery(sql);
+		return result;
+	}
+	
 
 	public void verifyInstitutionCreated(Institution institution)
 			throws Exception {
@@ -545,11 +556,20 @@ public class DbService extends SystemObjectImpl {
 	}
 
 	public String getClassIdByName(String classNae) throws Exception {
-		String institutionId = configuration.getProperty("institution.id");
+		String institutionId = institutionService.getInstitution().getInstitutionId();
+		
 		String sql = "select classId from class where Name='" + classNae
 				+ "' and institutionId=" + institutionId + "";
 		String result = getStringFromQuery(sql);
 		return result;
+	}
+	public int getCurrentDay()throws Exception{
+		Calendar cal = Calendar.getInstance();
+		int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
+
+		String dayOfMonthStr = String.valueOf(dayOfMonth);
+		
+		return dayOfMonth;
 	}
 
 }

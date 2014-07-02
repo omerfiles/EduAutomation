@@ -89,9 +89,9 @@ public class SkillsTests extends EdusoftWebTest {
 		edoHomePage.markVocabRadioBtnAnswer("2","Hello!");
 		edoHomePage.markVocabRadioBtnAnswer("3","Good night!");
 		edoHomePage.clickOnCheckAnswers();
-		edoHomePage.checkVacabRadioBtnAnswer("1",true,"Good morning!");
-		edoHomePage.checkVacabRadioBtnAnswer("2",true,"Hello!");
-		edoHomePage.checkVacabRadioBtnAnswer("3",true,"Good night!");
+		edoHomePage.checkVocabRadioBtnAnswer("1",true,"Good morning!");
+		edoHomePage.checkVocabRadioBtnAnswer("2",true,"Hello!");
+		edoHomePage.checkVocabRadioBtnAnswer("3",true,"Good night!");
 		edoHomePage.clickOnNextComponent(1);
 		
 		edoHomePage.dragAnswerToElement("86", webDriver.waitForElement("//div[@id=2]", "xpath"));

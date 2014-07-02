@@ -15,6 +15,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import jsystem.framework.system.SystemObjectImpl;
+
 @Service
 public class TextService extends SystemObjectImpl {
 
@@ -29,15 +30,16 @@ public class TextService extends SystemObjectImpl {
 
 		} catch (IOException e) {
 			report.report(e.toString());
-			
+
 		} finally {
 			return new String(encoded, encoding);
 		}
 	}
-	
-	public String getFirstCharsFromCsv(int charsNumber,String filePath)throws Exception{
-		String str=getTextFromFile(filePath, Charset.defaultCharset());
-		str=str.substring(0, charsNumber);
+
+	public String getFirstCharsFromCsv(int charsNumber, String filePath)
+			throws Exception {
+		String str = getTextFromFile(filePath, Charset.defaultCharset());
+		str = str.substring(0, charsNumber);
 		return str;
 	}
 
@@ -101,4 +103,8 @@ public class TextService extends SystemObjectImpl {
 		clipboard.setContents(selection, selection);
 	}
 
+	public String[] splitStringToArray(String str) {
+		String[] result = str.split("(?!^)");
+		return result;
+	}
 }

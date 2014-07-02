@@ -5,15 +5,18 @@ import jsystem.framework.system.SystemObjectImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import services.Configuration;
+import services.InstitutionService;
 import services.PageHelperService;
 
-abstract class BasicObject{
-	private String id;
+abstract class BasicObject {
+	protected String id;
 	
-	private String name;
+	protected String name;
 	
 	@Autowired
 	Configuration configuration;
+	@Autowired
+	InstitutionService institutionService;
 	
 
 	

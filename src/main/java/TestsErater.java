@@ -113,8 +113,8 @@ public class TestsErater extends EdusoftWebTest {
 		edoLoginPage.OpenPage(getSutAndSubDomain());
 
 		Student student = new Student();
-		student.setUserName(config.getProperty("student.user.name"));
-		student.setPassword(config.getProperty("student.user.password"));
+		student.setUserName(autoInstitution.getStudentUserName());
+		student.setPassword(autoInstitution.getStudentPassword());
 		student.setId(dbService.getUserIdByUserName(student.getUserName()));
 		
 

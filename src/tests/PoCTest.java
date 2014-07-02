@@ -16,6 +16,7 @@ import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import Objects.Student;
 import Objects.Teacher;
@@ -30,33 +31,32 @@ public class PoCTest extends EdusoftWebTest {
 	public void setup() throws Exception {
 		super.setup();
 	}
-	
+
 	@Test
-	public void testFirefox()throws Exception{
-		
+	public void testFirefox() throws Exception {
+
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
 		webDriver.printScreen();
-		
 
 	}
-	@Test
-	public void TestSafari()throws Exception{
-		
-		webDriver.init();
-		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
-	
-		webDriver.printScreen();
-	}
-	@Test
-	public void testDbNullQuery()throws Exception{
-		String sql="select * from writing where UserId='52313630000004'";
-		dbService.getStringFromQuery(sql);
-	}
 	
 	@Test
-	public void OpenTmsCloseItAndOpenEdoAndLogin()throws Exception{
-		
+	public void TestSafari() throws Exception {
+
+		System.out.println(institutionService.getInstitution()
+				.getInstitutionId());
+		;
+	}
+
+	@Test
+	public void testDbNullQuery() throws Exception {
+		System.out.println(dbService.getCurrentDay());
+	}
+
+	@Test
+	public void OpenTmsCloseItAndOpenEdoAndLogin() throws Exception {
+
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
 
@@ -65,7 +65,7 @@ public class PoCTest extends EdusoftWebTest {
 		student.setPassword(config.getStudentPassword());
 		student.setId(dbService.getUserIdByUserName(student.getUserName()));
 		EdoHomePage edoHomePage = edoLoginPage.login(student);
-		
+
 		webDriver.deleteCookiesAndRefresh();
 		Teacher teacher = new Teacher(config.getProperty("teacher.username"),
 				config.getProperty("teacher.password"));
@@ -73,10 +73,7 @@ public class PoCTest extends EdusoftWebTest {
 		edoHomePage = edoLoginPage.login(teacher);
 		edoHomePage.waitForPageToLoad();
 		TmsHomePage tmsHomePage = edoHomePage.openTeachersCorner();
-		
-		
-		
-		
+
 		webDriver.quitBrowser();
 		webDriver.init();
 		webDriver.openUrl(getSutAndSubDomain());
@@ -116,7 +113,8 @@ public class PoCTest extends EdusoftWebTest {
 
 	@Test
 	public void getUserId() throws Exception {
-	System.out.println(dbService.getUserIdByUserName(config.getStudentUserName()));	
+		System.out.println(dbService.getUserIdByUserName(config
+				.getStudentUserName()));
 	}
 
 	@Test
@@ -164,7 +162,7 @@ public class PoCTest extends EdusoftWebTest {
 
 	@After
 	public void tearDown() throws Exception {
-//		EdoHomePage edoHomePage = new EdoHomePage(webDriver);
+		// EdoHomePage edoHomePage = new EdoHomePage(webDriver);
 		// edoHomePage.logOut();
 		super.tearDown();
 
@@ -204,8 +202,6 @@ public class PoCTest extends EdusoftWebTest {
 		String userId = dbService.getUserIdByUserName(student.getUserName());
 		report.report(userId);
 	}
-
-
 
 	@Test
 	public void testGetNodesList() throws Exception {
@@ -285,10 +281,6 @@ public class PoCTest extends EdusoftWebTest {
 		}
 
 	}
-
-	
-
-	
 
 	public void testOpenURL(GenericWebDriver webDriver) throws Exception {
 		webDriver.init();

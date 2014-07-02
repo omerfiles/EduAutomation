@@ -1,5 +1,7 @@
 package pageObjects.tms;
 
+import java.util.Calendar;
+
 import org.openqa.selenium.WebElement;
 
 import Enums.ByTypes;
@@ -385,6 +387,51 @@ public class TmsHomePage extends GenericPage {
 	public TmsHomePage selectPackage(String packageID) throws Exception {
 		webDriver.waitForElement("//table//tr[" + packageID + "]//td[1]",
 				"xpath").click();
+		return this;
+
+	}
+
+	public TmsHomePage selectPackageStartDate(String packageId)
+			throws Exception {
+		webDriver.waitForElement("//a[@name='anchor" + packageId + "']//img",
+				ByTypes.xpath.toString()).click();
+		int currentDay = dbService.getCurrentDay();
+		String nainWin = webDriver.switchToPopup();
+		webDriver.waitForElement("//td//a[text()='" + currentDay + "']",
+				"xpath").click();
+		webDriver.switchToMainWindow(nainWin);
+		swithchToFormFrame();
+		return this;
+	}
+
+	public TmsHomePage enterPackageQuantity(String packageId, String amount)
+			throws Exception {
+		webDriver.waitForElement("number" + packageId, ByTypes.name.toString())
+				.sendKeys(amount);
+		return this;
+
+	}
+
+	public TmsHomePage clickOnSubmitButton() throws Exception {
+		webDriver.waitForElement("Submitbutton", ByTypes.name.toString())
+				.click();
+		return this;
+
+	}
+
+	public TmsHomePage checkPackageExist(String packageName) throws Exception {
+		webDriver.waitForElement(
+				"//tbody//tr//td[text()='" + packageName + "']", "xpath")
+				.isDisplayed();
+		return this;
+
+	}
+
+	public TmsHomePage checkClassNameIsDisplayed(String className)
+			throws Exception {
+		webDriver.waitForElement(
+				"//tbody//tr//td//a[text()='" + className + "']", "xpath")
+				.isDisplayed();
 		return this;
 
 	}

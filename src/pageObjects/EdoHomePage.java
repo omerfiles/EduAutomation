@@ -121,7 +121,7 @@ public class EdoHomePage extends GenericPage {
 			// .click();
 			webDriver.waitForElementAndClick("//a[@class='tasksBtnext']",
 					"xpath");
-			Thread.sleep(500);
+			Thread.sleep(1500);
 		}
 		return this;
 	}
@@ -611,7 +611,7 @@ public class EdoHomePage extends GenericPage {
 
 	}
 
-	public void checkVacabRadioBtnAnswer(String questionId, boolean trueAnswer,
+	public void checkVocabRadioBtnAnswer(String questionId, boolean trueAnswer,
 			String answer) throws Exception {
 		String check;
 		if (trueAnswer == true) {
@@ -632,5 +632,48 @@ public class EdoHomePage extends GenericPage {
 		webDriver.waitForElement("CheckAnswer", "id").click();
 		return this;
 
+	}
+
+	public EdoHomePage checkInputFieldIsDisplayed(String id) throws Exception {
+		webDriver
+				.waitForElement("//input[@id='" + id + "']", "xpath", 20, true)
+				.isDisplayed();
+		return this;
+
+	}
+
+	public EdoHomePage ClickComponentStage(String index) throws Exception {
+		webDriver.waitForElement(
+				"//ul[@class='ulTasks']//li[@ind='" + index + "']", "xpath")
+				.click();
+		return this;
+	}
+
+	public EdoHomePage typeAnswerInInputField(String id, String answerText)
+			throws Exception {
+		webDriver
+				.waitForElement("//input[@id='" + id + "']", "xpath", 20, true)
+				.sendKeys(answerText);
+		return this;
+
+	}
+
+	public EdoHomePage checkTextInputAnswer(String id,boolean trueAnswer)throws Exception  {
+		
+		
+			String check;
+			if (trueAnswer == true) {
+				check = "vCheck";
+			} else {
+				check = "xCheck";
+			}
+			// webDriver.waitForElement("//div[contains(@id,'q"+questionId+"')][contains(@class,'"+check+"']",
+			// "xpath");
+			webDriver.waitForElement("//div[@id='res"+id+"'][contains(@class,'"+check+"')]","xpath","Correct/incorrect answer do not match expected");
+					
+		
+		
+		
+		return this;
 	}
 }

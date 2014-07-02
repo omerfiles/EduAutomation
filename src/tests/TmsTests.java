@@ -40,8 +40,8 @@ public class TmsTests extends EdusoftWebTest {
 	
 	public void testLoginToEdoAsTeacher() throws Exception {
 		Teacher teacher = new Teacher();
-		teacher.setUserName(config.getProperty("teacher.username"));
-		teacher.setPassword(config.getProperty("teacher.password"));
+		teacher.setUserName(autoInstitution.getTeacherUserName());
+		teacher.setPassword(autoInstitution.getTeacherPassword());
 
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
@@ -265,11 +265,12 @@ public class TmsTests extends EdusoftWebTest {
 
 	}
 
-
+	@Test
 	public void testAssigningValidPackagesToInstitution() throws Exception {
 		startStep("Init test data");
 		this.testCaseId = "7663";
-		String institutionId = config.getProperty("institution.id");
+		String packageId="231";
+		String institutionId = autoInstitution.getInstitutionId();
 		String instituteName = dbService.getInstituteNameById(institutionId);
 		String lavalName = "F-A3";
 
@@ -304,14 +305,43 @@ public class TmsTests extends EdusoftWebTest {
 		webDriver.switchToMainWindow();
 		tmsHomePage.swithchToMainFrame();
 		tmsHomePage.clickOnInstitutionPackages();
-		tmsHomePage.selectInstitute(instituteName, institutionId);
+		tmsHomePage.selectInstitute(institution.getName(), dbService.getInstituteIdByName(institution.getName()));
 		tmsHomePage.swithchToMainFrame();
 		tmsHomePage.clickOnAddPackages();
 		webDriver.switchToNewWindow(1);
 		
 		tmsHomePage.selectLevel(lavalName);
+		tmsHomePage.swithchToFormFrame();
+		
 		tmsHomePage.selectPackage("1");
+		tmsHomePage.selectPackageStartDate(packageId);
+		tmsHomePage.enterPackageQuantity(packageId,"100");
+		webDriver.switchToParentFrame();
+		tmsHomePage.clickOnSubmitButton();
+		
+		startStep("Check that package was added");
+		webDriver.switchToMainWindow();
+		tmsHomePage.swithchToMainFrame();
+		tmsHomePage.checkPackageExist("F-A3/12M_18M");
 
+	}
+	@Test
+	public void testAddClass()throws Exception{
+		startStep("Open TMS and create new class");
+		this.testCaseId="7256";
+		TmsHomePage tmsHomePage = pageHelper.loginToTmsAsAdmin();
+		tmsHomePage.clickOnClasses();
+		String institutionId = autoInstitution.getInstitutionId();
+		String instituteName = autoInstitution.getInstitutionName();
+		tmsHomePage.selectInstitute(instituteName, institutionId);
+		String className = "class" + dbService.sig(3);
+		report.report("Class name is: " + className);
+		tmsHomePage.swithchToMainFrame();
+		tmsHomePage.enterClassName(className);
+		tmsHomePage.clickOnAddClass();
+		startStep("Validate that class was added");
+		tmsHomePage.checkClassNameIsDisplayed(className);
+		pageHelper.checkClassWasCreated(className,institutionId);
 	}
 
 	@After

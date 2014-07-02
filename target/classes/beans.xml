@@ -29,6 +29,8 @@
 	</bean>
 	<bean id="NetService" class="services.NetService"></bean>
 	<bean id="EraterService" class="services.EraterService"></bean>
+	<bean id="InstitutionService" class="services.InstitutionService"></bean>
+	<bean id="AudioService" class="services.AudioService"></bean>
 
 
 	<bean id="dataSource"

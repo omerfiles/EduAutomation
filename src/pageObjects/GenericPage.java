@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import services.AudioService;
 import services.Configuration;
 import services.DbService;
 import drivers.GenericWebDriver;
@@ -16,6 +17,9 @@ public abstract class GenericPage extends SystemObjectImpl {
 	
 	@Autowired
 	protected Configuration configuration;
+	
+	@Autowired
+	protected AudioService audioService;
 	
 	
 	protected DbService dbService;
