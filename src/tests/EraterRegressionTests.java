@@ -33,7 +33,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		report.startLevel("delete all student assignments",
 				Reporter.EnumReportLevel.CurrentPlace);
 		String userId = dbService.getUserIdByUserName(config
-				.getStudentUserName());
+				.getStudentUserName(),autoInstitution.getInstitutionId());
 		eraterService.deleteStudentAssignments(userId);
 		report.stopLevel();
 		report.startLevel("Set institution to 'Teacher first' settings",
@@ -74,7 +74,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		Student student = new Student();
 		student.setUserName(config.getStudentUserName());
 		student.setPassword(config.getStudentPassword());
-		student.setId(dbService.getUserIdByUserName(student.getUserName()));
+		student.setId(dbService.getUserIdByUserName(student.getUserName(),autoInstitution.getInstitutionId()));
 		EdoHomePage edoHomePage = edoLoginPage.login(student);
 
 		startStep("Open home page and start a writing drill");
@@ -99,7 +99,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		// Thread.sleep(60000);
 
 		startStep("start checking the xml and json");
-		String userId = dbService.getUserIdByUserName(student.getUserName());
+		String userId = dbService.getUserIdByUserName(student.getUserName(),autoInstitution.getInstitutionId());
 		String textStart = textService.getFirstCharsFromCsv(10, textFile);
 		String writingId = eraterService.getWritingIdByUserIdAndTextStart(
 				userId, textStart);
@@ -172,7 +172,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		Student student = new Student();
 		student.setUserName(config.getStudentUserName());
 		student.setPassword(config.getStudentPassword());
-		student.setId(dbService.getUserIdByUserName(student.getUserName()));
+		student.setId(dbService.getUserIdByUserName(student.getUserName(),autoInstitution.getInstitutionId()));
 
 		startStep("Login as student and enter some text");
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
@@ -201,7 +201,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		edoHomePage.clickOnSubmitAssignment();
 
 		startStep("Check the assignment in the DB");
-		String userId = dbService.getUserIdByUserName(student.getUserName());
+		String userId = dbService.getUserIdByUserName(student.getUserName(),autoInstitution.getInstitutionId());
 		Assert.assertNotNull("validate writing id in DB",
 				eraterService.getWritingIdByUserId(userId));
 		

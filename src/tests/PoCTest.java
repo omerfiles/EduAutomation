@@ -40,7 +40,7 @@ public class PoCTest extends EdusoftWebTest {
 		webDriver.printScreen();
 
 	}
-	
+
 	@Test
 	public void TestSafari() throws Exception {
 
@@ -63,7 +63,8 @@ public class PoCTest extends EdusoftWebTest {
 		Student student = new Student();
 		student.setUserName(config.getStudentUserName());
 		student.setPassword(config.getStudentPassword());
-		student.setId(dbService.getUserIdByUserName(student.getUserName()));
+		student.setId(dbService.getUserIdByUserName(student.getUserName(),
+				autoInstitution.getInstitutionId()));
 		EdoHomePage edoHomePage = edoLoginPage.login(student);
 
 		webDriver.deleteCookiesAndRefresh();
@@ -113,8 +114,10 @@ public class PoCTest extends EdusoftWebTest {
 
 	@Test
 	public void getUserId() throws Exception {
-		System.out.println(dbService.getUserIdByUserName(config
-				.getStudentUserName()));
+		System.out
+				.println(dbService.getUserIdByUserName(
+						config.getStudentUserName(),
+						autoInstitution.getInstitutionId()));
 	}
 
 	@Test
@@ -199,7 +202,8 @@ public class PoCTest extends EdusoftWebTest {
 		Student student = new Student();
 		student.setUserName(config.getProperty("student.user.name"));
 		student.setPassword(config.getProperty("student.user.password"));
-		String userId = dbService.getUserIdByUserName(student.getUserName());
+		String userId = dbService.getUserIdByUserName(student.getUserName(),
+				autoInstitution.getInstitutionId());
 		report.report(userId);
 	}
 
@@ -261,6 +265,46 @@ public class PoCTest extends EdusoftWebTest {
 		for (int i = 0; i < list.size(); i++) {
 			System.out.println(list.get(i)[0] + " " + list.get(i)[1]);
 		}
+	}
+
+	@Test
+	public void testDeleteUpdate() throws Exception {
+		pageHelper.loginAsStudent();
+
+	}
+
+	@Test
+	public void testRemoveComment() throws Exception {
+	
+		Student student = new Student();
+		student.setUserName(config.getStudentUserName());
+		student.setPassword(config.getStudentPassword());
+		student.setId(dbService.getUserIdByUserName(student.getUserName(),
+				autoInstitution.getInstitutionId()));
+		
+		
+		EdoHomePage edoHomePage = pageHelper.loginAsTeacher();
+		edoHomePage.waitForPageToLoad();
+		TmsHomePage tmsHomePage = edoHomePage.openTeachersCorner();
+//		String newWritingId = eraterService.getWritingIdByUserIdAndTextStart(
+//				student.getId(), newText);
+//		eraterService.checkWritingIsProcessed(newWritingId);
+		tmsHomePage.clickOnWritingAssignments();
+		String courseName =pageHelper.getCourses().get(3).getName();
+		tmsHomePage.clickOnStudentAssignment(student.getUserName(), courseName);
+
+		startStep("Check that the Remove button is disabled when no comment is selected");
+		tmsHomePage.clickOnXFeedback();
+		tmsHomePage.checkRemoveCommentButtonStatus(false,true);
+
+		startStep("Select a comment and check the remve button");
+		tmsHomePage.selectFeedbackComment("0_0");
+		tmsHomePage.checkRemoveCommentButtonStatus(true,false);
+
+		startStep("click the remove button and check the texts");
+		tmsHomePage.clickTheRemoveCommentButton();
+		tmsHomePage.checkFeedbackCommentUnderline("0_0", false);
+		tmsHomePage.checkfeedbackCommentText(false);
 	}
 
 	@Test

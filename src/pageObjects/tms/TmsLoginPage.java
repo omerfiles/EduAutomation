@@ -1,5 +1,6 @@
 package pageObjects.tms;
 
+import Enums.ByTypes;
 import Objects.UserObject;
 import drivers.GenericWebDriver;
 import pageObjects.EdoLoginPage;
@@ -21,9 +22,9 @@ public class TmsLoginPage extends LoginPage {
 	
 	
 	public TmsHomePage Login(UserObject userObject)throws Exception{
-		webDriver.waitForElement("userName", "name").sendKeys(userObject.getUserName());
-		webDriver.waitForElement("password", "name").sendKeys(userObject.getPassword());
-		webDriver.waitForElement("//input[@value='Login']", "xpath").click();
+		webDriver.waitForElement("userName",ByTypes.name).sendKeys(userObject.getUserName());
+		webDriver.waitForElement("password", ByTypes.name).sendKeys(userObject.getPassword());
+		webDriver.waitForElement("//input[@value='Login']",ByTypes.xpath).click();
 		return new TmsHomePage(webDriver);
 		
 	}

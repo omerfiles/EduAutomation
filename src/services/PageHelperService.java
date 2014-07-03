@@ -14,11 +14,14 @@ import pageObjects.EdoHomePage;
 import pageObjects.EdoLoginPage;
 import pageObjects.tms.TmsHomePage;
 import pageObjects.tms.TmsLoginPage;
+import Enums.ByTypes;
+import Objects.AutoInstitution;
 import Objects.Course;
 import Objects.CourseUnit;
 import Objects.Recording;
 import Objects.SchoolAdmin;
 import Objects.Student;
+import Objects.Teacher;
 import Objects.UnitComponent;
 
 @Service
@@ -30,49 +33,68 @@ public class PageHelperService extends SystemObjectImpl {
 	Configuration configuration;
 	@Autowired
 	TextService textService;
-	
+
 	@Autowired
 	DbService dbService;
-	
+
 	@Autowired
 	AudioService audioService;
 
 	List<Course> courses = null;
-	List<Recording>recordings=null;
+	List<Recording> recordings = null;
+	private boolean edoLogoutNeeded;
+	private boolean tmsLogoutNeeded;
+	private AutoInstitution autoInstitution;
 
 	public PageHelperService() {
 
 	}
 
-	public void init(GenericWebDriver webDriver) throws Exception {
+	public void init(GenericWebDriver webDriver, AutoInstitution autoInstitution) throws Exception {
 		this.webDriver = webDriver;
+		this.autoInstitution=autoInstitution;
 		courses = loadCoursedDetailsFromCsv();
-		recordings=loadRecordings();
+		recordings = loadRecordings();
 
 	}
 
 	public EdoHomePage loginAsStudent() throws Exception {
+		
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
 		Student student = new Student();
 		student.setUserName(configuration.getProperty("student.user.name"));
 		student.setPassword(configuration.getProperty("student.user.password"));
+		setUserLoginToNull(dbService.getUserIdByUserName(student.getUserName(),autoInstitution.getInstitutionId()));
 		EdoHomePage edoHomePage = edoLoginPage.login(student);
 		edoHomePage.waitForPageToLoad();
+		edoLogoutNeeded=true;
+		return edoHomePage;
+	}
+	public EdoHomePage loginAsTeacher()throws Exception{
+		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
+		edoLoginPage.OpenPage(getSutAndSubDomain());
+		Teacher teacher=new Teacher();
+		teacher.setUserName(configuration.getProperty("teacher.username"));
+		teacher.setPassword(configuration.getProperty("teacher.password"));
+		setUserLoginToNull(dbService.getUserIdByUserName(teacher.getUserName(),autoInstitution.getInstitutionId()));
+		EdoHomePage edoHomePage = edoLoginPage.login(teacher);
+		edoHomePage.waitForPageToLoad();
+		
 		return edoHomePage;
 	}
 
-	public TmsHomePage loginToTmsAsAdmin()throws Exception{
-		TmsLoginPage tmsLoginPage=new TmsLoginPage(webDriver);
+	public TmsHomePage loginToTmsAsAdmin() throws Exception {
+		TmsLoginPage tmsLoginPage = new TmsLoginPage(webDriver);
 		tmsLoginPage.OpenPage(getTmsUrl());
-		SchoolAdmin schoolAdmin=new SchoolAdmin();
+		SchoolAdmin schoolAdmin = new SchoolAdmin();
 		schoolAdmin.setUserName(configuration.getProperty("tmsadmin.user"));
 		schoolAdmin.setPassword(configuration.getProperty("tmsadmin.password"));
-		TmsHomePage tmsHomePage=tmsLoginPage.Login(schoolAdmin);
+		TmsHomePage tmsHomePage = tmsLoginPage.Login(schoolAdmin);
 		tmsHomePage.waitForPageToLoad();
+		tmsLogoutNeeded=true;
 		return tmsHomePage;
-		
-		
+
 	}
 
 	public String getSutAndSubDomain() {
@@ -130,15 +152,18 @@ public class PageHelperService extends SystemObjectImpl {
 		return course;
 	}
 
-	public void checkClassWasCreated(String className, String institutionId) throws Exception {
-		String sql="select * from Class where Name='"+className+"' and institutionId="+institutionId;
+	public void checkClassWasCreated(String className, String institutionId)
+			throws Exception {
+		String sql = "select * from Class where Name='" + className
+				+ "' and institutionId=" + institutionId;
 		dbService.getStringFromQuery(sql);
 	}
-	
-	public void startRecording(String fileName) throws Exception{
-		//TODO 1. click on the recored button
+
+	public void startRecording(String fileName) throws Exception {
+		// TODO 1. click on the recored button
 		audioService.sendSoundToVirtualMic(new File(fileName));
 	}
+
 	public List<Recording> loadRecordings() throws Exception {
 		List<String[]> recordingsCsv = textService
 				.getStr2dimArrFromCsv("files/csvFiles/recordingResults.csv");
@@ -159,6 +184,27 @@ public class PageHelperService extends SystemObjectImpl {
 
 	public List<Recording> getRecordings() {
 		return recordings;
+	}
+
+	public void logOut() throws Exception {
+		webDriver.waitForElement("Log Out", ByTypes.linkText).click();
+//		webDriver.switchToFrame("lastAct");
+		webDriver.switchToFrame(webDriver.waitForElement( "//iframe[contains(@src,'LogOut')]",ByTypes.xpath));
+		// webDriver.closeAlertByAccept();
+		webDriver.waitForElement("btnOk", ByTypes.id).click();
+
+	}
+
+	public boolean isLogoutNeeded() {
+		return edoLogoutNeeded;
+	}
+
+	public void setLogoutNeeded(boolean logoutNeeded) {
+		this.edoLogoutNeeded = logoutNeeded;
+	}
+	public void setUserLoginToNull(String id) throws Exception {
+		String sql = "Update users set logedin = null where userid=" + id;
+		dbService.runDeleteUpdateSql(sql);
 	}
 	
 

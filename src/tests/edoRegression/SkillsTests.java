@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import pageObjects.EdoHomePage;
+import Enums.ByTypes;
 import Objects.Course;
 import tests.EdusoftWebTest;
 
@@ -94,9 +95,9 @@ public class SkillsTests extends EdusoftWebTest {
 		edoHomePage.checkVocabRadioBtnAnswer("3",true,"Good night!");
 		edoHomePage.clickOnNextComponent(1);
 		
-		edoHomePage.dragAnswerToElement("86", webDriver.waitForElement("//div[@id=2]", "xpath"));
-		edoHomePage.dragAnswerToElement("45", webDriver.waitForElement("//div[@id=3]", "xpath"));
-		edoHomePage.dragAnswerToElement("89", webDriver.waitForElement("//div[@id=4]", "xpath"));
+		edoHomePage.dragAnswerToElement("86", webDriver.waitForElement("//div[@id=2]", ByTypes.xpath));
+		edoHomePage.dragAnswerToElement("45", webDriver.waitForElement("//div[@id=3]", ByTypes.xpath));
+		edoHomePage.dragAnswerToElement("89", webDriver.waitForElement("//div[@id=4]", ByTypes.xpath));
 		edoHomePage.clickOnCheckAnswers();
 		
 		

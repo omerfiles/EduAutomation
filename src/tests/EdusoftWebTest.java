@@ -15,11 +15,6 @@ import drivers.SafariWebDriver;
 
 public class EdusoftWebTest extends EdusoftBasicTest {
 
-//	protected FirefoxWebDriver firefoxDriver;
-//	protected IEWebDriver ieWebDriver;
-//	protected ChromeWebDriver chromeWebDriver;
-//	protected SafariWebDriver safariDriver;
-	
 	protected GenericWebDriver webDriver;
 	protected PageHelperService pageHelper;
 
@@ -28,11 +23,13 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 	@Override
 	public void setup() throws Exception {
 		super.setup();
-		System.out.println("remote machine: "+ System.getProperty("remote.machine"));
+		System.out.println("remote machine: "
+				+ System.getProperty("remote.machine"));
 		browser = System.getProperty("browser");// getting browser name from
 												// pom.xml when running frm
 												// Jenkins
-		System.out.println("browser name loaded from maven profile: "+browser);
+		System.out
+				.println("browser name loaded from maven profile: " + browser);
 		if (browser == null) {
 			browser = config.getProperty("browser");// getting browser name from
 													// properties file
@@ -46,40 +43,34 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 		} else if (browser.equals(Browsers.firefox.toString())) {
 			webDriver = (FirefoxWebDriver) ctx.getBean("FirefoxWebDriver");
 		}
-		
+
 		webDriver.init();
 		webDriver.maximize();
-//		webDriver.maximize();
-		pageHelper=(PageHelperService)ctx.getBean("PageHelperService");
-		pageHelper.init(webDriver);
+		// webDriver.maximize();
+		pageHelper = (PageHelperService) ctx.getBean("PageHelperService");
+		pageHelper.init(webDriver, autoInstitution);
 
 	}
 
 	@After
 	public void tearDown() throws Exception {
 
-//		if (this.isPass == false) {
-//			if (chromeWebDriver.isInitialized() == true) {
-//				chromeWebDriver.printScreen(this.getMethodName(), null);
-//			} else if (ieWebDriver.isInitialized() == true) {
-//				ieWebDriver.printScreen(this.getMethodName(), null);
-//			} else if (firefoxDriver.isInitialized() == true) {
-//				firefoxDriver.printScreen(this.getMethodName(), null);
-//			} else if (safariDriver.isInitialized() == true) {
-//				safariDriver.printScreen(this.getMethodName(), null);
-//			}
-//		}
-//
-//		chromeWebDriver.quitBrowser();
-//		firefoxDriver.quitBrowser();
-//		ieWebDriver.quitBrowser();
-//		safariDriver.quitBrowser();
-		if (this.isPass == false) {
-			
-			webDriver.printScreen(this.getMethodName(), null);
+		try {
+			if (this.isPass == false) {
+
+				webDriver.printScreen(this.getMethodName(), null);
+			}
+
+			if (pageHelper.isLogoutNeeded()) {
+				pageHelper.logOut();
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			webDriver.quitBrowser();
 		}
-		webDriver.quitBrowser();
-		
+
 		super.tearDown();
 	}
 

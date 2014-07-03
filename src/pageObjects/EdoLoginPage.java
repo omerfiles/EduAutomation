@@ -37,13 +37,13 @@ public class EdoLoginPage extends LoginPage {
 
 	public LoginPage typeUserNameAndPass(String userName, String password)
 			throws Exception {
-		webDriver.waitForElement("UserName", "id").sendKeys(userName);
-		webDriver.waitForElement("Password", "name").sendKeys(password);
+		webDriver.waitForElement("UserName", ByTypes.id).sendKeys(userName);
+		webDriver.waitForElement("Password", ByTypes.name).sendKeys(password);
 		return this;
 	}
 
 	public EdoHomePage submitLogin() throws Exception {
-		webDriver.waitForElement("//div[@class='blueButton']", "xpath").click();
+		webDriver.waitForElement("//div[@class='blueButton']", ByTypes.xpath).click();
 		return new EdoHomePage(webDriver);
 	}
 
@@ -59,9 +59,9 @@ public class EdoLoginPage extends LoginPage {
 	}
 
 	public EdoHomePage login(UserObject user) throws Exception {
-		dbService.setUserLoginToNull(user.getId());
+//		dbService.setUserLoginToNull(user.getId());
 		typeUserNameAndPass(user.getUserName(), user.getPassword());
-		webDriver.waitForElement("//div[@class='blueButton']", "xpath").click();
+		webDriver.waitForElement("//div[@class='blueButton']", ByTypes.xpath).click();
 		EdoHomePage edoHomePage=new EdoHomePage(webDriver);
 		edoHomePage.waitForPageToLoad();
 		return edoHomePage;
@@ -69,40 +69,40 @@ public class EdoLoginPage extends LoginPage {
 	}
 
 	public EdoLoginPage clickOnSelfRegistraton()throws Exception {
-		webDriver.waitForElement("Self Registration", ByTypes.linkText.toString()).click();
+		webDriver.waitForElement("Self Registration", ByTypes.linkText).click();
 		return this;
 		
 	}
 
 	public EdoLoginPage enterStudentRegUserName(String studentName)throws Exception {
 		report.report("User name is: "+studentName);
-		webDriver.waitForElement("UserName", "id").sendKeys(studentName);
+		webDriver.waitForElement("UserName", ByTypes.id).sendKeys(studentName);
 		return this;
 		
 	}
 	public EdoLoginPage enterStudentRegFirstName(String studentName)throws Exception {
-		webDriver.waitForElement("FirstName", "id").sendKeys(studentName);
+		webDriver.waitForElement("FirstName", ByTypes.id).sendKeys(studentName);
 		return this;
 		
 	}
 	public EdoLoginPage enterStudentRegLastName(String studentName)throws Exception {
-		webDriver.waitForElement("LastName", "id").sendKeys(studentName);
+		webDriver.waitForElement("LastName", ByTypes.id).sendKeys(studentName);
 		return this;	
 	}
 
 	public EdoLoginPage enterStudentRegPassword(String password)throws Exception {
-		webDriver.waitForElement("Password", "id").sendKeys(password);
-		webDriver.waitForElement("ConfirmPassword", "id").sendKeys(password);
+		webDriver.waitForElement("Password", ByTypes.id).sendKeys(password);
+		webDriver.waitForElement("ConfirmPassword", ByTypes.id).sendKeys(password);
 		return this;	
 	}
 
 	public EdoLoginPage enterStudentEmail(String email)throws Exception {
-		webDriver.waitForElement("Email", "id").sendKeys(email);
+		webDriver.waitForElement("Email", ByTypes.id).sendKeys(email);
 		return this;
 	}
 
 	public EdoLoginPage clickOnRegister()throws Exception {
-		webDriver.waitForElement("Submit", "id").click();
+		webDriver.waitForElement("Submit", ByTypes.id).click();
 		return this;
 	}
 

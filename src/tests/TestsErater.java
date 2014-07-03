@@ -114,7 +114,7 @@ public class TestsErater extends EdusoftWebTest {
 		Student student = new Student();
 		student.setUserName(config.getProperty("student.user.name"));
 		student.setPassword(config.getProperty("student.user.password"));
-		student.setId(dbService.getUserIdByUserName(student.getUserName()));
+		student.setId(dbService.getUserIdByUserName(student.getUserName(),autoInstitution.getInstitutionId()));
 
 //		String userName = config.getProperty("student.user.name");
 		// edoLoginPage.typeUserNameAndPass(userName,
@@ -140,7 +140,7 @@ public class TestsErater extends EdusoftWebTest {
 
 		report.startLevel("start checking the xml and json",
 				EnumReportLevel.CurrentPlace);
-		String userId = dbService.getUserIdByUserName(student.getUserName());
+		String userId = dbService.getUserIdByUserName(student.getUserName(),autoInstitution.getInstitutionId());
 		String textStart = textService.getFirstCharsFromCsv(10, textFile);
 		String writingId = eraterService.getWritingIdByUserIdAndTextStart(
 				userId, textStart);

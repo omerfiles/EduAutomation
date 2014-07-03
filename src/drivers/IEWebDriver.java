@@ -18,6 +18,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.springframework.stereotype.Service;
 
+import Enums.ByTypes;
 import services.DbService;
 
 @Service
@@ -56,7 +57,7 @@ public class IEWebDriver extends GenericWebDriver {
 
 	
 	@Override
-	public void waitForElementAndClick(String idValue, String byType)
+	public void waitForElementAndClick(String idValue, ByTypes byType)
 			throws Exception {
 		waitForElement(idValue, byType, this.timeout, true).click();
 	}

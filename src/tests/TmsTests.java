@@ -148,7 +148,7 @@ public class TmsTests extends EdusoftWebTest {
 		// }
 
 		tmsHomePage.enterStudentDetails(studentName);
-		String userId = dbService.getUserIdByUserName(studentName);
+		String userId = dbService.getUserIdByUserName(studentName,autoInstitution.getInstitutionId());
 		tmsHomePage.enterStudentPassword(userId, studentPassword);
 
 		report.stopLevel();

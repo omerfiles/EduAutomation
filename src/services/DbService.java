@@ -55,17 +55,17 @@ public class DbService extends SystemObjectImpl {
 		// this.dataSource = dataSource;
 	}
 
-	public void runUpdateQuery(String query) throws Exception {
-		try {
-			report.startLevel("Running update query: " + query,
-					EnumReportLevel.CurrentPlace);
-			jdbcTemplate.update(query);
-		} catch (Exception e) {
-			fail("Update query failed");
-		}
-		report.stopLevel();
-
-	}
+//	public void runUpdateQuery(String query) throws Exception {
+//		try {
+//			report.startLevel("Running update query: " + query,
+//					EnumReportLevel.CurrentPlace);
+//			jdbcTemplate.update(query);
+//		} catch (Exception e) {
+//			fail("Update query failed");
+//		}
+//		report.stopLevel();
+//
+//	}
 
 	public String getValue(String query, String columnName) throws Exception {
 		String str = null;
@@ -82,20 +82,20 @@ public class DbService extends SystemObjectImpl {
 		return str;
 	}
 
-	public void deleteValue(String tableName, String whereParam,
-			String whereValue) throws Exception {
-		String sql = "";
-		try {
-			sql = "delete from ";
-			sql += tableName;
-			sql += " where " + whereParam + " =" + whereValue + "";
-			report.report("Query to run:" + sql);
-			jdbcTemplate.update(sql);
-		} catch (Exception e) {
-			report.report(e.getMessage());
-			Assert.fail("Sql delete failed. Query was:" + sql);
-		}
-	}
+//	public void deleteValue(String tableName, String whereParam,
+//			String whereValue) throws Exception {
+//		String sql = "";
+//		try {
+//			sql = "delete from ";
+//			sql += tableName;
+//			sql += " where " + whereParam + " =" + whereValue + "";
+//			report.report("Query to run:" + sql);
+//			jdbcTemplate.update(sql);
+//		} catch (Exception e) {
+//			report.report(e.getMessage());
+//			Assert.fail("Sql delete failed. Query was:" + sql);
+//		}
+//	}
 
 	public SqlRowSet getValueRS(String query, String[] columnName,
 			int NumOfRowsExpected, int timeout) throws Exception {
@@ -134,60 +134,7 @@ public class DbService extends SystemObjectImpl {
 
 	}
 
-	public String[] getValueMultipleColumns(String query, String[] columnName)
-			throws Exception {
-		String[] results = null;
-		int elapsedTime = 0;
-		int timeout = 20;
 
-		report.startLevel("Getting results set from db",
-				EnumReportLevel.CurrentPlace);
-		report.report("Query was:" + query);
-
-		System.out.println("jdbcTemplate = " + jdbcTemplate);
-		SqlRowSet sqlRowSet = null;
-		outterloop: while (elapsedTime < timeout) {
-			try {
-				sqlRowSet = jdbcTemplate.queryForRowSet(query);
-				while (sqlRowSet.next()) {
-					for (int i = 0; i < columnName.length; i++) {
-						report.report(columnName[i] + ":"
-								+ sqlRowSet.getString(columnName[i]));
-					}
-					if (sqlRowSet.getString(columnName[1]) != null) {
-						elapsedTime = timeout;
-						break outterloop;
-					} else {
-
-					}
-				}
-				report.report("Sleeping for 1000ms");
-				Thread.sleep(1000);
-				elapsedTime++;
-			} catch (Exception e) {
-				report.report("Sleeping for 1000ms");
-				Thread.sleep(1000);
-				elapsedTime++;
-				continue outterloop;
-			}
-		}
-
-		try {
-			// sqlRowSet = jdbcTemplate.queryForRowSet(query);
-			// int rowSetSize = getSqlRowSetRowsCount(sqlRowSet);
-			results = new String[columnName.length];
-			StringBuilder printResults = new StringBuilder("|| ");
-			sqlRowSet.first();
-			for (int i = 0; i < columnName.length; i++) {
-				results[i] = sqlRowSet.getString(columnName[i]);
-				printResults.append(results[i]).append(" ||| ");
-			}
-		} catch (Exception e) {
-
-		}
-
-		return results;
-	}
 
 	public String[] getValue(String query, String[] columnName,
 			int NumOfRowsExpected, int timeout) throws Exception {
@@ -521,17 +468,15 @@ public class DbService extends SystemObjectImpl {
 		conn.close();
 	}
 
-	public String getUserIdByUserName(String userName) throws Exception {
-		String institutionid = institutionService.getInstitution().getInstitutionId();
+	public String getUserIdByUserName(String userName,String institutionId) throws Exception {
+//		String institutionid = institutionService.getInstitution().getInstitutionId();
 		String sql = "select UserId from users where UserName='" + userName
-				+ "' and institutionid=" + institutionid;
+				+ "' and institutionid=" + institutionId;
 		String result = getStringFromQuery(sql);
 		return result;
 	}
 
-	public void setUserLoginToNull(String id) {
-		String sql = "Update users set logedin = null where userid=" + id;
-	}
+	
 
 	public String getInstituteNameById(String id) throws Exception {
 		String sql = "select name from institutions where institutionId=" + id;

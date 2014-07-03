@@ -1,5 +1,6 @@
 package pageObjects.tms;
 
+import Enums.ByTypes;
 import drivers.GenericWebDriver;
 import pageObjects.GenericPage;
 
@@ -26,29 +27,29 @@ public class TeacherDetailsPage extends GenericPage {
 	}
 	
 	public TeacherDetailsPage typeTeacherFirstName(String name)throws Exception{
-		webDriver.waitForElement("FirstName", "id").sendKeys(name);
+		webDriver.waitForElement("FirstName", ByTypes.id).sendKeys(name);
 		return this;
 	}
 	public TeacherDetailsPage typeTeacherLastName(String lastName)throws Exception{
-		webDriver.waitForElement("LastName", "id").sendKeys(lastName);
+		webDriver.waitForElement("LastName", ByTypes.id).sendKeys(lastName);
 		return this;
 	}
 	public TeacherDetailsPage typeTeacherUserName(String UserName)throws Exception{
-		webDriver.waitForElement("UserName", "id").sendKeys(UserName);
+		webDriver.waitForElement("UserName", ByTypes.id).sendKeys(UserName);
 		return this;
 	}
 	public TeacherDetailsPage typeTeacherPassword(String password)throws Exception{
-		webDriver.waitForElement("Password", "id").sendKeys(password);
+		webDriver.waitForElement("Password", ByTypes.id).sendKeys(password);
 		return this;
 	}
 	public TeacherDetailsPage addClass()throws Exception{
-		webDriver.waitForElementAndClick("//select[@id='listLeft']//option[1]" , "xpath");
-		webDriver.waitForElementAndClick("Submit", "id");
+		webDriver.waitForElementAndClick("//select[@id='listLeft']//option[1]" , ByTypes.xpath);
+		webDriver.waitForElementAndClick("Submit", ByTypes.id);
 		return this;
 	}
 	public TmsHomePage clickOnSubmit()throws Exception{
 		webDriver.switchToMainWindow(mainWin);
-		webDriver.waitForElementAndClick("Submitbutton", "name");
+		webDriver.waitForElementAndClick("Submitbutton", ByTypes.name);
 		return new TmsHomePage(webDriver);
 	}
 	

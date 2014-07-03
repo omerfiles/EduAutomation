@@ -121,12 +121,12 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		value = element.getAttribute(propertyname);
 		return value;
 	}
-	public WebElement waitForElement(String idValue, String byType,
+	public WebElement waitForElement(String idValue, ByTypes byType,
 			int timeout, boolean isElementMandatory) throws Exception {
 		return waitForElement(idValue, byType, timeout, isElementMandatory, null);
 	}
 
-	public WebElement waitForElement(String idValue, String byType,
+	public WebElement waitForElement(String idValue, ByTypes byType,
 			int timeout, boolean isElementMandatory,String message) throws Exception {
 
 		report.startLevel("waiting for element " + idValue + " by trpe "
@@ -190,7 +190,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		} finally {
 
 			if (isElementMandatory == true && element == null) {
-				if(message.equals(null)==false){
+				if(message!=null){
 					report.report(message);
 				}
 				Assert.fail("Element: " + idValue + " not found");
@@ -200,22 +200,23 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		}
 	}
 	
-	public WebElement waitForElement(String idValue, String byType,String message)
+	public WebElement waitForElement(String idValue, ByTypes byType,String message)
 			throws Exception {
 		return waitForElement(idValue, byType, timeout, true,message);
 	}
+	
 
-	public WebElement waitForElement(String idValue, String byType)
+	public WebElement waitForElement(String idValue, ByTypes byType)
 			throws Exception {
-		return waitForElement(idValue, byType, timeout, true,null);
+		return waitForElement(idValue, byType , timeout, true,null);
 	}
 
-	public void waitForElementAndClick(String idValue, String byType)
+	public void waitForElementAndClick(String idValue, ByTypes byType)
 			throws Exception {
 		waitForElement(idValue, byType, timeout, true,null).click();
 	}
 
-	public WebElement waitForElement(String idValue, String byType,
+	public WebElement waitForElement(String idValue, ByTypes byType,
 			boolean isElementMandatory, int timeout) throws Exception {
 		return waitForElement(idValue, byType, timeout, isElementMandatory,null);
 	}
@@ -459,7 +460,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			// WebDriverWait wait = new WebDriverWait(webDriver, timeout, 1000);
 			// wait.until(ExpectedConditions.visibilityOfElementLocated(By
 			// .xpath(xpath)));
-			WebElement element = waitForElement(xpath, "xpath", false, 10);
+			WebElement element = waitForElement(xpath, ByTypes.xpath, false, 10);
 			if (element != null) {
 				elementFound = true;
 			}
@@ -571,7 +572,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	public WebElement getTableTdByName(String tableId, String text)
 			throws Exception {
 		WebElement result = null;
-		WebElement table = waitForElement(tableId, "xpath");
+		WebElement table = waitForElement(tableId, ByTypes.xpath);
 		List<WebElement> allrows = table.findElements(By.tagName("tr"));
 		for (WebElement row : allrows) {
 			List<WebElement> cells = row.findElements(By.tagName("td"));
@@ -587,7 +588,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	}
 
 	public int getTableRowIndexByParam(String tableId, String tdIndex,
-			String tdText, String byType) throws Exception {
+			String tdText, ByTypes byType) throws Exception {
 		String result = "";
 		int index = 0;
 		try {
@@ -616,7 +617,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			throws Exception {
 		waitForElement(
 				"//table[@id='" + tableId + "']//tr[" + yIndex + "]//td["
-						+ xIndex + "]", "xpath").click();
+						+ xIndex + "]", ByTypes.xpath).click();
 	}
 
 	public void pasteTextFromClipboard(WebElement element) throws Exception {
