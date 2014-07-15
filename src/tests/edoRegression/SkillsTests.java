@@ -7,7 +7,7 @@ import org.junit.Test;
 import pageObjects.EdoHomePage;
 import Enums.ByTypes;
 import Objects.Course;
-import tests.EdusoftWebTest;
+import tests.misc.EdusoftWebTest;
 
 public class SkillsTests extends EdusoftWebTest {
 

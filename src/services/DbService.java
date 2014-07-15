@@ -8,7 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLXML;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -31,20 +33,20 @@ public class DbService extends SystemObjectImpl {
 	private static final String SQL_SERVER_DRIVER_CLASS = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
 	private JdbcTemplate jdbcTemplate;
 	private final String db_connect_string = "jdbc:sqlserver://BACKQA:1433;databaseName=EDODOTNet3;";
-	private  String db_userid = null;
-	private  String db_password = null;
+	private String db_userid = null;
+	private String db_password = null;
 	private final int MAX_DB_TIMEOUT = 120;
-	// private DataSource dataSou   rce;
+	// private DataSource dataSou rce;
 
 	@Autowired
 	Configuration configuration;
-	
+
 	@Autowired
 	InstitutionService institutionService;
 
 	Connection conn;
 
-//	private static final Logger logger = Logger.getLogger(DbService.class);
+	// private static final Logger logger = Logger.getLogger(DbService.class);
 
 	public DbService() throws Exception {
 		jdbcTemplate = new JdbcTemplate();
@@ -55,17 +57,17 @@ public class DbService extends SystemObjectImpl {
 		// this.dataSource = dataSource;
 	}
 
-//	public void runUpdateQuery(String query) throws Exception {
-//		try {
-//			report.startLevel("Running update query: " + query,
-//					EnumReportLevel.CurrentPlace);
-//			jdbcTemplate.update(query);
-//		} catch (Exception e) {
-//			fail("Update query failed");
-//		}
-//		report.stopLevel();
-//
-//	}
+	// public void runUpdateQuery(String query) throws Exception {
+	// try {
+	// report.startLevel("Running update query: " + query,
+	// EnumReportLevel.CurrentPlace);
+	// jdbcTemplate.update(query);
+	// } catch (Exception e) {
+	// fail("Update query failed");
+	// }
+	// report.stopLevel();
+	//
+	// }
 
 	public String getValue(String query, String columnName) throws Exception {
 		String str = null;
@@ -82,20 +84,20 @@ public class DbService extends SystemObjectImpl {
 		return str;
 	}
 
-//	public void deleteValue(String tableName, String whereParam,
-//			String whereValue) throws Exception {
-//		String sql = "";
-//		try {
-//			sql = "delete from ";
-//			sql += tableName;
-//			sql += " where " + whereParam + " =" + whereValue + "";
-//			report.report("Query to run:" + sql);
-//			jdbcTemplate.update(sql);
-//		} catch (Exception e) {
-//			report.report(e.getMessage());
-//			Assert.fail("Sql delete failed. Query was:" + sql);
-//		}
-//	}
+	// public void deleteValue(String tableName, String whereParam,
+	// String whereValue) throws Exception {
+	// String sql = "";
+	// try {
+	// sql = "delete from ";
+	// sql += tableName;
+	// sql += " where " + whereParam + " =" + whereValue + "";
+	// report.report("Query to run:" + sql);
+	// jdbcTemplate.update(sql);
+	// } catch (Exception e) {
+	// report.report(e.getMessage());
+	// Assert.fail("Sql delete failed. Query was:" + sql);
+	// }
+	// }
 
 	public SqlRowSet getValueRS(String query, String[] columnName,
 			int NumOfRowsExpected, int timeout) throws Exception {
@@ -133,8 +135,6 @@ public class DbService extends SystemObjectImpl {
 		return sqlRowSet;
 
 	}
-
-
 
 	public String[] getValue(String query, String[] columnName,
 			int NumOfRowsExpected, int timeout) throws Exception {
@@ -335,8 +335,8 @@ public class DbService extends SystemObjectImpl {
 
 	public void runDeleteUpdateSql(String sql) throws Exception {
 		report.report("Query is: " + sql);
-		db_userid=configuration.getProperty("db.connection.username");
-		db_password=configuration.getProperty("db.connection.password");
+		db_userid = configuration.getProperty("db.connection.username");
+		db_password = configuration.getProperty("db.connection.password");
 		System.out.println(sql);
 		Statement statement = null;
 		try {
@@ -362,13 +362,13 @@ public class DbService extends SystemObjectImpl {
 
 	}
 
-	public String getStringFromQuery(String sql, int intervals)
+	public List<String> getArrayListFromQuery(String sql, int intervals)
 			throws Exception {
-		// System.out.println(configuration.getProperty("db.connection"));
-		report.report("Query is: " + sql+". Max db time out is: "+MAX_DB_TIMEOUT);
-		db_userid=configuration.getProperty("db.connection.username");
-		db_password=configuration.getProperty("db.connection.password");
-		System.out.println(db_userid+"  "+db_password);
+		List<String> list = new ArrayList<String>();
+		report.report("Query is: " + sql + ". Max db time out is: "
+				+ MAX_DB_TIMEOUT);
+		db_userid = configuration.getProperty("db.connection.username");
+		db_password = configuration.getProperty("db.connection.password");
 		System.out.println(sql);
 		ResultSet rs = null;
 		Statement statement = null;
@@ -377,7 +377,56 @@ public class DbService extends SystemObjectImpl {
 
 		try {
 			Class.forName(SQL_SERVER_DRIVER_CLASS);
-			System.out.println("DB user id is: "+db_userid);
+			conn = DriverManager.getConnection(db_connect_string, db_userid,
+					db_password);
+			System.out.println("connected");
+			if (conn.isClosed() == true) {
+				System.out.println("connection is closed");
+			}
+			statement = conn.createStatement();
+			
+				rs = statement.executeQuery(sql);
+				while (rs.next()) {
+					// System.out.println(rs.getString(1));
+					// str = rs.getString(1);
+					list.add(rs.getString(1));
+				System.out.println(rs.getString(1));
+				}
+			
+			conn.close();
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		} finally {
+
+			try {
+				
+			} catch (Exception e) {
+			}
+			if (statement != null) {
+				statement.close();
+			}
+		}
+		return list;
+	}
+
+	public String getStringFromQuery(String sql, int intervals)
+			throws Exception {
+		// System.out.println(configuration.getProperty("db.connection"));
+		report.report("Query is: " + sql + ". Max db time out is: "
+				+ MAX_DB_TIMEOUT);
+		db_userid = configuration.getProperty("db.connection.username");
+		db_password = configuration.getProperty("db.connection.password");
+		System.out.println(db_userid + "  " + db_password);
+		System.out.println(sql);
+		ResultSet rs = null;
+		Statement statement = null;
+		String str = null;
+		int elapsedTimeInSec = 0;
+
+		try {
+			Class.forName(SQL_SERVER_DRIVER_CLASS);
+			System.out.println("DB user id is: " + db_userid);
 			conn = DriverManager.getConnection(db_connect_string, db_userid,
 					db_password);
 			System.out.println("connected");
@@ -468,28 +517,38 @@ public class DbService extends SystemObjectImpl {
 		conn.close();
 	}
 
-	public String getUserIdByUserName(String userName,String institutionId) throws Exception {
-//		String institutionid = institutionService.getInstitution().getInstitutionId();
+	public String getUserIdByUserName(String userName, String institutionId)
+			throws Exception {
+		// String institutionid =
+		// institutionService.getInstitution().getInstitutionId();
 		String sql = "select UserId from users where UserName='" + userName
 				+ "' and institutionid=" + institutionId;
 		String result = getStringFromQuery(sql);
 		return result;
 	}
-
 	
+	public String getUserNameById(String id, String institutionId)
+			throws Exception {
+		// String institutionid =
+		// institutionService.getInstitution().getInstitutionId();
+		String sql = "select UserName from users where userId='" + id
+				+ "' and institutionid=" + institutionId;
+		String result = getStringFromQuery(sql);
+		return result;
+	}
 
 	public String getInstituteNameById(String id) throws Exception {
 		String sql = "select name from institutions where institutionId=" + id;
 		String result = getStringFromQuery(sql);
 		return result;
 	}
-	
+
 	public String getInstituteIdByName(String name) throws Exception {
-		String sql = "select institutionId from institutions where name='" + name+"'";
+		String sql = "select institutionId from institutions where name='"
+				+ name + "'";
 		String result = getStringFromQuery(sql);
 		return result;
 	}
-	
 
 	public void verifyInstitutionCreated(Institution institution)
 			throws Exception {
@@ -500,21 +559,30 @@ public class DbService extends SystemObjectImpl {
 		report.report("Institution id is: " + result);
 	}
 
-	public String getClassIdByName(String classNae) throws Exception {
-		String institutionId = institutionService.getInstitution().getInstitutionId();
-		
+	public String getClassIdByName(String classNae, String institutionId)
+			throws Exception {
+
+		// String institutionId =
+		// institutionService.getInstitution().getInstitutionId();
+
 		String sql = "select classId from class where Name='" + classNae
 				+ "' and institutionId=" + institutionId + "";
 		String result = getStringFromQuery(sql);
 		return result;
 	}
-	public int getCurrentDay()throws Exception{
+
+	public int getCurrentDay() throws Exception {
 		Calendar cal = Calendar.getInstance();
 		int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
 
 		String dayOfMonthStr = String.valueOf(dayOfMonth);
-		
+
 		return dayOfMonth;
+	}
+
+	public String getUserNameByUserId(String string) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

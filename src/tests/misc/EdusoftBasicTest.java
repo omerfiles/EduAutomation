@@ -1,4 +1,6 @@
-package tests;
+package tests.misc;
+
+import java.lang.reflect.Method;
 
 import jsystem.framework.report.Reporter.EnumReportLevel;
 import junit.framework.SystemTestCase4;
@@ -14,6 +16,8 @@ import services.EraterService;
 import services.InstitutionService;
 import services.NetService;
 import services.TextService;
+import Interfaces.TestCaseParams;
+import Interfaces.TestCaseParams;
 import Objects.AutoInstitution;
 import drivers.GenericWebDriver;
 
@@ -22,7 +26,7 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 	protected GenericWebDriver webDriver;
 
 	protected TextService textService;
-	protected Configuration config;
+	protected Configuration configuration;
 	protected DbService dbService;
 	NetService netService;
 	protected EraterService eraterService;
@@ -42,7 +46,7 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 		// ctx = new ClassPathXmlApplicationContext("beans.xml");
 
 		ctx = new ClassPathXmlApplicationContext("beans.xml");
-		config = (Configuration) ctx.getBean("configuration");
+		configuration = (Configuration) ctx.getBean("configuration");
 		// webDriver=(GenericWebDriver)ctx.getBean("GenericWebDriver");
 
 		textService = (TextService) ctx.getBean("TextSerivce");
@@ -67,7 +71,7 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 
 		institutionService.init(institutionId);
 		autoInstitution = institutionService.getInstitution();
-
+	
 		// System.out.println("Automation isntitution id is: "
 		// + autoInstitution.getInstitutionId());
 	}
@@ -79,8 +83,8 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 
 	@After
 	public void tearDown() throws Exception {
-		report.startLevel("Test case id is: " + this.testCaseId,
-				EnumReportLevel.MainFrame);
+		// report.startLevel("Test case id is: " + this.testCaseId,
+		// EnumReportLevel.MainFrame);
 		if (this.isPass == false) {
 			report.startLevel("Test failed", EnumReportLevel.MainFrame);
 		}
@@ -97,6 +101,35 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 
 	public void endStep() throws Exception {
 		report.stopLevel();
+	}
+
+	public String getTestCaseId(String methodName,Class c) {
+		Method method = null;
+		try {
+			method = c.getDeclaredMethod(methodName, null);
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// Method[] methods = c.getMethods();
+		// for (Method m : methods) {
+		// if (m.isAnnotationPresent(TestCaseParams.class)) {
+		// TestCaseParams ta = m.getAnnotation(TestCaseParams.class);
+		// System.out.println("test cas_e id: " + ta.testCaseID());
+		// testCaseId = ta.testCaseID();
+		// break;
+		// }
+		// }
+
+		if (method.isAnnotationPresent(TestCaseParams.class)) {
+			TestCaseParams tc = method.getAnnotation(TestCaseParams.class);
+			testCaseId = tc.testCaseID();
+		}
+
+		return testCaseId;
 	}
 
 }

@@ -42,7 +42,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	protected static final Logger logger = LoggerFactory
 			.getLogger(GenericWebDriver.class);
-	public String sutUrl = null;
+	private String sutUrl = null;
+	private String sutSubDomain=null;
+	
 	protected RemoteWebDriver webDriver;
 	protected int timeout = 10;
 	private String browserName;
@@ -63,11 +65,11 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		// getting remote machine from pom profile while executing tests using
 		// maven/Jenkins
 		remoteMachine = System.getProperty("remote.machine");
-		if(remoteMachine!=null){
+		if (remoteMachine != null) {
 			report.report("Got remote machine from pom file");
 		}
 		if (remoteMachine == null) {
-			
+
 			// getting remote machine for running the tests from properties file
 			// - while developing/debugging
 			remoteMachine = configuration.getProperty("remote.machine");
@@ -75,7 +77,8 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		if (remoteMachine == null) {
 			Assert.fail("Remote machine value is null");
 		}
-
+		setSutUrl(configuration.getProperty("sut.url"));
+		setSutSubDomain(configuration.getProperty("institution.name"));
 		init(remoteMachine, null);
 	}
 
@@ -121,50 +124,53 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		value = element.getAttribute(propertyname);
 		return value;
 	}
-	public WebElement waitForElement(String idValue, ByTypes byType,
-			int timeout, boolean isElementMandatory) throws Exception {
-		return waitForElement(idValue, byType, timeout, isElementMandatory, null);
-	}
 
 	public WebElement waitForElement(String idValue, ByTypes byType,
-			int timeout, boolean isElementMandatory,String message) throws Exception {
+			int timeout, boolean isElementMandatory) throws Exception {
+		return waitForElement(idValue, byType, timeout, isElementMandatory,
+				null);
+	}
+
+	@SuppressWarnings("finally")
+	public WebElement waitForElement(String idValue, ByTypes byType,
+			int timeout, boolean isElementMandatory, String message)
+			throws Exception {
 
 		report.startLevel("waiting for element " + idValue + " by trpe "
 				+ byType + " for " + timeout + " seconds");
 		WebElement element = null;
 		try {
 			WebDriverWait wait = new WebDriverWait(webDriver, timeout, 1000);
-			if (byType.equals(ByTypes.id.toString())) {
+			if (byType.equals(ByTypes.id)) {
 				wait.until(ExpectedConditions.visibilityOfElementLocated(By
 						.id(idValue)));
 				element = webDriver.findElement(By.id(idValue));
 			} else {
-				if (byType.equals(ByTypes.xpath.toString())) {
+				if (byType.equals(ByTypes.xpath)) {
 					wait.until(ExpectedConditions.visibilityOfElementLocated(By
 							.xpath(idValue)));
 					element = webDriver.findElement(By.xpath(idValue));
 				} else {
-					if (byType.equals(ByTypes.className.toString())) {
+					if (byType.equals(ByTypes.className)) {
 						wait.until(ExpectedConditions
 								.visibilityOfElementLocated(By
 										.className(idValue)));
 						element = webDriver.findElement(By.className(idValue));
 					} else {
-						if (byType.equals(ByTypes.name.toString())) {
+						if (byType.equals(ByTypes.name)) {
 							wait.until(ExpectedConditions
 									.visibilityOfElementLocated(By
 											.name(idValue)));
 							element = webDriver.findElement(By.name(idValue));
 						} else {
-							if (byType.equals(ByTypes.linkText.toString())) {
+							if (byType.equals(ByTypes.linkText)) {
 								wait.until(ExpectedConditions
 										.visibilityOfElementLocated(By
 												.linkText(idValue)));
 								element = webDriver.findElement(By
 										.linkText(idValue));
 							} else {
-								if (byType.equals(ByTypes.partialLinkText
-										.toString())) {
+								if (byType.equals(ByTypes.partialLinkText)) {
 									wait.until(ExpectedConditions
 											.visibilityOfElementLocated(By
 													.partialLinkText(idValue)));
@@ -190,35 +196,37 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		} finally {
 
 			if (isElementMandatory == true && element == null) {
-				if(message!=null){
+				if (message != null) {
 					report.report(message);
 				}
+				
+				printScreen("Element: " + idValue + " not found");
 				Assert.fail("Element: " + idValue + " not found");
 			}
 			report.stopLevel();
 			return element;
 		}
 	}
-	
-	public WebElement waitForElement(String idValue, ByTypes byType,String message)
-			throws Exception {
-		return waitForElement(idValue, byType, timeout, true,message);
+
+	public WebElement waitForElement(String idValue, ByTypes byType,
+			String message) throws Exception {
+		return waitForElement(idValue, byType, timeout, true, message);
 	}
-	
 
 	public WebElement waitForElement(String idValue, ByTypes byType)
 			throws Exception {
-		return waitForElement(idValue, byType , timeout, true,null);
+		return waitForElement(idValue, byType, timeout, true, null);
 	}
 
 	public void waitForElementAndClick(String idValue, ByTypes byType)
 			throws Exception {
-		waitForElement(idValue, byType, timeout, true,null).click();
+		waitForElement(idValue, byType, timeout, true, null).click();
 	}
 
 	public WebElement waitForElement(String idValue, ByTypes byType,
 			boolean isElementMandatory, int timeout) throws Exception {
-		return waitForElement(idValue, byType, timeout, isElementMandatory,null);
+		return waitForElement(idValue, byType, timeout, isElementMandatory,
+				null);
 	}
 
 	public void sendKey(Keys keys) throws Exception {
@@ -531,6 +539,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	public String printScreen() throws Exception {
 		return printScreen("", null);
 	}
+	public String printScreen(String message) throws Exception{
+		return printScreen(message, null);
+	}
 
 	public String printScreen(String message, String level) throws Exception {
 		// File screenShot;
@@ -662,25 +673,43 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	}
 
-	public void switchToParentFrame() {
+	public void switchToTopMostFrame() {
 		webDriver.switchTo().defaultContent();
 	}
 
 	public void switchToMainWindow() throws Exception {
-		webDriver.switchTo().window((String) webDriver.getWindowHandles().toArray()[0]);
-		
+		webDriver.switchTo().window(
+				(String) webDriver.getWindowHandles().toArray()[0]);
 
 	}
 
 	public void dragAndDropElement(WebElement from, WebElement to) {
 
 		(new Actions(webDriver)).dragAndDrop(from, to).perform();
-
 	}
 
 	public void maximize() {
 		webDriver.manage().window().maximize();
+	}
+	public WebElement getChileElementByXpath(WebElement element,String xpath){
+		WebElement chileElement=element.findElement(By.xpath(xpath));
+		return chileElement;
+	}
 
+	public int getTimeout() {
+		return timeout;
+	}
+
+	public void setTimeout(int timeout) {
+		this.timeout = timeout;
+	}
+
+	public String getSutSubDomain() {
+		return sutSubDomain;
+	}
+
+	public void setSutSubDomain(String sutSubDomain) {
+		this.sutSubDomain = sutSubDomain;
 	}
 
 }

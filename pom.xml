@@ -237,6 +237,13 @@
 			<artifactId>spring-aop</artifactId>
 			<version>3.2.5.RELEASE</version>
 		</dependency>
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>6.1.1</version>
+			<scope>test</scope>
+		</dependency>
+
 
 
 
@@ -274,9 +281,9 @@
 									<value>http://10.1.0.56:5555</value>
 								</property>
 								<property>
-								<name>institutionId</name>
-								<value>1</value>
-								
+									<name>institutionId</name>
+									<value>1</value>
+
 								</property>
 
 							</systemProperties>
@@ -403,9 +410,9 @@
 									<value>http://10.1.0.37:5555</value>
 								</property>
 								<property>
-								<name>institutionId</name>
-								<value>1</value>
-								
+									<name>institutionId</name>
+									<value>1</value>
+
 								</property>
 
 							</systemProperties>

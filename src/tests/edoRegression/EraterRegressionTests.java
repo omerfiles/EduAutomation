@@ -1,4 +1,4 @@
-package tests;
+package tests.edoRegression;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -17,6 +17,7 @@ import drivers.GenericWebDriver;
 import pageObjects.EdoHomePage;
 import pageObjects.EdoLoginPage;
 import pageObjects.tms.TmsHomePage;
+import tests.misc.EdusoftWebTest;
 import Objects.Course;
 import Objects.Student;
 import Objects.Teacher;
@@ -32,7 +33,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		courses = pageHelper.getCourses();
 		report.startLevel("delete all student assignments",
 				Reporter.EnumReportLevel.CurrentPlace);
-		String userId = dbService.getUserIdByUserName(config
+		String userId = dbService.getUserIdByUserName(configuration
 				.getStudentUserName(),autoInstitution.getInstitutionId());
 		eraterService.deleteStudentAssignments(userId);
 		report.stopLevel();
@@ -65,15 +66,15 @@ public class EraterRegressionTests extends EdusoftWebTest {
 	public void testSubmitTextAsStudentAndCheckFeedbackAsTeacherAndSendAgain()
 			throws Exception {
 		startStep("Login to Edo");
-		int courseId = 1;
+		int courseId = 2;
 		String textFile = "files/assayFiles/text24.txt";
 		report.report("using file: " + textFile);
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
 
 		Student student = new Student();
-		student.setUserName(config.getStudentUserName());
-		student.setPassword(config.getStudentPassword());
+		student.setUserName(configuration.getStudentUserName());
+		student.setPassword(configuration.getStudentPassword());
 		student.setId(dbService.getUserIdByUserName(student.getUserName(),autoInstitution.getInstitutionId()));
 		EdoHomePage edoHomePage = edoLoginPage.login(student);
 
@@ -124,8 +125,8 @@ public class EraterRegressionTests extends EdusoftWebTest {
 
 		startStep("Login as teacher and send feedback to the student");
 		webDriver.deleteCookiesAndRefresh();
-		Teacher teacher = new Teacher(config.getProperty("teacher.username"),
-				config.getProperty("teacher.password"));
+		Teacher teacher = new Teacher(configuration.getProperty("teacher.username"),
+				configuration.getProperty("teacher.password"));
 		edoLoginPage.OpenPage(getSutAndSubDomain());
 		edoHomePage = edoLoginPage.login(teacher);
 		edoHomePage.waitForPageToLoad();
@@ -170,8 +171,8 @@ public class EraterRegressionTests extends EdusoftWebTest {
 
 		startStep("init test data");
 		Student student = new Student();
-		student.setUserName(config.getStudentUserName());
-		student.setPassword(config.getStudentPassword());
+		student.setUserName(configuration.getStudentUserName());
+		student.setPassword(configuration.getStudentPassword());
 		student.setId(dbService.getUserIdByUserName(student.getUserName(),autoInstitution.getInstitutionId()));
 
 		startStep("Login as student and enter some text");

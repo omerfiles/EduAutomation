@@ -1,4 +1,4 @@
-package tests;
+package tests.misc;
 
 import java.nio.charset.Charset;
 import java.sql.ResultSet;
@@ -17,14 +17,18 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.junit.runner.RunWith;
 
+import Interfaces.TestCaseParams;
 import Objects.Student;
 import Objects.Teacher;
 import drivers.GenericWebDriver;
 import pageObjects.EdoHomePage;
 import pageObjects.EdoLoginPage;
 import pageObjects.tms.TmsHomePage;
+import services.MyTestRunner;
 
+//@RunWith(MyTestRunner.class)
 public class PoCTest extends EdusoftWebTest {
 
 	@Before
@@ -50,35 +54,33 @@ public class PoCTest extends EdusoftWebTest {
 	}
 
 	@Test
-	public void testDbNullQuery() throws Exception {
-		System.out.println(dbService.getCurrentDay());
+	public void TestUserLoggedIn() throws Exception {
+		System.out.println(webDriver.getSutUrl());
+		pageHelper.loginAsStudent();
+
 	}
 
 	@Test
+	public void testDbNullQuery1() throws Exception {
+		dbService
+				.getStringFromQuery("select classId from class where Name='class1'");
+	}
+
+	@Test
+	public void testDbNullQuery2() throws Exception {
+
+	}
+
+	@Test
+	public void testNoParam() throws Exception {
+
+	}
+
+	@Test
+	@TestCaseParams(testCaseID = "14521", ignoreBrowsers = { "" }, isRun = false)
 	public void OpenTmsCloseItAndOpenEdoAndLogin() throws Exception {
 
-		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
-		edoLoginPage.OpenPage(getSutAndSubDomain());
-
-		Student student = new Student();
-		student.setUserName(config.getStudentUserName());
-		student.setPassword(config.getStudentPassword());
-		student.setId(dbService.getUserIdByUserName(student.getUserName(),
-				autoInstitution.getInstitutionId()));
-		EdoHomePage edoHomePage = edoLoginPage.login(student);
-
-		webDriver.deleteCookiesAndRefresh();
-		Teacher teacher = new Teacher(config.getProperty("teacher.username"),
-				config.getProperty("teacher.password"));
-		edoLoginPage.OpenPage(getSutAndSubDomain());
-		edoHomePage = edoLoginPage.login(teacher);
-		edoHomePage.waitForPageToLoad();
-		TmsHomePage tmsHomePage = edoHomePage.openTeachersCorner();
-
-		webDriver.quitBrowser();
-		webDriver.init();
-		webDriver.openUrl(getSutAndSubDomain());
-		edoLoginPage.login(student);
+		System.out.println("Test run");
 	}
 
 	@Test
@@ -114,10 +116,9 @@ public class PoCTest extends EdusoftWebTest {
 
 	@Test
 	public void getUserId() throws Exception {
-		System.out
-				.println(dbService.getUserIdByUserName(
-						config.getStudentUserName(),
-						autoInstitution.getInstitutionId()));
+		System.out.println(dbService.getUserIdByUserName(
+				configuration.getStudentUserName(),
+				autoInstitution.getInstitutionId()));
 	}
 
 	@Test
@@ -200,8 +201,8 @@ public class PoCTest extends EdusoftWebTest {
 	@Test
 	public void testDB() throws Exception {
 		Student student = new Student();
-		student.setUserName(config.getProperty("student.user.name"));
-		student.setPassword(config.getProperty("student.user.password"));
+		student.setUserName(configuration.getProperty("student.user.name"));
+		student.setPassword(configuration.getProperty("student.user.password"));
 		String userId = dbService.getUserIdByUserName(student.getUserName(),
 				autoInstitution.getInstitutionId());
 		report.report(userId);
@@ -274,37 +275,44 @@ public class PoCTest extends EdusoftWebTest {
 	}
 
 	@Test
+	public void testPrintScreen() throws Exception {
+		pageHelper.loginAsStudent();
+		webDriver.printScreen("test print message 1", null);
+		webDriver.printScreen("test print message 2");
+		webDriver.printScreen();
+	}
+
+	@Test
 	public void testRemoveComment() throws Exception {
-	
+
 		Student student = new Student();
-		student.setUserName(config.getStudentUserName());
-		student.setPassword(config.getStudentPassword());
+		student.setUserName(configuration.getStudentUserName());
+		student.setPassword(configuration.getStudentPassword());
 		student.setId(dbService.getUserIdByUserName(student.getUserName(),
 				autoInstitution.getInstitutionId()));
-		
-		
+
 		EdoHomePage edoHomePage = pageHelper.loginAsTeacher();
 		edoHomePage.waitForPageToLoad();
 		TmsHomePage tmsHomePage = edoHomePage.openTeachersCorner();
-//		String newWritingId = eraterService.getWritingIdByUserIdAndTextStart(
-//				student.getId(), newText);
-//		eraterService.checkWritingIsProcessed(newWritingId);
+		// String newWritingId = eraterService.getWritingIdByUserIdAndTextStart(
+		// student.getId(), newText);
+		// eraterService.checkWritingIsProcessed(newWritingId);
 		tmsHomePage.clickOnWritingAssignments();
-		String courseName =pageHelper.getCourses().get(3).getName();
+		String courseName = pageHelper.getCourses().get(3).getName();
 		tmsHomePage.clickOnStudentAssignment(student.getUserName(), courseName);
 
 		startStep("Check that the Remove button is disabled when no comment is selected");
 		tmsHomePage.clickOnXFeedback();
-		tmsHomePage.checkRemoveCommentButtonStatus(false,true);
+		tmsHomePage.checkRemoveCommentButtonStatus(false, true);
 
 		startStep("Select a comment and check the remve button");
 		tmsHomePage.selectFeedbackComment("0_0");
-		tmsHomePage.checkRemoveCommentButtonStatus(true,false);
+		tmsHomePage.checkRemoveCommentButtonStatus(true, false);
 
 		startStep("click the remove button and check the texts");
 		tmsHomePage.clickTheRemoveCommentButton();
-		tmsHomePage.checkFeedbackCommentUnderline("0_0", false);
-		tmsHomePage.checkfeedbackCommentText(false);
+		tmsHomePage.checkIfCommentedTextIsInderlined("0_0", false);
+		// tmsHomePage.checkfeedbackCommentText(false);
 	}
 
 	@Test

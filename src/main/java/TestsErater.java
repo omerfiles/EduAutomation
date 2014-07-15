@@ -11,7 +11,7 @@ import Objects.Student;
 import Objects.UserObject;
 import pageObjects.EdoHomePage;
 import pageObjects.EdoLoginPage;
-import tests.EdusoftWebTest;
+import tests.misc.EdusoftWebTest;
 
 public class TestsErater extends EdusoftWebTest {
 

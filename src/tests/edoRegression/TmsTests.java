@@ -1,4 +1,4 @@
-package tests;
+package tests.edoRegression;
 
 import javax.print.attribute.standard.PageRanges;
 
@@ -18,6 +18,8 @@ import pageObjects.EdoLoginPage;
 import pageObjects.tms.TeacherDetailsPage;
 import pageObjects.tms.TmsHomePage;
 import pageObjects.tms.TmsLoginPage;
+import tests.misc.EdusoftWebTest;
+import Enums.ByTypes;
 import Enums.SchoolImpTypes;
 import Objects.Institution;
 import Objects.SchoolAdmin;
@@ -27,17 +29,11 @@ import Objects.UserObject;
 
 public class TmsTests extends EdusoftWebTest {
 
-	
-
 	@Before
 	public void setup() throws Exception {
 		super.setup();
 	}
 
-	
-
-
-	
 	public void testLoginToEdoAsTeacher() throws Exception {
 		Teacher teacher = new Teacher();
 		teacher.setUserName(autoInstitution.getTeacherUserName());
@@ -58,9 +54,9 @@ public class TmsTests extends EdusoftWebTest {
 
 		TmsLoginPage tmsLoginPage = new TmsLoginPage(webDriver);
 		UserObject tmsAdmin = new UserObject();
-		tmsAdmin.setUserName(config.getProperty("tmsadmin.user"));
-		tmsAdmin.setPassword(config.getProperty("tmsadmin.password"));
-		tmsLoginPage.OpenPage(config.getProperty("tms.url"));
+		tmsAdmin.setUserName(configuration.getProperty("tmsadmin.user"));
+		tmsAdmin.setPassword(configuration.getProperty("tmsadmin.password"));
+		tmsLoginPage.OpenPage(configuration.getProperty("tms.url"));
 		TmsHomePage tmsHomePage = tmsLoginPage.Login(tmsAdmin);
 		tmsHomePage.waitForPageToLoad();
 		report.stopLevel();
@@ -68,7 +64,7 @@ public class TmsTests extends EdusoftWebTest {
 		report.startLevel("Go to teachers section and select the institute",
 				EnumReportLevel.CurrentPlace);
 		tmsHomePage.clickOnTeachers();
-		String institutionId = config.getProperty("institution.id");
+		String institutionId = configuration.getProperty("institution.id");
 		String instituteName = dbService.getInstituteNameById(institutionId);
 		tmsHomePage.selectInstitute(instituteName, institutionId);
 		report.stopLevel();
@@ -122,9 +118,9 @@ public class TmsTests extends EdusoftWebTest {
 		String studentPassword = "12345";
 		TmsLoginPage tmsLoginPage = new TmsLoginPage(webDriver);
 		UserObject tmsAdmin = new UserObject();
-		tmsAdmin.setUserName(config.getProperty("tmsadmin.user"));
-		tmsAdmin.setPassword(config.getProperty("tmsadmin.password"));
-		tmsLoginPage.OpenPage(config.getProperty("tms.url"));
+		tmsAdmin.setUserName(configuration.getProperty("tmsadmin.user"));
+		tmsAdmin.setPassword(configuration.getProperty("tmsadmin.password"));
+		tmsLoginPage.OpenPage(configuration.getProperty("tms.url"));
 		TmsHomePage tmsHomePage = tmsLoginPage.Login(tmsAdmin);
 		tmsHomePage.waitForPageToLoad();
 		report.stopLevel();
@@ -132,11 +128,11 @@ public class TmsTests extends EdusoftWebTest {
 		report.startLevel("Go to students section and select the institute",
 				EnumReportLevel.CurrentPlace);
 		tmsHomePage.clickOnStudents();
-		String institutionId = config.getProperty("institution.id");
+		String institutionId = configuration.getProperty("institution.id");
 		String instituteName = dbService.getInstituteNameById(institutionId);
-		tmsHomePage.selectInstitute(instituteName, institutionId,false);
+		tmsHomePage.selectInstitute(instituteName, institutionId, false);
 		Thread.sleep(1000);
-		tmsHomePage.selectClass(config.getProperty("classname"));
+		tmsHomePage.selectClass(configuration.getProperty("classname"));
 
 		report.stopLevel();
 
@@ -148,7 +144,8 @@ public class TmsTests extends EdusoftWebTest {
 		// }
 
 		tmsHomePage.enterStudentDetails(studentName);
-		String userId = dbService.getUserIdByUserName(studentName,autoInstitution.getInstitutionId());
+		String userId = dbService.getUserIdByUserName(studentName,
+				autoInstitution.getInstitutionId());
 		tmsHomePage.enterStudentPassword(userId, studentPassword);
 
 		report.stopLevel();
@@ -174,9 +171,9 @@ public class TmsTests extends EdusoftWebTest {
 		this.testCaseId = "5779";
 		TmsLoginPage tmsLoginPage = new TmsLoginPage(webDriver);
 		UserObject tmsAdmin = new UserObject();
-		tmsAdmin.setUserName(config.getProperty("tmsadmin.user"));
-		tmsAdmin.setPassword(config.getProperty("tmsadmin.password"));
-		tmsLoginPage.OpenPage(config.getProperty("tms.url"));
+		tmsAdmin.setUserName(configuration.getProperty("tmsadmin.user"));
+		tmsAdmin.setPassword(configuration.getProperty("tmsadmin.password"));
+		tmsLoginPage.OpenPage(configuration.getProperty("tms.url"));
 		TmsHomePage tmsHomePage = tmsLoginPage.Login(tmsAdmin);
 		tmsHomePage.waitForPageToLoad();
 		report.stopLevel();
@@ -197,8 +194,9 @@ public class TmsTests extends EdusoftWebTest {
 		institution.setNumberOfComonents("20");
 		institution.setNumberOfUsers("100");
 		institution.setSchoolImpType(SchoolImpTypes.blended);
-		institution.setHost(config.getProperty("sut.url")
-				.replace("http://", "") + institution.getName());
+		institution.setHost(configuration.getProperty("sut.url").replace(
+				"http://", "")
+				+ institution.getName());
 		SchoolAdmin schoolAdmin = new SchoolAdmin();
 		String adminUserName = "admin" + dbService.sig(6);
 		schoolAdmin.setUserName(adminUserName);
@@ -217,14 +215,13 @@ public class TmsTests extends EdusoftWebTest {
 		report.stopLevel();
 	}
 
-
 	public void testSelfRegistration() throws Exception {
 
 		startStep("Open TMS and create new class");
 
 		TmsHomePage tmsHomePage = pageHelper.loginToTmsAsAdmin();
 		tmsHomePage.clickOnClasses();
-		String institutionId = config.getProperty("institution.id");
+		String institutionId = configuration.getProperty("institution.id");
 		String instituteName = dbService.getInstituteNameById(institutionId);
 		tmsHomePage.selectInstitute(instituteName, institutionId);
 		String className = "class" + dbService.sig(3);
@@ -241,7 +238,8 @@ public class TmsTests extends EdusoftWebTest {
 		tmsHomePage.selectInstitute(instituteName, institutionId);
 		tmsHomePage.swithchToMainFrame();
 		tmsHomePage.clickOnSelfRegistration();
-		String classId = dbService.getClassIdByName(className);
+		String classId = dbService.getClassIdByName(className,
+				autoInstitution.getInstitutionId());
 		tmsHomePage.selectClassForFelfRegistration(classId);
 		tmsHomePage.clickOnSaveFeature();
 
@@ -265,11 +263,12 @@ public class TmsTests extends EdusoftWebTest {
 
 	}
 
+	// Test case 7663
 	@Test
 	public void testAssigningValidPackagesToInstitution() throws Exception {
 		startStep("Init test data");
 		this.testCaseId = "7663";
-		String packageId="231";
+		String packageId = "231";
 		String institutionId = autoInstitution.getInstitutionId();
 		String instituteName = dbService.getInstituteNameById(institutionId);
 		String lavalName = "F-A3";
@@ -285,8 +284,9 @@ public class TmsTests extends EdusoftWebTest {
 		institution.setNumberOfComonents("20");
 		institution.setNumberOfUsers("100");
 		institution.setSchoolImpType(SchoolImpTypes.blended);
-		institution.setHost(config.getProperty("sut.url")
-				.replace("http://", "") + institution.getName());
+		institution.setHost(configuration.getProperty("sut.url").replace(
+				"http://", "")
+				+ institution.getName());
 		SchoolAdmin schoolAdmin = new SchoolAdmin();
 		String adminUserName = "admin" + dbService.sig(6);
 		schoolAdmin.setUserName(adminUserName);
@@ -305,30 +305,74 @@ public class TmsTests extends EdusoftWebTest {
 		webDriver.switchToMainWindow();
 		tmsHomePage.swithchToMainFrame();
 		tmsHomePage.clickOnInstitutionPackages();
-		tmsHomePage.selectInstitute(institution.getName(), dbService.getInstituteIdByName(institution.getName()));
+		tmsHomePage.selectInstitute(institution.getName(),
+				dbService.getInstituteIdByName(institution.getName()));
 		tmsHomePage.swithchToMainFrame();
 		tmsHomePage.clickOnAddPackages();
 		webDriver.switchToNewWindow(1);
-		
+
 		tmsHomePage.selectLevel(lavalName);
 		tmsHomePage.swithchToFormFrame();
-		
+
 		tmsHomePage.selectPackage("1");
-		tmsHomePage.selectPackageStartDate(packageId);
-		tmsHomePage.enterPackageQuantity(packageId,"100");
-		webDriver.switchToParentFrame();
+		tmsHomePage
+				.selectPackageStartDate(packageId, dbService.getCurrentDay());
+		tmsHomePage.enterPackageQuantity(packageId, "100");
+		webDriver.switchToTopMostFrame();
 		tmsHomePage.clickOnSubmitButton();
-		
+
 		startStep("Check that package was added");
 		webDriver.switchToMainWindow();
 		tmsHomePage.swithchToMainFrame();
 		tmsHomePage.checkPackageExist("F-A3/12M_18M");
 
 	}
+
+	// Test case id 7667
+	// Assign Packages to A Class
 	@Test
-	public void testAddClass()throws Exception{
+	public void testAssignPackagesToClass() throws Exception {
+		startStep("Init Test data");
+		String packageId = "6543";
+		startStep("Login to TMS as Admin");
+		TmsHomePage tmsHomePage = pageHelper.loginToTmsAsAdmin();
+
+		startStep("Create new class");
+		tmsHomePage.clickOnClasses();
+		String institutionId = autoInstitution.getInstitutionId();
+		String instituteName = autoInstitution.getInstitutionName();
+		tmsHomePage.selectInstitute(instituteName, institutionId);
+		String className = "class" + dbService.sig(3);
+		report.report("Class name is: " + className);
+		tmsHomePage.swithchToMainFrame();
+		tmsHomePage.enterClassName(className);
+		tmsHomePage.clickOnAddClass();
+
+		startStep("Go To Curriculum and click on Assign Package");
+		tmsHomePage.clickOnCurriculum();
+
+		tmsHomePage.clickOnAssignPackages();
+		tmsHomePage.selectInstitute(instituteName, institutionId);
+		tmsHomePage.swithchToMainFrame();
+		// tmsHomePage.swithchToFormFrame();
+
+		tmsHomePage.selectPackage("4");
+		sleep(2);
+		String classId = dbService.getClassIdByName(className,
+				autoInstitution.getInstitutionId());
+		tmsHomePage.markClassForPackageAssignment(classId, packageId);
+		tmsHomePage.clickOnSaveFeature();
+		
+		
+
+	}
+
+	// Test case id 7256
+
+	@Test
+	public void testCreateNewClass() throws Exception {
 		startStep("Open TMS and create new class");
-		this.testCaseId="7256";
+		this.testCaseId = "7256";
 		TmsHomePage tmsHomePage = pageHelper.loginToTmsAsAdmin();
 		tmsHomePage.clickOnClasses();
 		String institutionId = autoInstitution.getInstitutionId();
@@ -341,7 +385,7 @@ public class TmsTests extends EdusoftWebTest {
 		tmsHomePage.clickOnAddClass();
 		startStep("Validate that class was added");
 		tmsHomePage.checkClassNameIsDisplayed(className);
-		pageHelper.checkClassWasCreated(className,institutionId);
+		pageHelper.checkClassWasCreated(className, institutionId);
 	}
 
 	@After

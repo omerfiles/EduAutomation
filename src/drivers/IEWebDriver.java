@@ -26,7 +26,7 @@ public class IEWebDriver extends GenericWebDriver {
 
 	@Override
 	public void init(String remoteUrl, String folderName) throws Exception {
-		this.timeout = 30;
+		setTimeout(30);
 		setBrowserName("Internet Exporer");
 		setInitialized(true);
 		dbService = new DbService();
@@ -59,7 +59,7 @@ public class IEWebDriver extends GenericWebDriver {
 	@Override
 	public void waitForElementAndClick(String idValue, ByTypes byType)
 			throws Exception {
-		waitForElement(idValue, byType, this.timeout, true).click();
+		waitForElement(idValue, byType, timeout, true).click();
 	}
 
 	@Override

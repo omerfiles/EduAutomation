@@ -37,7 +37,7 @@ public class ChromeWebDriver extends GenericWebDriver {
 			webDriver = new RemoteWebDriver(new URL(remoteUrl + "/wd/hub"),
 					capabilities);
 			// webDriver = new RemoteWebDriver( capabilities);
-
+			
 			report.stopLevel();
 		} catch (Exception e) {
 			logger.error("Cannot register node or start the remote driver! ", e);

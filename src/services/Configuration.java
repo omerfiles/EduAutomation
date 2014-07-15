@@ -23,7 +23,7 @@ public class Configuration {
 	public Configuration() {
 		InputStream input = null;
 		try {
-			input = new FileInputStream("files/properties/QA/qa.properties");
+			input = new FileInputStream("files/properties/QA/sr.properties");
 //			input = new FileInputStream("C:\\qa.properties");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

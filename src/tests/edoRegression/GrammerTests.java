@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import Objects.Course;
 import pageObjects.EdoHomePage;
-import tests.EdusoftWebTest;
+import tests.misc.EdusoftWebTest;
 
 public class GrammerTests extends EdusoftWebTest {
 

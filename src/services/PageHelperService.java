@@ -50,37 +50,41 @@ public class PageHelperService extends SystemObjectImpl {
 
 	}
 
-	public void init(GenericWebDriver webDriver, AutoInstitution autoInstitution) throws Exception {
+	public void init(GenericWebDriver webDriver, AutoInstitution autoInstitution)
+			throws Exception {
 		this.webDriver = webDriver;
-		this.autoInstitution=autoInstitution;
+		this.autoInstitution = autoInstitution;
 		courses = loadCoursedDetailsFromCsv();
 		recordings = loadRecordings();
 
 	}
 
 	public EdoHomePage loginAsStudent() throws Exception {
-		
+
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
 		Student student = new Student();
 		student.setUserName(configuration.getProperty("student.user.name"));
 		student.setPassword(configuration.getProperty("student.user.password"));
-		setUserLoginToNull(dbService.getUserIdByUserName(student.getUserName(),autoInstitution.getInstitutionId()));
+		//setUserLoginToNull(dbService.getUserIdByUserName(student.getUserName(),
+			//	autoInstitution.getInstitutionId()));
 		EdoHomePage edoHomePage = edoLoginPage.login(student);
 		edoHomePage.waitForPageToLoad();
-		edoLogoutNeeded=true;
+		edoLogoutNeeded = true;
 		return edoHomePage;
 	}
-	public EdoHomePage loginAsTeacher()throws Exception{
+
+	public EdoHomePage loginAsTeacher() throws Exception {
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
-		Teacher teacher=new Teacher();
+		Teacher teacher = new Teacher();
 		teacher.setUserName(configuration.getProperty("teacher.username"));
 		teacher.setPassword(configuration.getProperty("teacher.password"));
-		setUserLoginToNull(dbService.getUserIdByUserName(teacher.getUserName(),autoInstitution.getInstitutionId()));
+		setUserLoginToNull(dbService.getUserIdByUserName(teacher.getUserName(),
+				autoInstitution.getInstitutionId()));
 		EdoHomePage edoHomePage = edoLoginPage.login(teacher);
 		edoHomePage.waitForPageToLoad();
-		
+
 		return edoHomePage;
 	}
 
@@ -92,7 +96,7 @@ public class PageHelperService extends SystemObjectImpl {
 		schoolAdmin.setPassword(configuration.getProperty("tmsadmin.password"));
 		TmsHomePage tmsHomePage = tmsLoginPage.Login(schoolAdmin);
 		tmsHomePage.waitForPageToLoad();
-		tmsLogoutNeeded=true;
+		tmsLogoutNeeded = true;
 		return tmsHomePage;
 
 	}
@@ -173,7 +177,7 @@ public class PageHelperService extends SystemObjectImpl {
 			recording.setId(recordingsCsv.get(i)[0]);
 			recording.setWordsScores(textService
 					.splitStringToArray(recordingsCsv.get(i)[3]));
-			recording.setFileName(new File(recordingsCsv.get(i)[4]));
+			recording.setRecordingFile(new File(recordingsCsv.get(i)[4]));
 			recordings.add(recording);
 
 		}
@@ -188,8 +192,9 @@ public class PageHelperService extends SystemObjectImpl {
 
 	public void logOut() throws Exception {
 		webDriver.waitForElement("Log Out", ByTypes.linkText).click();
-//		webDriver.switchToFrame("lastAct");
-		webDriver.switchToFrame(webDriver.waitForElement( "//iframe[contains(@src,'LogOut')]",ByTypes.xpath));
+		// webDriver.switchToFrame("lastAct");
+		webDriver.switchToFrame(webDriver.waitForElement(
+				"//iframe[contains(@src,'LogOut')]", ByTypes.xpath));
 		// webDriver.closeAlertByAccept();
 		webDriver.waitForElement("btnOk", ByTypes.id).click();
 
@@ -202,10 +207,37 @@ public class PageHelperService extends SystemObjectImpl {
 	public void setLogoutNeeded(boolean logoutNeeded) {
 		this.edoLogoutNeeded = logoutNeeded;
 	}
+
 	public void setUserLoginToNull(String id) throws Exception {
 		String sql = "Update users set logedin = null where userid=" + id;
 		dbService.runDeleteUpdateSql(sql);
 	}
-	
+
+	public String[] getClassesForImport(String institutionId) throws Exception {
+		String sql = "select top 1 Name from class where institutionId="
+				+ institutionId + "  order by Name ";
+		List<String> classes = dbService.getArrayListFromQuery(sql, 5);
+		String[] classesStr = classes.toArray(new String[classes.size()]);
+		return classesStr;
+	}
+
+	public String[] getStudentsForExporte(String objectName, int count,
+			String institutionId, String by) throws Exception {
+		String sql = "select top " + count + " " + by + " from " + objectName
+				+ " where institutionId=" + institutionId + " order by " + by;
+		List<String> objects = dbService.getArrayListFromQuery(sql, 5);
+		String[] objectsArr = objects.toArray(new String[objects.size()]);
+		return objectsArr;
+	}
+
+	public String[] convertStudentIdsToNames(String[] students)
+			throws Exception {
+		String[] studentNames = new String[students.length];
+		for (int i = 0; i < students.length; i++) {
+			studentNames[i] = dbService.getUserNameById(students[i],
+					autoInstitution.getInstitutionId());
+		}
+		return studentNames;
+	}
 
 }

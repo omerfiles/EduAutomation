@@ -1,4 +1,4 @@
-package tests;
+package tests.misc;
 
 import jsystem.framework.report.Reporter.EnumReportLevel;
 
@@ -112,8 +112,8 @@ public class TestsErater extends EdusoftWebTest {
 		edoLoginPage.OpenPage(getSutAndSubDomain());
 
 		Student student = new Student();
-		student.setUserName(config.getProperty("student.user.name"));
-		student.setPassword(config.getProperty("student.user.password"));
+		student.setUserName(configuration.getProperty("student.user.name"));
+		student.setPassword(configuration.getProperty("student.user.password"));
 		student.setId(dbService.getUserIdByUserName(student.getUserName(),autoInstitution.getInstitutionId()));
 
 //		String userName = config.getProperty("student.user.name");

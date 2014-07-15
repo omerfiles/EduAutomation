@@ -1,6 +1,7 @@
-package tests;
+package tests.misc;
 
 import jsystem.framework.report.Reporter.EnumReportLevel;
+import junit.framework.Assert;
 
 import org.junit.After;
 import org.openqa.selenium.safari.SafariDriver;
@@ -16,7 +17,7 @@ import drivers.SafariWebDriver;
 public class EdusoftWebTest extends EdusoftBasicTest {
 
 	protected GenericWebDriver webDriver;
-	protected PageHelperService pageHelper;
+	public PageHelperService pageHelper;
 
 	String browser = null;
 
@@ -31,7 +32,7 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 		System.out
 				.println("browser name loaded from maven profile: " + browser);
 		if (browser == null) {
-			browser = config.getProperty("browser");// getting browser name from
+			browser = configuration.getProperty("browser");// getting browser name from
 													// properties file
 		}
 		if (browser.equals(Browsers.chrome.toString())) {
@@ -43,12 +44,16 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 		} else if (browser.equals(Browsers.firefox.toString())) {
 			webDriver = (FirefoxWebDriver) ctx.getBean("FirefoxWebDriver");
 		}
+		if(webDriver==null){
+			Assert.fail("No webdriver found. Please check properties file or pom for webdriver name");
+		}
 
 		webDriver.init();
 		webDriver.maximize();
 		// webDriver.maximize();
 		pageHelper = (PageHelperService) ctx.getBean("PageHelperService");
 		pageHelper.init(webDriver, autoInstitution);
+	
 
 	}
 
@@ -61,9 +66,9 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 				webDriver.printScreen(this.getMethodName(), null);
 			}
 
-			if (pageHelper.isLogoutNeeded()) {
-				pageHelper.logOut();
-			}
+//			if (pageHelper.isLogoutNeeded()) {
+//				pageHelper.logOut();
+//			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -75,8 +80,8 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 	}
 
 	public String getSutAndSubDomain() {
-		return config.getProperty("sut.url") + "//"
-				+ config.getProperty("institutaion.subdomain");
+		return configuration.getProperty("sut.url") + "//"
+				+ configuration.getProperty("institutaion.subdomain");
 
 	}
 }

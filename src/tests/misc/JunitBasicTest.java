@@ -1,9 +1,11 @@
-package tests;
+package tests.misc;
 
 import jsystem.extensions.report.junit.JUnitReporter;
+import junit.framework.TestCase;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.runners.model.TestClass;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import services.Configuration;
@@ -16,7 +18,9 @@ import com.aqua.anttask.jsystem.JUnitTest;
 
 import drivers.GenericWebDriver;
 
-public class JunitBasicTest  {
+public class JunitBasicTest  extends JUnitTest {
+	
+
 	protected GenericWebDriver webDriver;
 
 	protected TextService textService;
@@ -31,6 +35,7 @@ public class JunitBasicTest  {
 	public void setup() throws Exception {
 		// System.setProperty("java.ibrary.path","C:\\Users\\omers\\Downloads\\Microsoft JDBC Driver 4.0 for SQL Server\\sqljdbc_4.0\\enu\\auth\\x86");
 		jUnitReporter=new JUnitReporter();
+	
 		
 		ctx = new ClassPathXmlApplicationContext("beans.xml");
 		config = (Configuration) ctx.getBean("configuration");
