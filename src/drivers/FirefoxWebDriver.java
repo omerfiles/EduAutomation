@@ -57,7 +57,7 @@ public class FirefoxWebDriver extends GenericWebDriver {
 	public void waitForElementAndClick(String idValue, ByTypes byType)
 			throws Exception {
 		waitForElement(idValue, byType, this.timeout, true)
-				.sendKeys(Keys.ENTER);
+				.click();
 	}
 
 	@Override

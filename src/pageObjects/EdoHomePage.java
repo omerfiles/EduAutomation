@@ -43,7 +43,7 @@ public class EdoHomePage extends GenericPage {
 		// webDriver.waitForElement("//table[@id='navTable']//tbody//tr//td//a[text()='My Courses']",
 		// ByTypes.xpath).click();
 		String url = webDriver.getSutUrl() 
-				+ "/Runtime/myPage.aspx";
+				+webDriver.getIntitutionName()+ "/Runtime/myPage.aspx";
 
 		webDriver.openUrl(url);
 		return this;
@@ -284,7 +284,7 @@ public class EdoHomePage extends GenericPage {
 				}
 			} catch (Exception e) {
 				try {
-
+					System.out.println("Catched exception in waitForPageToLoad");
 					logger.info("Checking if user is logged in already");
 
 //					String userIsLogged = webDriver.waitForElement(
@@ -298,12 +298,14 @@ public class EdoHomePage extends GenericPage {
 					webDriver.closeAlertByAccept();
 					break;
 				} catch (Exception j) {
-
+					System.out.println("Catched exception jjjjj");
 				}
+				
 				continue;
 			}
 
 		}
+		System.out.println("Finished waitForPageToLoad");
 		return this;
 	}
 
@@ -758,5 +760,26 @@ public class EdoHomePage extends GenericPage {
 		webDriver.waitForElementAndClick("open_srp", ByTypes.id);
 		return new RecordPanel(webDriver);
 
+	}
+	public RecordPanel clickOnRecordYourselfInVocabulary() throws Exception {
+		webDriver.waitForElementAndClick("tempLink2", ByTypes.id);
+		return new RecordPanel(webDriver);
+
+	}
+
+	public void selectIdiomFromList(String id)throws Exception {
+		webDriver.waitForElement("//ul[@id='idiomList']//li[4]", ByTypes.xpath).click();
+		
+	}
+
+	public void clickOnRecordFromIdioms()throws Exception {
+		webDriver.waitForElement("//*[@id='mainAreaTD']/div[1]/div/a", ByTypes.xpath).click();
+		webDriver.waitForElement("recordLI", ByTypes.id).click();
+		
+	}
+
+	public RecordPanel clickOnPronunciation() throws Exception {
+		webDriver.waitForElement("pf", ByTypes.id).click();
+		return new RecordPanel(webDriver);
 	}
 }

@@ -14,6 +14,8 @@ import org.junit.Assert;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.TimeoutException;
@@ -43,8 +45,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	protected static final Logger logger = LoggerFactory
 			.getLogger(GenericWebDriver.class);
 	private String sutUrl = null;
-	private String sutSubDomain=null;
-	
+	private String sutSubDomain = null;
+	private String institutionnName = null;
+
 	protected RemoteWebDriver webDriver;
 	protected int timeout = 10;
 	private String browserName;
@@ -79,6 +82,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		}
 		setSutUrl(configuration.getProperty("sut.url"));
 		setSutSubDomain(configuration.getProperty("institution.name"));
+		setInstitutionName(configuration.getProperty("institution.name"));
 		init(remoteMachine, null);
 	}
 
@@ -135,7 +139,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	public WebElement waitForElement(String idValue, ByTypes byType,
 			int timeout, boolean isElementMandatory, String message)
 			throws Exception {
-
+		System.out.println("Start of waitForElement");
 		report.startLevel("waiting for element " + idValue + " by trpe "
 				+ byType + " for " + timeout + " seconds");
 		WebElement element = null;
@@ -185,25 +189,31 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 				}
 			}
 		} catch (Exception e) {
+			System.out.println("Cought exception in waitForElement. isElementMandatory="+isElementMandatory);
 			if (isElementMandatory == true) {
 				// printScreen("Element " + idValue +
 				// " not found. See screen shot");
-				Assert.fail("Element: " + idValue + " was not found after "
-						+ timeout + "seconds");
+//				Assert.fail("Element: " + idValue + " was not found after "
+//						+ timeout + "seconds");
 				// failCause.append("Element: " + idValue + " was not found");
+				
+//				this.isPass=false;
+				System.out.println("Failing test");
 			}
 
 		} finally {
+			System.out.println("Starting finalize waitForElement");
 
 			if (isElementMandatory == true && element == null) {
 				if (message != null) {
 					report.report(message);
 				}
-				
-				printScreen("Element: " + idValue + " not found");
+
+//				printScreen("Element: " + idValue + " not found");
 				Assert.fail("Element: " + idValue + " not found");
 			}
 			report.stopLevel();
+			System.out.println("End of isElementMandatory");
 			return element;
 		}
 	}
@@ -284,6 +294,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	}
 
 	public void quitBrowser() throws Exception {
+		System.out.println("Quit broswer");
 		if (initialized == true) {
 			try {
 
@@ -498,19 +509,25 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	}
 
 	public void switchToAlert() {
-		WebDriverWait wait = new WebDriverWait(webDriver, 20, 1000);
+		try {
+			WebDriverWait wait = new WebDriverWait(webDriver, 20, 1000);
 
-		if (wait.until(ExpectedConditions.alertIsPresent()) != null) {
-			webDriver.switchTo().alert();
+			if (wait.until(ExpectedConditions.alertIsPresent()) != null) {
+				webDriver.switchTo().alert();
+			}
+		} catch (NoAlertPresentException e) {
+			e.printStackTrace();
+			Assert.fail("Alert not found");
 		}
 	}
 
 	public void closeAlertByAccept() {
-		WebDriverWait wait = new WebDriverWait(webDriver, 20, 1000);
-
+		System.out.println("Closing alert");
+		WebDriverWait wait = new WebDriverWait(webDriver, 10, 1000);
 		if (wait.until(ExpectedConditions.alertIsPresent()) != null) {
 			webDriver.switchTo().alert().accept();
 		}
+		System.out.println("Finished closing alert");
 
 	}
 
@@ -539,7 +556,8 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	public String printScreen() throws Exception {
 		return printScreen("", null);
 	}
-	public String printScreen(String message) throws Exception{
+
+	public String printScreen(String message) throws Exception {
 		return printScreen(message, null);
 	}
 
@@ -691,8 +709,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	public void maximize() {
 		webDriver.manage().window().maximize();
 	}
-	public WebElement getChileElementByXpath(WebElement element,String xpath){
-		WebElement chileElement=element.findElement(By.xpath(xpath));
+
+	public WebElement getChileElementByXpath(WebElement element, String xpath) {
+		WebElement chileElement = element.findElement(By.xpath(xpath));
 		return chileElement;
 	}
 
@@ -710,6 +729,19 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	public void setSutSubDomain(String sutSubDomain) {
 		this.sutSubDomain = sutSubDomain;
+	}
+
+	public void setInstitutionName(String name) {
+		this.institutionnName = name;
+	}
+
+	public String getIntitutionName() {
+		return this.institutionnName;
+	}
+
+	public String getCssValue(WebElement element, String cssParam)
+			throws Exception {
+		return element.getCssValue(cssParam);
 	}
 
 }

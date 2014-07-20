@@ -1,7 +1,10 @@
 package services;
 
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.io.StringReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.sql.SQLXML;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -171,5 +174,27 @@ public class NetService extends SystemObjectImpl {
 			throws Exception {
 
 	}
+	public void sentHttpRequest(String request,String requestMethod)throws Exception
+    {
+        report.report("Request is: "+request);
+        URL url=new URL(request) ;
+        HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
+        httpCon.setDoOutput(true); httpCon.setRequestMethod(requestMethod);
+        OutputStreamWriter out = new OutputStreamWriter( httpCon.getOutputStream());
+//        System.out.println(httpCon.getResponseCode()) ;
+        report.report("Get response code: "+httpCon.getResponseCode());
+        System.out.println(httpCon.getResponseMessage());
+        report.report("Get response message: "+httpCon.getResponseMessage());
+        out.close();
+
+
+    }
+    
+    public void sentHttpRequest(String request)throws Exception
+    {
+      sentHttpRequest(request, "POST");
+
+
+    }
 
 }

@@ -601,8 +601,8 @@ public class TmsHomePage extends GenericPage {
 
 		String[] studentsId = new String[count];
 		String studentId = null;
-		int j=0;
-		for (int i = 1; i < count+1; i++) {
+		int j = 0;
+		for (int i = 1; i < count + 1; i++) {
 			studentId = webDriver.waitForElement(
 					"//tbody[@id='tblBody']//tr[" + i + "]", ByTypes.xpath)
 					.getAttribute("id");
@@ -620,13 +620,15 @@ public class TmsHomePage extends GenericPage {
 
 	public void clickOnHomePage() throws Exception {
 		webDriver.waitForElement("Home Page", ByTypes.linkText).click();
-		
+
 	}
 
 	public void selectHomePageObject(String objectName) throws Exception {
 		webDriver.waitForElementAndClick("cpselect_Mode", ByTypes.name);
-		webDriver.waitForElement("//select[@name='cpselect_Mode']//option[contains(text(),'"+objectName+"')]", ByTypes.xpath).click();
-		
+		webDriver.waitForElement(
+				"//select[@name='cpselect_Mode']//option[contains(text(),'"
+						+ objectName + "')]", ByTypes.xpath).click();
+
 	}
 
 	public void selectInstituteInSettings(String institutionName,
@@ -635,21 +637,36 @@ public class TmsHomePage extends GenericPage {
 		webDriver.waitForElementAndClick("cpselect_Inst", ByTypes.name);
 		Thread.sleep(1000);
 		webDriver.waitForElement(
-				"//select[@name='cpselect_Inst']//option[@value='" + institutionId + "#"
-						+ institutionName + "']", ByTypes.xpath).click();
+				"//select[@name='cpselect_Inst']//option[@value='"
+						+ institutionId + "#" + institutionName + "']",
+				ByTypes.xpath).click();
 		if (clickGo == true) {
 			webDriver.waitForElement("//input[@value='  GO  ']", ByTypes.xpath)
 					.click();
 		}
 		webDriver.switchToMainWindow(mainWin);
-	
-		
+
 	}
 
 	public void selectScreenArea(String elements) throws Exception {
 		webDriver.waitForElementAndClick("cpselect_Sect", ByTypes.name);
-		webDriver.waitForElement("//select[@name='cpselect_Sect']//option[contains(text(),'"+elements+"')]", ByTypes.xpath).click();
-		
+		webDriver.waitForElement(
+				"//select[@name='cpselect_Sect']//option[contains(text(),'"
+						+ elements + "')]", ByTypes.xpath).click();
+
+	}
+
+	public void checkAddCommentButtonStatus(boolean enabled) throws Exception {
+		swithchToMainFrame();
+		webDriver.switchToFrame(webDriver.waitForElement(
+				"//iframe[@class='cboxIframe']", ByTypes.xpath));
+		webDriver.waitForElement("butAdd", ByTypes.xpath).isEnabled();
+
+	}
+
+	public void ClickAddCommentButton() throws Exception {
+		webDriver.waitForElement("butAdd", ByTypes.xpath).click();
+
 	}
 
 }

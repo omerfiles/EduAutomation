@@ -1,5 +1,6 @@
 package tests.misc;
 
+import java.io.File;
 import java.nio.charset.Charset;
 import java.sql.ResultSet;
 import java.sql.SQLXML;
@@ -18,7 +19,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
+import org.monte.audiodemo.AudioRecorder;
 
+import Enums.ByTypes;
 import Interfaces.TestCaseParams;
 import Objects.Student;
 import Objects.Teacher;
@@ -27,6 +30,7 @@ import pageObjects.EdoHomePage;
 import pageObjects.EdoLoginPage;
 import pageObjects.tms.TmsHomePage;
 import services.MyTestRunner;
+import ddf.minim.*;
 
 //@RunWith(MyTestRunner.class)
 public class PoCTest extends EdusoftWebTest {
@@ -55,8 +59,12 @@ public class PoCTest extends EdusoftWebTest {
 
 	@Test
 	public void TestUserLoggedIn() throws Exception {
-		System.out.println(webDriver.getSutUrl());
-		pageHelper.loginAsStudent();
+		AudioRecorder audioRecorder = new AudioRecorder(new File(
+				"files\\sound111.avi"));
+		audioRecorder.start();
+
+		sleep(20);
+		audioRecorder.stop();
 
 	}
 
@@ -168,6 +176,7 @@ public class PoCTest extends EdusoftWebTest {
 	public void tearDown() throws Exception {
 		// EdoHomePage edoHomePage = new EdoHomePage(webDriver);
 		// edoHomePage.logOut();
+		System.out.println("Test tear down");
 		super.tearDown();
 
 	}
@@ -277,9 +286,9 @@ public class PoCTest extends EdusoftWebTest {
 	@Test
 	public void testPrintScreen() throws Exception {
 		pageHelper.loginAsStudent();
-		webDriver.printScreen("test print message 1", null);
-		webDriver.printScreen("test print message 2");
-		webDriver.printScreen();
+//		webDriver.printScreen("test print message 1", null);
+//		webDriver.printScreen("test print message 2");
+		webDriver.waitForElement("b", ByTypes.id);
 	}
 
 	@Test
@@ -332,6 +341,12 @@ public class PoCTest extends EdusoftWebTest {
 
 		}
 
+	}
+
+	@Test
+	public void testSendHttp() throws Exception {
+		pageHelper.loginAsStudent();
+		webDriver.waitForElement("aaa", ByTypes.id);
 	}
 
 	public void testOpenURL(GenericWebDriver webDriver) throws Exception {

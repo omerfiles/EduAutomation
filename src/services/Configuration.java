@@ -17,14 +17,19 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Properties;
 import java.util.Set;
+
 @Service
 public class Configuration {
 	private static Configuration configuration = new Configuration();
+
 	public Configuration() {
 		InputStream input = null;
+		InputStream globaConfigInput = null;
 		try {
-			input = new FileInputStream("files/properties/QA/sr.properties");
-//			input = new FileInputStream("C:\\qa.properties");
+			globaConfigInput = new FileInputStream(
+					"files/properties/global.properties");
+
+			// input = new FileInputStream("C:\\qa.properties");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -32,21 +37,29 @@ public class Configuration {
 
 		// load a properties file
 		try {
+			globalProperties.load(globaConfigInput);
+			String localPropertiesFile = getGlobalProperties("envFile");
+
+			input = new FileInputStream("files/properties/QA/"
+					+ localPropertiesFile);
 			properties.load(input);
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+
 	public static Configuration getInstance() {
 
-        return configuration;
-    }
+		return configuration;
+	}
 
 	private static final String LIST_FORMAT = "       %1$-70s| %2$s%n";
 	public static final String OVERRIDE_PROPERTIES_FILENAME = "";
 
 	private Properties properties = new Properties();
+	private Properties globalProperties = new Properties();
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(Configuration.class);
@@ -89,15 +102,20 @@ public class Configuration {
 		return properties.getProperty(key, defaultValue);
 	}
 
+	public String getGlobalProperties(String key) {
+		return globalProperties.getProperty(key);
+	}
+
 	public String getProperty(String key) {
 
 		return getProperty(key, null);
 	}
-	
-	public String getStudentUserName(){
+
+	public String getStudentUserName() {
 		return getProperty("student.user.name");
 	}
-	public String getStudentPassword(){
+
+	public String getStudentPassword() {
 		return getProperty("student.user.password");
 	}
 

@@ -214,7 +214,7 @@ public class TmsTests extends EdusoftWebTest {
 		dbService.verifyInstitutionCreated(institution);
 		report.stopLevel();
 	}
-
+	//Test case 7348
 	public void testSelfRegistration() throws Exception {
 
 		startStep("Open TMS and create new class");

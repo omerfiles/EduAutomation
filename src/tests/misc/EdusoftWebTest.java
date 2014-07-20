@@ -1,9 +1,14 @@
 package tests.misc;
 
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsEnvironment;
+
 import jsystem.framework.report.Reporter.EnumReportLevel;
 import junit.framework.Assert;
 
 import org.junit.After;
+import org.monte.audiodemo.AudioRecorder;
+import org.monte.screenrecorder.ScreenRecorder;
 import org.openqa.selenium.safari.SafariDriver;
 
 import services.PageHelperService;
@@ -18,6 +23,8 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 
 	protected GenericWebDriver webDriver;
 	public PageHelperService pageHelper;
+	private ScreenRecorder screenRecorder;
+	private AudioRecorder audioRecorder;
 
 	String browser = null;
 
@@ -26,14 +33,17 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 		super.setup();
 		System.out.println("remote machine: "
 				+ System.getProperty("remote.machine"));
-		browser = System.getProperty("browser");// getting browser name from
-												// pom.xml when running frm
-												// Jenkins
+		if (browser == null) {
+			browser = System.getProperty("browser");// getting browser name from
+													// pom.xml when running frm
+													// Jenkins
+		}
 		System.out
 				.println("browser name loaded from maven profile: " + browser);
 		if (browser == null) {
-			browser = configuration.getProperty("browser");// getting browser name from
-													// properties file
+			browser = configuration.getProperty("browser");// getting browser
+															// name from
+			// properties file
 		}
 		if (browser.equals(Browsers.chrome.toString())) {
 			webDriver = (ChromeWebDriver) ctx.getBean("ChromeWebDriver");
@@ -44,7 +54,7 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 		} else if (browser.equals(Browsers.firefox.toString())) {
 			webDriver = (FirefoxWebDriver) ctx.getBean("FirefoxWebDriver");
 		}
-		if(webDriver==null){
+		if (webDriver == null) {
 			Assert.fail("No webdriver found. Please check properties file or pom for webdriver name");
 		}
 
@@ -53,29 +63,37 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 		// webDriver.maximize();
 		pageHelper = (PageHelperService) ctx.getBean("PageHelperService");
 		pageHelper.init(webDriver, autoInstitution);
-	
+
+		startStep("Start recording");
+		GraphicsConfiguration gc = GraphicsEnvironment
+				.getLocalGraphicsEnvironment().getLocalGraphicsEnvironment()
+				.getDefaultScreenDevice().getDefaultConfiguration();
+		screenRecorder = new ScreenRecorder(gc);
+
+		// screenRecorder.start();
 
 	}
 
 	@After
 	public void tearDown() throws Exception {
-
+		System.out.println("Start of EdusoftWebTest teardown");
 		try {
 			if (this.isPass == false) {
 
 				webDriver.printScreen(this.getMethodName(), null);
 			}
 
-//			if (pageHelper.isLogoutNeeded()) {
-//				pageHelper.logOut();
-//			}
+			// if (pageHelper.isLogoutNeeded()) {
+			// pageHelper.logOut();
+			// }
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			System.out.println("Exception in WebTest teardown");
 			e.printStackTrace();
 		} finally {
 			webDriver.quitBrowser();
 		}
-
+		// screenRecorder.stop();
+		System.out.println("end of EdusoftWebTest teardown");
 		super.tearDown();
 	}
 
@@ -83,5 +101,13 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 		return configuration.getProperty("sut.url") + "//"
 				+ configuration.getProperty("institutaion.subdomain");
 
+	}
+
+	public String getBrowser() {
+		return browser;
+	}
+
+	public void setBrowser(String browser) {
+		this.browser = browser;
 	}
 }

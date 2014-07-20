@@ -30,5 +30,9 @@
 	<classpathentry kind="lib" path="lib/sqljdbc4.jar"/>
 	<classpathentry kind="lib" path="lib/java2html.jar"/>
 	<classpathentry kind="lib" path="lib/xalan.jar"/>
+	<classpathentry kind="lib" path="lib/MonteScreenRecorder.jar" sourcepath="C:/Users/omers/workspace/AutomationInfra/lib/MonteScreenRecorder.jar"/>
+	<classpathentry kind="lib" path="lib/monte-cc.jar" sourcepath="C:/Users/omers/Downloads/MonteMedia-0.7.7src-cc"/>
+	<classpathentry kind="lib" path="lib/jl1.0.jar"/>
+	<classpathentry kind="lib" path="lib/jsminim.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

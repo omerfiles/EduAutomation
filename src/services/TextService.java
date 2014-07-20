@@ -111,9 +111,13 @@ public class TextService extends SystemObjectImpl {
 		clipboard.setContents(selection, selection);
 	}
 
-	public String[] splitStringToArray(String str) {
-		String[] result = str.split("(?!^)");
+	public String[] splitStringToArray(String str, String ignorChars) {
+		String[] result = str.split("(" + ignorChars + ")");
 		return result;
+	}
+
+	public String[] splitStringToArray(String str) {
+		return splitStringToArray(str, "?!^");
 	}
 
 	public void typeText(String text) throws Exception {
@@ -147,27 +151,37 @@ public class TextService extends SystemObjectImpl {
 	}
 
 	public boolean searchForTextInFile(String text, URL url) throws Exception {
-		report.report("Text to find is: "+text);
+		report.report("Text to find is: " + text);
 		boolean found = false;
 		scanner = new Scanner(url.openStream());
 		try {
 			while (scanner.hasNextLine()) {
-				String lineTex=scanner.nextLine();
-//				System.out.println(scanner.nextLine());
-//				report.report(scanner.nextLine());
-				if (lineTex.contains(text) ) {
+				String lineTex = scanner.nextLine();
+				// System.out.println(scanner.nextLine());
+				// report.report(scanner.nextLine());
+				if (lineTex.contains(text)) {
 					found = true;
 					break;
 				}
 			}
 		} catch (Exception e) {
-			report.report("Text: "+text +" was not found");
+			report.report("Text: " + text + " was not found");
 			e.printStackTrace();
 		}
-		if(found==false){
-			report.report("Text: "+text +" was not found");
+		if (found == false) {
+			report.report("Text: " + text + " was not found");
 		}
 		return found;
 
 	}
+	public String resolveAprostophes(String item){
+		 if(!item.contains("'")){
+		  return "'" + item + "'";
+		 }
+		 StringBuilder finalString = new StringBuilder();
+		 finalString.append("concat('");
+		 finalString.append(item.replace("'", "',\"'\",'"));
+		 finalString.append("')");
+		 return finalString.toString();
+		}
 }

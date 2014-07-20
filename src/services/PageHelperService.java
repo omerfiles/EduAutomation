@@ -2,7 +2,10 @@ package services;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import jsystem.framework.system.SystemObjectImpl;
 
@@ -69,7 +72,7 @@ public class PageHelperService extends SystemObjectImpl {
 		//setUserLoginToNull(dbService.getUserIdByUserName(student.getUserName(),
 			//	autoInstitution.getInstitutionId()));
 		EdoHomePage edoHomePage = edoLoginPage.login(student);
-		edoHomePage.waitForPageToLoad();
+//		edoHomePage.waitForPageToLoad();
 		edoLogoutNeeded = true;
 		return edoHomePage;
 	}
@@ -239,5 +242,15 @@ public class PageHelperService extends SystemObjectImpl {
 		}
 		return studentNames;
 	}
+	
+	public List shuffleList(List list)throws Exception{
+		
+		long seed=System.nanoTime();
+		Collections.shuffle(list,new Random(seed));
+		return list;
+		
+	}
+	
+	
 
 }
