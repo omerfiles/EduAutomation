@@ -359,7 +359,7 @@
 							<systemProperties>
 								<property>
 									<name>browser</name>
-									<value>IE</value>
+									<value>chrome</value>
 								</property>
 								<property>
 									<name>remote.machine</name>
