@@ -24,6 +24,13 @@ public class RecordPanel extends GenericPage {
 	String rating5Text = "67%-83%";
 	String rating6Text = "84%-100%";
 
+	String rating1FeedbackText = "Try Again";
+	String rating2FeedbackText = "Try Again";
+	String rating3FeedbackText = "Keep Working!";
+	String rating4FeedbackText = "Good!";
+	String rating5FeedbackText = "Very Good!";
+	String rating6FeedbackText = "Excellent!";
+
 	int numOfCurrentRecordings = 0;
 
 	public RecordPanel(GenericWebDriver webDriver) {
@@ -62,10 +69,14 @@ public class RecordPanel extends GenericPage {
 
 	public void clickOnRecordButton() throws Exception {
 		webDriver.waitForElement("btnRecord", ByTypes.id).click();
+		checkThatHearButtonIsDisabled();
 	}
 
 	public void clickOnRecordAndStop(int seconds) throws Exception {
 		webDriver.waitForElement("btnRecord", ByTypes.id).click();
+
+//		webDriver.checkThatElementBecameDisabled(webDriver.waitForElement(
+//				"btnHear", ByTypes.id));
 		numOfCurrentRecordings++;
 
 		int elapsedTime = 0;
@@ -77,6 +88,13 @@ public class RecordPanel extends GenericPage {
 		report.report("clicking the stop button");
 		// clickOnStopButton();
 		checkNumberOfRecordings();
+
+	}
+
+	private void checkThatHearButtonIsDisabled() throws Exception {
+
+		Assert.assertFalse("Hear button is not disabled", webDriver
+				.waitForElement("btnHear", ByTypes.id).isEnabled());
 
 	}
 
@@ -127,25 +145,31 @@ public class RecordPanel extends GenericPage {
 				"//div[@class='srPanelScoreWrapper']//div[2]//span[@class='scoreSquares"
 						+ ratingIndex + "']", ByTypes.xpath);
 		String ratingText = null;
-		String ratingClass = null;
+		String ratingFeedbackText = null;
 		switch (ratingIndex) {
 		case 1:
 			ratingText = rating1Text;
+			ratingFeedbackText = rating1FeedbackText;
 			break;
 		case 2:
 			ratingText = rating2Text;
+			ratingFeedbackText = rating2FeedbackText;
 			break;
 		case 3:
 			ratingText = rating3Text;
+			ratingFeedbackText = rating3FeedbackText;
 			break;
 		case 4:
 			ratingText = rating4Text;
+			ratingFeedbackText = rating4FeedbackText;
 			break;
 		case 5:
 			ratingText = rating5Text;
+			ratingFeedbackText = rating5FeedbackText;
 			break;
 		case 6:
 			ratingText = rating6Text;
+			ratingFeedbackText = rating6FeedbackText;
 			break;
 		}
 
@@ -154,6 +178,13 @@ public class RecordPanel extends GenericPage {
 		Assert.assertEquals(
 				"Sentence rating text does not matche or not found",
 				ratingText, actualSentenceScoreText);
+
+		String actualSentenceFeedbackText = webDriver.waitForElement(
+				"//div[@class='scoreExpWrapper']", ByTypes.xpath).getText();
+
+		Assert.assertEquals(
+				"Sentence rating feedback text does not matche or not found",
+				ratingFeedbackText, actualSentenceFeedbackText);
 	}
 
 	public void closeRecordPanel() throws Exception {

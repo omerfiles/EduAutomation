@@ -712,7 +712,7 @@ public class EdoHomePage extends GenericPage {
 
 		WebElement webElement = webDriver.waitForElement(
 				"//div[@id='textContainer']", ByTypes.xpath);
-		WebElement childElement = webDriver.getChileElementByXpath(webElement,
+		WebElement childElement = webDriver.getChildElementByXpath(webElement,
 				".//p");
 
 		String text = childElement.getText();
@@ -727,7 +727,7 @@ public class EdoHomePage extends GenericPage {
 
 		WebElement element = webDriver.waitForElement("//div[@selectedspan='"
 				+ questonId + "']", ByTypes.xpath);
-		WebElement childElement = webDriver.getChileElementByXpath(element,
+		WebElement childElement = webDriver.getChildElementByXpath(element,
 				"//td[text()='" + answerText + "']");
 		childElement.click();
 

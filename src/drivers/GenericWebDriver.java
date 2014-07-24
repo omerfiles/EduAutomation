@@ -145,59 +145,98 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		WebElement element = null;
 		try {
 			WebDriverWait wait = new WebDriverWait(webDriver, timeout, 1000);
-			if (byType.equals(ByTypes.id)) {
+
+			switch (byType) {
+			case className:
+				wait.until(ExpectedConditions.visibilityOfElementLocated(By
+						.className(idValue)));
+				element = webDriver.findElement(By.className(idValue));
+				;
+				break;
+			case linkText:
+				wait.until(ExpectedConditions.visibilityOfElementLocated(By
+						.linkText(idValue)));
+				element = webDriver.findElement(By.linkText(idValue));
+				break;
+			case id:
 				wait.until(ExpectedConditions.visibilityOfElementLocated(By
 						.id(idValue)));
 				element = webDriver.findElement(By.id(idValue));
-			} else {
-				if (byType.equals(ByTypes.xpath)) {
-					wait.until(ExpectedConditions.visibilityOfElementLocated(By
-							.xpath(idValue)));
-					element = webDriver.findElement(By.xpath(idValue));
-				} else {
-					if (byType.equals(ByTypes.className)) {
-						wait.until(ExpectedConditions
-								.visibilityOfElementLocated(By
-										.className(idValue)));
-						element = webDriver.findElement(By.className(idValue));
-					} else {
-						if (byType.equals(ByTypes.name)) {
-							wait.until(ExpectedConditions
-									.visibilityOfElementLocated(By
-											.name(idValue)));
-							element = webDriver.findElement(By.name(idValue));
-						} else {
-							if (byType.equals(ByTypes.linkText)) {
-								wait.until(ExpectedConditions
-										.visibilityOfElementLocated(By
-												.linkText(idValue)));
-								element = webDriver.findElement(By
-										.linkText(idValue));
-							} else {
-								if (byType.equals(ByTypes.partialLinkText)) {
-									wait.until(ExpectedConditions
-											.visibilityOfElementLocated(By
-													.partialLinkText(idValue)));
-									element = webDriver.findElement(By
-											.partialLinkText(idValue));
-								}
-							}
-						}
-
-					}
-
-				}
+				;
+				break;
+			case name:
+				wait.until(ExpectedConditions.visibilityOfElementLocated(By
+						.name(idValue)));
+				element = webDriver.findElement(By.name(idValue));
+				;
+				break;
+			case partialLinkText:
+				wait.until(ExpectedConditions.visibilityOfElementLocated(By
+						.partialLinkText(idValue)));
+				element = webDriver.findElement(By.partialLinkText(idValue));
+				break;
+			case xpath:
+				wait.until(ExpectedConditions.visibilityOfElementLocated(By
+						.xpath(idValue)));
+				element = webDriver.findElement(By.xpath(idValue));
+				break;
 			}
+
+//			if (byType.equals(ByTypes.id)) {
+//				wait.until(ExpectedConditions.visibilityOfElementLocated(By
+//						.id(idValue)));
+//				element = webDriver.findElement(By.id(idValue));
+//			} else {
+//				if (byType.equals(ByTypes.xpath)) {
+//					wait.until(ExpectedConditions.visibilityOfElementLocated(By
+//							.xpath(idValue)));
+//					element = webDriver.findElement(By.xpath(idValue));
+//				} else {
+//					if (byType.equals(ByTypes.className)) {
+//						wait.until(ExpectedConditions
+//								.visibilityOfElementLocated(By
+//										.className(idValue)));
+//						element = webDriver.findElement(By.className(idValue));
+//					} else {
+//						if (byType.equals(ByTypes.name)) {
+//							wait.until(ExpectedConditions
+//									.visibilityOfElementLocated(By
+//											.name(idValue)));
+//							element = webDriver.findElement(By.name(idValue));
+//						} else {
+//							if (byType.equals(ByTypes.linkText)) {
+//								wait.until(ExpectedConditions
+//										.visibilityOfElementLocated(By
+//												.linkText(idValue)));
+//								element = webDriver.findElement(By
+//										.linkText(idValue));
+//							} else {
+//								if (byType.equals(ByTypes.partialLinkText)) {
+//									wait.until(ExpectedConditions
+//											.visibilityOfElementLocated(By
+//													.partialLinkText(idValue)));
+//									element = webDriver.findElement(By
+//											.partialLinkText(idValue));
+//								}
+//							}
+//						}
+//
+//					}
+//
+//				}
+//			}
 		} catch (Exception e) {
-			System.out.println("Cought exception in waitForElement. isElementMandatory="+isElementMandatory);
+			System.out
+					.println("Cought exception in waitForElement. isElementMandatory="
+							+ isElementMandatory);
 			if (isElementMandatory == true) {
 				// printScreen("Element " + idValue +
 				// " not found. See screen shot");
-//				Assert.fail("Element: " + idValue + " was not found after "
-//						+ timeout + "seconds");
+				// Assert.fail("Element: " + idValue + " was not found after "
+				// + timeout + "seconds");
 				// failCause.append("Element: " + idValue + " was not found");
-				
-//				this.isPass=false;
+
+				// this.isPass=false;
 				System.out.println("Failing test");
 			}
 
@@ -209,7 +248,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 					report.report(message);
 				}
 
-//				printScreen("Element: " + idValue + " not found");
+				// printScreen("Element: " + idValue + " not found");
 				Assert.fail("Element: " + idValue + " not found");
 			}
 			report.stopLevel();
@@ -710,7 +749,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		webDriver.manage().window().maximize();
 	}
 
-	public WebElement getChileElementByXpath(WebElement element, String xpath) {
+	public WebElement getChildElementByXpath(WebElement element, String xpath) {
 		WebElement chileElement = element.findElement(By.xpath(xpath));
 		return chileElement;
 	}
@@ -742,6 +781,32 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	public String getCssValue(WebElement element, String cssParam)
 			throws Exception {
 		return element.getCssValue(cssParam);
+	}
+
+	public void checkThatElementBecameDisabled(WebElement element)
+			throws Exception {
+
+		int elapsedTime = 0;
+		boolean disabled = false;
+		while (elapsedTime < timeout) {
+			if (element.isEnabled() == false) {
+				disabled = true;
+				break;
+			} else {
+				elapsedTime++;
+				Thread.sleep(1000);
+				System.out.println("Waiting for 1000ms");
+			}
+		}
+		Assert.assertTrue("Element is not disabled", disabled);
+	}
+
+	public void printAllChiledElemetns(WebElement element) throws Exception {
+		List<WebElement> elements = element.findElements(By.xpath(".//div"));
+		for (int i = 0; i < elements.size(); i++) {
+			System.out.println("class is: "
+					+ elements.get(i).getAttribute("class"));
+		}
 	}
 
 }
