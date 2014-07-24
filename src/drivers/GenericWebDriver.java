@@ -101,6 +101,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	public void openUrl(String url) throws Exception, TimeoutException {
 
 		try {
+			report.report("URL is: "+url);
 			report.addLink("link to url", url);
 			webDriver.get(url);
 
