@@ -3,14 +3,11 @@ package tests.misc;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
 
-import jsystem.framework.report.Reporter.EnumReportLevel;
 import junit.framework.Assert;
 
 import org.junit.After;
 import org.monte.audiodemo.AudioRecorder;
 import org.monte.screenrecorder.ScreenRecorder;
-import org.openqa.selenium.safari.SafariDriver;
-
 import services.PageHelperService;
 import Enums.Browsers;
 import drivers.ChromeWebDriver;
