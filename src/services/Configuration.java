@@ -38,8 +38,9 @@ public class Configuration {
 			globalProperties.load(globaConfigInput);
 			String localPropertiesFile = getGlobalProperties("envFile");
 
-			input = new FileInputStream("files/properties/QA/"
-					+ localPropertiesFile);
+//			input = new FileInputStream("files/properties/QA/"
+//					+ localPropertiesFile);
+			input=new FileInputStream("C:\\automation\\"+localPropertiesFile);
 			properties.load(input);
 
 		} catch (IOException e) {
