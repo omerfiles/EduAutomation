@@ -238,7 +238,7 @@
 			<version>3.2.5.RELEASE</version>
 		</dependency>
 
-	
+
 
 
 
@@ -468,13 +468,17 @@
 									<value>1</value>
 
 								</property>
+								<property>
+									<name>envFile</name>
+									<value>sr.properties</value>
+								</property>
 
 							</systemProperties>
 							<testSourceDirectory>${project.basedir}/src/tests/</testSourceDirectory>
 							<testClassesDirectory>${project.basedir}/target/classes/</testClassesDirectory>
 							<includes>
 								<include>**/RecoredYourself.java</include>
-							
+
 
 							</includes>
 
@@ -509,9 +513,7 @@
 						<version>2.17</version>
 						<configuration>
 							<properties>
-
 							</properties>
-
 							<systemProperties>
 								<property>
 									<name>browser</name>
@@ -524,7 +526,10 @@
 								<property>
 									<name>institutionId</name>
 									<value>1</value>
-
+								</property>
+								<property>
+									<name>envFile</name>
+									<value>sr.properties</value>
 								</property>
 
 							</systemProperties>
@@ -532,7 +537,7 @@
 							<testClassesDirectory>${project.basedir}/target/classes/</testClassesDirectory>
 							<includes>
 								<include>**/RecoredYourself.java</include>
-							
+
 
 							</includes>
 
@@ -552,6 +557,6 @@
 			</build>
 
 		</profile>
-		
+
 	</profiles>
 </project>

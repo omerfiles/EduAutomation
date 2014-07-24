@@ -32,15 +32,24 @@ public class Configuration {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		String localPropertiesFile = null;
 		// load a properties file
 		try {
-			globalProperties.load(globaConfigInput);
-			String localPropertiesFile = getGlobalProperties("envFile");
 
-//			input = new FileInputStream("files/properties/QA/"
-//					+ localPropertiesFile);
-			input=new FileInputStream("C:\\automation\\"+localPropertiesFile);
+			// try to get properties file name from pom profile
+			localPropertiesFile = System.getProperty("envFile");
+
+			globalProperties.load(globaConfigInput);
+			// if local properties files does not exist in the pom xml, get if
+			// from the global properties file
+			if (localPropertiesFile.equals(null)) {
+				localPropertiesFile = getGlobalProperties("envFile");
+			}
+
+			// input = new FileInputStream("files/properties/QA/"
+			// + localPropertiesFile);
+			input = new FileInputStream("C:\\automation\\"
+					+ localPropertiesFile);
 			properties.load(input);
 
 		} catch (IOException e) {

@@ -101,7 +101,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	public void openUrl(String url) throws Exception, TimeoutException {
 
 		try {
-			report.report("URL is: "+url);
+			report.report("URL is: " + url);
 			report.addLink("link to url", url);
 			webDriver.get(url);
 
@@ -140,7 +140,6 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	public WebElement waitForElement(String idValue, ByTypes byType,
 			int timeout, boolean isElementMandatory, String message)
 			throws Exception {
-		System.out.println("Start of waitForElement");
 		report.startLevel("waiting for element " + idValue + " by trpe "
 				+ byType + " for " + timeout + " seconds");
 		WebElement element = null;
@@ -183,53 +182,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 				break;
 			}
 
-//			if (byType.equals(ByTypes.id)) {
-//				wait.until(ExpectedConditions.visibilityOfElementLocated(By
-//						.id(idValue)));
-//				element = webDriver.findElement(By.id(idValue));
-//			} else {
-//				if (byType.equals(ByTypes.xpath)) {
-//					wait.until(ExpectedConditions.visibilityOfElementLocated(By
-//							.xpath(idValue)));
-//					element = webDriver.findElement(By.xpath(idValue));
-//				} else {
-//					if (byType.equals(ByTypes.className)) {
-//						wait.until(ExpectedConditions
-//								.visibilityOfElementLocated(By
-//										.className(idValue)));
-//						element = webDriver.findElement(By.className(idValue));
-//					} else {
-//						if (byType.equals(ByTypes.name)) {
-//							wait.until(ExpectedConditions
-//									.visibilityOfElementLocated(By
-//											.name(idValue)));
-//							element = webDriver.findElement(By.name(idValue));
-//						} else {
-//							if (byType.equals(ByTypes.linkText)) {
-//								wait.until(ExpectedConditions
-//										.visibilityOfElementLocated(By
-//												.linkText(idValue)));
-//								element = webDriver.findElement(By
-//										.linkText(idValue));
-//							} else {
-//								if (byType.equals(ByTypes.partialLinkText)) {
-//									wait.until(ExpectedConditions
-//											.visibilityOfElementLocated(By
-//													.partialLinkText(idValue)));
-//									element = webDriver.findElement(By
-//											.partialLinkText(idValue));
-//								}
-//							}
-//						}
-//
-//					}
-//
-//				}
-//			}
 		} catch (Exception e) {
-			System.out
-					.println("Cought exception in waitForElement. isElementMandatory="
-							+ isElementMandatory);
 			if (isElementMandatory == true) {
 				// printScreen("Element " + idValue +
 				// " not found. See screen shot");
@@ -238,12 +191,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 				// failCause.append("Element: " + idValue + " was not found");
 
 				// this.isPass=false;
-				System.out.println("Failing test");
 			}
 
 		} finally {
-			System.out.println("Starting finalize waitForElement");
-
 			if (isElementMandatory == true && element == null) {
 				if (message != null) {
 					report.report(message);
@@ -253,7 +203,6 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 				Assert.fail("Element: " + idValue + " not found");
 			}
 			report.stopLevel();
-			System.out.println("End of isElementMandatory");
 			return element;
 		}
 	}
