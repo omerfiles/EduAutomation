@@ -1,13 +1,10 @@
 package tests.misc;
 
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsEnvironment;
 
-import junit.framework.Assert;
 
 import org.junit.After;
-import org.monte.audiodemo.AudioRecorder;
-import org.monte.screenrecorder.ScreenRecorder;
+import org.junit.Assert;
+
 import services.PageHelperService;
 import Enums.Browsers;
 import drivers.ChromeWebDriver;
@@ -20,8 +17,8 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 
 	protected GenericWebDriver webDriver;
 	public PageHelperService pageHelper;
-	private ScreenRecorder screenRecorder;
-	private AudioRecorder audioRecorder;
+
+	
 
 	String browser = null;
 
@@ -57,17 +54,9 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 
 		webDriver.init();
 		webDriver.maximize();
-		// webDriver.maximize();
 		pageHelper = (PageHelperService) ctx.getBean("PageHelperService");
 		pageHelper.init(webDriver, autoInstitution);
 
-		startStep("Start recording");
-		GraphicsConfiguration gc = GraphicsEnvironment
-				.getLocalGraphicsEnvironment().getLocalGraphicsEnvironment()
-				.getDefaultScreenDevice().getDefaultConfiguration();
-		screenRecorder = new ScreenRecorder(gc);
-
-		// screenRecorder.start();
 
 	}
 
