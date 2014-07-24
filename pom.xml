@@ -274,7 +274,7 @@
 								</property>
 								<property>
 									<name>remote.machine</name>
-									<value>http://10.1.0.56:5555</value>
+									<value>http://10.1.0.66:5555</value>
 								</property>
 								<property>
 									<name>institutionId</name>
@@ -321,7 +321,7 @@
 								</property>
 								<property>
 									<name>remote.machine</name>
-									<value>http://10.1.0.37:5555</value>
+									<value>http://10.1.0.66:5555</value>
 								</property>
 
 							</systemProperties>
@@ -363,7 +363,7 @@
 								</property>
 								<property>
 									<name>remote.machine</name>
-									<value>http://10.1.0.37:5555</value>
+									<value>http://10.1.0.66:5555</value>
 								</property>
 
 							</systemProperties>
