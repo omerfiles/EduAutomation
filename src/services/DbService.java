@@ -580,9 +580,6 @@ public class DbService extends SystemObjectImpl {
 		return dayOfMonth;
 	}
 
-	public String getUserNameByUserId(String string) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 }

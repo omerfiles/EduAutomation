@@ -31,7 +31,7 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 	NetService netService;
 	protected EraterService eraterService;
 	protected InstitutionService institutionService;
-	protected static AudioService audioService;
+//	protected static AudioService audioService;
 	public ClassPathXmlApplicationContext ctx;
 
 	protected boolean inStep = false;
@@ -55,7 +55,7 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 		eraterService = (EraterService) ctx.getBean("EraterService");
 		institutionService = (InstitutionService) ctx
 				.getBean("InstitutionService");
-		audioService = (AudioService) ctx.getBean("AudioService");
+//		audioService = (AudioService) ctx.getBean("AudioService");
 
 		int institutionId;
 		if (System.getProperty("institutionId") == null) {
@@ -69,8 +69,9 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 					.getProperty("institutionId"));
 		}
 
-		institutionService.init(institutionId);
+		institutionService.init();
 		autoInstitution = institutionService.getInstitution();
+		System.out.println(autoInstitution.getInstitutionId());
 	
 		// System.out.println("Automation isntitution id is: "
 		// + autoInstitution.getInstitutionId());

@@ -42,7 +42,7 @@ public class Configuration {
 			globalProperties.load(globaConfigInput);
 			// if local properties files does not exist in the pom xml, get if
 			// from the global properties file
-			if (localPropertiesFile.equals(null)) {
+			if (localPropertiesFile==null) {
 				localPropertiesFile = getGlobalProperties("envFile");
 			}
 

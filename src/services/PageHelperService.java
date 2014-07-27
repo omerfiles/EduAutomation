@@ -40,8 +40,8 @@ public class PageHelperService extends SystemObjectImpl {
 	@Autowired
 	DbService dbService;
 
-	@Autowired
-	AudioService audioService;
+	// @Autowired
+	// AudioService audioService;
 
 	List<Course> courses = null;
 	List<Recording> recordings = null;
@@ -69,10 +69,10 @@ public class PageHelperService extends SystemObjectImpl {
 		Student student = new Student();
 		student.setUserName(configuration.getProperty("student.user.name"));
 		student.setPassword(configuration.getProperty("student.user.password"));
-		//setUserLoginToNull(dbService.getUserIdByUserName(student.getUserName(),
-			//	autoInstitution.getInstitutionId()));
+		setUserLoginToNull(dbService.getUserIdByUserName(student.getUserName(),
+				autoInstitution.getInstitutionId()));
 		EdoHomePage edoHomePage = edoLoginPage.login(student);
-//		edoHomePage.waitForPageToLoad();
+		// edoHomePage.waitForPageToLoad();
 		edoLogoutNeeded = true;
 		return edoHomePage;
 	}
@@ -168,7 +168,7 @@ public class PageHelperService extends SystemObjectImpl {
 
 	public void startRecording(String fileName) throws Exception {
 		// TODO 1. click on the recored button
-		audioService.sendSoundToVirtualMic(new File(fileName));
+		// audioService.sendSoundToVirtualMic(new File(fileName));
 	}
 
 	public List<Recording> loadRecordings() throws Exception {
@@ -242,15 +242,13 @@ public class PageHelperService extends SystemObjectImpl {
 		}
 		return studentNames;
 	}
-	
-	public List shuffleList(List list)throws Exception{
-		
-		long seed=System.nanoTime();
-		Collections.shuffle(list,new Random(seed));
+
+	public List shuffleList(List list) throws Exception {
+
+		long seed = System.nanoTime();
+		Collections.shuffle(list, new Random(seed));
 		return list;
-		
+
 	}
-	
-	
 
 }

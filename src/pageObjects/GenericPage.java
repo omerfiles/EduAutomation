@@ -18,8 +18,8 @@ public abstract class GenericPage extends SystemObjectImpl {
 	@Autowired
 	protected Configuration configuration;
 	
-	@Autowired
-	protected AudioService audioService;
+//	@Autowired
+//	protected AudioService audioService;
 	
 //	@Autowired
 //	protected DbService dbService;

@@ -17,6 +17,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -214,12 +215,16 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	public WebElement waitForElement(String idValue, ByTypes byType)
 			throws Exception {
-		return waitForElement(idValue, byType, timeout, true, null);
+		return waitForElement(idValue, byType, this.timeout, true, null);
 	}
 
 	public void waitForElementAndClick(String idValue, ByTypes byType)
 			throws Exception {
 		waitForElement(idValue, byType, timeout, true, null).click();
+	}
+	public void waitForElementAndSendEnter(String idValue, ByTypes byType)
+			throws Exception {
+		waitForElement(idValue, byType, timeout, true, null).sendKeys(Keys.ENTER);
 	}
 
 	public WebElement waitForElement(String idValue, ByTypes byType,
@@ -757,6 +762,11 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			System.out.println("class is: "
 					+ elements.get(i).getAttribute("class"));
 		}
+	}
+
+	public void getElementLocation(WebElement element) {
+		Point p = element.getLocation();
+		System.out.println("X is: "+ p.getX()+" and Y is: "+p.getY());
 	}
 
 }

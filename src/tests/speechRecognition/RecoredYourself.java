@@ -133,8 +133,11 @@ public class RecoredYourself extends EdusoftWebTest {
 		startStep("Check the recording was added and that the 1st recording was removed");
 
 		for (int i = 0; i < numOfRecordingsInTest; i++) {
+			
 			int index = i + 1;
+			System.out.println("Index is: "+index);
 			recordPanel.selectRecording(String.valueOf(index));
+			sleep(1);
 			recordPanel.checkWordsLevel(words, wordsScoreList.get(i),
 					textService);
 			recordPanel.checkSentenceScoreRatingText(sentenceLevels.get(i));
@@ -180,7 +183,7 @@ public class RecoredYourself extends EdusoftWebTest {
 	}
 
 	// Test case 13440
-	@Test
+
 	public void testRecordYourselfPanelOpenFromIdioms() throws Exception {
 		startStep("Init test data");
 

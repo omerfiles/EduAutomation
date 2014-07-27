@@ -18,7 +18,7 @@ public class NonUiTests extends EdusoftBasicTest {
 
 	@Test
 	public void testAudio() throws Exception {
-		audioService.sendSoundToVirtualMic(new File("files/audioFiles/207838.wav"));
+//		audioService.sendSoundToVirtualMic(new File("files/audioFiles/207838.wav"));
 	
 //		System.out.println("Do not run");
 	}

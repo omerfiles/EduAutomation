@@ -2,6 +2,8 @@ package Objects;
 
 public class AutoInstitution {
 	
+	public AutoInstitution(){};
+	
 	public AutoInstitution(String institutionId, String institutionName,
 			String studentUserName, String teacherUserName,
 			String studentPassword, String teacherPassword,
@@ -48,6 +50,27 @@ public class AutoInstitution {
 	}
 	public String getInstitutionDirectoryName() {
 		return institutionDirectoryName;
+	}
+	public void setInstitutionId(String institutionId) {
+		InstitutionId = institutionId;
+	}
+	public void setInstitutionName(String institutionName) {
+		this.institutionName = institutionName;
+	}
+	public void setStudentUserName(String studentUserName) {
+		this.studentUserName = studentUserName;
+	}
+	public void setTeacherUserName(String teacherUserName) {
+		this.teacherUserName = teacherUserName;
+	}
+	public void setStudentPassword(String studentPassword) {
+		this.studentPassword = studentPassword;
+	}
+	public void setTeacherPassword(String teacherPassword) {
+		this.teacherPassword = teacherPassword;
+	}
+	public void setInstitutionDirectoryName(String institutionDirectoryName) {
+		this.institutionDirectoryName = institutionDirectoryName;
 	}
 	
 	

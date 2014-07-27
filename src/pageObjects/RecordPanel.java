@@ -3,8 +3,7 @@ package pageObjects;
 import java.io.File;
 import java.util.List;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
@@ -13,6 +12,8 @@ import services.TextService;
 import Enums.ByTypes;
 import Enums.SRWordLevel;
 import Objects.Recording;
+import drivers.ChromeWebDriver;
+import drivers.FirefoxWebDriver;
 import drivers.GenericWebDriver;
 
 public class RecordPanel extends GenericPage {
@@ -50,33 +51,33 @@ public class RecordPanel extends GenericPage {
 		return null;
 	}
 
-	public RecordPanel sendRecordingToMic(File file, AudioService audioService)
-			throws Exception {
-		audioService.sendSoundToVirtualMic(file);
-		return this;
-
-	}
+	// public RecordPanel sendRecordingToMic(File file, AudioService
+	// audioService)
+	// throws Exception {
+	// audioService.sendSoundToVirtualMic(file);
+	// return this;
+	//
+	// }
 
 	public void clickOnPlayButton() throws Exception {
 		webDriver.waitForElement("btnHear", ByTypes.id).click();
 	}
 
 	public void selectRecording(String index) throws Exception {
-		webDriver.waitForElement(
-				"//ul[@id='ulURecords']//li[" + index + "]//a//input",
-				ByTypes.xpath).click();
+		webDriver.waitForElementAndClick("//ul[@id='ulURecords']//li[" + index
+				+ "]//a//input", ByTypes.xpath);
 	}
 
 	public void clickOnRecordButton() throws Exception {
 		webDriver.waitForElement("btnRecord", ByTypes.id).click();
-		checkThatHearButtonIsDisabled();
+		// checkThatHearButtonIsDisabled();
 	}
 
 	public void clickOnRecordAndStop(int seconds) throws Exception {
 		webDriver.waitForElement("btnRecord", ByTypes.id).click();
 
-//		webDriver.checkThatElementBecameDisabled(webDriver.waitForElement(
-//				"btnHear", ByTypes.id));
+		// webDriver.checkThatElementBecameDisabled(webDriver.waitForElement(
+		// "btnHear", ByTypes.id));
 		numOfCurrentRecordings++;
 
 		int elapsedTime = 0;
@@ -264,7 +265,13 @@ public class RecordPanel extends GenericPage {
 
 	public String getSLBackgroundImage(WebElement element) throws Exception {
 		String bgImg = webDriver.getCssValue(element, "background-image");
-		bgImg = bgImg.substring(4, bgImg.length() - 1);
+		if (webDriver instanceof FirefoxWebDriver) {
+			bgImg = bgImg.substring(5, bgImg.length() - 2);
+		} else if (webDriver instanceof ChromeWebDriver) {
+			bgImg = bgImg.substring(4, bgImg.length() - 1);
+		}
+
+		// bgImg=bgImg.replace("''", "");
 		return bgImg;
 	}
 
@@ -275,7 +282,9 @@ public class RecordPanel extends GenericPage {
 				"//ul[@id='ulURecords']//li[" + index + "]//a//span[3]",
 				ByTypes.xpath);
 		String bgImage = getSLBackgroundImage(element);
-		Assert.assertEquals(getExpectedGifBySL(sentenceLevel), bgImage);
+		Assert.assertArrayEquals("Image not found",
+				new String[] { getExpectedGifBySL(sentenceLevel) },
+				new String[] { bgImage });
 		System.out.println("checked that recording was added");
 
 	}
