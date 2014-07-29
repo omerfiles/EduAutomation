@@ -768,5 +768,10 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		Point p = element.getLocation();
 		System.out.println("X is: "+ p.getX()+" and Y is: "+p.getY());
 	}
+	
+	public void setElementSelected(WebElement element)throws Exception{
+		element.click();
+	
+	}
 
 }

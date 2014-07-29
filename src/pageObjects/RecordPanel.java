@@ -64,8 +64,11 @@ public class RecordPanel extends GenericPage {
 	}
 
 	public void selectRecording(String index) throws Exception {
-		webDriver.waitForElementAndClick("//ul[@id='ulURecords']//li[" + index
-				+ "]//a//input", ByTypes.xpath);
+		WebElement radioBtn = webDriver.waitForElement(
+				"//ul[@id='ulURecords']//li[" + index + "]//a//input",
+				ByTypes.xpath);
+		
+		webDriver.setElementSelected(radioBtn);
 	}
 
 	public void clickOnRecordButton() throws Exception {

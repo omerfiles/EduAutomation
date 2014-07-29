@@ -151,7 +151,7 @@ public class RecoredYourself extends EdusoftWebTest {
 	public void testRecordPanelFromVacabulary() throws Exception {
 		startStep("Init test data");
 		Course course = pageHelper.initCouse(9);
-		String[] words = new String[] { "twenty-one" };
+		String[] words = new String[] { "twenty-five" };
 
 		List<String[]> wordsScoreList = new ArrayList<String[]>();
 		List<Integer> sentenceLevels = new ArrayList<Integer>();
