@@ -67,7 +67,7 @@ public class RecordPanel extends GenericPage {
 		WebElement radioBtn = webDriver.waitForElement(
 				"//ul[@id='ulURecords']//li[" + index + "]//a//input",
 				ByTypes.xpath);
-		
+
 		webDriver.setElementSelected(radioBtn);
 	}
 
@@ -209,9 +209,17 @@ public class RecordPanel extends GenericPage {
 
 	}
 
-	public int getSentenceLevel() throws Exception, Exception {
-		int level = Integer.valueOf(webDriver.waitForElement("sl", ByTypes.id)
-				.getAttribute("value"));
+	public int getSentenceLevel() throws Exception {
+		int level = 0;
+		try {
+			level = Integer.valueOf(webDriver.waitForElement("sl", ByTypes.id)
+					.getAttribute("value"));
+
+		} catch (Exception e) {
+			System.out.println("Problem getting sentence level");
+			webDriver.printScreen();
+		}
+
 		return level;
 	}
 

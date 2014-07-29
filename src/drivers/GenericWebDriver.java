@@ -222,9 +222,11 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			throws Exception {
 		waitForElement(idValue, byType, timeout, true, null).click();
 	}
+
 	public void waitForElementAndSendEnter(String idValue, ByTypes byType)
 			throws Exception {
-		waitForElement(idValue, byType, timeout, true, null).sendKeys(Keys.ENTER);
+		waitForElement(idValue, byType, timeout, true, null).sendKeys(
+				Keys.ENTER);
 	}
 
 	public WebElement waitForElement(String idValue, ByTypes byType,
@@ -581,14 +583,14 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			FileOutputStream fos = new FileOutputStream(new File(newFileName));
 			fos.write(decodedScreenshot);
 			fos.close();
+			System.out.println(path);
 
 		} catch (Exception e) {
 			report.report("Taking the screenshot failed: " + e.getStackTrace());
-		} finally {
-			report.addLink("Screenshot", path);
-
-			return path;
 		}
+		report.addLink("Screenshot", path);
+
+		return path;
 
 	}
 
@@ -766,12 +768,12 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	public void getElementLocation(WebElement element) {
 		Point p = element.getLocation();
-		System.out.println("X is: "+ p.getX()+" and Y is: "+p.getY());
+		System.out.println("X is: " + p.getX() + " and Y is: " + p.getY());
 	}
-	
-	public void setElementSelected(WebElement element)throws Exception{
+
+	public void setElementSelected(WebElement element) throws Exception {
 		element.click();
-	
+
 	}
 
 }
