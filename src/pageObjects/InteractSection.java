@@ -76,4 +76,9 @@ public class InteractSection extends GenericPage {
 
 	}
 
+	public  void checkText(String xpath, String text)throws Exception {
+		String actualText=webDriver.waitForElement(xpath, ByTypes.xpath,"instruction text not found").getText();
+		Assert.assertEquals("Text not found or do not match", text, actualText);
+	}
+
 }

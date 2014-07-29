@@ -15,6 +15,9 @@ import pageObjects.InteractSection;
 import tests.misc.EdusoftWebTest;
 
 public class SpeechRecognitonInteract1 extends EdusoftWebTest {
+	
+	
+	private final String instructionText0="Click on the arrow next to the character you would like to practice.";
 
 	@Before
 	public void setup() throws Exception {
@@ -39,10 +42,13 @@ public class SpeechRecognitonInteract1 extends EdusoftWebTest {
 		edoHomePage.clickOnCourseUnit(course.getCourseUnit());
 		edoHomePage.clickOntUnitComponent(course.getUnitComponent(),
 				"Interact 1");
-
-		startStep("Select right speaker");
 		InteractSection interactSection = new InteractSection(webDriver);
+	
+		startStep("Select right speaker");
+		
 		interactSection.approveFlash();
+		interactSection.checkText("//div[@class='questionInstructions']",instructionText0);
+
 		sleep(1);
 		interactSection.selectRightSpeaker();
 		sleep(1);
