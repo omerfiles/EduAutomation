@@ -782,4 +782,8 @@ public class EdoHomePage extends GenericPage {
 		webDriver.waitForElement("pf", ByTypes.id).click();
 		return new RecordPanel(webDriver);
 	}
+
+	public void clickOnVocabText(String text)throws Exception {
+		webDriver.waitForElement(text, ByTypes.id).click();
+	}
 }

@@ -151,7 +151,7 @@ public class RecoredYourself extends EdusoftWebTest {
 	public void testRecordPanelFromVacabulary() throws Exception {
 		startStep("Init test data");
 		Course course = pageHelper.initCouse(9);
-		String[] words = new String[] { "twenty-five" };
+		String[] words = new String[] { "twenty-one" };
 
 		List<String[]> wordsScoreList = new ArrayList<String[]>();
 		List<Integer> sentenceLevels = new ArrayList<Integer>();
@@ -162,7 +162,7 @@ public class RecoredYourself extends EdusoftWebTest {
 		edoHomePage.clickOnCourseByName(course.getName());
 		edoHomePage.clickOnCourseUnit(course.getCourseUnit());
 		edoHomePage.clickOntUnitComponent(course.getUnitComponent(), "Explore");
-
+		edoHomePage.clickOnVocabText("W0");
 		startStep("Click on recored yourself");
 
 		RecordPanel recordPanel = edoHomePage
