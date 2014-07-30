@@ -170,6 +170,7 @@ public class RecoredYourself extends EdusoftWebTest {
 		edoHomePage.switchToFrameByClassName("cboxIframe");
 
 		startStep("Check that the record panel opens");
+		sleep(3);
 		recordPanel.clickOnRecordAndStop(5);
 		String[] wordsScoring = textService.splitStringToArray(recordPanel
 				.getWordsScoring());
