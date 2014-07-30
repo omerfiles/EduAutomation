@@ -16,7 +16,7 @@ import drivers.ChromeWebDriver;
 import drivers.FirefoxWebDriver;
 import drivers.GenericWebDriver;
 
-public class RecordPanel extends GenericPage {
+public class RecordPanel extends SRpage {
 
 	String rating1Text = "0%-16%";
 	String rating2Text = "17%-33%";
@@ -106,32 +106,9 @@ public class RecordPanel extends GenericPage {
 		webDriver.waitForElement("btnHear", ByTypes.id).click();
 	}
 
-	public void checkWordsLevel(String[] words, String[] wordsScores,
-			TextService textService) throws Exception {
-		for (int i = 0; i < words.length; i++) {
-			CheckWordScore(words[i], Integer.valueOf(wordsScores[i]),
-					textService);
-		}
-	}
+	
 
-	public void CheckWordScore(String word, int expectedWordLevel,
-			TextService textService) throws Exception {
-		boolean found = false;
-		SRWordLevel wordLevel = null;
-		if (expectedWordLevel <= 2) {
-			wordLevel = SRWordLevel.failed;
-		} else if (expectedWordLevel > 2 && expectedWordLevel <= 4) {
-			wordLevel = SRWordLevel.pass;
-		} else if (expectedWordLevel > 4 && expectedWordLevel <= 6) {
-			wordLevel = SRWordLevel.success;
-		}
-		webDriver.waitForElement(
-				"//div[@id='txtOriginal']//div//span[@class='"
-						+ wordLevel.toString() + "'][contains(text(),"
-						+ textService.resolveAprostophes(word) + ")]",
-				ByTypes.xpath);
-
-	}
+	
 
 	public void checkSentenceScoreText(String expectedScore) throws Exception {
 		String actualSentenceScore = webDriver.waitForElement(
@@ -200,14 +177,7 @@ public class RecordPanel extends GenericPage {
 				.click();
 	}
 
-	public String getWordsScoring() throws Exception {
-		String str = webDriver.waitForElement("wl", ByTypes.id).getAttribute(
-				"value");
-		System.out.println("Random data is:" + str);
-		str = str.replace(",", "");
-		return str;
-
-	}
+	
 
 	public int getSentenceLevel() throws Exception {
 		int level = 0;

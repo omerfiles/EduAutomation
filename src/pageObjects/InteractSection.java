@@ -7,7 +7,7 @@ import org.openqa.selenium.WebElement;
 import Enums.ByTypes;
 import drivers.GenericWebDriver;
 
-public class InteractSection extends GenericPage {
+public class InteractSection extends SRpage {
 
 	public InteractSection(GenericWebDriver webDriver) {
 		super(webDriver);
@@ -15,14 +15,17 @@ public class InteractSection extends GenericPage {
 	}
 
 	public void selectRightSpeaker() throws Exception {
-
-		// WebElement element =
-		// webDriver.waitForElement("bgImgContainerWrapper",
-		// ByTypes.className);
 		WebElement speakerElement = webDriver.waitForElement(
-				"//div[@class='bgImgContainerWrapper']//div[3]//a", ByTypes.xpath);
+				"//div[@class='bgImgContainerWrapper']//div[3]//a",
+				ByTypes.xpath);
 		speakerElement.click();
-		
+	}
+
+	public void selectLeftSpeaker() throws Exception {
+		WebElement speakerElement = webDriver.waitForElement(
+				"//div[@class='bgImgContainerWrapper']//div[1]//a",
+				ByTypes.xpath);
+		speakerElement.click();
 	}
 
 	@Override
@@ -68,7 +71,7 @@ public class InteractSection extends GenericPage {
 	}
 
 	public void clickTheRestartButton() throws Exception {
-		webDriver.waitForElement("//a[@class='button startAgain']//span",
+		webDriver.waitForElement("//a[@class='button startAgain']",
 				ByTypes.xpath).click();
 	}
 
@@ -76,9 +79,36 @@ public class InteractSection extends GenericPage {
 
 	}
 
-	public  void checkText(String xpath, String text)throws Exception {
-		String actualText=webDriver.waitForElement(xpath, ByTypes.xpath,"instruction text not found").getText();
+	public void checkInstructionText( String text) throws Exception {
+		String actualText = webDriver.waitForElement("//div[@class='questionInstructions']", ByTypes.xpath,
+				"instruction text not found").getText();
 		Assert.assertEquals("Text not found or do not match", text, actualText);
+	}
+
+	public void checkThatSpeakerTextIsHighlighted(int speaker) throws Exception {
+		// right speaker{
+		if (speaker == 1) {
+			webDriver
+					.waitForElement(
+							"//div[@class='recordingPanelWrapper']//div[1][contains(@class,'selected')]",
+							ByTypes.xpath);
+		}
+		// left speaker
+		if (speaker == 2) {
+			webDriver
+					.waitForElement(
+							"//div[@class='recordingPanelWrapper']//div[2][contains(@class,'selected')]",
+							ByTypes.xpath);
+
+		}
+
+	}
+
+	public void checkThatStartButtonIsDisabled() throws Exception {
+		WebElement startButton = webDriver.waitForElement("Start",
+				ByTypes.linkText);
+		Assert.assertTrue(startButton.getAttribute("class")
+				.contains("disable") == false);
 	}
 
 }

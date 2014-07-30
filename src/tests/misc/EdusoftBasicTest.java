@@ -45,6 +45,8 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 
 		// ctx = new ClassPathXmlApplicationContext("beans.xml");
 
+		System.out.println("url from maven command line: "+System.getProperty( "URL"));
+		
 		ctx = new ClassPathXmlApplicationContext("beans.xml");
 		configuration = (Configuration) ctx.getBean("configuration");
 		// webDriver=(GenericWebDriver)ctx.getBean("GenericWebDriver");

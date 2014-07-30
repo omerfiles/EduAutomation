@@ -35,6 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import Enums.ByTypes;
+import Enums.TestRunnerType;
 import services.DbService;
 import jsystem.framework.report.Reporter;
 import jsystem.framework.system.SystemObjectImpl;
@@ -75,7 +76,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		if (remoteMachine == null) {
 
 			// getting remote machine from pom file
-			
+
 			remoteMachine = System.getProperty("remote.machine");
 		}
 		if (remoteMachine == null) {
@@ -565,25 +566,31 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		String path = null;
 		String newFileName = null;
 		try {
-			// if (level.equals(configuration.getProperty("logLevel"))) {
 			WebDriver driver = webDriver;
 			driver = new Augmenter().augment(driver);
 			byte[] decodedScreenshot = org.apache.commons.codec.binary.Base64
 					.decodeBase64(((TakesScreenshot) driver).getScreenshotAs(
 							OutputType.BASE64).getBytes());
-			// InetAddress inetAddress = InetAddress.getLocalHost();
+			TestRunnerType runner = getTestRunner();
 
-			newFileName = System.getProperty("user.dir") + "/log//current/"
-					+ "ScreenShot" + message.replace(" ", "") + sig + ".png";
-			path = System.getProperty("user.dir") + "//" + "log//current/";
-			// path = configuration.getProperty("logserver") + "//"
-			// + configuration.getProperty("screenshotFolder");
+			// If test is running using jenkins ci
+			if (runner == TestRunnerType.CI) {
 
-			path = path + sig + ".png";
+				newFileName = configuration.getProperty("logserver") + "\\\\"
+						+ configuration.getProperty("screenshotFolder")
+						+ "\\\\ScreenShot" + message.replace(" ", "") + sig
+						+ ".png";
+			} else if (runner == TestRunnerType.local) {
+				newFileName = System.getProperty("user.dir") + "/log//current/"
+						+ "ScreenShot" + message.replace(" ", "") + sig
+						+ ".png";
+				path = System.getProperty("user.dir") + "//" + "log//current//"
+						+ "ScreenShot" + message.replace(" ", "") + sig;
+			}
 			FileOutputStream fos = new FileOutputStream(new File(newFileName));
 			fos.write(decodedScreenshot);
 			fos.close();
-			System.out.println(path);
+			System.out.println(newFileName);
 
 		} catch (Exception e) {
 			report.report("Taking the screenshot failed: " + e.getStackTrace());
@@ -774,6 +781,17 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	public void setElementSelected(WebElement element) throws Exception {
 		element.click();
 
+	}
+
+	public TestRunnerType getTestRunner() {
+		// if test is run in debug/development
+		TestRunnerType testRunner;
+		if (System.getProperty("remote.machine") != null) {
+			testRunner = TestRunnerType.CI;
+		} else
+			testRunner = TestRunnerType.local;
+
+		return testRunner;
 	}
 
 }
