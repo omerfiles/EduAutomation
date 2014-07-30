@@ -356,6 +356,10 @@
 							</dependency>
 						</dependencies>
 						<configuration>
+							<properties>
+								<url>${URL}</url>
+								<browser>${browserCMD}</browser>
+							</properties>
 							<systemProperties>
 								<property>
 									<name>browser</name>
@@ -392,8 +396,9 @@
 						<artifactId>maven-surefire-plugin</artifactId>
 						<version>2.17</version>
 						<configuration>
-							<properties>
-
+						<properties>
+								<url>${URL}</url>
+								<browser>${browserCMD}</browser>
 							</properties>
 
 							<systemProperties>
@@ -451,7 +456,8 @@
 						<version>2.17</version>
 						<configuration>
 							<properties>
-							<url>${URL}</url>	
+								<url>${URL}</url>
+								<browser>${browserCMD}</browser>
 							</properties>
 
 							<systemProperties>
@@ -513,6 +519,8 @@
 						<version>2.17</version>
 						<configuration>
 							<properties>
+								<url>${URL}</url>
+								<browser>${browserCMD}</browser>
 							</properties>
 							<systemProperties>
 								<property>

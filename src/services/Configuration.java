@@ -23,6 +23,7 @@ public class Configuration {
 	public Configuration() {
 		InputStream input = null;
 		InputStream globaConfigInput = null;
+
 		try {
 			globaConfigInput = new FileInputStream(
 					"files/properties/global.properties");
@@ -38,12 +39,17 @@ public class Configuration {
 
 			// try to get properties file name from pom profile
 			localPropertiesFile = System.getProperty("envFile");
+			System.out
+					.println("Got envFile propery from pom profile. EnvFile is: "
+							+ localPropertiesFile);
 
-			globalProperties.load(globaConfigInput);
 			// if local properties files does not exist in the pom xml, get if
 			// from the global properties file
-			if (localPropertiesFile==null) {
+			if (localPropertiesFile == null) {
+				globalProperties.load(globaConfigInput);
 				localPropertiesFile = getGlobalProperties("envFile");
+				System.out
+						.println("Got envFile propery from Global config file");
 			}
 
 			// input = new FileInputStream("files/properties/QA/"

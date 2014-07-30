@@ -40,7 +40,7 @@ public class SRpage extends GenericPage {
 				ByTypes.xpath);
 
 	}
-	public void checkWordsLevel(String[] words, String[] wordsScores,
+	public void checkWordsLevels(String[] words, String[] wordsScores,
 			TextService textService) throws Exception {
 		for (int i = 0; i < words.length; i++) {
 			CheckWordScore(words[i], Integer.valueOf(wordsScores[i]),

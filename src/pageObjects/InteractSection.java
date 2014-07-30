@@ -79,8 +79,9 @@ public class InteractSection extends SRpage {
 
 	}
 
-	public void checkInstructionText( String text) throws Exception {
-		String actualText = webDriver.waitForElement("//div[@class='questionInstructions']", ByTypes.xpath,
+	public void checkInstructionText(String text) throws Exception {
+		String actualText = webDriver.waitForElement(
+				"//div[@class='questionInstructions']", ByTypes.xpath,
 				"instruction text not found").getText();
 		Assert.assertEquals("Text not found or do not match", text, actualText);
 	}
@@ -107,8 +108,14 @@ public class InteractSection extends SRpage {
 	public void checkThatStartButtonIsDisabled() throws Exception {
 		WebElement startButton = webDriver.waitForElement("Start",
 				ByTypes.linkText);
-		Assert.assertTrue(startButton.getAttribute("class")
-				.contains("disable") == false);
+		Assert.assertTrue(startButton.getAttribute("class").contains("disable") == false);
+	}
+
+	public String getDebugScore() throws Exception {
+		String score = webDriver.waitForElement("debugScore", ByTypes.id)
+				.getText();
+		return score;
+
 	}
 
 }

@@ -25,6 +25,12 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 	@Override
 	public void setup() throws Exception {
 		super.setup();
+		
+		//check if maven command line has a browser
+		browser=System.getProperty("browserCMD");
+		if(browser!=null){
+			System.out.println("Got borwser from maven cmd: "+browser);
+		}
 		System.out.println("remote machine: "
 				+ System.getProperty("remote.machine"));
 		if (browser == null) {

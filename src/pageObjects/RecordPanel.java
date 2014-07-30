@@ -270,7 +270,7 @@ public class RecordPanel extends SRpage {
 
 	}
 
-	public void checkSendStutusMessage() throws Exception {
+	public void checkSendStatusMessage() throws Exception {
 		String message = webDriver.waitForElement("divSendStatus", ByTypes.id)
 				.getText();
 		Assert.assertTrue(message

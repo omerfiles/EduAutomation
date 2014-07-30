@@ -60,7 +60,7 @@ public class RecoredYourself extends EdusoftWebTest {
 			// to do: check SL for added entry in the list
 			recordPanel.checkAddedRecordingToList(sentenceLevel, i);
 
-			recordPanel.checkWordsLevel(words, wordsScoring, textService);
+			recordPanel.checkWordsLevels(words, wordsScoring, textService);
 		}
 
 		startStep("Select each recording from the list and check Sentence level annd word level");
@@ -69,7 +69,7 @@ public class RecoredYourself extends EdusoftWebTest {
 			int index = i + 1;
 			recordPanel.selectRecording(String.valueOf(index));
 			recordPanel
-					.checkWordsLevel(words, recWordLevel.get(i), textService);
+					.checkWordsLevels(words, recWordLevel.get(i), textService);
 			recordPanel.checkSentenceScoreRatingText(sentenceLevels.get(i));
 
 		}
@@ -114,7 +114,7 @@ public class RecoredYourself extends EdusoftWebTest {
 		}
 		startStep("try to add the 9th recording");
 		recordPanel.clickOnRecordButton();
-		recordPanel.checkSendStutusMessage();
+		recordPanel.checkSendStatusMessage();
 		recordPanel.clickOnSendStatusCancelButton();
 		recordPanel.clickOnRecordButton();
 		recordPanel.clickOnSendStatusRecordButton();
@@ -138,7 +138,7 @@ public class RecoredYourself extends EdusoftWebTest {
 			System.out.println("Index is: "+index);
 			recordPanel.selectRecording(String.valueOf(index));
 			sleep(1);
-			recordPanel.checkWordsLevel(words, wordsScoreList.get(i),
+			recordPanel.checkWordsLevels(words, wordsScoreList.get(i),
 					textService);
 			recordPanel.checkSentenceScoreRatingText(sentenceLevels.get(i));
 
@@ -180,7 +180,7 @@ public class RecoredYourself extends EdusoftWebTest {
 		recordPanel.checkSentenceScoreRatingText(sentenceLevel);
 		recordPanel.checckSentenceLevelLightBulbs(sentenceLevel);
 		recordPanel.checkAddedRecordingToList(sentenceLevel, 0);
-		recordPanel.checkWordsLevel(words, wordsScoring, textService);
+		recordPanel.checkWordsLevels(words, wordsScoring, textService);
 	}
 
 	// Test case 13440
@@ -235,7 +235,7 @@ public class RecoredYourself extends EdusoftWebTest {
 		recordPanel.checkSentenceScoreRatingText(sentenceLevel);
 		recordPanel.checckSentenceLevelLightBulbs(sentenceLevel);
 		recordPanel.checkAddedRecordingToList(sentenceLevel, 0);
-		recordPanel.checkWordsLevel(words, wordsScoring, textService);
+		recordPanel.checkWordsLevels(words, wordsScoring, textService);
 	}
 
 	@After

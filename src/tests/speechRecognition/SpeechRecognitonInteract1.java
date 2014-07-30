@@ -70,7 +70,8 @@ public class SpeechRecognitonInteract1 extends EdusoftWebTest {
 		sleep(3);
 		
 		startStep("Check the words level of the recording");
-		
+		String[]wordLevels=textService.splitStringToArray(interactSection.getDebugScore());
+		interactSection.checkWordsLevels(words, wordLevels, textService);
 		
 		startStep("Click on restart and select left speaker");
 		sleep(15);
