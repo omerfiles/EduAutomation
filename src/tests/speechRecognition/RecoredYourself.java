@@ -51,7 +51,7 @@ public class RecoredYourself extends EdusoftWebTest {
 		for (int i = 0; i < numOfRecordingsInTest; i++) {
 			recordPanel.clickOnRecordAndStop(10);
 			String[] wordsScoring = textService.splitStringToArray(recordPanel
-					.getWordsScoring());
+					.getWordsScoring("wl"));
 			recWordLevel.add(wordsScoring);
 			int sentenceLevel = recordPanel.getSentenceLevel();
 			sentenceLevels.add(sentenceLevel);
@@ -106,7 +106,7 @@ public class RecoredYourself extends EdusoftWebTest {
 		for (int i = 0; i < numOfRecordingsInTest; i++) {
 			recordPanel.clickOnRecordAndStop(10);
 			String[] wordsScoring = textService.splitStringToArray(recordPanel
-					.getWordsScoring());
+					.getWordsScoring("wl"));
 			wordsScoreList.add(wordsScoring);
 			int sentenceLevel = recordPanel.getSentenceLevel();
 			sentenceLevels.add(sentenceLevel);
@@ -123,7 +123,7 @@ public class RecoredYourself extends EdusoftWebTest {
 		recordPanel.clickOnRecordAndStop(5);
 		wordsScoreList.remove(0);
 		String[] wordsScoring = textService.splitStringToArray(recordPanel
-				.getWordsScoring());
+				.getWordsScoring("wl"));
 		wordsScoreList.add(wordsScoring);
 
 		int sentenceLevel = recordPanel.getSentenceLevel();
@@ -173,7 +173,7 @@ public class RecoredYourself extends EdusoftWebTest {
 		sleep(3);
 		recordPanel.clickOnRecordAndStop(5);
 		String[] wordsScoring = textService.splitStringToArray(recordPanel
-				.getWordsScoring());
+				.getWordsScoring("wl"));
 		wordsScoreList.add(wordsScoring);
 		int sentenceLevel = recordPanel.getSentenceLevel();
 		sentenceLevels.add(sentenceLevel);
@@ -228,7 +228,7 @@ public class RecoredYourself extends EdusoftWebTest {
 		startStep("Click on record and send audio file to microphone");
 		recordPanel.clickOnRecordAndStop(5);
 		String[] wordsScoring = textService.splitStringToArray(recordPanel
-				.getWordsScoring());
+				.getWordsScoring("wl"));
 		
 		int sentenceLevel = recordPanel.getSentenceLevel();
 		sentenceLevels.add(sentenceLevel);

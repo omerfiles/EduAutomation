@@ -130,15 +130,23 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 				null);
 	}
 
-	@SuppressWarnings("finally")
 	public WebElement waitForElement(String idValue, ByTypes byType,
 			int timeout, boolean isElementMandatory, String message)
+			throws Exception {
+
+		return waitForElement(idValue, byType, timeout, isElementMandatory,
+				message, 1000);
+	}
+
+	@SuppressWarnings("finally")
+	public WebElement waitForElement(String idValue, ByTypes byType,
+			int timeout, boolean isElementMandatory, String message, int sleepMS)
 			throws Exception {
 		report.startLevel("waiting for element " + idValue + " by trpe "
 				+ byType + " for " + timeout + " seconds");
 		WebElement element = null;
 		try {
-			WebDriverWait wait = new WebDriverWait(webDriver, timeout, 1000);
+			WebDriverWait wait = new WebDriverWait(webDriver, timeout, sleepMS);
 
 			switch (byType) {
 			case className:
@@ -178,13 +186,6 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 		} catch (Exception e) {
 			if (isElementMandatory == true) {
-				// printScreen("Element " + idValue +
-				// " not found. See screen shot");
-				// Assert.fail("Element: " + idValue + " was not found after "
-				// + timeout + "seconds");
-				// failCause.append("Element: " + idValue + " was not found");
-
-				// this.isPass=false;
 			}
 
 		} finally {
@@ -245,6 +246,27 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 			Assert.fail("Element not found or element is not Clickable");
 		}
+	}
+
+	public void waitUntilElementExist(String idValue, ByTypes byType,
+			int timeOut) throws Exception {
+
+		boolean exist = false;
+		int elapsedTime = 0;
+		while (elapsedTime < timeOut) {
+			try {
+				WebDriverWait wait = new WebDriverWait(webDriver, timeOut, 200);
+				wait.until(ExpectedConditions
+						.visibilityOfAllElementsLocatedBy(By.xpath(idValue)));
+				webDriver.findElement(By.xpath(idValue));
+				exist = true;
+				break;
+			} catch (Exception e) {
+				Thread.sleep(100);
+			}
+
+		}
+
 	}
 
 	public void assertTextBy(String idValue, String byType, String text)
@@ -331,7 +353,6 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	public void sendKey(Keys keys, int iterations) throws Exception {
 		for (int i = 0; i < iterations; i++) {
-			// printScreen(Integer.toString(i));
 			sendKey(keys);
 
 		}
@@ -464,15 +485,10 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			throws Exception {
 		boolean elementFound = false;
 		try {
-
-			// WebDriverWait wait = new WebDriverWait(webDriver, timeout, 1000);
-			// wait.until(ExpectedConditions.visibilityOfElementLocated(By
-			// .xpath(xpath)));
 			WebElement element = waitForElement(xpath, ByTypes.xpath, false, 10);
 			if (element != null) {
 				elementFound = true;
 			}
-			// printScreen("Element was found when it should not");
 
 		} catch (Exception e) {
 			report.report("Exceptin found during checkElementNotExist");
@@ -777,12 +793,12 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	public TestRunnerType getTestRunner() {
 		// if test is run in debug/development
-		TestRunnerType testRunner;
+		TestRunnerType testRunner = null;
 		if (System.getProperty("remote.machine") != null) {
 			testRunner = TestRunnerType.CI;
-		} else
+		} else if (System.getProperty("remote.machine") == null) {
 			testRunner = TestRunnerType.local;
-
+		}
 		return testRunner;
 	}
 

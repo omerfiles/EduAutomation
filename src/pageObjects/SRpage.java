@@ -48,8 +48,8 @@ public class SRpage extends GenericPage {
 		}
 	}
 	
-	public String getWordsScoring() throws Exception {
-		String str = webDriver.waitForElement("wl", ByTypes.id).getAttribute(
+	public String getWordsScoring(String elementId) throws Exception {
+		String str = webDriver.waitForElement(elementId, ByTypes.id).getAttribute(
 				"value");
 		System.out.println("Random data is:" + str);
 		str = str.replace(",", "");

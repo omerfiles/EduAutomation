@@ -359,6 +359,7 @@
 							<properties>
 								<url>${URL}</url>
 								<browser>${browserCMD}</browser>
+								<student>${student}</student>
 							</properties>
 							<systemProperties>
 								<property>
@@ -396,9 +397,11 @@
 						<artifactId>maven-surefire-plugin</artifactId>
 						<version>2.17</version>
 						<configuration>
-						<properties>
+							<properties>
 								<url>${URL}</url>
 								<browser>${browserCMD}</browser>
+								<student>${student}</student>
+								<teacher>${teacher}</teacher>
 							</properties>
 
 							<systemProperties>
@@ -458,6 +461,8 @@
 							<properties>
 								<url>${URL}</url>
 								<browser>${browserCMD}</browser>
+								<student>${student}</student>
+								<teacher>${teacher}</teacher>
 							</properties>
 
 							<systemProperties>
@@ -484,6 +489,7 @@
 							<testClassesDirectory>${project.basedir}/target/classes/</testClassesDirectory>
 							<includes>
 								<include>**/RecoredYourself.java</include>
+								<include>**/SpeechRecognitonInteract1.java</include>
 
 
 							</includes>
@@ -521,6 +527,8 @@
 							<properties>
 								<url>${URL}</url>
 								<browser>${browserCMD}</browser>
+								<student>${student}</student>
+								<teacher>${teacher}</teacher>
 							</properties>
 							<systemProperties>
 								<property>
@@ -545,7 +553,7 @@
 							<testClassesDirectory>${project.basedir}/target/classes/</testClassesDirectory>
 							<includes>
 								<include>**/RecoredYourself.java</include>
-
+								<include>**/SpeechRecognitonInteract1.java</include>
 
 							</includes>
 

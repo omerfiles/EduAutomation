@@ -48,6 +48,8 @@ public class PageHelperService extends SystemObjectImpl {
 	private boolean edoLogoutNeeded;
 	private boolean tmsLogoutNeeded;
 	private AutoInstitution autoInstitution;
+	private Student student;
+	private Teacher teacher;
 
 	public PageHelperService() {
 
@@ -59,6 +61,23 @@ public class PageHelperService extends SystemObjectImpl {
 		this.autoInstitution = autoInstitution;
 		courses = loadCoursedDetailsFromCsv();
 		recordings = loadRecordings();
+		student = new Student();
+		teacher = new Teacher();
+
+		// check if student parameter is in maven command line
+		if (System.getProperty("student") != null) {
+			student.setUserName(System.getProperty("student"));
+		} else {
+			student.setUserName(configuration.getProperty("student.user.name"));
+		}
+		student.setPassword(configuration.getProperty("student.user.password"));
+
+		if (System.getProperty("teacher") != null) {
+			teacher.setUserName(System.getProperty("teacher"));
+		} else {
+			teacher.setUserName(configuration.getProperty("teacher.username"));
+		}
+		teacher.setPassword(configuration.getProperty("teacher.password"));
 
 	}
 
@@ -66,9 +85,7 @@ public class PageHelperService extends SystemObjectImpl {
 
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
-		Student student = new Student();
-		student.setUserName(configuration.getProperty("student.user.name"));
-		student.setPassword(configuration.getProperty("student.user.password"));
+
 		setUserLoginToNull(dbService.getUserIdByUserName(student.getUserName(),
 				autoInstitution.getInstitutionId()));
 		EdoHomePage edoHomePage = edoLoginPage.login(student);
@@ -80,8 +97,7 @@ public class PageHelperService extends SystemObjectImpl {
 	public EdoHomePage loginAsTeacher() throws Exception {
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
-		Teacher teacher = new Teacher();
-		teacher.setUserName(configuration.getProperty("teacher.username"));
+
 		teacher.setPassword(configuration.getProperty("teacher.password"));
 		setUserLoginToNull(dbService.getUserIdByUserName(teacher.getUserName(),
 				autoInstitution.getInstitutionId()));
@@ -249,6 +265,14 @@ public class PageHelperService extends SystemObjectImpl {
 		Collections.shuffle(list, new Random(seed));
 		return list;
 
+	}
+
+	public Student getStudent() {
+		return student;
+	}
+
+	public Teacher getTeacher() {
+		return teacher;
 	}
 
 }

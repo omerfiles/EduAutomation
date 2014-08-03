@@ -4,10 +4,30 @@ import org.junit.Assert;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
+import services.TextService;
 import Enums.ByTypes;
+import Enums.InteractStatus;
+import Enums.SRWordLevel;
 import drivers.GenericWebDriver;
 
 public class InteractSection extends SRpage {
+
+	public final String instructionText0 = "Click on the arrow next to the character you would like to practice.";
+	public final String instructionText1 = "Click 'Start' to begin the conversation.";
+	public final String instructionText2 = "Click 'Hear all' to hear the whole conversation. ";
+	public final String instructionText3 = "Listen to the first speaker and prepare to speak.";
+	public final String instructionText4 = "Prepare to speak.";
+	public final String instructionText5 = "Speak now.";
+	public final String instructionText6 = "Click 'Try again' to repeat your response.";
+	public final String instructionText7 = "Your answer is unclear. Let's move on… ";
+	public final String instructionText8 = "Click 'Start' to begin the conversation.";
+	public final String instructionText9 = "Good! Let's move on...";
+	public final String instructionText10 = "You have completed the conversation. Click ‘See feedback’ below to view detailed feedback on your responses.";
+	public final String instructionText11 = "Listen to the response.";
+	public final String instructionText12 = "Start";
+	public final String instructionText13 = "Try again";
+	public final String instructionText14 = "See feedback";
+	public final String instructionText20 = "Listen to the first speaker and choose a response.";
 
 	public InteractSection(GenericWebDriver webDriver) {
 		super(webDriver);
@@ -111,11 +131,98 @@ public class InteractSection extends SRpage {
 		Assert.assertTrue(startButton.getAttribute("class").contains("disable") == false);
 	}
 
-	public String getDebugScore() throws Exception {
-		String score = webDriver.waitForElement("debugScore", ByTypes.id)
-				.getText();
-		return score;
+	public void checkStatus(InteractStatus status, int speaker)
+			throws Exception {
+		webDriver.waitForElement("//div[@class='recordingPanelWrapper']//div["
+				+ speaker + "][contains(@class,'" + status.toString() + "')]",
+				ByTypes.xpath);
+	}
 
+	public String[] getCurrentSpeakerText(int speaker, TextService textService)
+			throws Exception {
+		String text = null;
+		text = webDriver.waitForElement(
+				"//div[@class='recordingPanelWrapper']//div[" + speaker
+						+ "]//div", ByTypes.xpath).getText();
+		System.out.println("words text is: " + text);
+		text = text.substring(1, text.length());
+		String[] words = textService.splitStringToArray(text, "\\s+");
+		return words;
+	}
+
+	public void waitUntilStatusChanges(int speaker, InteractStatus after,
+			int timeOut) throws Exception {
+		long timeBefore = System.currentTimeMillis();
+		webDriver.waitForElement("//div[@class='recordingPanelWrapper']//div["
+				+ speaker + "][contains(@class,'" + after.toString() + "')]",
+				ByTypes.xpath);
+		WebElement afterElement = webDriver.waitForElement(
+				"//div[@class='recordingPanelWrapper']//div[" + speaker
+						+ "][contains(@class,'" + after.toString() + "')]",
+				ByTypes.xpath, timeOut, true, null, 250);
+		webDriver.printScreen("StatusChangedTo" + after.toString());
+		Assert.assertNotNull("Status did not changed", afterElement);
+		long timeAfter = System.currentTimeMillis();
+		long time = timeAfter - timeBefore;
+		System.out.println("Changed after :" + time + " ms");
+		Assert.assertTrue("Status did not changed in time",
+				time < timeOut * 1100);
+
+	}
+
+	public void waitUntilRecordingEnds(int timeOut, int speaker)
+			throws Exception {
+		webDriver.printScreen("Checking of recording ended");
+		long timeBefore = System.currentTimeMillis();
+		webDriver.waitForElement("//div[@class='recordingPanelWrapper']//div["
+				+ speaker + "]//div//div//div//span", ByTypes.xpath);
+		webDriver.printScreen("recording ended");
+		long timeAfter = System.currentTimeMillis();
+		long time = timeAfter - timeBefore;
+		System.out.println("Changed after :" + time + " ms");
+		Assert.assertTrue("Status did not changed in time",
+				time < timeOut * 1100);
+
+	}
+
+	public void checkInteractWordsLevels(String[] words, String[] wordLevels,
+			TextService textService, int speaker) throws NumberFormatException,
+			Exception {
+		for (int i = 0; i < words.length; i++) {
+			CheckInteractWordScore(words[i], Integer.valueOf(wordLevels[i]),
+					textService, speaker);
+		}
+
+	}
+
+	private void CheckInteractWordScore(String word, int expectedWordLevel,
+			TextService textService, int speaker) throws Exception {
+		boolean found = false;
+		SRWordLevel wordLevel = null;
+		if (expectedWordLevel <= 2) {
+			wordLevel = SRWordLevel.failed;
+		} else if (expectedWordLevel > 2 && expectedWordLevel <= 4) {
+			wordLevel = SRWordLevel.pass;
+		} else if (expectedWordLevel > 4 && expectedWordLevel <= 6) {
+			wordLevel = SRWordLevel.success;
+		}
+		webDriver.waitForElement("//div[@class='recordingPanelWrapper']//div["
+				+ speaker + "]//div//div//div//span[contains(text(),"
+				+ textService.resolveAprostophes(word) + ")]", ByTypes.xpath);
+
+	}
+
+	public void clickInteract2StartButtn() throws Exception {
+		webDriver.waitForElement("Start", ByTypes.linkText).click();
+
+	}
+
+	public void checkThatSpeakerTextIsHighlighted() throws Exception{
+		webDriver.waitForElement("//div[@class='mediaContainer']//div[1][contains(@class,'speaker')]", ByTypes.xpath);
+		
+	}
+	public void checkInteract2Status(InteractStatus status)throws Exception{
+//		webDriver.waitForElement("//div[@class='speakingInteract']//div[2], byType)
 	}
 
 }
