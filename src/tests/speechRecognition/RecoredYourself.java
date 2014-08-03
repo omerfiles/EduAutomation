@@ -78,6 +78,7 @@ public class RecoredYourself extends EdusoftWebTest {
 		// recordPanel.clickOnPlayButton();
 		sleep(10);
 		recordPanel.clickOnSendToTeacher();
+		recordPanel.checkSendToTeacherText();
 	}
 
 	@Test

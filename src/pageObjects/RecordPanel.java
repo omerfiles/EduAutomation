@@ -106,10 +106,6 @@ public class RecordPanel extends SRpage {
 		webDriver.waitForElement("btnHear", ByTypes.id).click();
 	}
 
-	
-
-	
-
 	public void checkSentenceScoreText(String expectedScore) throws Exception {
 		String actualSentenceScore = webDriver.waitForElement(
 				"//div[@class='srPanelScoreWrapper']//div[1]//div[1]",
@@ -176,8 +172,6 @@ public class RecordPanel extends SRpage {
 		webDriver.waitForElement("//div[@id='btnSendTT']//a", ByTypes.xpath)
 				.click();
 	}
-
-	
 
 	public int getSentenceLevel() throws Exception {
 		int level = 0;
@@ -292,6 +286,16 @@ public class RecordPanel extends SRpage {
 				"//div[@id='btnOK4Send']//a", ByTypes.xpath);
 		Assert.assertEquals("Record", element.getText());
 		element.click();
+
+	}
+
+	public void checkSendToTeacherText() throws Exception {
+		String text = webDriver.waitForElement("divSendStatus", ByTypes.id)
+				.getText();
+		Assert.assertArrayEquals(
+				"Text does not match",
+				new String[] { "You have sent the maximum (2) number of recordings for this lesson. If you send this recording, your first sent recording will be deleted." },
+				new String[] { text });
 
 	}
 

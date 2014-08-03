@@ -47,7 +47,7 @@ public class SpeechRecognitonInteract1 extends EdusoftWebTest {
 		startStep("Select right speaker");
 		
 //		interactSection.approveFlash();
-		interactSection.checkInstructionText(interactSection.instructionText10);
+		interactSection.checkInstructionText(interactSection.instructionText0);
 
 		sleep(1);
 		interactSection.selectRightSpeaker();
@@ -84,14 +84,14 @@ public class SpeechRecognitonInteract1 extends EdusoftWebTest {
 		
 		
 		startStep("Wait for next recording");
-		interactSection.waitUntilStatusChanges(1,InteractStatus.speaker,2);
+		interactSection.waitUntilStatusChanges(1,InteractStatus.speaker,5);
 		interactSection.checkInstructionText( interactSection.instructionText3);
-		interactSection.waitUntilStatusChanges(2,InteractStatus.counter,3);
+		interactSection.waitUntilStatusChanges(2,InteractStatus.counter,5);
 		interactSection.checkInstructionText( interactSection.instructionText4);
-		interactSection.waitUntilStatusChanges(2,InteractStatus.recorder,3);
+		interactSection.waitUntilStatusChanges(2,InteractStatus.recorder,5);
 		interactSection.checkInstructionText( interactSection.instructionText5);
 		sleep(1);
-		interactSection.waitUntilRecordingEnds(4,2);
+		interactSection.waitUntilRecordingEnds(5,2);
 		interactSection.checkInstructionText( interactSection.instructionText10);
 		sleep(1);
 		
