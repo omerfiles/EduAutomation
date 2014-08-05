@@ -578,24 +578,24 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			TestRunnerType runner = getTestRunner();
 
 			// If test is running using jenkins ci
-			if (runner == TestRunnerType.CI) {
+			if (runner == TestRunnerType.local) {
 
 				newFileName = configuration.getProperty("logserver") + "\\\\"
 						+ configuration.getProperty("screenshotFolder")
 						+ "\\\\ScreenShot" + message.replace(" ", "") + sig
 						+ ".png";
-				
-				path= configuration.getProperty("logserver") + "\\"
-						+ configuration.getProperty("screenshotFolder")
-						+ "\\ScreenShot" + message.replace(" ", "") + sig
-						+ ".png";
-			} else if (runner == TestRunnerType.local) {
-				newFileName = System.getProperty("user.dir") + "/log//current/"
-						+ "ScreenShot" + message.replace(" ", "") + sig
-						+ ".png";
-				path = System.getProperty("user.dir") + "//" + "log//current//"
-						+ "ScreenShot" + message.replace(" ", "") + sig+ ".png";
+
+				path ="http://"+ configuration.getProperty("logserver").replace("\\", "") + "/"
+						+ configuration.getProperty("webFolder") + "/ScreenShot"
+						+ message.replace(" ", "") + sig + ".png";
 			}
+			// } else if (runner == TestRunnerType.local) {
+			// newFileName = System.getProperty("user.dir") + "/log//current/"
+			// + "ScreenShot" + message.replace(" ", "") + sig
+			// + ".png";
+			// path = System.getProperty("user.dir") + "//" + "log//current//"
+			// + "ScreenShot" + message.replace(" ", "") + sig+ ".png";
+			// }
 			FileOutputStream fos = new FileOutputStream(new File(newFileName));
 			fos.write(decodedScreenshot);
 			fos.close();
