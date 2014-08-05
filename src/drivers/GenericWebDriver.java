@@ -193,8 +193,6 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 				if (message != null) {
 					report.report(message);
 				}
-
-				// printScreen("Element: " + idValue + " not found");
 				Assert.fail("Element: " + idValue + " not found");
 			}
 			report.stopLevel();
@@ -294,8 +292,6 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			// current.equals(text));
 			report.report("Asserting " + text + " in " + idValue);
 		} catch (Exception e) {
-			// printScreen();
-			// printScreen("Text assertion failed");
 			Assert.fail("Text assertion failed. Xpath was: " + idValue
 					+ " . Text to assert was: " + text + ". Actual text was: "
 					+ current);
@@ -588,20 +584,25 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 						+ configuration.getProperty("screenshotFolder")
 						+ "\\\\ScreenShot" + message.replace(" ", "") + sig
 						+ ".png";
+				
+				path= configuration.getProperty("logserver") + "\\"
+						+ configuration.getProperty("screenshotFolder")
+						+ "\\ScreenShot" + message.replace(" ", "") + sig
+						+ ".png";
 			} else if (runner == TestRunnerType.local) {
 				newFileName = System.getProperty("user.dir") + "/log//current/"
 						+ "ScreenShot" + message.replace(" ", "") + sig
 						+ ".png";
 				path = System.getProperty("user.dir") + "//" + "log//current//"
-						+ "ScreenShot" + message.replace(" ", "") + sig;
+						+ "ScreenShot" + message.replace(" ", "") + sig+ ".png";
 			}
 			FileOutputStream fos = new FileOutputStream(new File(newFileName));
 			fos.write(decodedScreenshot);
 			fos.close();
-			System.out.println(newFileName);
+			System.out.println(path);
 
 		} catch (Exception e) {
-			report.report("Taking the screenshot failed: " + e.getStackTrace());
+			report.report("Taking the screenshot failed: " + e.toString());
 		}
 		report.addLink("Screenshot", path);
 
