@@ -578,7 +578,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			TestRunnerType runner = getTestRunner();
 
 			// If test is running using jenkins ci
-			if (runner == TestRunnerType.local) {
+			if (runner == TestRunnerType.CI) {
 
 				newFileName = configuration.getProperty("logserver") + "\\\\"
 						+ configuration.getProperty("screenshotFolder")
@@ -588,14 +588,14 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 				path ="http://"+ configuration.getProperty("logserver").replace("\\", "") + "/"
 						+ configuration.getProperty("webFolder") + "/ScreenShot"
 						+ message.replace(" ", "") + sig + ".png";
-			}
-			// } else if (runner == TestRunnerType.local) {
-			// newFileName = System.getProperty("user.dir") + "/log//current/"
-			// + "ScreenShot" + message.replace(" ", "") + sig
-			// + ".png";
-			// path = System.getProperty("user.dir") + "//" + "log//current//"
-			// + "ScreenShot" + message.replace(" ", "") + sig+ ".png";
-			// }
+			
+			 } else if (runner == TestRunnerType.local) {
+			 newFileName = System.getProperty("user.dir") + "/log//current/"
+			 + "ScreenShot" + message.replace(" ", "") + sig
+			 + ".png";
+			 path = System.getProperty("user.dir") + "//" + "log//current//"
+			 + "ScreenShot" + message.replace(" ", "") + sig+ ".png";
+			 }
 			FileOutputStream fos = new FileOutputStream(new File(newFileName));
 			fos.write(decodedScreenshot);
 			fos.close();
