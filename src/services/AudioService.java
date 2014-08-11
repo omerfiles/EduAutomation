@@ -48,9 +48,9 @@ public class AudioService extends SystemObjectImpl {
 	AudioFileFormat.Type fileType = AudioFileFormat.Type.WAVE;
 	TargetDataLine targetline;
 
-	
-
-	public void sendSoundToVirtualMic(File soundFile) throws Exception {
+	public void sendSoundToVirtualMic(File soundFile, float sampleRate)
+			throws Exception {
+		
 		try {
 			audioStream = AudioSystem.getAudioInputStream(soundFile);
 
@@ -61,7 +61,12 @@ public class AudioService extends SystemObjectImpl {
 		report.startLevel("Starting to play file: " + soundFile.getPath()
 				+ " to virtual microphone", EnumReportLevel.CurrentPlace);
 		// audioFormat = audioStream.getFormat();
-		audioFormat = getAudioFormat();
+		if (sampleRate == 0) {
+			audioFormat = getAudioFormat();
+		} else {
+			audioFormat = getAudioFormat(sampleRate);
+		}
+
 		DataLine.Info infoIn = new DataLine.Info(SourceDataLine.class,
 				audioFormat);
 
@@ -102,20 +107,26 @@ public class AudioService extends SystemObjectImpl {
 		report.stopLevel();
 
 	}
-	
-	public void recoredSound(){
-	
-		
+
+	public void recoredSound() {
+
 	}
 
 	private AudioFormat getAudioFormat() {
-		float sampleRate = 16000.0F;
+		return getAudioFormat(44100.0F);
+	}
+
+	private AudioFormat getAudioFormat(float sampleRate) {
+		// float sampleRate = 44100.0F;
 		// 8000,11025,16000,22050,44100
-		int sampleSizeInBits = 8;
+		//8000 for recordings with SRI tool!
+		int sampleSizeInBits = 16;
+		//16 for my recordings!!!!
 		// 8,16
 		int channels = 2;
 		// 1,2
-		boolean signed = false;
+		boolean signed = true;
+		//true for my recordings
 		// true,false
 		boolean bigEndian = false;
 		// true,false
@@ -126,7 +137,5 @@ public class AudioService extends SystemObjectImpl {
 		// AudioFormat(javax.sound.sampled.AudioFormat.Encoding.PCM_SIGNED,
 		// sampleRate, sampleSizeInBits, channels, fr, f, bigEndian)
 	}// end getAudioFormat
-
-	
 
 }

@@ -6,20 +6,20 @@ public class Recording extends BasicObject{
 	
 	
 	private File recordingFile;
-	private String expectedScore;
-	private String[]wordsScores;
-	private long recordingLength;
+	private int SL;
+	private String[]WL;
+	
 	
 	public Recording(){};
 	
-	public Recording(String id, File file, String expectedScore,
+	public Recording(String id, File file, int expectedScore,
 			String[] wordsScores, long recordingLength) {
 //		super();
 		this.id=id;
 		this.recordingFile = file;
-		this.expectedScore = expectedScore;
-		this.wordsScores = wordsScores;
-		this.recordingLength = recordingLength;
+		this.SL = expectedScore;
+		this.WL = wordsScores;
+	
 	}
 	
 	
@@ -29,23 +29,18 @@ public class Recording extends BasicObject{
 	public void setRecordingFile(File file) {
 		this.recordingFile = file;
 	}
-	public String getExpectedScore() {
-		return expectedScore;
+	public int getSL() {
+		return SL;
 	}
-	public void setExpectedScore(String expectedScore) {
-		this.expectedScore = expectedScore;
+	public void setSL(int expectedScore) {
+		this.SL = expectedScore;
 	}
-	public String[] getWordsScores() {
-		return wordsScores;
+	public String[] getWL() {
+		return WL;
 	}
-	public void setWordsScores(String[] wordsScores) {
-		this.wordsScores = wordsScores;
+	public void setWL(String[] wordsScores) {
+		this.WL = wordsScores;
 	}
-	public long getRecordingLength() {
-		return recordingLength;
-	}
-	public void setRecordingLength(long recordingLength) {
-		this.recordingLength = recordingLength;
-	}
+	
 
 }

@@ -1,10 +1,13 @@
 package pageObjects;
 
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.List;
 
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
 import services.AudioService;
@@ -73,6 +76,16 @@ public class RecordPanel extends SRpage {
 
 	public void clickOnRecordButton() throws Exception {
 		webDriver.waitForElement("btnRecord", ByTypes.id).click();
+		webDriver.sleep(1000);
+		Robot robot = new Robot();
+		robot.keyPress(KeyEvent.VK_TAB);
+		webDriver.sleep(500);
+		robot.keyPress(KeyEvent.VK_TAB);
+		webDriver.sleep(500);
+		robot.keyPress(KeyEvent.VK_TAB);
+		webDriver.sleep(500);
+
+		robot.keyPress(KeyEvent.VK_ENTER);
 		// checkThatHearButtonIsDisabled();
 	}
 
@@ -173,6 +186,17 @@ public class RecordPanel extends SRpage {
 				.click();
 	}
 
+	public String[] getSentenceText(TextService textService) throws Exception {
+		String text = webDriver.waitForElement("txtOriginal", ByTypes.id)
+				.getText();
+		System.out.println("words text is: " + text);
+		text = text.replaceAll("[-.]", "");
+		text = text.trim();
+		String[] words = textService.splitStringToArray(text, "\\s+");
+
+		return words;
+	}
+
 	public int getSentenceLevel() throws Exception {
 		int level = 0;
 		try {
@@ -199,8 +223,14 @@ public class RecordPanel extends SRpage {
 	}
 
 	public String getExpectedGifBySL(int sl) {
-		String expectedGif = webDriver.getSutUrl()
-				+ webDriver.getIntitutionName() + "/Runtime/Context/SRAPanel/";
+		String expectedGif = null;
+
+		if (webDriver.getSutUrl().contains("develop")) {
+			expectedGif = webDriver.getSutUrl() + "Runtime/Context/SRAPanel/";
+		} else {
+			expectedGif = webDriver.getSutUrl() + webDriver.getIntitutionName()
+					+ "/Runtime/Context/SRAPanel/";
+		}
 
 		switch (sl) {
 		case 1:
@@ -297,6 +327,39 @@ public class RecordPanel extends SRpage {
 				new String[] { "You have sent the maximum (2) number of recordings for this lesson. If you send this recording, your first sent recording will be deleted." },
 				new String[] { text });
 
+	}
+
+	public void clickOnRecordAndSendRecording(File file) {
+
+	}
+
+	public void waitForSpeakStatus() throws Exception {
+		webDriver
+				.waitForElement(
+						"//div[@id='divRStatus'][contains(text(),'SPEAK')]",
+						ByTypes.id);
+
+	}
+
+	public void waitForRecordingToEnd(int indexOfRecording) throws Exception {
+		webDriver.waitForElement("//ul[@id='ulURecords']//li["
+				+ indexOfRecording + "]//a//span[3]", ByTypes.xpath, true, 20);
+
+	}
+
+	public void checkThatWlIsCloseToExpectedWL(String[] expectedWL, String[] actualWL) {
+		for(int i=0;i<expectedWL.length;i++){
+			int expWL=Integer.valueOf(expectedWL[i]);
+			int actWL=Integer.valueOf(actualWL[i]);
+			System.out.println("Diffrence is: "+Math.abs(expWL-actWL));
+			if(Math.abs(expWL-actWL)>1){
+				System.out.println("Diffrence between expected WL and actual WL was bigger then 1");
+			
+			}
+		}
+		
+		
+		
 	}
 
 }

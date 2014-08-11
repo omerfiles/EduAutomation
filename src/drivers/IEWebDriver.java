@@ -61,6 +61,8 @@ public class IEWebDriver extends GenericWebDriver {
 			throws Exception {
 		waitForElement(idValue, byType, timeout, true).click();
 	}
+	
+	
 
 	@Override
 	public String switchToNewWindow(int windowId) throws Exception {

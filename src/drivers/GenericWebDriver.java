@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import Enums.ByTypes;
 import Enums.TestRunnerType;
 import services.DbService;
+import services.TestResultService;
 import jsystem.framework.report.Reporter;
 import junit.framework.SystemTestCaseImpl;
 
@@ -50,6 +51,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	protected DbService dbService;
 	@Autowired
 	private services.Configuration configuration;
+
+	@Autowired
+	TestResultService testResultService;
 
 	protected String logsFolder;
 
@@ -100,7 +104,10 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			webDriver.get(url);
 
 		} catch (Exception e) {
-			Assert.fail("Open url failed ." + e.toString());
+			printScreen("OpenUrlFailed");
+			// Assert.fail("Open url failed ." + e.toString());
+			testResultService.addFailTest("Open url failed ." + e.toString(),
+					true);
 		}
 
 	}
@@ -193,7 +200,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 				if (message != null) {
 					report.report(message);
 				}
-				Assert.fail("Element: " + idValue + " not found");
+				testResultService.addFailTest("Element: " + idValue
+						+ " not found");
+				// Assert.fail("Element: " + idValue + " not found");
 			}
 			report.stopLevel();
 			return element;
@@ -242,7 +251,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			webDriver.findElement(By.xpath(xpath));
 		} catch (Exception e) {
 
-			Assert.fail("Element not found or element is not Clickable");
+			// Assert.fail("Element not found or element is not Clickable");
+			testResultService
+					.addFailTest("Element not found or element is not Clickable");
 		}
 	}
 
@@ -286,15 +297,16 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			}
 			current = element.getText();
 			report.report("text to compare was: " + current);
-			Assert.assertEquals(text, current);
+			// Assert.assertEquals(text, current);
+			testResultService.assertEquals(text, current);
 			// Assert.assertTrue("Check text failed. Actual text was: " +
 			// current + ". Text to compare was: " + text,
 			// current.equals(text));
 			report.report("Asserting " + text + " in " + idValue);
 		} catch (Exception e) {
-			Assert.fail("Text assertion failed. Xpath was: " + idValue
-					+ " . Text to assert was: " + text + ". Actual text was: "
-					+ current);
+			// Assert.fail("Text assertion failed. Xpath was: " + idValue
+			// + " . Text to assert was: " + text + ". Actual text was: "
+			// + current);
 		}
 
 		report.stopLevel();
@@ -387,7 +399,8 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			wait.until(ExpectedConditions
 					.frameToBeAvailableAndSwitchToIt(frameName));
 		} catch (TimeoutException e) {
-			Assert.fail("Frame waw not found");
+			// Assert.fail("Frame waw not found");
+			testResultService.addFailTest("Frame waw not found", true);
 		} finally {
 			return currentWindow;
 		}
@@ -490,9 +503,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			report.report("Exceptin found during checkElementNotExist");
 		} finally {
 
-			Assert.assertEquals("Element with xpath " + xpath
-					+ " found, when it should not. " + message, elementFound,
-					false);
+			
+			testResultService.assertTrue("Element with xpath " + xpath
+					+ " found when it should not", elementFound == false);
 		}
 	}
 
@@ -500,9 +513,6 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		checkElementNotExist(xpath, null);
 	}
 
-	public void checkElementIsDisabled(WebElement webElement) throws Exception {
-		Assert.assertTrue(webElement.isEnabled() == false);
-	}
 
 	public WebElement getElement(By by) {
 		WebElement element = webDriver.findElement(by);
@@ -585,17 +595,21 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 						+ "\\\\ScreenShot" + message.replace(" ", "") + sig
 						+ ".png";
 
-				path ="http://"+ configuration.getProperty("logserver").replace("\\", "") + "/"
-						+ configuration.getProperty("webFolder") + "/ScreenShot"
-						+ message.replace(" ", "") + sig + ".png";
-			
-			 } else if (runner == TestRunnerType.local) {
-			 newFileName = System.getProperty("user.dir") + "/log//current/"
-			 + "ScreenShot" + message.replace(" ", "") + sig
-			 + ".png";
-			 path = System.getProperty("user.dir") + "//" + "log//current//"
-			 + "ScreenShot" + message.replace(" ", "") + sig+ ".png";
-			 }
+				path = "http://"
+						+ configuration.getProperty("logserver").replace("\\",
+								"") + "/"
+						+ configuration.getProperty("webFolder")
+						+ "/ScreenShot" + message.replace(" ", "") + sig
+						+ ".png";
+
+			} else if (runner == TestRunnerType.local) {
+				newFileName = System.getProperty("user.dir") + "/log//current/"
+						+ "ScreenShot" + message.replace(" ", "") + sig
+						+ ".png";
+				path = System.getProperty("user.dir") + "//" + "log//current//"
+						+ "ScreenShot" + message.replace(" ", "") + sig
+						+ ".png";
+			}
 			FileOutputStream fos = new FileOutputStream(new File(newFileName));
 			fos.write(decodedScreenshot);
 			fos.close();
@@ -628,38 +642,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		return result;
 	}
 
-	public int getTableRowIndexByParam(String tableId, String tdIndex,
-			String tdText, ByTypes byType) throws Exception {
-		String result = "";
-		int index = 0;
-		try {
-			while (result != null) {
-				String xpath = "//table[@id='" + tableId
-						+ "']//tbody//tr[@role='row'][" + index + "]//td["
-						+ tdIndex + "]//div";
-				System.out.println(xpath);
-				String text = waitForElement(xpath, byType, false, 10)
-						.getText();
-				if (text.equals(tdText)) {
-					result = text;
-					System.out.println("text is:" + text);
-				}
-				index++;
-			}
-		} catch (Exception e) {
-			System.out.println(e.toString());
-			Assert.fail();
-		} finally {
-			return index;
-		}
-	}
+	
 
-	public void clickOnTableCell(String tableId, int xIndex, int yIndex)
-			throws Exception {
-		waitForElement(
-				"//table[@id='" + tableId + "']//tr[" + yIndex + "]//td["
-						+ xIndex + "]", ByTypes.xpath).click();
-	}
+
 
 	public void pasteTextFromClipboard(WebElement element) throws Exception {
 		element.click();
@@ -756,31 +741,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		return element.getCssValue(cssParam);
 	}
 
-	public void checkThatElementBecameDisabled(WebElement element)
-			throws Exception {
+	
 
-		int elapsedTime = 0;
-		boolean disabled = false;
-		while (elapsedTime < timeout) {
-			if (element.isEnabled() == false) {
-				disabled = true;
-				break;
-			} else {
-				elapsedTime++;
-				Thread.sleep(1000);
-				System.out.println("Waiting for 1000ms");
-			}
-		}
-		Assert.assertTrue("Element is not disabled", disabled);
-	}
 
-	public void printAllChiledElemetns(WebElement element) throws Exception {
-		List<WebElement> elements = element.findElements(By.xpath(".//div"));
-		for (int i = 0; i < elements.size(); i++) {
-			System.out.println("class is: "
-					+ elements.get(i).getAttribute("class"));
-		}
-	}
 
 	public void getElementLocation(WebElement element) {
 		Point p = element.getLocation();

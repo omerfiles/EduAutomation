@@ -59,15 +59,15 @@ public class SpeechRecognitonInteract1 extends EdusoftWebTest {
 		
 		startStep("Check of start button is enabled and click it");
 		interactSection.clickTheStartButton();
-		interactSection.waitUntilStatusChanges(1,InteractStatus.speaker,2);
+		interactSection.checkIfInteract1StatusChanged(1,InteractStatus.speaker,2);
 		interactSection.checkInstructionText( interactSection.instructionText3);
 	
 		
 		startStep("Wait for 3 seconds and start sending sound to the mic");
 		
-		interactSection.waitUntilStatusChanges(2,InteractStatus.counter,3);
+		interactSection.checkIfInteract1StatusChanged(2,InteractStatus.counter,3);
 		interactSection.checkInstructionText( interactSection.instructionText4);
-		interactSection.waitUntilStatusChanges(2,InteractStatus.recorder,3);
+		interactSection.checkIfInteract1StatusChanged(2,InteractStatus.recorder,3);
 		interactSection.checkInstructionText( interactSection.instructionText5);
 		sleep(1);
 		interactSection.waitUntilRecordingEnds(4,2);
@@ -80,15 +80,15 @@ public class SpeechRecognitonInteract1 extends EdusoftWebTest {
 		startStep("Check the words level of the recording");
 		String[]wordLevels=textService.splitStringToArray(interactSection.getWordsScoring("debugScore"));
 		words=interactSection.getCurrentSpeakerText(2, textService);
-		interactSection.checkInteractWordsLevels(words, wordLevels, textService,2);
+		interactSection.checkInteract1WordsLevels(words, wordLevels, textService,2);
 		
 		
 		startStep("Wait for next recording");
-		interactSection.waitUntilStatusChanges(1,InteractStatus.speaker,5);
+		interactSection.checkIfInteract1StatusChanged(1,InteractStatus.speaker,5);
 		interactSection.checkInstructionText( interactSection.instructionText3);
-		interactSection.waitUntilStatusChanges(2,InteractStatus.counter,5);
+		interactSection.checkIfInteract1StatusChanged(2,InteractStatus.counter,5);
 		interactSection.checkInstructionText( interactSection.instructionText4);
-		interactSection.waitUntilStatusChanges(2,InteractStatus.recorder,5);
+		interactSection.checkIfInteract1StatusChanged(2,InteractStatus.recorder,5);
 		interactSection.checkInstructionText( interactSection.instructionText5);
 		sleep(1);
 		interactSection.waitUntilRecordingEnds(5,2);

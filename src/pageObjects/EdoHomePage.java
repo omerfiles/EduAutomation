@@ -42,9 +42,13 @@ public class EdoHomePage extends GenericPage {
 		// webDriver.waitForElementAndClick("My Courses", ByTypes.linkText);
 		// webDriver.waitForElement("//table[@id='navTable']//tbody//tr//td//a[text()='My Courses']",
 		// ByTypes.xpath).click();
-		String url = webDriver.getSutUrl() 
-				+webDriver.getIntitutionName()+ "/Runtime/myPage.aspx";
-
+		String url = null;
+		if (webDriver.getSutUrl().contains("develop")) {
+			url = webDriver.getSutUrl() + "/Runtime/myPage.aspx";
+		} else {
+			url = webDriver.getSutUrl() + webDriver.getIntitutionName()
+					+ "/Runtime/myPage.aspx";
+		}
 		webDriver.openUrl(url);
 		return this;
 	}
@@ -284,23 +288,24 @@ public class EdoHomePage extends GenericPage {
 				}
 			} catch (Exception e) {
 				try {
-					System.out.println("Catched exception in waitForPageToLoad");
+					System.out
+							.println("Catched exception in waitForPageToLoad");
 					logger.info("Checking if user is logged in already");
 
-//					String userIsLogged = webDriver.waitForElement(
-//							"//div[@class='insTxt']", ByTypes.xpath, false,
-//							webDriver.getTimeout()).getText();
-//					if (userIsLogged
-//							.contains("This username is currently logged")) {
-//						Assert.fail("User was logged in already");
-//					}
+					// String userIsLogged = webDriver.waitForElement(
+					// "//div[@class='insTxt']", ByTypes.xpath, false,
+					// webDriver.getTimeout()).getText();
+					// if (userIsLogged
+					// .contains("This username is currently logged")) {
+					// Assert.fail("User was logged in already");
+					// }
 					System.out.println("trying to close popup");
 					webDriver.closeAlertByAccept();
 					break;
 				} catch (Exception j) {
 					System.out.println("Catched exception jjjjj");
 				}
-				
+
 				continue;
 			}
 
@@ -761,21 +766,24 @@ public class EdoHomePage extends GenericPage {
 		return new RecordPanel(webDriver);
 
 	}
+
 	public RecordPanel clickOnRecordYourselfInVocabulary() throws Exception {
 		webDriver.waitForElementAndClick("tempLink2", ByTypes.id);
 		return new RecordPanel(webDriver);
 
 	}
 
-	public void selectIdiomFromList(String id)throws Exception {
-		webDriver.waitForElement("//ul[@id='idiomList']//li[4]", ByTypes.xpath).click();
-		
+	public void selectIdiomFromList(String id) throws Exception {
+		webDriver.waitForElement("//ul[@id='idiomList']//li[4]", ByTypes.xpath)
+				.click();
+
 	}
 
-	public void clickOnRecordFromIdioms()throws Exception {
-		webDriver.waitForElement("//*[@id='mainAreaTD']/div[1]/div/a", ByTypes.xpath).click();
+	public void clickOnRecordFromIdioms() throws Exception {
+		webDriver.waitForElement("//*[@id='mainAreaTD']/div[1]/div/a",
+				ByTypes.xpath).click();
 		webDriver.waitForElement("recordLI", ByTypes.id).click();
-		
+
 	}
 
 	public RecordPanel clickOnPronunciation() throws Exception {
@@ -783,7 +791,14 @@ public class EdoHomePage extends GenericPage {
 		return new RecordPanel(webDriver);
 	}
 
-	public void clickOnVocabText(String text)throws Exception {
+	public void clickOnVocabText(String text) throws Exception {
 		webDriver.waitForElement(text, ByTypes.id).click();
+	}
+
+	public void selectTextFromContainer(int index) throws Exception {
+		webDriver.waitForElement(
+				"//div[@id='textContainer']//span[" + index + "]",
+				ByTypes.xpath).click();
+
 	}
 }

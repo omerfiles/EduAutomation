@@ -6,7 +6,11 @@ import jsystem.framework.report.Reporter.EnumReportLevel;
 import junit.framework.SystemTestCase4;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
+import org.junit.rules.ErrorCollector;
+import org.openqa.selenium.logging.NeedsLocalLogs;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import services.AudioService;
@@ -15,6 +19,7 @@ import services.DbService;
 import services.EraterService;
 import services.InstitutionService;
 import services.NetService;
+import services.TestResultService;
 import services.TextService;
 import Interfaces.TestCaseParams;
 import Interfaces.TestCaseParams;
@@ -31,7 +36,8 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 	NetService netService;
 	protected EraterService eraterService;
 	protected InstitutionService institutionService;
-//	protected static AudioService audioService;
+	protected TestResultService testResultService;
+	// protected static AudioService audioService;
 	public ClassPathXmlApplicationContext ctx;
 
 	protected boolean inStep = false;
@@ -45,8 +51,9 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 
 		// ctx = new ClassPathXmlApplicationContext("beans.xml");
 
-		System.out.println("url from maven command line: "+System.getProperty( "URL"));
-		
+		System.out.println("url from maven command line: "
+				+ System.getProperty("URL"));
+
 		ctx = new ClassPathXmlApplicationContext("beans.xml");
 		configuration = (Configuration) ctx.getBean("configuration");
 		// webDriver=(GenericWebDriver)ctx.getBean("GenericWebDriver");
@@ -57,7 +64,9 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 		eraterService = (EraterService) ctx.getBean("EraterService");
 		institutionService = (InstitutionService) ctx
 				.getBean("InstitutionService");
-//		audioService = (AudioService) ctx.getBean("AudioService");
+		testResultService = (TestResultService) ctx
+				.getBean("TestResultService");
+		// audioService = (AudioService) ctx.getBean("AudioService");
 
 		int institutionId;
 		if (System.getProperty("institutionId") == null) {
@@ -74,7 +83,7 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 		institutionService.init();
 		autoInstitution = institutionService.getInstitution();
 		System.out.println(autoInstitution.getInstitutionId());
-	
+
 		// System.out.println("Automation isntitution id is: "
 		// + autoInstitution.getInstitutionId());
 	}
@@ -88,9 +97,15 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 	public void tearDown() throws Exception {
 		// report.startLevel("Test case id is: " + this.testCaseId,
 		// EnumReportLevel.MainFrame);
-		if (this.isPass == false) {
-			report.startLevel("Test failed", EnumReportLevel.MainFrame);
+		
+		System.out.println("Test failed?: "+testResultService.hasFailedResults());
+		if(testResultService.hasFailedResults()){
+			testResultService.printAllFailures();
+			Assert.fail("Test has filed due to one or more problems");
 		}
+//		if (this.isPass == false) {
+//			report.startLevel("Test failed", EnumReportLevel.MainFrame);
+//		}
 	}
 
 	public void startStep(String stepName) throws Exception {
@@ -106,7 +121,7 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 		report.stopLevel();
 	}
 
-	public String getTestCaseId(String methodName,Class c) {
+	public String getTestCaseId(String methodName, Class c) {
 		Method method = null;
 		try {
 			method = c.getDeclaredMethod(methodName, null);

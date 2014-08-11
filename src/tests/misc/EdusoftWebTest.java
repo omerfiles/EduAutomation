@@ -5,6 +5,7 @@ package tests.misc;
 import org.junit.After;
 import org.junit.Assert;
 
+import services.AudioService;
 import services.PageHelperService;
 import Enums.Browsers;
 import drivers.ChromeWebDriver;
@@ -17,6 +18,7 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 
 	protected GenericWebDriver webDriver;
 	public PageHelperService pageHelper;
+	public AudioService audioService;
 
 	
 
@@ -55,13 +57,16 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 			webDriver = (FirefoxWebDriver) ctx.getBean("FirefoxWebDriver");
 		}
 		if (webDriver == null) {
-			Assert.fail("No webdriver found. Please check properties file or pom for webdriver name");
+//			Assert.fail("No webdriver found. Please check properties file or pom for webdriver name");
+			testResultService.addFailTest("No webdriver found. Please check properties file or pom for webdriver name");
 		}
 
 		webDriver.init();
 		webDriver.maximize();
 		pageHelper = (PageHelperService) ctx.getBean("PageHelperService");
 		pageHelper.init(webDriver, autoInstitution);
+		audioService=(AudioService)ctx.getBean("AudioService");
+		
 
 
 	}
@@ -72,7 +77,7 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 		try {
 			if (this.isPass == false) {
 
-				webDriver.printScreen(this.getMethodName(), null);
+				webDriver.printScreen("FailCause_"+ this.getMethodName(), null);
 			}
 
 			// if (pageHelper.isLogoutNeeded()) {

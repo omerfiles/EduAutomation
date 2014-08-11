@@ -26,16 +26,26 @@ public class RecoredYourself extends EdusoftWebTest {
 	}
 
 	@Test
-	public void testEecoredYourSelf() throws Exception {
+	public void testRecordYourselfIntegrated() throws Exception {
 		startStep("Init test data");
-		Course course = pageHelper.initCouse(8);
-		String[] words = new String[] { "Hi", "I'm", "Tom", "Smith." };
+		int courseId = 13;
+		int scriptSection = 1;
+		Recording recording = pageHelper.getRecordings().get(1);
+		Course course = pageHelper.initCouse(courseId);
+		// Recording recording=pageHelper.getRecordings().get(1);
+
+		String[] wordLevels = null;
+		int sentenceLevel = 0;
+		boolean SRDebug = false;
+		String[] words = null;
 		int numOfRecordingsInTest = 6;
 		List<String[]> recWordLevel = new ArrayList<String[]>();
 		List<Integer> sentenceLevels = new ArrayList<Integer>();
 		startStep("Login to EDO as student");
 		EdoHomePage edoHomePage = pageHelper.loginAsStudent();
+		sleep(3);
 		edoHomePage.clickOnCourses();
+		sleep(2);
 		edoHomePage.clickOnCourseByName(course.getName());
 		edoHomePage.clickOnCourseUnit(course.getCourseUnit());
 		edoHomePage.clickOntUnitComponent(course.getUnitComponent(), "Explore");
@@ -43,42 +53,139 @@ public class RecoredYourself extends EdusoftWebTest {
 		startStep("Click on recored yourself");
 		edoHomePage.clickOnSeeScript();
 		sleep(3);
+		edoHomePage.selectTextFromContainer(scriptSection);
 		RecordPanel recordPanel = edoHomePage.clickOnRecordYourself();
 		sleep(3);
 		edoHomePage.switchToFrameByClassName("cboxIframe");
 		startStep("Click on record and send audio file to microphone");
 
-		for (int i = 0; i < numOfRecordingsInTest; i++) {
-			recordPanel.clickOnRecordAndStop(10);
-			String[] wordsScoring = textService.splitStringToArray(recordPanel
-					.getWordsScoring("wl"));
-			recWordLevel.add(wordsScoring);
-			int sentenceLevel = recordPanel.getSentenceLevel();
-			sentenceLevels.add(sentenceLevel);
-			recordPanel.checkSentenceScoreRatingText(sentenceLevel);
-			recordPanel.checckSentenceLevelLightBulbs(sentenceLevel);
-			// to do: check SL for added entry in the list
-			recordPanel.checkAddedRecordingToList(sentenceLevel, i);
+		words = recordPanel.getSentenceText(textService);
 
-			recordPanel.checkWordsLevels(words, wordsScoring, textService);
+		sleep(3);
+		recordPanel.clickOnRecordButton();
+		sleep(3);
+		// recordPanel.waitForSpeakStatus();
+		audioService.sendSoundToVirtualMic(recording.getFile(), 0);
+
+		startStep("Check that recording ended");
+		sleep(2);
+		recordPanel.waitForRecordingToEnd(1);
+		// audioService.sendSoundToVirtualMic(new File(
+		// "files/audioFiles/TheBeatMe16000_16.wav"), 16000.0F);
+//		sentenceLevel = recordPanel.getSentenceLevel();
+		sentenceLevel=recording.getSL();
+		System.out.println("Sentence level is: " + sentenceLevel);
+		wordLevels = textService.splitStringToArray(recordPanel
+				.getWordsScoring("wl"));
+//		wordLevels=recording.getWL();
+		System.out.println("Word level is: " + wordLevels.toString());
+
+		startStep("Check word level and sentence level");
+		recordPanel.checkWordsLevels(words, wordLevels, textService);
+		recordPanel.checckSentenceLevelLightBulbs(sentenceLevel);
+		recordPanel.checkSentenceScoreRatingText(sentenceLevel);
+		// recordPanel.checkSentenceScoreText(sentenceLevel);
+		recordPanel.checkThatWlIsCloseToExpectedWL(wordLevels,recording.getWL());
+
+	}
+
+	@Test
+	public void testRecordPanelScore4() throws Exception {
+		// they beat me up and stole my wife's car
+		// Advanced 1,Life In The City,How Awful!,6
+		// 191301.wav
+		// Script section 1
+		testRecoredPanel(13, pageHelper.getRecordings().get(1), 1);
+	}
+
+	@Test
+	public void testRecordPanelScore5() throws Exception {
+		// text: what happened
+		// Advanced 1,Dangerous Sports,What Happened?,6
+		// 225059.wav
+		// Script section 2
+		testRecoredPanel(14, pageHelper.getRecordings().get(2), 2);
+	}
+
+	public void testRecoredPanel(int courseId, Recording recording,
+			int scriptSection) throws Exception {
+		startStep("Init test data");
+		Course course = pageHelper.initCouse(courseId);
+		// Recording recording=pageHelper.getRecordings().get(1);
+
+		String[] wordLevels = null;
+		int sentenceLevel = 0;
+		boolean SRDebug = false;
+		String[] words = null;
+		int numOfRecordingsInTest = 6;
+		List<String[]> recWordLevel = new ArrayList<String[]>();
+		List<Integer> sentenceLevels = new ArrayList<Integer>();
+		startStep("Login to EDO as student");
+		EdoHomePage edoHomePage = pageHelper.loginAsStudent();
+		sleep(3);
+		edoHomePage.clickOnCourses();
+		sleep(2);
+		edoHomePage.clickOnCourseByName(course.getName());
+		edoHomePage.clickOnCourseUnit(course.getCourseUnit());
+		edoHomePage.clickOntUnitComponent(course.getUnitComponent(), "Explore");
+
+		startStep("Click on recored yourself");
+		edoHomePage.clickOnSeeScript();
+		sleep(3);
+		edoHomePage.selectTextFromContainer(scriptSection);
+		RecordPanel recordPanel = edoHomePage.clickOnRecordYourself();
+		sleep(3);
+		edoHomePage.switchToFrameByClassName("cboxIframe");
+		startStep("Click on record and send audio file to microphone");
+
+		words = recordPanel.getSentenceText(textService);
+
+		for (int i = 0; i < numOfRecordingsInTest; i++) {
+
+			if (SRDebug == true) {
+				recordPanel.clickOnRecordAndStop(10);
+				sentenceLevel = recordPanel.getSentenceLevel();
+				sentenceLevels.add(sentenceLevel);
+				wordLevels = textService.splitStringToArray(recordPanel
+						.getWordsScoring("wl"));
+				recWordLevel.add(wordLevels);
+			} else if (SRDebug == false) {
+				sleep(3);
+				recordPanel.clickOnRecordButton();
+				audioService.sendSoundToVirtualMic(recording.getFile(), 0);
+				sleep(2);
+				// audioService.sendSoundToVirtualMic(new File(
+				// "files/audioFiles/TheBeatMe16000_16.wav"), 16000.0F);
+				sentenceLevel = recording.getSL();
+				sentenceLevels.add(sentenceLevel);
+				wordLevels = recording.getWL();
+				recWordLevel.add(wordLevels);
+			}
+
+			// recordPanel.checkSentenceScoreRatingText(sentenceLevel);
+			// recordPanel.checckSentenceLevelLightBulbs(sentenceLevel);
+			// to do: check SL for added entry in the list
+			// recordPanel.checkAddedRecordingToList(sentenceLevel, i);
+
+			// recordPanel.checkWordsLevels(words, wordLevels, textService);
 		}
 
 		startStep("Select each recording from the list and check Sentence level annd word level");
 
-		for (int i = 0; i < numOfRecordingsInTest; i++) {
-			int index = i + 1;
-			recordPanel.selectRecording(String.valueOf(index));
-			recordPanel
-					.checkWordsLevels(words, recWordLevel.get(i), textService);
-			recordPanel.checkSentenceScoreRatingText(sentenceLevels.get(i));
-
-		}
+		// for (int i = 0; i < numOfRecordingsInTest; i++) {
+		// int index = i + 1;
+		// recordPanel.selectRecording(String.valueOf(index));
+		// recordPanel
+		// .checkWordsLevels(words, recWordLevel.get(i), textService);
+		// recordPanel.checkSentenceScoreRatingText(sentenceLevels.get(i));
+		//
+		// }
 
 		startStep("Send to Teacher");
 		// recordPanel.clickOnPlayButton();
 		sleep(10);
 		recordPanel.clickOnSendToTeacher();
-		recordPanel.checkSendToTeacherText();
+		// recordPanel.checkSendToTeacherText();
 	}
 
 	@Test
@@ -134,9 +241,9 @@ public class RecoredYourself extends EdusoftWebTest {
 		startStep("Check the recording was added and that the 1st recording was removed");
 
 		for (int i = 0; i < numOfRecordingsInTest; i++) {
-			
+
 			int index = i + 1;
-			System.out.println("Index is: "+index);
+			System.out.println("Index is: " + index);
 			recordPanel.selectRecording(String.valueOf(index));
 			sleep(1);
 			recordPanel.checkWordsLevels(words, wordsScoreList.get(i),
@@ -191,7 +298,7 @@ public class RecoredYourself extends EdusoftWebTest {
 
 		startStep("Login to EDO as student");
 		EdoHomePage edoHomePage = pageHelper.loginAsStudent();
-		
+
 		startStep("Go to Talking Idioms");
 		edoHomePage.clickOnCommunity();
 		edoHomePage.clickOnTalkingIdioms();
@@ -202,10 +309,11 @@ public class RecoredYourself extends EdusoftWebTest {
 		edoHomePage.clickOnRecordFromIdioms();
 
 	}
-	
-	//Test case 13438
+
+	// Test case 13438
 	@Test
-	public void testRecoredYourselfPanelOpensFromPronunciation()throws Exception{
+	public void testRecoredYourselfPanelOpensFromPronunciation()
+			throws Exception {
 		startStep("Init test data");
 		Course course = pageHelper.initCouse(8);
 		String[] words = new String[] { "Hi" };
@@ -225,12 +333,12 @@ public class RecoredYourself extends EdusoftWebTest {
 		RecordPanel recordPanel = edoHomePage.clickOnPronunciation();
 		sleep(3);
 		edoHomePage.switchToFrameByClassName("cboxIframe");
-		
+
 		startStep("Click on record and send audio file to microphone");
 		recordPanel.clickOnRecordAndStop(5);
 		String[] wordsScoring = textService.splitStringToArray(recordPanel
 				.getWordsScoring("wl"));
-		
+
 		int sentenceLevel = recordPanel.getSentenceLevel();
 		sentenceLevels.add(sentenceLevel);
 		recordPanel.checkSentenceScoreRatingText(sentenceLevel);

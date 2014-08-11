@@ -194,9 +194,10 @@ public class PageHelperService extends SystemObjectImpl {
 		for (int i = 0; i < recordingsCsv.size(); i++) {
 			Recording recording = new Recording();
 			recording.setId(recordingsCsv.get(i)[0]);
-			recording.setWordsScores(textService
-					.splitStringToArray(recordingsCsv.get(i)[3]));
-			recording.setRecordingFile(new File(recordingsCsv.get(i)[4]));
+			recording
+					.setWL(textService.splitStringToArray(recordingsCsv.get(i)[1]));
+			recording.setSL(Integer.valueOf(recordingsCsv.get(i)[2]));
+			recording.setRecordingFile(new File("files/audioFiles/"+recordingsCsv.get(i)[3]));
 			recordings.add(recording);
 
 		}

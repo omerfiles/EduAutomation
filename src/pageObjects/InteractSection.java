@@ -150,15 +150,44 @@ public class InteractSection extends SRpage {
 		return words;
 	}
 
-	public void waitUntilStatusChanges(int speaker, InteractStatus after,
-			int timeOut) throws Exception {
+	public String[] getInteract2RecordedText(TextService textService,int option)
+			throws Exception {
+		String text = webDriver.waitForElement(
+				"//div[@class='recordingPanelSentencesWrapper']//div["+option+"]", ByTypes.xpath)
+				.getText();
+		text = text.substring(1, text.length());
+		System.out.println("Recorded text is: " + text);
+		String[] words = textService.splitStringToArray(text, "\\s+");
+		return words;
+	}
+
+	public void checkIfInteract1StatusChanged(int speaker,
+			InteractStatus status, int timeOut) throws Exception {
+		waitUntilStatusChanges(status, timeOut,
+				"//div[@class='recordingPanelWrapper']//div[" + speaker + "]");
+	}
+
+	public void checkifInteract2StatusChanged(InteractStatus status, int timeOut)
+			throws Exception {
+		waitUntilStatusChanges(status, timeOut,
+				"//div[@class='speakingInteract']//div[2]");
+
+	}
+
+	public void waitUntilStatusChanges(InteractStatus after, int timeOut,
+			String xpath) throws Exception {
 		long timeBefore = System.currentTimeMillis();
-		webDriver.waitForElement("//div[@class='recordingPanelWrapper']//div["
-				+ speaker + "][contains(@class,'" + after.toString() + "')]",
-				ByTypes.xpath);
-		WebElement afterElement = webDriver.waitForElement(
-				"//div[@class='recordingPanelWrapper']//div[" + speaker
-						+ "][contains(@class,'" + after.toString() + "')]",
+		// webDriver.waitForElement("//div[@class='recordingPanelWrapper']//div["
+		// + speaker + "][contains(@class,'" + after.toString() + "')]",
+		// ByTypes.xpath);
+
+		// WebElement afterElement = webDriver.waitForElement(
+		// "//div[@class='recordingPanelWrapper']//div[" + speaker
+		// + "][contains(@class,'" + after.toString() + "')]",
+		// ByTypes.xpath, timeOut, true, null, 250);
+
+		WebElement afterElement = webDriver.waitForElement(xpath
+				+ "[contains(@class,'" + after.toString() + "')]",
 				ByTypes.xpath, timeOut, true, null, 250);
 		webDriver.printScreen("StatusChangedTo" + after.toString());
 		Assert.assertNotNull("Status did not changed", afterElement);
@@ -185,18 +214,43 @@ public class InteractSection extends SRpage {
 
 	}
 
-	public void checkInteractWordsLevels(String[] words, String[] wordLevels,
+	public void checkInteract1WordsLevels(String[] words, String[] wordLevels,
 			TextService textService, int speaker) throws NumberFormatException,
 			Exception {
 		for (int i = 0; i < words.length; i++) {
-			CheckInteractWordScore(words[i], Integer.valueOf(wordLevels[i]),
+			checkInteract1WordScore(words[i], Integer.valueOf(wordLevels[i]),
 					textService, speaker);
 		}
 
 	}
 
-	private void CheckInteractWordScore(String word, int expectedWordLevel,
+	public void checkInteract2WordsLevels(String[] words, String[] wordLevels,
+			TextService textService, int speaker) throws NumberFormatException,
+			Exception {
+		for (int i = 0; i < words.length; i++) {
+			checkInteract2WordScore(words[i], Integer.valueOf(wordLevels[i]),
+					textService, speaker);
+		}
+
+	}
+
+	private void checkInteract2WordScore(String word, int expectedWordLevel,
 			TextService textService, int speaker) throws Exception {
+
+		CheckInteractWordScore(word, expectedWordLevel, textService, speaker,
+				"//div[@class='recordingPanelSentenceText']//");
+	}
+
+	private void checkInteract1WordScore(String word, int expectedWordLevel,
+			TextService textService, int speaker) throws Exception {
+		CheckInteractWordScore(word, expectedWordLevel, textService, speaker,
+				"//div[@class='recordingPanelWrapper']//div[" + speaker
+						+ "]//div//div//div//");
+	}
+
+	private void CheckInteractWordScore(String word, int expectedWordLevel,
+			TextService textService, int speaker, String xpath)
+			throws Exception {
 		boolean found = false;
 		SRWordLevel wordLevel = null;
 		if (expectedWordLevel <= 2) {
@@ -206,9 +260,14 @@ public class InteractSection extends SRpage {
 		} else if (expectedWordLevel > 4 && expectedWordLevel <= 6) {
 			wordLevel = SRWordLevel.success;
 		}
-		webDriver.waitForElement("//div[@class='recordingPanelWrapper']//div["
-				+ speaker + "]//div//div//div//span[contains(text(),"
-				+ textService.resolveAprostophes(word) + ")]", ByTypes.xpath);
+		// webDriver.waitForElement("//div[@class='recordingPanelWrapper']//div["+
+		// speaker + "]//div//div//div//span[contains(text(),"
+		// + textService.resolveAprostophes(word) + ")]", ByTypes.xpath);
+
+		webDriver.waitForElement(
+				xpath + "span[contains(text(),"
+						+ textService.resolveAprostophes(word) + ")][@class='"+wordLevel+"']",
+				ByTypes.xpath);
 
 	}
 
@@ -217,12 +276,29 @@ public class InteractSection extends SRpage {
 
 	}
 
-	public void checkThatSpeakerTextIsHighlighted() throws Exception{
-		webDriver.waitForElement("//div[@class='mediaContainer']//div[1][contains(@class,'speaker')]", ByTypes.xpath);
+	public void checkThatSpeakerTextIsHighlighted() throws Exception {
+		webDriver
+				.waitForElement(
+						"//div[@class='mediaContainer']//div[1][contains(@class,'speaker')]",
+						ByTypes.xpath);
+
+	}
+
+	public void checkInteract2recorderText(int option, String[] words,
 		
+			String[] wordLevels, TextService textService) throws Exception {
+		// WebElement element = webDriver.waitForElement(
+		// "//div[@class='recordingPanelSentencesWrapper']//div[" + option
+		// + "]//div//div//span", ByTypes.xpath);
+
+		checkInteract2WordsLevels(words, wordLevels, textService, 2);
+
 	}
-	public void checkInteract2Status(InteractStatus status)throws Exception{
-//		webDriver.waitForElement("//div[@class='speakingInteract']//div[2], byType)
+
+	public void clickOnSeeFeedback() throws Exception {
+		webDriver.waitForElement("See feedback", ByTypes.linkText).click();
 	}
+	
+	
 
 }

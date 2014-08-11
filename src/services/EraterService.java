@@ -7,16 +7,12 @@ import java.util.List;
 
 import jsystem.framework.report.Reporter;
 import jsystem.framework.report.Reporter.EnumReportLevel;
-import jsystem.framework.report.Reporter.ReportAttribute;
 import jsystem.framework.system.SystemObjectImpl;
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import Objects.Course;
-import Objects.CourseUnit;
-import Objects.UnitComponent;
+
 
 @Service
 public class EraterService extends SystemObjectImpl {
@@ -32,6 +28,9 @@ public class EraterService extends SystemObjectImpl {
 	private NetService netService;
 	@Autowired
 	Configuration configuration;
+	
+	@Autowired
+	TestResultService testResultService;
 
 	List<String[]> feedbackList = new ArrayList<String[]>();
 
@@ -174,10 +173,12 @@ public class EraterService extends SystemObjectImpl {
 			report.report("json list length is: " + jsonList.size());
 			report.report("xml list length is: " + xmlList.size());
 		} catch (Exception e) {
-			Assert.fail("Test failed during comparing json and xml");
+//			Assert.fail("Test failed during comparing json and xml");
+			testResultService.addFailTest("Test failed during comparing json and xml");
 		} finally {
-			return AssertJsonAndXmlLists(xmlList, jsonList);
+			
 		}
+		return AssertJsonAndXmlLists(xmlList, jsonList);
 
 	}
 

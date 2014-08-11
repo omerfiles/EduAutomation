@@ -24,6 +24,7 @@ public class SRpage extends GenericPage {
 	}
 	public void CheckWordScore(String word, int expectedWordLevel,
 			TextService textService) throws Exception {
+		System.out.println("Checking WL of word: "+word+". Expected WL is: "+expectedWordLevel);
 		boolean found = false;
 		SRWordLevel wordLevel = null;
 		if (expectedWordLevel <= 2) {
@@ -34,7 +35,7 @@ public class SRpage extends GenericPage {
 			wordLevel = SRWordLevel.success;
 		}
 		webDriver.waitForElement(
-				"//div[@id='txtOriginal']//div//span[@class='"
+				"//div[@id='txtOriginal']//span[@class='"
 						+ wordLevel.toString() + "'][contains(text(),"
 						+ textService.resolveAprostophes(word) + ")]",
 				ByTypes.xpath);

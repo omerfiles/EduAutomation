@@ -30,7 +30,8 @@
 	<bean id="NetService" class="services.NetService"></bean>
 	<bean id="EraterService" class="services.EraterService"></bean>
 	<bean id="InstitutionService" class="services.InstitutionService"></bean>
-	
+	<bean id="AudioService" class="services.AudioService"></bean>
+	<bean id="TestResultService" class="services.TestResultService"></bean>
 
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource"

@@ -66,7 +66,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 	public void testSubmitTextAsStudentAndCheckFeedbackAsTeacherAndSendAgain()
 			throws Exception {
 		startStep("Login to Edo");
-		int courseId = 2;
+		int courseId = 12;
 		String textFile = "files/assayFiles/text24.txt";
 		report.report("using file: " + textFile);
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
@@ -80,6 +80,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 
 		startStep("Open home page and start a writing drill");
 		String courseName = courses.get(courseId).getName();
+		sleep(3);
 		edoHomePage.clickOnCourses();
 		edoHomePage.clickOnCourseByName(courseName);
 		edoHomePage.waitForCourseDetailsToBeDisplayed(courseName);
@@ -153,6 +154,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		webDriver.init();
 		webDriver.openUrl(getSutAndSubDomain());
 		edoLoginPage.login(student);
+		sleep(5);
 		edoHomePage.clickOnMyAssignments();
 		edoHomePage.switchToAssignmentsFrame();
 		edoHomePage.clickOnWritingAssignmentsTab(courseName);
