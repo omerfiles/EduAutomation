@@ -2,6 +2,9 @@ package tests.misc;
 
 import java.io.File;
 
+import jsystem.framework.RunProperties;
+import jsystem.framework.scenario.RunningProperties;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,8 +33,11 @@ public class NonUiTests extends EdusoftBasicTest {
 	@Test
 	public void testFailTest()throws Exception{
 		testResultService.addFailTest("aaaaa");
-		testResultService.assertEquals("dog", "dog");
+		testResultService.assertEquals("do_g", "dog");
+		testResultService.assertEquals("dog", "cat");
 		testResultService.addFailTest("ccccc");
+		
+		
 	}
 
 

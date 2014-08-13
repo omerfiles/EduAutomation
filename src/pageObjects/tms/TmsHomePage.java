@@ -11,11 +11,12 @@ import Objects.Institution;
 import drivers.GenericWebDriver;
 import pageObjects.EdoHomePage;
 import pageObjects.GenericPage;
+import services.TestResultService;
 
 public class TmsHomePage extends GenericPage {
 
-	public TmsHomePage(GenericWebDriver webDriver) {
-		super(webDriver);
+	public TmsHomePage(GenericWebDriver webDriver,TestResultService testResultService) {
+		super(webDriver,testResultService);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -155,7 +156,7 @@ public class TmsHomePage extends GenericPage {
 		webDriver.waitForElementAndClick("//input[@value='Add New Teacher']",
 				ByTypes.xpath);
 		webDriver.switchToNewWindow();
-		return new TeacherDetailsPage(webDriver);
+		return new TeacherDetailsPage(webDriver,testResultService);
 
 	}
 

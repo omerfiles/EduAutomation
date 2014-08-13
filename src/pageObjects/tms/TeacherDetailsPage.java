@@ -3,13 +3,14 @@ package pageObjects.tms;
 import Enums.ByTypes;
 import drivers.GenericWebDriver;
 import pageObjects.GenericPage;
+import services.TestResultService;
 
 public class TeacherDetailsPage extends GenericPage {
 
 	String mainWin=null;
 	
-	public TeacherDetailsPage(GenericWebDriver webDriver) throws Exception {
-		super(webDriver);
+	public TeacherDetailsPage(GenericWebDriver webDriver,TestResultService testResultService) throws Exception {
+		super(webDriver ,testResultService);
 	mainWin=	webDriver.switchToFrame("FormFrame");
 		// TODO Auto-generated constructor stub
 	}
@@ -50,7 +51,7 @@ public class TeacherDetailsPage extends GenericPage {
 	public TmsHomePage clickOnSubmit()throws Exception{
 		webDriver.switchToMainWindow(mainWin);
 		webDriver.waitForElementAndClick("Submitbutton", ByTypes.name);
-		return new TmsHomePage(webDriver);
+		return new TmsHomePage(webDriver,testResultService);
 	}
 	
 

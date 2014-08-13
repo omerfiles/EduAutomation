@@ -1,44 +1,47 @@
 package Objects;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.io.File;
 
 public class Recording extends BasicObject{
 	
 	
-	private File recordingFile;
-	private int SL;
-	private String[]WL;
+	private  File recordingFile;
+	private List<File>soundFiles=new  ArrayList<File>();
+	private List <Integer> SL=new  ArrayList<Integer>();
+	private List <String[]>WL=new ArrayList<String[]>();
 	
 	
 	public Recording(){};
 	
-	public Recording(String id, File file, int expectedScore,
-			String[] wordsScores, long recordingLength) {
-//		super();
-		this.id=id;
-		this.recordingFile = file;
-		this.SL = expectedScore;
-		this.WL = wordsScores;
+//	public Recording(String id, File file, int expectedScore,
+//			String[] wordsScores, long recordingLength) {
+////		super();
+//		this.id=id;
+//		this.recordingFile = file;
+//		this.SL = expectedScore;
+//		this.WL = wordsScores;
+//	
+//	}
 	
-	}
 	
-	
-	public File getFile() {
-		return recordingFile;
+	public List <File> getFiles() {
+		return soundFiles;
 	}
-	public void setRecordingFile(File file) {
-		this.recordingFile = file;
+	public void setRecordingFiles(List<File>files) {
+		this.soundFiles = files;
 	}
-	public int getSL() {
+	public List <Integer> getSL() {
 		return SL;
 	}
-	public void setSL(int expectedScore) {
+	public void setSL(List <Integer> expectedScore) {
 		this.SL = expectedScore;
 	}
-	public String[] getWL() {
+	public List <String[]> getWL() {
 		return WL;
 	}
-	public void setWL(String[] wordsScores) {
+	public void setWL(List <String[]> wordsScores) {
 		this.WL = wordsScores;
 	}
 	

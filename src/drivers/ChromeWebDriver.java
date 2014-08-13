@@ -32,6 +32,7 @@ public class ChromeWebDriver extends GenericWebDriver {
 			options.addArguments("--disable-extensions");
 			capabilities.setCapability("chrome.switches",
 					Arrays.asList("--start-maximized"));
+			capabilities.setCapability("chrome.switches",Arrays.asList("--use-fake-ui-for-media-stream"));
 			capabilities.setCapability(ChromeOptions.CAPABILITY, options);
 			// capabilities.setCapability("platform", "Windows 2003");
 			webDriver = new RemoteWebDriver(new URL(remoteUrl + "/wd/hub"),

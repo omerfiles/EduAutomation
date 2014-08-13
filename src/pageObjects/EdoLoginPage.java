@@ -6,6 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import services.DbService;
+import services.TestResultService;
 import Enums.ByTypes;
 import Objects.Student;
 import Objects.UserObject;
@@ -16,8 +17,8 @@ public class EdoLoginPage extends LoginPage {
 	
 	
 	
-	public EdoLoginPage(GenericWebDriver webDriver) {
-		super(webDriver);
+	public EdoLoginPage(GenericWebDriver webDriver,TestResultService testResultService) {
+		super(webDriver,testResultService);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -44,7 +45,7 @@ public class EdoLoginPage extends LoginPage {
 
 	public EdoHomePage submitLogin() throws Exception {
 		webDriver.waitForElement("//div[@class='blueButton']", ByTypes.xpath).click();
-		return new EdoHomePage(webDriver);
+		return new EdoHomePage(webDriver,testResultService);
 	}
 
 	// public EdoLoginPage openEdoLoginPage(String url)throws Exception{
@@ -62,7 +63,7 @@ public class EdoLoginPage extends LoginPage {
 //		dbService.setUserLoginToNull(user.getId());
 		typeUserNameAndPass(user.getUserName(), user.getPassword());
 		webDriver.waitForElement("//div[@class='blueButton']", ByTypes.xpath).click();
-		EdoHomePage edoHomePage=new EdoHomePage(webDriver);
+		EdoHomePage edoHomePage=new EdoHomePage(webDriver,testResultService);
 		edoHomePage.waitForPageToLoad();
 		return edoHomePage;
 		

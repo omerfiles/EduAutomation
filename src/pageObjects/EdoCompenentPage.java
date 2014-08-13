@@ -1,11 +1,12 @@
 package pageObjects;
 
+import services.TestResultService;
 import drivers.GenericWebDriver;
 
 public class EdoCompenentPage extends GenericPage {
 
-	public EdoCompenentPage(GenericWebDriver webDriver) {
-		super(webDriver);
+	public EdoCompenentPage(GenericWebDriver webDriver,TestResultService testResultService) {
+		super(webDriver,testResultService);
 		// TODO Auto-generated constructor stub
 	}
 

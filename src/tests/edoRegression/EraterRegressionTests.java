@@ -69,7 +69,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		int courseId = 12;
 		String textFile = "files/assayFiles/text24.txt";
 		report.report("using file: " + textFile);
-		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
+		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver,testResultService);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
 
 		Student student = new Student();
@@ -178,7 +178,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		student.setId(dbService.getUserIdByUserName(student.getUserName(),autoInstitution.getInstitutionId()));
 
 		startStep("Login as student and enter some text");
-		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
+		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver,testResultService);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
 		EdoHomePage edoHomePage = edoLoginPage.login(student);
 

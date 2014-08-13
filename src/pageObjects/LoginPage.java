@@ -1,5 +1,6 @@
 package pageObjects;
 
+import services.TestResultService;
 import junit.framework.Assert;
 import drivers.GenericWebDriver;
 
@@ -15,8 +16,8 @@ public abstract class LoginPage extends GenericPage {
 		this.pageUrl = pageUrl;
 	}
 
-	public LoginPage(GenericWebDriver webDriver) {
-		super(webDriver);
+	public LoginPage(GenericWebDriver webDriver,TestResultService testResultService) {
+		super(webDriver,testResultService);
 		// TODO Auto-generated constructor stub
 	}
 

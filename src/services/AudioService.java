@@ -47,10 +47,13 @@ public class AudioService extends SystemObjectImpl {
 
 	AudioFileFormat.Type fileType = AudioFileFormat.Type.WAVE;
 	TargetDataLine targetline;
+	
+//	public void sendSoundToVirtualMic(File soundFile, float sampleRate){
+//		
+//	}
 
 	public void sendSoundToVirtualMic(File soundFile, float sampleRate)
 			throws Exception {
-		
 		try {
 			audioStream = AudioSystem.getAudioInputStream(soundFile);
 
@@ -60,12 +63,14 @@ public class AudioService extends SystemObjectImpl {
 		}
 		report.startLevel("Starting to play file: " + soundFile.getPath()
 				+ " to virtual microphone", EnumReportLevel.CurrentPlace);
+		System.out.println("Playing file: "+soundFile.getPath().toString());
 		// audioFormat = audioStream.getFormat();
 		if (sampleRate == 0) {
 			audioFormat = getAudioFormat();
 		} else {
 			audioFormat = getAudioFormat(sampleRate);
 		}
+		System.out.println("Playing the file with sample rate of: "+audioFormat.getSampleRate());
 
 		DataLine.Info infoIn = new DataLine.Info(SourceDataLine.class,
 				audioFormat);
@@ -83,6 +88,7 @@ public class AudioService extends SystemObjectImpl {
 			}
 			sourceLine = (SourceDataLine) mixer.getLine(infoIn);
 			sourceLine.open(audioFormat);
+			System.out.println("Started playing the file."+System.currentTimeMillis());
 		} catch (LineUnavailableException e) {
 			e.printStackTrace();
 			// System.exit(1);
@@ -103,7 +109,7 @@ public class AudioService extends SystemObjectImpl {
 		}
 		sourceLine.drain();
 		sourceLine.close();
-		System.out.println("finished playing the file");
+		System.out.println("finished playing the file."+System.currentTimeMillis());
 		report.stopLevel();
 
 	}

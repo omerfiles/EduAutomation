@@ -11,13 +11,14 @@ import org.openqa.selenium.WebElement;
 import Enums.ByTypes;
 import Enums.InteractStatus;
 import Objects.Course;
+import Objects.Recording;
 import pageObjects.EdoHomePage;
 import pageObjects.InteractSection;
 import tests.misc.EdusoftWebTest;
 
 public class SpeechRecognitonInteract1 extends EdusoftWebTest {
 
-
+	
 
 	@Before
 	public void setup() throws Exception {
@@ -31,6 +32,7 @@ public class SpeechRecognitonInteract1 extends EdusoftWebTest {
 		startStep("Init test data");
 		Course course = pageHelper.initCouse(8);
 		String[] words;
+		Recording recording=pageHelper.getRecordings().get(4);
 		
 //		List<String[]> recWordLevel = new ArrayList<String[]>();
 //		List<Integer> sentenceLevels = new ArrayList<Integer>();
@@ -42,7 +44,7 @@ public class SpeechRecognitonInteract1 extends EdusoftWebTest {
 		edoHomePage.clickOnCourseUnit(course.getCourseUnit());
 		edoHomePage.clickOntUnitComponent(course.getUnitComponent(),
 				"Interact 1");
-		InteractSection interactSection = new InteractSection(webDriver);
+		InteractSection interactSection = new InteractSection(webDriver,testResultService);
 	
 		startStep("Select right speaker");
 		
@@ -70,6 +72,8 @@ public class SpeechRecognitonInteract1 extends EdusoftWebTest {
 		interactSection.checkIfInteract1StatusChanged(2,InteractStatus.recorder,3);
 		interactSection.checkInstructionText( interactSection.instructionText5);
 		sleep(1);
+		interactSection.allowMicFirefox();
+		audioService.sendSoundToVirtualMic(recording.getFiles().get(0), 0);
 		interactSection.waitUntilRecordingEnds(4,2);
 		interactSection.checkInstructionText( interactSection.instructionText9);
 		sleep(1);

@@ -40,6 +40,9 @@ public class PageHelperService extends SystemObjectImpl {
 	@Autowired
 	DbService dbService;
 
+	@Autowired
+	TestResultService testResultService;
+
 	// @Autowired
 	// AudioService audioService;
 
@@ -83,7 +86,8 @@ public class PageHelperService extends SystemObjectImpl {
 
 	public EdoHomePage loginAsStudent() throws Exception {
 
-		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
+		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver,
+				testResultService);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
 
 		setUserLoginToNull(dbService.getUserIdByUserName(student.getUserName(),
@@ -95,7 +99,8 @@ public class PageHelperService extends SystemObjectImpl {
 	}
 
 	public EdoHomePage loginAsTeacher() throws Exception {
-		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
+		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver,
+				testResultService);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
 
 		teacher.setPassword(configuration.getProperty("teacher.password"));
@@ -108,7 +113,8 @@ public class PageHelperService extends SystemObjectImpl {
 	}
 
 	public TmsHomePage loginToTmsAsAdmin() throws Exception {
-		TmsLoginPage tmsLoginPage = new TmsLoginPage(webDriver);
+		TmsLoginPage tmsLoginPage = new TmsLoginPage(webDriver,
+				testResultService);
 		tmsLoginPage.OpenPage(getTmsUrl());
 		SchoolAdmin schoolAdmin = new SchoolAdmin();
 		schoolAdmin.setUserName(configuration.getProperty("tmsadmin.user"));
@@ -131,8 +137,17 @@ public class PageHelperService extends SystemObjectImpl {
 	}
 
 	public List<Course> loadCoursedDetailsFromCsv() throws Exception {
-		List<String[]> courses = textService
-				.getStr2dimArrFromCsv("files/csvFiles/Courses.csv");
+		// "files/csvFiles/Courses.csv"
+		String filepath = configuration.getProperty("coursesFilePath");
+		if (filepath == null) {
+			filepath = "files/csvFiles/Courses.csv";
+		}
+		return loadCoursedDetailsFromCsv(filepath);
+	}
+
+	public List<Course> loadCoursedDetailsFromCsv(String filePath)
+			throws Exception {
+		List<String[]> courses = textService.getStr2dimArrFromCsv(filePath);
 		List<Course> coursesList = new ArrayList<Course>();
 		for (int i = 0; i < courses.size(); i++) {
 			Course course = new Course();
@@ -194,10 +209,27 @@ public class PageHelperService extends SystemObjectImpl {
 		for (int i = 0; i < recordingsCsv.size(); i++) {
 			Recording recording = new Recording();
 			recording.setId(recordingsCsv.get(i)[0]);
-			recording
-					.setWL(textService.splitStringToArray(recordingsCsv.get(i)[1]));
-			recording.setSL(Integer.valueOf(recordingsCsv.get(i)[2]));
-			recording.setRecordingFile(new File("files/audioFiles/"+recordingsCsv.get(i)[3]));
+
+			String[] Wlevels = textService.splitStringToArray(
+					recordingsCsv.get(i)[1], "\\|");
+			String[] Slevels = textService.splitStringToArray(
+					recordingsCsv.get(i)[2], "\\|");
+			String[] files = textService.splitStringToArray(
+					recordingsCsv.get(i)[3], "\\|");
+
+			List<Integer> SL = new ArrayList<Integer>();
+			List<String[]> WL = new ArrayList<String[]>();
+			List<File> recFiles = new ArrayList<File>();
+
+			for (int j = 0; j < Wlevels.length; j++) {
+				WL.add(textService.splitStringToArray(Wlevels[j]));
+				SL.add(Integer.valueOf(Slevels[j]));
+				recFiles.add(new File("files/audioFiles/" + files[j]));
+			}
+			recording.setWL(WL);
+			recording.setSL(SL);
+			recording.setRecordingFiles(recFiles);
+
 			recordings.add(recording);
 
 		}

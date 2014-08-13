@@ -3,11 +3,12 @@ package pageObjects.tms;
 import Enums.ByTypes;
 import drivers.GenericWebDriver;
 import pageObjects.GenericPage;
+import services.TestResultService;
 
 public class StudentRecordingsPage extends GenericPage {
 
-	public StudentRecordingsPage(GenericWebDriver webDriver) {
-		super(webDriver);
+	public StudentRecordingsPage(GenericWebDriver webDriver,TestResultService testResultService) {
+		super(webDriver,testResultService);
 		// TODO Auto-generated constructor stub
 	}
 

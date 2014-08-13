@@ -5,12 +5,14 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.List;
 
+import org.hamcrest.core.IsInstanceOf;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
 import services.AudioService;
+import services.TestResultService;
 import services.TextService;
 import Enums.ByTypes;
 import Enums.SRWordLevel;
@@ -37,8 +39,9 @@ public class RecordPanel extends SRpage {
 
 	int numOfCurrentRecordings = 0;
 
-	public RecordPanel(GenericWebDriver webDriver) {
-		super(webDriver);
+	public RecordPanel(GenericWebDriver webDriver,
+			TestResultService testResultService) {
+		super(webDriver, testResultService);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -76,16 +79,18 @@ public class RecordPanel extends SRpage {
 
 	public void clickOnRecordButton() throws Exception {
 		webDriver.waitForElement("btnRecord", ByTypes.id).click();
+		
+		//approve popup using Java robot
+		
 		webDriver.sleep(1000);
-		Robot robot = new Robot();
-		robot.keyPress(KeyEvent.VK_TAB);
-		webDriver.sleep(500);
-		robot.keyPress(KeyEvent.VK_TAB);
-		webDriver.sleep(500);
-		robot.keyPress(KeyEvent.VK_TAB);
-		webDriver.sleep(500);
+	
+		allowMicFirefox();
+		//**************************
+		
+//		webDriver.closeAlertByAccept();
+		
 
-		robot.keyPress(KeyEvent.VK_ENTER);
+		
 		// checkThatHearButtonIsDisabled();
 	}
 
@@ -165,16 +170,18 @@ public class RecordPanel extends SRpage {
 
 		String actualSentenceScoreText = webDriver.waitForElement(
 				"//div[@class='scoreRangeWrapper']", ByTypes.xpath).getText();
-		Assert.assertEquals(
-				"Sentence rating text does not matche or not found",
-				ratingText, actualSentenceScoreText);
+//		Assert.assertEquals(
+//				"Sentence rating text does not matche or not found",
+//				ratingText, actualSentenceScoreText);
+		testResultService.assertEquals(ratingText, actualSentenceScoreText);
 
 		String actualSentenceFeedbackText = webDriver.waitForElement(
 				"//div[@class='scoreExpWrapper']", ByTypes.xpath).getText();
 
-		Assert.assertEquals(
-				"Sentence rating feedback text does not matche or not found",
-				ratingFeedbackText, actualSentenceFeedbackText);
+//		Assert.assertEquals(
+//				"Sentence rating feedback text does not matche or not found",
+//				ratingFeedbackText, actualSentenceFeedbackText);
+		testResultService.assertEquals(ratingFeedbackText, actualSentenceFeedbackText);
 	}
 
 	public void closeRecordPanel() throws Exception {
@@ -216,9 +223,10 @@ public class RecordPanel extends SRpage {
 		WebElement element = webDriver.waitForElement(
 				"//div[@class='srPanelScoreWrapper']//div[2]//span[@class='scoreSquares"
 						+ sentenceLevel + "']", ByTypes.xpath);
-		System.out.println(getSLBackgroundImage(element));
+		System.out.println("SL background image is (SL is "+sentenceLevel+ ") "+getSLBackgroundImage(element));
 
-		Assert.assertEquals(getExpectedGifBySL(sentenceLevel),
+		// Assert.assertEquals(getExpectedGifBySL(sentenceLevel),getSLBackgroundImage(element));
+		testResultService.assertEquals(getExpectedGifBySL(sentenceLevel),
 				getSLBackgroundImage(element));
 	}
 
@@ -270,10 +278,15 @@ public class RecordPanel extends SRpage {
 
 	public String getSLBackgroundImage(WebElement element) throws Exception {
 		String bgImg = webDriver.getCssValue(element, "background-image");
-		if (webDriver instanceof FirefoxWebDriver) {
-			bgImg = bgImg.substring(5, bgImg.length() - 2);
-		} else if (webDriver instanceof ChromeWebDriver) {
-			bgImg = bgImg.substring(4, bgImg.length() - 1);
+		System.out.println("bgImage is: "+bgImg);
+		try {
+			if (webDriver instanceof FirefoxWebDriver) {
+				bgImg = bgImg.substring(5, bgImg.length() - 2);
+			} else if (webDriver instanceof ChromeWebDriver) {
+				bgImg = bgImg.substring(4, bgImg.length() - 1);
+			}
+		} catch (Exception e) {
+			testResultService.addFailTest("Getting SL image failed");
 		}
 
 		// bgImg=bgImg.replace("''", "");
@@ -338,6 +351,7 @@ public class RecordPanel extends SRpage {
 				.waitForElement(
 						"//div[@id='divRStatus'][contains(text(),'SPEAK')]",
 						ByTypes.id);
+		System.out.println("SPEAK status found."+System.currentTimeMillis());
 
 	}
 
@@ -347,19 +361,19 @@ public class RecordPanel extends SRpage {
 
 	}
 
-	public void checkThatWlIsCloseToExpectedWL(String[] expectedWL, String[] actualWL) {
-		for(int i=0;i<expectedWL.length;i++){
-			int expWL=Integer.valueOf(expectedWL[i]);
-			int actWL=Integer.valueOf(actualWL[i]);
-			System.out.println("Diffrence is: "+Math.abs(expWL-actWL));
-			if(Math.abs(expWL-actWL)>1){
-				System.out.println("Diffrence between expected WL and actual WL was bigger then 1");
-			
+	public void checkThatWlIsCloseToExpectedWL(String[] expectedWL,
+			String[] actualWL) {
+		for (int i = 0; i < expectedWL.length; i++) {
+			int expWL = Integer.valueOf(expectedWL[i]);
+			int actWL = Integer.valueOf(actualWL[i]);
+			System.out.println("Diffrence is: " + Math.abs(expWL - actWL));
+			if (Math.abs(expWL - actWL) > 1) {
+				System.out
+						.println("Diffrence between expected WL and actual WL was bigger then 1");
+
 			}
 		}
-		
-		
-		
+
 	}
 
 }

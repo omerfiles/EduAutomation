@@ -7,11 +7,12 @@ import pageObjects.EdoLoginPage;
 import pageObjects.GenericPage;
 import pageObjects.LoginPage;
 import services.Configuration;
+import services.TestResultService;
 
 public class TmsLoginPage extends LoginPage {
 
-	public TmsLoginPage(GenericWebDriver webDriver) {
-		super(webDriver);
+	public TmsLoginPage(GenericWebDriver webDriver,TestResultService testResultService) {
+		super(webDriver,testResultService);
 		
 		// TODO Auto-generated constructor stub
 	}
@@ -25,7 +26,7 @@ public class TmsLoginPage extends LoginPage {
 		webDriver.waitForElement("userName",ByTypes.name).sendKeys(userObject.getUserName());
 		webDriver.waitForElement("password", ByTypes.name).sendKeys(userObject.getPassword());
 		webDriver.waitForElement("//input[@value='Login']",ByTypes.xpath).click();
-		return new TmsHomePage(webDriver);
+		return new TmsHomePage(webDriver,testResultService);
 		
 	}
 	

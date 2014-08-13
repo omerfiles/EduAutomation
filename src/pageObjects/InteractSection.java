@@ -1,9 +1,12 @@
 package pageObjects;
 
+import java.io.File;
+
 import org.junit.Assert;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
+import services.TestResultService;
 import services.TextService;
 import Enums.ByTypes;
 import Enums.InteractStatus;
@@ -29,8 +32,8 @@ public class InteractSection extends SRpage {
 	public final String instructionText14 = "See feedback";
 	public final String instructionText20 = "Listen to the first speaker and choose a response.";
 
-	public InteractSection(GenericWebDriver webDriver) {
-		super(webDriver);
+	public InteractSection(GenericWebDriver webDriver,TestResultService testResultService) {
+		super(webDriver,testResultService);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -297,6 +300,11 @@ public class InteractSection extends SRpage {
 
 	public void clickOnSeeFeedback() throws Exception {
 		webDriver.waitForElement("See feedback", ByTypes.linkText).click();
+	}
+
+	public void sendVoiceToMic(File file) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

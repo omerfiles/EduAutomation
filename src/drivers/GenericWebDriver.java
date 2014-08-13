@@ -503,7 +503,6 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			report.report("Exceptin found during checkElementNotExist");
 		} finally {
 
-			
 			testResultService.assertTrue("Element with xpath " + xpath
 					+ " found when it should not", elementFound == false);
 		}
@@ -512,7 +511,6 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	public void checkElementNotExist(String xpath) throws Exception {
 		checkElementNotExist(xpath, null);
 	}
-
 
 	public WebElement getElement(By by) {
 		WebElement element = webDriver.findElement(by);
@@ -541,6 +539,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		System.out.println("Finished closing alert");
 
 	}
+	
 
 	public void closeAlertByDismiss() {
 		WebDriverWait wait = new WebDriverWait(webDriver, 20, 1000);
@@ -642,10 +641,6 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		return result;
 	}
 
-	
-
-
-
 	public void pasteTextFromClipboard(WebElement element) throws Exception {
 		element.click();
 		element.sendKeys(Keys.chord(Keys.CONTROL, "v"));
@@ -738,12 +733,15 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	public String getCssValue(WebElement element, String cssParam)
 			throws Exception {
-		return element.getCssValue(cssParam);
+		String value = null;
+		try {
+			value = element.getCssValue(cssParam);
+		} catch (Exception e) {
+			testResultService.addFailTest("Element with css param " + cssParam
+					+ " was null");
+		}
+		return value;
 	}
-
-	
-
-
 
 	public void getElementLocation(WebElement element) {
 		Point p = element.getLocation();

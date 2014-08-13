@@ -31,7 +31,7 @@ public class SpeechRecognitionInteract2 extends EdusoftWebTest {
 		edoHomePage.clickOnCourseUnit(course.getCourseUnit());
 		edoHomePage.clickOntUnitComponent(course.getUnitComponent(),
 				"Interact 2");
-		InteractSection interactSection = new InteractSection(webDriver);
+		InteractSection interactSection = new InteractSection(webDriver,testResultService);
 		startStep("Click on Interact2 - start button");
 		interactSection.checkInstructionText(interactSection.instructionText1);
 		sleep(2);

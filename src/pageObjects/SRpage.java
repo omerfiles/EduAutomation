@@ -1,5 +1,10 @@
 package pageObjects;
 
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
+
+import services.TestResultService;
 import services.TextService;
 import Enums.ByTypes;
 import Enums.SRWordLevel;
@@ -7,8 +12,8 @@ import drivers.GenericWebDriver;
 
 public class SRpage extends GenericPage {
 
-	public SRpage(GenericWebDriver webDriver) {
-		super(webDriver);
+	public SRpage(GenericWebDriver webDriver,TestResultService testResultService) {
+		super(webDriver,testResultService);
 	}
 
 	@Override
@@ -43,9 +48,14 @@ public class SRpage extends GenericPage {
 	}
 	public void checkWordsLevels(String[] words, String[] wordsScores,
 			TextService textService) throws Exception {
-		for (int i = 0; i < words.length; i++) {
-			CheckWordScore(words[i], Integer.valueOf(wordsScores[i]),
-					textService);
+		try {
+			for (int i = 0; i < words.length; i++) {
+				CheckWordScore(words[i], Integer.valueOf(wordsScores[i]),
+						textService);
+			}
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			testResultService.addFailTest("Word  is missing");
 		}
 	}
 	
@@ -56,6 +66,17 @@ public class SRpage extends GenericPage {
 		str = str.replace(",", "");
 		return str;
 
+	}
+	
+	public void allowMicFirefox() throws AWTException{
+		Robot robot = new Robot();
+		robot.keyPress(KeyEvent.VK_TAB);
+		webDriver.sleep(500);
+		robot.keyPress(KeyEvent.VK_TAB);
+		webDriver.sleep(500);
+		robot.keyPress(KeyEvent.VK_TAB);
+		webDriver.sleep(500);
+		robot.keyPress(KeyEvent.VK_ENTER);
 	}
 
 }

@@ -9,9 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import Enums.ByTypes;
 import Objects.Course;
 import pageObjects.tms.TmsHomePage;
+import services.TestResultService;
 import services.TextService;
 import jsystem.framework.report.Reporter.ReportAttribute;
-import junit.framework.Assert;
+
+import org.junit.Assert;
+
 import drivers.GenericWebDriver;
 
 public class EdoHomePage extends GenericPage {
@@ -27,8 +30,9 @@ public class EdoHomePage extends GenericPage {
 
 	public String mainWindowName = null;
 
-	public EdoHomePage(GenericWebDriver webDriver) {
-		super(webDriver);
+	public EdoHomePage(GenericWebDriver webDriver,
+			TestResultService testResultService) {
+		super(webDriver, testResultService);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -65,6 +69,7 @@ public class EdoHomePage extends GenericPage {
 				courseName,
 				webDriver.waitForElement("//*[@id='mainAreaTD']/div/h1",
 						ByTypes.xpath).getText());
+
 		return this;
 	}
 
@@ -181,12 +186,17 @@ public class EdoHomePage extends GenericPage {
 
 	public EdoHomePage submitWritingAssignment(String assayTextFileName,
 			TextService textService) throws Exception {
+		return submitWritingAssignment(assayTextFileName, textService, null);
+	}
+
+	public EdoHomePage submitWritingAssignment(String assayTextFileName,
+			TextService textService, String timeStamp) throws Exception {
 		String assayText = textService.getTextFromFile(assayTextFileName,
 				Charset.defaultCharset());
 
 		// System.out.println("Clipboard text is set to: " + assayText);
 		// textService.setClipboardText(assayText);
-		webDriver.swithcToFrameAndSendKeys("//body[@id='tinymce']", assayText,
+		webDriver.swithcToFrameAndSendKeys("//body[@id='tinymce']", timeStamp+ assayText,
 				"elm1_ifr");
 		Thread.sleep(3000);
 		// String mainWindow = webDriver.switchToFrame("elm1_ifr");
@@ -323,7 +333,7 @@ public class EdoHomePage extends GenericPage {
 		// webDriver.waitForElement("a5", ByTypes.id).click();
 		// webDriver.waitForElement("//a[@href='../Report/writingAssignments.aspx']",
 		// ByTypes.xpath.toString()).click();
-		return new TmsHomePage(webDriver);
+		return new TmsHomePage(webDriver, testResultService);
 	}
 
 	public EdoHomePage addWritingAssignment(Course course, String textFile)
@@ -586,8 +596,10 @@ public class EdoHomePage extends GenericPage {
 	public EdoHomePage checkStudentScore(String score) throws Exception {
 		String actualScore = webDriver.waitForElement(
 				"//span[@class='TestCongratulation']", ByTypes.xpath).getText();
-		Assert.assertEquals("Score is incorrect or not found", score,
-				actualScore);
+		// Assert.assertEquals("Score is incorrect or not found", score,
+		// actualScore);
+		testResultService.assertEquals(score, actualScore);
+
 		return this;
 	}
 
@@ -763,13 +775,13 @@ public class EdoHomePage extends GenericPage {
 
 	public RecordPanel clickOnRecordYourself() throws Exception {
 		webDriver.waitForElementAndClick("open_srp", ByTypes.id);
-		return new RecordPanel(webDriver);
+		return new RecordPanel(webDriver, testResultService);
 
 	}
 
 	public RecordPanel clickOnRecordYourselfInVocabulary() throws Exception {
 		webDriver.waitForElementAndClick("tempLink2", ByTypes.id);
-		return new RecordPanel(webDriver);
+		return new RecordPanel(webDriver, testResultService);
 
 	}
 
@@ -788,7 +800,7 @@ public class EdoHomePage extends GenericPage {
 
 	public RecordPanel clickOnPronunciation() throws Exception {
 		webDriver.waitForElement("pf", ByTypes.id).click();
-		return new RecordPanel(webDriver);
+		return new RecordPanel(webDriver, testResultService);
 	}
 
 	public void clickOnVocabText(String text) throws Exception {

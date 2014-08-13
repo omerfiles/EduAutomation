@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import services.AudioService;
 import services.Configuration;
 import services.DbService;
+import services.TestResultService;
 import drivers.GenericWebDriver;
 
 public abstract class GenericPage extends SystemObjectImpl {
@@ -17,6 +18,9 @@ public abstract class GenericPage extends SystemObjectImpl {
 	
 	@Autowired
 	protected Configuration configuration;
+	
+//	@Autowired
+	protected TestResultService  testResultService;
 	
 //	@Autowired
 //	protected AudioService audioService;
@@ -28,8 +32,9 @@ public abstract class GenericPage extends SystemObjectImpl {
 	
 	protected static final Logger logger = LoggerFactory.getLogger(GenericPage.class);
 	
-	public GenericPage(GenericWebDriver webDriver){
+	public GenericPage(GenericWebDriver webDriver,TestResultService testResultService){
 		this.webDriver=webDriver;
+		this.testResultService=testResultService;
 //		this.dbService=webDriver.getDbService();
 //		textService=new TextService();
 	

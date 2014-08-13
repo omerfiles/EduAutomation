@@ -108,7 +108,7 @@ public class TestsErater extends EdusoftWebTest {
 			throws Exception {
 		report.startLevel("Login to Edo", EnumReportLevel.CurrentPlace);
 		report.report("using file: " + textFile);
-		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
+		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver,testResultService);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
 
 		Student student = new Student();

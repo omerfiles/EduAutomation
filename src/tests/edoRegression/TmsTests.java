@@ -39,7 +39,7 @@ public class TmsTests extends EdusoftWebTest {
 		teacher.setUserName(autoInstitution.getTeacherUserName());
 		teacher.setPassword(autoInstitution.getTeacherPassword());
 
-		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
+		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver,testResultService);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
 		edoLoginPage.login(teacher);
 	}
@@ -52,7 +52,7 @@ public class TmsTests extends EdusoftWebTest {
 		String teacherName = "teacher" + dbService.sig(6);
 		String teacherPassword = "12345";
 
-		TmsLoginPage tmsLoginPage = new TmsLoginPage(webDriver);
+		TmsLoginPage tmsLoginPage = new TmsLoginPage(webDriver,testResultService);
 		UserObject tmsAdmin = new UserObject();
 		tmsAdmin.setUserName(configuration.getProperty("tmsadmin.user"));
 		tmsAdmin.setPassword(configuration.getProperty("tmsadmin.password"));
@@ -88,7 +88,7 @@ public class TmsTests extends EdusoftWebTest {
 				EnumReportLevel.CurrentPlace);
 		webDriver.quitBrowser();
 		webDriver.init();
-		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
+		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver,testResultService);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
 		Teacher teacher = new Teacher(teacherName, teacherPassword);
 		EdoHomePage homePage = edoLoginPage.login(teacher);
@@ -116,7 +116,7 @@ public class TmsTests extends EdusoftWebTest {
 		this.testCaseId = "5783";
 		String studentName = "student" + dbService.sig(6);
 		String studentPassword = "12345";
-		TmsLoginPage tmsLoginPage = new TmsLoginPage(webDriver);
+		TmsLoginPage tmsLoginPage = new TmsLoginPage(webDriver,testResultService);
 		UserObject tmsAdmin = new UserObject();
 		tmsAdmin.setUserName(configuration.getProperty("tmsadmin.user"));
 		tmsAdmin.setPassword(configuration.getProperty("tmsadmin.password"));
@@ -152,7 +152,7 @@ public class TmsTests extends EdusoftWebTest {
 		report.startLevel("Login as student", EnumReportLevel.CurrentPlace);
 		webDriver.closeBrowser();
 		webDriver.init();
-		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
+		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver,testResultService);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
 		Student student = new Student();
 		student.setUserName(studentName);
@@ -169,7 +169,7 @@ public class TmsTests extends EdusoftWebTest {
 		report.startLevel("Open TMS and login as TMS Admin",
 				EnumReportLevel.CurrentPlace);
 		this.testCaseId = "5779";
-		TmsLoginPage tmsLoginPage = new TmsLoginPage(webDriver);
+		TmsLoginPage tmsLoginPage = new TmsLoginPage(webDriver,testResultService);
 		UserObject tmsAdmin = new UserObject();
 		tmsAdmin.setUserName(configuration.getProperty("tmsadmin.user"));
 		tmsAdmin.setPassword(configuration.getProperty("tmsadmin.password"));
@@ -246,7 +246,7 @@ public class TmsTests extends EdusoftWebTest {
 		startStep("Open institution URL and self register as a student");
 		webDriver.closeBrowser();
 		webDriver.init();
-		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
+		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver,testResultService);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
 		edoLoginPage.clickOnSelfRegistraton();
 		webDriver.switchToNewWindow(1);
