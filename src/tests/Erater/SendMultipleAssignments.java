@@ -40,8 +40,7 @@ public class SendMultipleAssignments extends EdusoftWebTest {
 		startStep("Send writing assignment to E-Rater");
 		System.out.println("Unit componenets is: "+ course.getName()
 				+ " "
-				+ course.getCourseUnit().toString()
-				+ " "
+				
 				+ course.getCourseUnits().get(0).getName()
 				+ " "
 				+ course.getCourseUnits().get(0).getUnitComponent().get(0)
