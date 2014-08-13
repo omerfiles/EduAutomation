@@ -38,6 +38,14 @@ public class SendMultipleAssignments extends EdusoftWebTest {
 
 	public void sendAssignmentAsStudent(Course course) throws Exception {
 		startStep("Send writing assignment to E-Rater");
+		System.out.println("Unit componenets is: "+ course.getName()
+				+ " "
+				+ course.getCourseUnit().toString()
+				+ " "
+				+ course.getCourseUnits().get(0).getName()
+				+ " "
+				+ course.getCourseUnits().get(0).getUnitComponent().get(0)
+						.getName());
 
 		edoHomePage.clickOnCourses();
 		sleep(2);
@@ -53,21 +61,19 @@ public class SendMultipleAssignments extends EdusoftWebTest {
 				.getUnitComponent().get(0).getStageNumber());
 		edoHomePage.ClickOnComponentsStage(unitStage);
 		sleep(3);
-		String timeStampe=dbService.sig(10);
-		edoHomePage.submitWritingAssignment(textFile, textService,timeStampe);
-		
+		String timeStampe = dbService.sig(10);
+		edoHomePage.submitWritingAssignment(textFile, textService, timeStampe);
+
 		startStep("start checking the xml and json");
-		String userId = dbService.getUserIdByUserName(pageHelper.getStudent().getUserName(),autoInstitution.getInstitutionId());
-//		String textStart = textService.getFirstCharsFromCsv(10, textFile);
+		String userId = dbService.getUserIdByUserName(pageHelper.getStudent()
+				.getUserName(), autoInstitution.getInstitutionId());
+		// String textStart = textService.getFirstCharsFromCsv(10, textFile);
 		String writingId = eraterService.getWritingIdByUserIdAndTextStart(
 				userId, timeStampe);
-//		writingIdForDelete.add(writingId);
+		// writingIdForDelete.add(writingId);
 		report.report("writing id is: " + writingId);
 		eraterService.compareJsonAndXmlByWritingId(writingId);
-		
-		
-		
-		
+
 		startStep("Wait for E-Rater feedback and send to teacher");
 		edoHomePage.clickOnMyAssignments();
 		edoHomePage.switchToAssignmentsFrame();
@@ -80,6 +86,7 @@ public class SendMultipleAssignments extends EdusoftWebTest {
 		edoHomePage.editFeedbackAssignmentText(newText);
 
 		edoHomePage.clickOnFeedbackSubmitBtn();
+		endStep();
 
 	}
 
