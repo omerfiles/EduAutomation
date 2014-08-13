@@ -615,7 +615,7 @@
 								</property>
 								<property>
 									<name>envFile</name>
-									<value>qa.properties</value>
+									<value>erater.properties</value>
 								</property>
 
 							</systemProperties>
