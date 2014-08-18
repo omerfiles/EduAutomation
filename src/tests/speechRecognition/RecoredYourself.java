@@ -27,16 +27,16 @@ public class RecoredYourself extends EdusoftWebTest {
 
 	@Test
 	public void testRecordPanel1() throws Exception {
-		testRecordYourselfIntegrated(13, 1, 1,0);
+		testRecordYourselfIntegrated(13, 1, 1, 0);
 	}
-	
+
 	@Test
 	public void testRecordPanel2() throws Exception {
-		testRecordYourselfIntegrated(15, 6, 3,8000.0F);
+		testRecordYourselfIntegrated(15, 6, 3, 8000.0F);
 	}
 
 	public void testRecordYourselfIntegrated(int courseId, int scriptSection,
-			int recordingId,float sampleRate) throws Exception {
+			int recordingId, float sampleRate) throws Exception {
 		startStep("Init test data");
 		// int courseId = 13;
 		// int scriptSection = 1;
@@ -73,9 +73,11 @@ public class RecoredYourself extends EdusoftWebTest {
 
 		sleep(3);
 		recordPanel.clickOnRecordButton();
-		recordPanel.waitForSpeakStatus();
+		String status = recordPanel.getRecordPanelStatus();
+		testResultService.assertEquals("SPEAK", status);
 		// recordPanel.waitForSpeakStatus();
-		audioService.sendSoundToVirtualMic(recording.getFiles().get(0), sampleRate);
+		audioService.sendSoundToVirtualMic(recording.getFiles().get(0),
+				sampleRate);
 
 		startStep("Check that recording ended");
 		sleep(2);
@@ -83,13 +85,15 @@ public class RecoredYourself extends EdusoftWebTest {
 		webDriver.printScreen("After recording ended");
 		// audioService.sendSoundToVirtualMic(new File(
 		// "files/audioFiles/TheBeatMe16000_16.wav"), 16000.0F);
-		// sentenceLevel = recordPanel.getSentenceLevel();
+//		 sentenceLevel = recordPanel.getSentenceLevel();
+		
 		sentenceLevel = recording.getSL().get(0);
+		
 		System.out.println("Sentence level is: " + sentenceLevel);
-		// wordLevels = textService.splitStringToArray(recordPanel
-		// .getWordsScoring("wl"));
-		wordLevels = recording.getWL().get(0);
-		System.out.println("Word level is: " + wordLevels.toString());
+//		wordLevels = textService.splitStringToArray(recordPanel
+//				.getWordsScoring("wl"));
+		 wordLevels = recording.getWL().get(0);
+		 System.out.println("Word level is: " + wordLevels.toString());
 
 		startStep("Check word level and sentence level");
 		recordPanel.checkWordsLevels(words, wordLevels, textService);
@@ -101,7 +105,7 @@ public class RecoredYourself extends EdusoftWebTest {
 
 	}
 
-	@Test
+	
 	public void testRecordYourselfIntegrated2() throws Exception {
 		startStep("Init test data");
 		int courseId = 15;
@@ -166,7 +170,7 @@ public class RecoredYourself extends EdusoftWebTest {
 
 	}
 
-	@Test
+
 	public void testRecordPanelScore4() throws Exception {
 		// they beat me up and stole my wife's car
 		// Advanced 1,Life In The City,How Awful!,6
@@ -175,7 +179,7 @@ public class RecoredYourself extends EdusoftWebTest {
 		testRecoredPanel(13, pageHelper.getRecordings().get(1), 1);
 	}
 
-	@Test
+
 	public void testRecordPanelScore5() throws Exception {
 		// text: what happened
 		// Advanced 1,Dangerous Sports,What Happened?,6
@@ -266,7 +270,7 @@ public class RecoredYourself extends EdusoftWebTest {
 		// recordPanel.checkSendToTeacherText();
 	}
 
-	@Test
+	
 	public void testRecoredMoreThenEightTimes() throws Exception {
 		startStep("Init test data");
 		Course course = pageHelper.initCouse(8);
@@ -333,7 +337,7 @@ public class RecoredYourself extends EdusoftWebTest {
 	}
 
 	// Test case 13439
-	@Test
+	
 	public void testRecordPanelFromVacabulary() throws Exception {
 		startStep("Init test data");
 		Course course = pageHelper.initCouse(9);
@@ -389,7 +393,7 @@ public class RecoredYourself extends EdusoftWebTest {
 	}
 
 	// Test case 13438
-	@Test
+	
 	public void testRecoredYourselfPanelOpensFromPronunciation()
 			throws Exception {
 		startStep("Init test data");

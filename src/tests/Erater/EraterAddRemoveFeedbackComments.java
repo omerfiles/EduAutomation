@@ -133,7 +133,7 @@ public class EraterAddRemoveFeedbackComments extends EdusoftWebTest {
 		tmsHomePage.clickOnTeacherFeedbackContinueButton();
 		tmsHomePage.clickOnRateAssignmentButton();
 		int rating = 1;
-		tmsHomePage.reteAssignment(rating);
+		tmsHomePage.rateAssignment(rating);
 		Thread.sleep(2000);
 		tmsHomePage.clickOnApproveAssignmentButton();
 		Thread.sleep(2000);
@@ -142,7 +142,7 @@ public class EraterAddRemoveFeedbackComments extends EdusoftWebTest {
 
 		startStep("Login as student and check that the commnet is not displayed");
 		webDriver.quitBrowser();
-		webDriver.init();
+		webDriver.init(testResultService);
 		pageHelper.loginAsStudent();
 		edoHomePage.clickOnMyAssignments();
 		edoHomePage.switchToAssignmentsFrame();
@@ -249,7 +249,7 @@ public class EraterAddRemoveFeedbackComments extends EdusoftWebTest {
 		tmsHomePage.clickOnTeacherFeedbackContinueButton();
 		tmsHomePage.clickOnRateAssignmentButton();
 		int rating = 1;
-		tmsHomePage.reteAssignment(rating);
+		tmsHomePage.rateAssignment(rating);
 		Thread.sleep(2000);
 		tmsHomePage.clickOnApproveAssignmentButton();
 		Thread.sleep(2000);
@@ -258,7 +258,7 @@ public class EraterAddRemoveFeedbackComments extends EdusoftWebTest {
 
 		startStep("Login as student and check that the commnet is not displayed");
 		webDriver.quitBrowser();
-		webDriver.init();
+		webDriver.init(testResultService);
 		pageHelper.loginAsStudent();
 		edoHomePage.clickOnMyAssignments();
 		edoHomePage.switchToAssignmentsFrame();

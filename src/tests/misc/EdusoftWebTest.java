@@ -1,12 +1,11 @@
 package tests.misc;
 
-
-
 import org.junit.After;
 import org.junit.Assert;
 
 import services.AudioService;
 import services.PageHelperService;
+import Enums.AutoParams;
 import Enums.Browsers;
 import drivers.ChromeWebDriver;
 import drivers.FirefoxWebDriver;
@@ -20,33 +19,34 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 	public PageHelperService pageHelper;
 	public AudioService audioService;
 
-	
-
 	String browser = null;
 
 	@Override
 	public void setup() throws Exception {
 		super.setup();
-		
-		//check if maven command line has a browser
-		browser=System.getProperty("browserCMD");
-		if(browser!=null){
-			System.out.println("Got borwser from maven cmd: "+browser);
-		}
-		System.out.println("remote machine: "
-				+ System.getProperty("remote.machine"));
-		if (browser == null) {
-			browser = System.getProperty("browser");// getting browser name from
-													// pom.xml when running frm
-													// Jenkins
-		}
-		System.out
-				.println("browser name loaded from maven profile: " + browser);
-		if (browser == null) {
-			browser = configuration.getProperty("browser");// getting browser
-															// name from
-			// properties file
-		}
+
+		// check if maven command line has a browser
+		// browser=System.getProperty("browserCMD");
+		// if(browser!=null){
+		// System.out.println("Got borwser from maven cmd: "+browser);
+		// }
+		// System.out.println("remote machine: "
+		// + System.getProperty("remote.machine"));
+		// if (browser == null) {
+		// browser = System.getProperty("browser");// getting browser name from
+		// // pom.xml when running frm
+		// // Jenkins
+		// }
+		// System.out
+		// .println("browser name loaded from maven profile: " + browser);
+		// if (browser == null) {
+		// browser = configuration.getProperty("browser");// getting browser
+		// // name from
+		// properties file
+		// }
+
+		browser = configuration.getAutomationParam("browser", "browserCMD");
+
 		if (browser.equals(Browsers.chrome.toString())) {
 			webDriver = (ChromeWebDriver) ctx.getBean("ChromeWebDriver");
 		} else if (browser.equals(Browsers.safari.toString())) {
@@ -57,17 +57,20 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 			webDriver = (FirefoxWebDriver) ctx.getBean("FirefoxWebDriver");
 		}
 		if (webDriver == null) {
-//			Assert.fail("No webdriver found. Please check properties file or pom for webdriver name");
-			testResultService.addFailTest("No webdriver found. Please check properties file or pom for webdriver name");
+			// Assert.fail("No webdriver found. Please check properties file or pom for webdriver name");
+			testResultService
+					.addFailTest("No webdriver found. Please check properties file or pom for webdriver name");
 		}
 
-		webDriver.init();
-		webDriver.maximize();
+		webDriver.init(testResultService);
+		try {
+			webDriver.maximize();
+		} catch (Exception e) {
+			Assert.fail("openening Webdriver failed. Check that selenium node/grid are running and also check configurations");
+		}
 		pageHelper = (PageHelperService) ctx.getBean("PageHelperService");
 		pageHelper.init(webDriver, autoInstitution);
-		audioService=(AudioService)ctx.getBean("AudioService");
-		
-
+		audioService = (AudioService) ctx.getBean("AudioService");
 
 	}
 
@@ -77,7 +80,8 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 		try {
 			if (this.isPass == false) {
 
-				webDriver.printScreen("FailCause_"+ this.getMethodName(), null);
+				webDriver
+						.printScreen("FailCause_" + this.getMethodName(), null);
 			}
 
 			// if (pageHelper.isLogoutNeeded()) {
@@ -95,7 +99,7 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 	}
 
 	public String getSutAndSubDomain() {
-		return configuration.getProperty("sut.url") + "//"
+		return configuration.getAutomationParam(AutoParams.sutUrl.toString(), AutoParams.sutUrl.toString()+"CMD") + "//"
 				+ configuration.getProperty("institutaion.subdomain");
 
 	}

@@ -112,6 +112,7 @@ public class TextService extends SystemObjectImpl {
 	}
 
 	public String[] splitStringToArray(String str, String ignorChars) {
+		System.out.println("Splitting string to array."+System.currentTimeMillis());
 		String[] result = str.split("(" + ignorChars + ")");
 		return result;
 	}
@@ -184,4 +185,10 @@ public class TextService extends SystemObjectImpl {
 		 finalString.append("')");
 		 return finalString.toString();
 		}
+	
+	public void printStringArray(String[] str){
+		for(int i=0;i<str.length;i++){
+			System.out.println("String number "+i+" :"+str[i]);
+		}
+	}
 }

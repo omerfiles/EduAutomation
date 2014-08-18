@@ -15,8 +15,9 @@ import services.TestResultService;
 
 public class TmsHomePage extends GenericPage {
 
-	public TmsHomePage(GenericWebDriver webDriver,TestResultService testResultService) {
-		super(webDriver,testResultService);
+	public TmsHomePage(GenericWebDriver webDriver,
+			TestResultService testResultService) {
+		super(webDriver, testResultService);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -107,9 +108,13 @@ public class TmsHomePage extends GenericPage {
 		return this;
 	}
 
-	public TmsHomePage reteAssignment(int rating) throws Exception {
-		webDriver.waitForElement("//tr//td//input[@id='" + rating + "']",
-				ByTypes.xpath).click();
+	public TmsHomePage rateAssignment(int rating) throws Exception {
+		// webDriver.waitForElement("//tr//td//input[@id='" + rating + "']",
+		// ByTypes.xpath).click();
+
+		webDriver.waitForElement(
+				"//div[@class='tableWrapper']//table//tbody//tr[" + rating
+						+ "]//td//div//div", ByTypes.xpath).click();
 		webDriver.printScreen("Rating student as teacher", null);
 		return this;
 	}
@@ -156,7 +161,7 @@ public class TmsHomePage extends GenericPage {
 		webDriver.waitForElementAndClick("//input[@value='Add New Teacher']",
 				ByTypes.xpath);
 		webDriver.switchToNewWindow();
-		return new TeacherDetailsPage(webDriver,testResultService);
+		return new TeacherDetailsPage(webDriver, testResultService);
 
 	}
 

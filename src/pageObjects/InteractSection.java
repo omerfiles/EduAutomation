@@ -32,8 +32,9 @@ public class InteractSection extends SRpage {
 	public final String instructionText14 = "See feedback";
 	public final String instructionText20 = "Listen to the first speaker and choose a response.";
 
-	public InteractSection(GenericWebDriver webDriver,TestResultService testResultService) {
-		super(webDriver,testResultService);
+	public InteractSection(GenericWebDriver webDriver,
+			TestResultService testResultService) {
+		super(webDriver, testResultService);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -149,15 +150,16 @@ public class InteractSection extends SRpage {
 						+ "]//div", ByTypes.xpath).getText();
 		System.out.println("words text is: " + text);
 		text = text.substring(1, text.length());
+		text=text.replace(".", "");
 		String[] words = textService.splitStringToArray(text, "\\s+");
 		return words;
 	}
 
-	public String[] getInteract2RecordedText(TextService textService,int option)
+	public String[] getInteract2RecordedText(TextService textService, int option)
 			throws Exception {
 		String text = webDriver.waitForElement(
-				"//div[@class='recordingPanelSentencesWrapper']//div["+option+"]", ByTypes.xpath)
-				.getText();
+				"//div[@class='recordingPanelSentencesWrapper']//div[" + option
+						+ "]", ByTypes.xpath).getText();
 		text = text.substring(1, text.length());
 		System.out.println("Recorded text is: " + text);
 		String[] words = textService.splitStringToArray(text, "\\s+");
@@ -220,6 +222,12 @@ public class InteractSection extends SRpage {
 	public void checkInteract1WordsLevels(String[] words, String[] wordLevels,
 			TextService textService, int speaker) throws NumberFormatException,
 			Exception {
+		webDriver.printScreen("checkngWordScore");
+		webDriver.getElementHTML(webDriver.waitForElement(
+				"//div[@class='recordingPanelWrapper']//div[2]//div",
+				ByTypes.xpath));
+		System.out.println("Starting to chec word levels."
+				+ System.currentTimeMillis());
 		for (int i = 0; i < words.length; i++) {
 			checkInteract1WordScore(words[i], Integer.valueOf(wordLevels[i]),
 					textService, speaker);
@@ -246,9 +254,10 @@ public class InteractSection extends SRpage {
 
 	private void checkInteract1WordScore(String word, int expectedWordLevel,
 			TextService textService, int speaker) throws Exception {
+		System.out.println("Check word level." + System.currentTimeMillis());
 		CheckInteractWordScore(word, expectedWordLevel, textService, speaker,
 				"//div[@class='recordingPanelWrapper']//div[" + speaker
-						+ "]//div//div//div//");
+						+ "]//div//div//");
 	}
 
 	private void CheckInteractWordScore(String word, int expectedWordLevel,
@@ -269,8 +278,8 @@ public class InteractSection extends SRpage {
 
 		webDriver.waitForElement(
 				xpath + "span[contains(text(),"
-						+ textService.resolveAprostophes(word) + ")][@class='"+wordLevel+"']",
-				ByTypes.xpath);
+						+ textService.resolveAprostophes(word) + ")][@class='"
+						+ wordLevel + "']", ByTypes.xpath);
 
 	}
 
@@ -288,8 +297,8 @@ public class InteractSection extends SRpage {
 	}
 
 	public void checkInteract2recorderText(int option, String[] words,
-		
-			String[] wordLevels, TextService textService) throws Exception {
+
+	String[] wordLevels, TextService textService) throws Exception {
 		// WebElement element = webDriver.waitForElement(
 		// "//div[@class='recordingPanelSentencesWrapper']//div[" + option
 		// + "]//div//div//span", ByTypes.xpath);
@@ -302,11 +311,29 @@ public class InteractSection extends SRpage {
 		webDriver.waitForElement("See feedback", ByTypes.linkText).click();
 	}
 
-	public void sendVoiceToMic(File file) {
-		// TODO Auto-generated method stub
-		
+	public void waitForInstructionToEnd(String instructionText)
+			throws Exception {
+		int elapsedTime = 0;
+		int timeOut = 10;
+		while (elapsedTime < timeOut) {
+
+			String actualText = webDriver.waitForElement(
+					"//div[@class='questionInstructions']", ByTypes.xpath,
+					"instruction text not found").getText();
+
+			if (actualText.equals(instructionText)) {
+				Thread.sleep(1000);
+				elapsedTime++;
+				System.out
+						.println("Instruction text did not changed. sleeping for 1000ms");
+				continue;
+			} else {
+				break;
+			}
+		}
+		System.out.println("Instruction text changed."
+				+ System.currentTimeMillis());
+
 	}
-	
-	
 
 }

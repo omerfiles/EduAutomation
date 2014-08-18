@@ -265,4 +265,38 @@ public class Configuration {
 	public String getEmailDevelopmentRecipients() {
 		return getProperty("", "");
 	}
+
+	public String getAutomationParam(String paramName, String mavenCmdParam) {
+		String value = null;
+
+		// check in maven command line
+		value = System.getProperty(mavenCmdParam);
+		// check in properties file
+		if (value != null) {
+			System.out.println("got param from maven cmd: " + value);
+			return value;
+		}
+		// check in properties file
+		value = getProperty(paramName);
+		if (value != null) {
+			System.out.println("got param from properties file: " + value);
+			return value;
+		}
+		// check in pom profile
+		value = System.getProperty(paramName);
+		if (value != null) {
+			System.out.println("got param from pom profile: " + value);
+			return value;
+		}
+		// check in global properties
+		value = globalProperties.getProperty(paramName);
+		if (value != null) {
+			System.out.println("got from global properties: " + value);
+			return value;
+		} else {
+			System.out.println("value not founnd");
+		}
+
+		return value;
+	}
 }

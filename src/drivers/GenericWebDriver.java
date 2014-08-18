@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import Enums.AutoParams;
 import Enums.ByTypes;
 import Enums.TestRunnerType;
 import services.DbService;
@@ -52,7 +53,6 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	@Autowired
 	private services.Configuration configuration;
 
-	@Autowired
 	TestResultService testResultService;
 
 	protected String logsFolder;
@@ -60,25 +60,34 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	abstract public void init(String remoteUrl, String folderName)
 			throws Exception;
 
-	public void init() throws Exception {
+	public void init(TestResultService testResultService) throws Exception {
+		this.testResultService = testResultService;
 		String remoteMachine = null;
 
-		// getting remote machine from pom profile while executing tests using
-		// maven/Jenkins
-		remoteMachine = configuration.getProperty("remote.machine");
-		if (remoteMachine != null) {
-			report.report("Got remote machine from properties file");
-		}
-		if (remoteMachine == null) {
-
-			// getting remote machine from pom file
-
-			remoteMachine = System.getProperty("remote.machine");
-		}
-		if (remoteMachine == null) {
-			Assert.fail("Remote machine value is null");
-		}
-		setSutUrl(configuration.getProperty("sut.url"));
+		// getting remote machine from maven command line
+		// remoteMachine = System.getProperty("machine");
+		// if (remoteMachine != null) {
+		// System.out.println("got remote machine from maven cmd: "+remoteMachine);
+		// }
+		//
+		// // getting remote machine from pom profile while executing tests
+		// using
+		// // maven/Jenkins
+		//
+		// if (remoteMachine == null) {
+		// remoteMachine = configuration.getProperty("remote.machine");
+		// }
+		// if (remoteMachine == null) {
+		// // getting remote machine from pom file
+		// remoteMachine = System.getProperty("remote.machine");
+		// }
+		// if (remoteMachine == null) {
+		// Assert.fail("Remote machine value is null");
+		// }
+		remoteMachine = configuration.getAutomationParam("remote.machine",
+				"machine");
+		setSutUrl(configuration.getAutomationParam(
+				AutoParams.sutUrl.toString(), "suturl"));
 		setSutSubDomain(configuration.getProperty("institution.name"));
 		setInstitutionName(configuration.getProperty("institution.name"));
 		init(remoteMachine, null);
@@ -152,6 +161,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		report.startLevel("waiting for element " + idValue + " by trpe "
 				+ byType + " for " + timeout + " seconds");
 		WebElement element = null;
+
 		try {
 			WebDriverWait wait = new WebDriverWait(webDriver, timeout, sleepMS);
 
@@ -202,7 +212,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 				}
 				testResultService.addFailTest("Element: " + idValue
 						+ " not found");
-				// Assert.fail("Element: " + idValue + " not found");
+				Assert.fail("Element: " + idValue + " not found");
 			}
 			report.stopLevel();
 			return element;
@@ -539,7 +549,6 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		System.out.println("Finished closing alert");
 
 	}
-	
 
 	public void closeAlertByDismiss() {
 		WebDriverWait wait = new WebDriverWait(webDriver, 20, 1000);
@@ -762,6 +771,13 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			testRunner = TestRunnerType.local;
 		}
 		return testRunner;
+	}
+
+	public String getElementHTML(WebElement element) throws Exception {
+		String html = element.getAttribute("innerHTML");
+		System.out.println("Element HTMl is: " + html);
+
+		return html;
 	}
 
 }

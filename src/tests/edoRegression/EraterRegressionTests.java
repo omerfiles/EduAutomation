@@ -76,7 +76,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		student.setUserName(configuration.getStudentUserName());
 		student.setPassword(configuration.getStudentPassword());
 		student.setId(dbService.getUserIdByUserName(student.getUserName(),autoInstitution.getInstitutionId()));
-		EdoHomePage edoHomePage = edoLoginPage.login(student);
+		EdoHomePage edoHomePage = pageHelper.loginAsStudent();
 
 		startStep("Open home page and start a writing drill");
 		String courseName = courses.get(courseId).getName();
@@ -142,7 +142,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		tmsHomePage.clickOnAssignmentSummary();
 		tmsHomePage.clickOnRateAssignmentButton();
 		int rating = 1;
-		tmsHomePage.reteAssignment(rating);
+		tmsHomePage.rateAssignment(rating);
 		Thread.sleep(2000);
 		tmsHomePage.clickOnApproveAssignmentButton();
 		Thread.sleep(2000);
@@ -151,7 +151,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 
 		startStep("Login again as student and check the feedback from the teacher");
 		webDriver.quitBrowser();
-		webDriver.init();
+		webDriver.init(testResultService);
 		webDriver.openUrl(getSutAndSubDomain());
 		edoLoginPage.login(student);
 		sleep(5);

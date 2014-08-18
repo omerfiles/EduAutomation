@@ -60,8 +60,8 @@ public class TestResultService extends SystemObjectImpl {
 	}
 
 	public void assertEquals(String expected, String actual) {
-		System.out.println("Asserting "+expected +" and "+actual);
-		if (expected != actual) {
+		System.out.println("Asserting "+expected +". and "+actual+".");
+		if (expected.equals(actual)==false) {
 			addFailTest("Expected String was: " + expected
 					+ " but actual string was: " + actual);
 //			throw new ComparisonFailure("Assert failed", expected, actual);

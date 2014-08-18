@@ -17,7 +17,6 @@ public class SafariWebDriver extends GenericWebDriver {
 			setInitialized(true);
 			dbService = new DbService();
 			report.report("Remote url from pom file is: " + remoteUrl);
-			// sutUrl = configuration.getProperty("sut.url");
 			logsFolder = folderName;
 			try {
 				if (remoteUrl == null) {

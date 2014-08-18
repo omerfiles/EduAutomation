@@ -17,6 +17,7 @@ import pageObjects.EdoHomePage;
 import pageObjects.EdoLoginPage;
 import pageObjects.tms.TmsHomePage;
 import pageObjects.tms.TmsLoginPage;
+import Enums.AutoParams;
 import Enums.ByTypes;
 import Objects.AutoInstitution;
 import Objects.Course;
@@ -53,6 +54,8 @@ public class PageHelperService extends SystemObjectImpl {
 	private AutoInstitution autoInstitution;
 	private Student student;
 	private Teacher teacher;
+	
+	private String sutUrl;
 
 	public PageHelperService() {
 
@@ -127,7 +130,7 @@ public class PageHelperService extends SystemObjectImpl {
 	}
 
 	public String getSutAndSubDomain() {
-		return configuration.getProperty("sut.url") + "//"
+		return configuration.getAutomationParam(AutoParams.sutUrl.toString(), AutoParams.sutUrl.toString()) + "//"
 				+ configuration.getProperty("institutaion.subdomain");
 
 	}

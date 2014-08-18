@@ -79,18 +79,16 @@ public class RecordPanel extends SRpage {
 
 	public void clickOnRecordButton() throws Exception {
 		webDriver.waitForElement("btnRecord", ByTypes.id).click();
-		
-		//approve popup using Java robot
-		
-		webDriver.sleep(1000);
-	
-		allowMicFirefox();
-		//**************************
-		
-//		webDriver.closeAlertByAccept();
-		
 
-		
+		// approve popup using Java robot
+
+		webDriver.sleep(1000);
+
+		allowMicFirefox();
+		// **************************
+
+		// webDriver.closeAlertByAccept();
+
 		// checkThatHearButtonIsDisabled();
 	}
 
@@ -170,18 +168,24 @@ public class RecordPanel extends SRpage {
 
 		String actualSentenceScoreText = webDriver.waitForElement(
 				"//div[@class='scoreRangeWrapper']", ByTypes.xpath).getText();
-//		Assert.assertEquals(
-//				"Sentence rating text does not matche or not found",
-//				ratingText, actualSentenceScoreText);
+
+		WebElement actualSentenceScore = webDriver.waitForElement(
+				"//div[@class='scoreRangeWrapper']", ByTypes.xpath);
+
+		// Assert.assertEquals(
+		// "Sentence rating text does not matche or not found",
+		// ratingText, actualSentenceScoreText);
 		testResultService.assertEquals(ratingText, actualSentenceScoreText);
 
 		String actualSentenceFeedbackText = webDriver.waitForElement(
 				"//div[@class='scoreExpWrapper']", ByTypes.xpath).getText();
 
-//		Assert.assertEquals(
-//				"Sentence rating feedback text does not matche or not found",
-//				ratingFeedbackText, actualSentenceFeedbackText);
-		testResultService.assertEquals(ratingFeedbackText, actualSentenceFeedbackText);
+		// Assert.assertEquals(
+		// "Sentence rating feedback text does not matche or not found",
+		// ratingFeedbackText, actualSentenceFeedbackText);
+		testResultService.assertEquals(ratingFeedbackText,
+				actualSentenceFeedbackText);
+		
 	}
 
 	public void closeRecordPanel() throws Exception {
@@ -197,7 +201,7 @@ public class RecordPanel extends SRpage {
 		String text = webDriver.waitForElement("txtOriginal", ByTypes.id)
 				.getText();
 		System.out.println("words text is: " + text);
-		text = text.replaceAll("[-.]", "");
+		text = text.replaceAll("[-.!]", "");
 		text = text.trim();
 		String[] words = textService.splitStringToArray(text, "\\s+");
 
@@ -223,7 +227,8 @@ public class RecordPanel extends SRpage {
 		WebElement element = webDriver.waitForElement(
 				"//div[@class='srPanelScoreWrapper']//div[2]//span[@class='scoreSquares"
 						+ sentenceLevel + "']", ByTypes.xpath);
-		System.out.println("SL background image is (SL is "+sentenceLevel+ ") "+getSLBackgroundImage(element));
+		System.out.println("SL background image is (SL is " + sentenceLevel
+				+ ") " + getSLBackgroundImage(element));
 
 		// Assert.assertEquals(getExpectedGifBySL(sentenceLevel),getSLBackgroundImage(element));
 		testResultService.assertEquals(getExpectedGifBySL(sentenceLevel),
@@ -278,7 +283,7 @@ public class RecordPanel extends SRpage {
 
 	public String getSLBackgroundImage(WebElement element) throws Exception {
 		String bgImg = webDriver.getCssValue(element, "background-image");
-		System.out.println("bgImage is: "+bgImg);
+		System.out.println("bgImage is: " + bgImg);
 		try {
 			if (webDriver instanceof FirefoxWebDriver) {
 				bgImg = bgImg.substring(5, bgImg.length() - 2);
@@ -346,12 +351,13 @@ public class RecordPanel extends SRpage {
 
 	}
 
-	public void waitForSpeakStatus() throws Exception {
-		webDriver
-				.waitForElement(
-						"//div[@id='divRStatus'][contains(text(),'SPEAK')]",
-						ByTypes.id);
-		System.out.println("SPEAK status found."+System.currentTimeMillis());
+	public String getRecordPanelStatus() throws Exception {
+		String text=null;
+		WebElement element = webDriver.waitForElement(
+				"//div[@id='divRStatus']", ByTypes.xpath);
+		text=element.getText();
+		System.out.println("SPEAK status found." + System.currentTimeMillis());
+		return text;
 
 	}
 
