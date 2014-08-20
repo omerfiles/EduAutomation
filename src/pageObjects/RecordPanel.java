@@ -83,8 +83,9 @@ public class RecordPanel extends SRpage {
 		// approve popup using Java robot
 
 		webDriver.sleep(1000);
-
-		allowMicFirefox();
+		if (webDriver.getSutUrl().contains("develop")) {
+			allowMicFirefox();
+		}
 		// **************************
 
 		// webDriver.closeAlertByAccept();
@@ -185,7 +186,7 @@ public class RecordPanel extends SRpage {
 		// ratingFeedbackText, actualSentenceFeedbackText);
 		testResultService.assertEquals(ratingFeedbackText,
 				actualSentenceFeedbackText);
-		
+
 	}
 
 	public void closeRecordPanel() throws Exception {
@@ -352,10 +353,10 @@ public class RecordPanel extends SRpage {
 	}
 
 	public String getRecordPanelStatus() throws Exception {
-		String text=null;
+		String text = null;
 		WebElement element = webDriver.waitForElement(
-				"//div[@id='divRStatus']", ByTypes.xpath);
-		text=element.getText();
+				"//div[@id='divRStatus']", ByTypes.xpath, true, 30);
+		text = element.getText();
 		System.out.println("SPEAK status found." + System.currentTimeMillis());
 		return text;
 

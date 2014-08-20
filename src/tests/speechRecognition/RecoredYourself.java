@@ -66,6 +66,13 @@ public class RecoredYourself extends EdusoftWebTest {
 		edoHomePage.selectTextFromContainer(scriptSection);
 		RecordPanel recordPanel = edoHomePage.clickOnRecordYourself();
 		sleep(3);
+		
+		//if QA, allow mic
+		startStep("Check if running in QA");
+		if(pageHelper.getSutAndSubDomain().contains("qa")){
+			recordPanel.allowMicFirefox();
+		}
+		
 		edoHomePage.switchToFrameByClassName("cboxIframe");
 		startStep("Click on record and send audio file to microphone");
 
@@ -274,12 +281,15 @@ public class RecoredYourself extends EdusoftWebTest {
 	public void testRecoredMoreThenEightTimes() throws Exception {
 		startStep("Init test data");
 		Course course = pageHelper.initCouse(8);
+		Recording recording=new Recording();
+		float sampleRate=8000.0F;
 		String[] words = new String[] { "Hi", "I'm", "Tom", "Smith." };
 		int numOfRecordingsInTest = 8;
 		List<String[]> wordsScoreList = new ArrayList<String[]>();
 		List<Integer> sentenceLevels = new ArrayList<Integer>();
 		startStep("Login to EDO as student");
 		EdoHomePage edoHomePage = pageHelper.loginAsStudent();
+		sleep(3);
 		edoHomePage.clickOnCourses();
 		edoHomePage.clickOnCourseByName(course.getName());
 		edoHomePage.clickOnCourseUnit(course.getCourseUnit());
@@ -294,7 +304,18 @@ public class RecoredYourself extends EdusoftWebTest {
 		startStep("Click on record ");
 
 		for (int i = 0; i < numOfRecordingsInTest; i++) {
-			recordPanel.clickOnRecordAndStop(10);
+			recordPanel.clickOnRecordButton();
+			String status = recordPanel.getRecordPanelStatus();
+			testResultService.assertEquals("SPEAK", status);
+			// recordPanel.waitForSpeakStatus();
+			audioService.sendSoundToVirtualMic(recording.getFiles().get(0),
+					sampleRate);
+
+			startStep("Check that recording ended");
+			sleep(2);
+			recordPanel.waitForRecordingToEnd(1);
+			webDriver.printScreen("After recording ended");
+			
 			String[] wordsScoring = textService.splitStringToArray(recordPanel
 					.getWordsScoring("wl"));
 			wordsScoreList.add(wordsScoring);

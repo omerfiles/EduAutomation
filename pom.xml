@@ -551,7 +551,7 @@
 								</property>
 								<property>
 									<name>envFile</name>
-									<value>srdev.properties</value>
+									<value>sr.properties</value>
 								</property>
 
 							</systemProperties>
