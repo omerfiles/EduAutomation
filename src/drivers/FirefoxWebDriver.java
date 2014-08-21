@@ -42,8 +42,8 @@ public class FirefoxWebDriver extends GenericWebDriver {
 			ProfilesIni profile = new ProfilesIni();
 			System.out.println("setting firefix profile to allow media");
 			FirefoxProfile firefoxProfile = profile.getProfile("automation");
-			firefoxProfile.setPreference("media.navigator.permission.disabled",
-					true);
+//			firefoxProfile.setPreference("media.navigator.permission.disabled",
+//					true);
 			
 
 			// FirefoxProfile.setPreference(
