@@ -56,7 +56,7 @@ public class FirefoxWebDriver extends GenericWebDriver {
 
 			report.stopLevel();
 		} catch (Exception e) {
-			logger.error("Cannot register node or start the remote driver! ", e);
+			logger.error("Cannot register node or start the remote driver! ", e.toString());
 		}
 	}
 
