@@ -31,6 +31,7 @@ public class FirefoxWebDriver extends GenericWebDriver {
 		setInitialized(true);
 		dbService = new DbService();
 		report.report("Remote url from pom file is: " + remoteUrl);
+
 		logsFolder = folderName;
 		try {
 			if (remoteUrl == null) {
@@ -39,7 +40,14 @@ public class FirefoxWebDriver extends GenericWebDriver {
 			report.startLevel("Initializing FirefoxWebDriver",
 					Reporter.EnumReportLevel.CurrentPlace);
 			ProfilesIni profile = new ProfilesIni();
+
 			FirefoxProfile firefoxProfile = profile.getProfile("automation");
+			firefoxProfile.setPreference("media.navigator.permission.disabled",
+					true);
+			
+
+			// FirefoxProfile.setPreference(
+			// "media.navigator.permission.disabled", true);
 			DesiredCapabilities capabilities = DesiredCapabilities.firefox();
 			capabilities.setCapability(FirefoxDriver.PROFILE, firefoxProfile);
 			webDriver = new RemoteWebDriver(new URL(remoteUrl + "/wd/hub"),
@@ -55,8 +63,7 @@ public class FirefoxWebDriver extends GenericWebDriver {
 	@Override
 	public void waitForElementAndClick(String idValue, ByTypes byType)
 			throws Exception {
-		waitForElement(idValue, byType, this.timeout, true)
-				.click();
+		waitForElement(idValue, byType, this.timeout, true).click();
 	}
 
 	@Override
