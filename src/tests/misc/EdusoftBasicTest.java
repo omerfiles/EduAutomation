@@ -97,15 +97,19 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 	public void tearDown() throws Exception {
 		// report.startLevel("Test case id is: " + this.testCaseId,
 		// EnumReportLevel.MainFrame);
-		
-		System.out.println("Test failed?: "+testResultService.hasFailedResults());
-		if(testResultService.hasFailedResults()){
+
+		System.out.println("Test failed?: "
+				+ testResultService.hasFailedResults());
+		if (testResultService.hasFailedResults()) {
 			testResultService.printAllFailures();
-			Assert.fail("Test has filed due to one or more problems");
+			if (this.isPass == true) {
+				Assert.fail("Test has filed due to one or more problems");
+			}
+
 		}
-//		if (this.isPass == false) {
-//			report.startLevel("Test failed", EnumReportLevel.MainFrame);
-//		}
+		// if (this.isPass == false) {
+		// report.startLevel("Test failed", EnumReportLevel.MainFrame);
+		// }
 	}
 
 	public void startStep(String stepName) throws Exception {

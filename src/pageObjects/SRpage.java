@@ -70,14 +70,14 @@ public class SRpage extends GenericPage {
 	}
 	
 	public void allowMicFirefox() throws AWTException{
-		Robot robot = new Robot();
-		robot.keyPress(KeyEvent.VK_TAB);
-		webDriver.sleep(500);
-		robot.keyPress(KeyEvent.VK_TAB);
-		webDriver.sleep(500);
-		robot.keyPress(KeyEvent.VK_TAB);
-		webDriver.sleep(500);
-		robot.keyPress(KeyEvent.VK_ENTER);
+//		Robot robot = new Robot();
+//		robot.keyPress(KeyEvent.VK_TAB);
+//		webDriver.sleep(500);
+//		robot.keyPress(KeyEvent.VK_TAB);
+//		webDriver.sleep(500);
+//		robot.keyPress(KeyEvent.VK_TAB);
+//		webDriver.sleep(500);
+//		robot.keyPress(KeyEvent.VK_ENTER);
 	}
 
 }

@@ -22,26 +22,7 @@
 					</archive>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.17</version>
-				<configuration>
 
-
-
-
-				</configuration>
-
-
-				<dependencies>
-					<dependency>
-						<groupId>org.apache.maven.surefire</groupId>
-						<artifactId>surefire-junit4</artifactId>
-						<version>2.17</version>
-					</dependency>
-				</dependencies>
-			</plugin>
 
 
 		</plugins>
@@ -90,6 +71,7 @@
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
 			<scope>test</scope>
+
 		</dependency>
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
@@ -272,7 +254,7 @@
 							</dependency>
 						</dependencies>
 						<configuration>
-							<groups>tests.EdoRegression</groups>
+							
 							<systemProperties>
 								<property>
 									<name>browser</name>
@@ -522,7 +504,6 @@
 
 			</activation>
 			<id>SRTests</id>
-
 			<build>
 
 				<plugins>
@@ -566,14 +547,14 @@
 
 						</configuration>
 
-						
+
 
 					</plugin>
 				</plugins>
 			</build>
 
 		</profile>
-		
+
 		<profile>
 			<activation>
 
@@ -617,7 +598,7 @@
 							<testSourceDirectory>${project.basedir}/src/tests/</testSourceDirectory>
 							<testClassesDirectory>${project.basedir}/target/classes/</testClassesDirectory>
 							<includes>
-								
+
 								<include>**/SendMultipleAssignments.java</include>
 
 							</includes>
@@ -638,7 +619,7 @@
 			</build>
 
 		</profile>
-		
+
 		<profile>
 			<activation>
 
@@ -683,14 +664,14 @@
 							<testSourceDirectory>${project.basedir}/src/tests/</testSourceDirectory>
 							<testClassesDirectory>${project.basedir}/target/classes/</testClassesDirectory>
 							<includes>
-								
+
 								<include>**/testClassForMaven.java</include>
 
 							</includes>
 
 						</configuration>
 
-						
+
 
 					</plugin>
 				</plugins>
