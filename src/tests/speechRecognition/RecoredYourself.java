@@ -66,13 +66,13 @@ public class RecoredYourself extends EdusoftWebTest {
 		edoHomePage.selectTextFromContainer(scriptSection);
 		RecordPanel recordPanel = edoHomePage.clickOnRecordYourself();
 		sleep(3);
-		
-		//if QA, allow mic
+
+		// if QA, allow mic
 		startStep("Check if running in QA");
-		if(pageHelper.getSutAndSubDomain().contains("qa")){
+		if (pageHelper.getSutAndSubDomain().contains("qa")) {
 			recordPanel.allowMicFirefox();
 		}
-		
+
 		edoHomePage.switchToFrameByClassName("cboxIframe");
 		startStep("Click on record and send audio file to microphone");
 
@@ -92,15 +92,15 @@ public class RecoredYourself extends EdusoftWebTest {
 		webDriver.printScreen("After recording ended");
 		// audioService.sendSoundToVirtualMic(new File(
 		// "files/audioFiles/TheBeatMe16000_16.wav"), 16000.0F);
-//		 sentenceLevel = recordPanel.getSentenceLevel();
-		
+		// sentenceLevel = recordPanel.getSentenceLevel();
+
 		sentenceLevel = recording.getSL().get(0);
-		
+
 		System.out.println("Sentence level is: " + sentenceLevel);
-//		wordLevels = textService.splitStringToArray(recordPanel
-//				.getWordsScoring("wl"));
-		 wordLevels = recording.getWL().get(0);
-		 System.out.println("Word level is: " + wordLevels.toString());
+		// wordLevels = textService.splitStringToArray(recordPanel
+		// .getWordsScoring("wl"));
+		wordLevels = recording.getWL().get(0);
+		System.out.println("Word level is: " + wordLevels.toString());
 
 		startStep("Check word level and sentence level");
 		recordPanel.checkWordsLevels(words, wordLevels, textService);
@@ -112,7 +112,6 @@ public class RecoredYourself extends EdusoftWebTest {
 
 	}
 
-	
 	public void testRecordYourselfIntegrated2() throws Exception {
 		startStep("Init test data");
 		int courseId = 15;
@@ -177,7 +176,6 @@ public class RecoredYourself extends EdusoftWebTest {
 
 	}
 
-
 	public void testRecordPanelScore4() throws Exception {
 		// they beat me up and stole my wife's car
 		// Advanced 1,Life In The City,How Awful!,6
@@ -185,7 +183,6 @@ public class RecoredYourself extends EdusoftWebTest {
 		// Script section 1
 		testRecoredPanel(13, pageHelper.getRecordings().get(1), 1);
 	}
-
 
 	public void testRecordPanelScore5() throws Exception {
 		// text: what happened
@@ -277,13 +274,13 @@ public class RecoredYourself extends EdusoftWebTest {
 		// recordPanel.checkSendToTeacherText();
 	}
 
-	
+	@Test
 	public void testRecoredMoreThenEightTimes() throws Exception {
 		startStep("Init test data");
 		Course course = pageHelper.initCouse(8);
-		Recording recording=new Recording();
-		float sampleRate=8000.0F;
-		String[] words = new String[] { "Hi", "I'm", "Tom", "Smith." };
+		Recording recording = pageHelper.getRecordings().get(5);
+		float sampleRate = 0;
+		String[] words = new String[] { "Hi", "I'm", "Tom", "Smith" };
 		int numOfRecordingsInTest = 8;
 		List<String[]> wordsScoreList = new ArrayList<String[]>();
 		List<Integer> sentenceLevels = new ArrayList<Integer>();
@@ -299,10 +296,18 @@ public class RecoredYourself extends EdusoftWebTest {
 		edoHomePage.clickOnSeeScript();
 		sleep(3);
 		RecordPanel recordPanel = edoHomePage.clickOnRecordYourself();
-		sleep(3);
+		sleep(5);
+		startStep("Check if running in QA");
+		if (pageHelper.getSutAndSubDomain().contains("qa")) {
+			System.out.println("In QA. allowing firefox");
+					
+			recordPanel.allowMicFirefox();
+			sleep(3);
+		}
 		edoHomePage.switchToFrameByClassName("cboxIframe");
-		startStep("Click on record ");
 
+		startStep("Click on record ");
+		sleep(2);
 		for (int i = 0; i < numOfRecordingsInTest; i++) {
 			recordPanel.clickOnRecordButton();
 			String status = recordPanel.getRecordPanelStatus();
@@ -314,8 +319,9 @@ public class RecoredYourself extends EdusoftWebTest {
 			startStep("Check that recording ended");
 			sleep(2);
 			recordPanel.waitForRecordingToEnd(1);
-			webDriver.printScreen("After recording ended");
 			
+			sleep(5);
+			webDriver.printScreen("After recording ended_"+i);
 			String[] wordsScoring = textService.splitStringToArray(recordPanel
 					.getWordsScoring("wl"));
 			wordsScoreList.add(wordsScoring);
@@ -331,24 +337,42 @@ public class RecoredYourself extends EdusoftWebTest {
 		recordPanel.clickOnSendStatusRecordButton();
 
 		startStep("Record another time");
-		recordPanel.clickOnRecordAndStop(5);
+		recordPanel.clickOnRecordButton();
+		String status = recordPanel.getRecordPanelStatus();
+		testResultService.assertEquals("SPEAK", status);
+		// recordPanel.waitForSpeakStatus();
+		audioService.sendSoundToVirtualMic(recording.getFiles().get(0),
+				sampleRate);
+
+		startStep("Check that recording ended");
+//		sleep(2);
+		recordPanel.waitForRecordingToEnd(1);
+		
+		sleep(4);
 		wordsScoreList.remove(0);
 		String[] wordsScoring = textService.splitStringToArray(recordPanel
 				.getWordsScoring("wl"));
+		System.out.println("printing word score of last recording:");
+		textService.printStringArray(wordsScoring);
 		wordsScoreList.add(wordsScoring);
 
 		int sentenceLevel = recordPanel.getSentenceLevel();
 		sentenceLevels.remove(0);
 		sentenceLevels.add(sentenceLevel);
-
+		sleep(3);
 		startStep("Check the recording was added and that the 1st recording was removed");
-
+		sleep(5);
 		for (int i = 0; i < numOfRecordingsInTest; i++) {
 
 			int index = i + 1;
 			System.out.println("Index is: " + index);
 			recordPanel.selectRecording(String.valueOf(index));
-			sleep(1);
+			Thread.sleep(2000);
+			System.out.println("printing expected scores");
+			if(index==8){
+				System.out.println("index 8");
+			}
+			textService.printStringArray( wordsScoreList.get(i));
 			recordPanel.checkWordsLevels(words, wordsScoreList.get(i),
 					textService);
 			recordPanel.checkSentenceScoreRatingText(sentenceLevels.get(i));
@@ -358,7 +382,7 @@ public class RecoredYourself extends EdusoftWebTest {
 	}
 
 	// Test case 13439
-	
+
 	public void testRecordPanelFromVacabulary() throws Exception {
 		startStep("Init test data");
 		Course course = pageHelper.initCouse(9);
@@ -414,7 +438,7 @@ public class RecoredYourself extends EdusoftWebTest {
 	}
 
 	// Test case 13438
-	
+
 	public void testRecoredYourselfPanelOpensFromPronunciation()
 			throws Exception {
 		startStep("Init test data");

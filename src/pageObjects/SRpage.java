@@ -48,6 +48,7 @@ public class SRpage extends GenericPage {
 	}
 	public void checkWordsLevels(String[] words, String[] wordsScores,
 			TextService textService) throws Exception {
+		webDriver.printScreen("checkWordsLevels");
 		try {
 			for (int i = 0; i < words.length; i++) {
 				CheckWordScore(words[i], Integer.valueOf(wordsScores[i]),
@@ -62,7 +63,7 @@ public class SRpage extends GenericPage {
 	public String getWordsScoring(String elementId) throws Exception {
 		String str = webDriver.waitForElement(elementId, ByTypes.id).getAttribute(
 				"value");
-		System.out.println("Random data is:" + str);
+		System.out.println("word scoring is:" + str);
 		str = str.replace(",", "");
 		return str;
 

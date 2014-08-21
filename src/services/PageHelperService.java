@@ -130,8 +130,10 @@ public class PageHelperService extends SystemObjectImpl {
 	}
 
 	public String getSutAndSubDomain() {
-		return configuration.getAutomationParam(AutoParams.sutUrl.toString(), AutoParams.sutUrl.toString()) + "//"
+		String str= configuration.getAutomationParam(AutoParams.sutUrl.toString(), AutoParams.sutUrl.toString()) + "//"
 				+ configuration.getProperty("institutaion.subdomain");
+				
+		return str;
 
 	}
 

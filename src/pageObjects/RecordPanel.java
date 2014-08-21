@@ -74,7 +74,16 @@ public class RecordPanel extends SRpage {
 				"//ul[@id='ulURecords']//li[" + index + "]//a//input",
 				ByTypes.xpath);
 
-		webDriver.setElementSelected(radioBtn);
+		radioBtn.click();
+
+		System.out.println("Checking the record was actually selected");
+		boolean selected = webDriver.waitForElement(
+				"//ul[@id='ulURecords']//li[" + index + "]//a//input",
+				ByTypes.xpath).isSelected();
+		if(selected==false){
+			System.out.println("record was not selected. try again");
+			radioBtn.click();
+		}
 	}
 
 	public void clickOnRecordButton() throws Exception {
@@ -134,7 +143,7 @@ public class RecordPanel extends SRpage {
 	public void checkSentenceScoreRatingText(int ratingIndex) throws Exception {
 		report.report("Checking sentence score rating. Expected rating: "
 				+ ratingIndex);
-
+		webDriver.printScreen("checkSentenceScoreRatingText");
 		webDriver.waitForElement(
 				"//div[@class='srPanelScoreWrapper']//div[2]//span[@class='scoreSquares"
 						+ ratingIndex + "']", ByTypes.xpath);
@@ -317,7 +326,7 @@ public class RecordPanel extends SRpage {
 		String message = webDriver.waitForElement("divSendStatus", ByTypes.id)
 				.getText();
 		Assert.assertTrue(message
-				.contains("Click Record to record this sentence again"));
+				.contains("Click 'Record' to record this sentence again"));
 
 	}
 
