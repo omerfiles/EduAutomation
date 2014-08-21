@@ -280,7 +280,7 @@
 								</property>
 								<property>
 									<name>remote.machine</name>
-									<value>http://10.1.0.66:5555</value>
+									<value>http://10.1.0.56:5555</value>
 								</property>
 								<property>
 									<name>institutionId</name>
@@ -292,7 +292,8 @@
 							<testSourceDirectory>${project.basedir}/src/tests/</testSourceDirectory>
 							<testClassesDirectory>${project.basedir}/target/classes/</testClassesDirectory>
 							<includes>
-								<include>**/MavenTests.java</include>
+								<include>**/RecoredYourself.java</include>
+								<include>**/SpeechRecognitonInteract1.java</include>
 							</includes>
 						</configuration>
 					</plugin>
@@ -565,14 +566,7 @@
 
 						</configuration>
 
-						<dependencies>
-							<dependency>
-								<groupId>org.apache.maven.surefire</groupId>
-								<artifactId>surefire-junit47</artifactId>
-								<version>2.17</version>
-
-							</dependency>
-						</dependencies>
+						
 
 					</plugin>
 				</plugins>
@@ -665,7 +659,7 @@
 								<student>${student}</student>
 								<teacher>${teacher}</teacher>
 								<machine>${machine}</machine>
-								<envFile>@{srdev}</envFile>
+								<envFile>${envFile}</envFile>
 							</properties>
 							<systemProperties>
 								<property>
@@ -674,7 +668,7 @@
 								</property>
 								<property>
 									<name>remote.machine</name>
-									<value>http://10.1.0.38:5555</value>
+									<value>http://10.1.0.56:5555</value>
 								</property>
 								<property>
 									<name>institutionId</name>
@@ -696,14 +690,7 @@
 
 						</configuration>
 
-						<dependencies>
-							<dependency>
-								<groupId>org.apache.maven.surefire</groupId>
-								<artifactId>surefire-junit47</artifactId>
-								<version>2.17</version>
-
-							</dependency>
-						</dependencies>
+						
 
 					</plugin>
 				</plugins>
