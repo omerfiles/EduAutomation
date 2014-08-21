@@ -40,7 +40,7 @@ public class FirefoxWebDriver extends GenericWebDriver {
 			report.startLevel("Initializing FirefoxWebDriver",
 					Reporter.EnumReportLevel.CurrentPlace);
 			ProfilesIni profile = new ProfilesIni();
-
+			System.out.println("setting firefix profile to allow media");
 			FirefoxProfile firefoxProfile = profile.getProfile("automation");
 			firefoxProfile.setPreference("media.navigator.permission.disabled",
 					true);
