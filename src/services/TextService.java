@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -18,7 +19,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
+import org.htmlcleaner.CleanerProperties;
+import org.htmlcleaner.DomSerializer;
+import org.htmlcleaner.HtmlCleaner;
+import org.htmlcleaner.TagNode;
+import org.htmlcleaner.XPatherException;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
 
 import jsystem.framework.system.SystemObjectImpl;
 
@@ -40,8 +54,9 @@ public class TextService extends SystemObjectImpl {
 			report.report(e.toString());
 
 		} finally {
-			return new String(encoded, encoding);
+
 		}
+		return new String(encoded, encoding);
 	}
 
 	public String getFirstCharsFromCsv(int charsNumber, String filePath)
@@ -112,8 +127,16 @@ public class TextService extends SystemObjectImpl {
 	}
 
 	public String[] splitStringToArray(String str, String ignorChars) {
-		System.out.println("Splitting string to array."+System.currentTimeMillis());
-		String[] result = str.split("(" + ignorChars + ")");
+		String[] result = null;
+		try {
+			System.out.println("Splitting string: "+str+" to array."
+					+ System.currentTimeMillis());
+			result = str.split("(" + ignorChars + ")");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			
+			e.printStackTrace();
+		}
 		return result;
 	}
 
@@ -175,20 +198,92 @@ public class TextService extends SystemObjectImpl {
 		return found;
 
 	}
-	public String resolveAprostophes(String item){
-		 if(!item.contains("'")){
-		  return "'" + item + "'";
-		 }
-		 StringBuilder finalString = new StringBuilder();
-		 finalString.append("concat('");
-		 finalString.append(item.replace("'", "',\"'\",'"));
-		 finalString.append("')");
-		 return finalString.toString();
+
+	public String resolveAprostophes(String item) {
+		if (!item.contains("'")) {
+			return "'" + item + "'";
 		}
-	
-	public void printStringArray(String[] str){
-		for(int i=0;i<str.length;i++){
-			System.out.println("String number "+i+" :"+str[i]);
+		StringBuilder finalString = new StringBuilder();
+		finalString.append("concat('");
+		finalString.append(item.replace("'", "',\"'\",'"));
+		finalString.append("')");
+		return finalString.toString();
+	}
+
+	public void printStringArray(String[] str) {
+		for (int i = 0; i < str.length; i++) {
+			System.out.println("String number " + i + " :" + str[i]);
+			report.report("String number " + i + " :" + str[i]);
 		}
+	}
+
+	public String getLineFromTextFile(File file, String textToFind)
+			throws IOException {
+		String textLine = null;
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		String line;
+		while ((line = br.readLine()) != null) {
+			if (line.contains(textToFind)) {
+				textLine = line;
+				System.out.println("line found:" + line);
+				break;
+			}
+
+		}
+		br.close();
+		if (textLine == null) {
+			System.out.println("Line with text: " + textToFind
+					+ " was not found");
+		}
+
+		return textLine;
+	}
+
+	public String[] getHtmlElementFromHtmlFile(String xpathToFind,
+			String fileContent) throws ParserConfigurationException,
+			XPathExpressionException, XPatherException {
+
+		String result = null;
+		TagNode tagNode = new HtmlCleaner().clean(fileContent);
+		Object[] segments = tagNode.evaluateXPath(xpathToFind);
+		String[] arr = new String[segments.length];
+		for (int i = 0; i < segments.length; i++) {
+			TagNode segment = (TagNode) segments[i];
+			System.out.println(segment.getText());
+			arr[i] = segment.getText().toString();
+			System.out.println();
+		}
+		return arr;
+
+	}
+
+	public String getFileContent(String string) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean checkIfFileExist(String path) {
+		File file = new File(path);
+		if (!file.exists()) {
+			report.report("File: "+path+" was not found");
+			return false;
+		} else
+			return true;
+
+	}
+
+	public String[] trimLowerCaseAndRemoveChars(String[] strArr) {
+		for (int i = 0; i < strArr.length; i++) {
+			strArr[i] = strArr[i].trim();
+			strArr[i] = strArr[i].toLowerCase();
+			strArr[i] = strArr[i].replace("?", "");
+			strArr[i] = strArr[i].replace("!", "");
+			strArr[i] = strArr[i].replace(",", "");
+			strArr[i] = strArr[i].replace(".", "");
+			strArr[i] = strArr[i].replace("-", "");
+			strArr[i] = strArr[i].trim();
+		}
+
+		return strArr;
 	}
 }

@@ -69,7 +69,7 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 			Assert.fail("openening Webdriver failed. Check that selenium node/grid are running and also check configurations");
 		}
 		pageHelper = (PageHelperService) ctx.getBean("PageHelperService");
-		pageHelper.init(webDriver, autoInstitution);
+		pageHelper.init(webDriver, autoInstitution,testResultService);
 		audioService = (AudioService) ctx.getBean("AudioService");
 
 	}

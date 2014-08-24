@@ -391,5 +391,17 @@ public class RecordPanel extends SRpage {
 		}
 
 	}
+	public void clickOnRecordButtonAndSendRecording(Recording recording,float sampleRate,AudioService audioService) throws Exception{
+		clickOnRecordButton();
+		String status = getRecordPanelStatus();
+		testResultService.assertEquals("SPEAK", status);
+		// recordPanel.waitForSpeakStatus();
+		audioService.sendSoundToVirtualMic(recording.getFiles().get(0),
+				sampleRate);
+
+		
+		Thread.sleep(2000);
+		waitForRecordingToEnd(1);
+	}
 
 }

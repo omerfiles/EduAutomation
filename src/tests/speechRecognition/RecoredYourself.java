@@ -1,6 +1,5 @@
 package tests.speechRecognition;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,12 +7,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import Enums.ByTypes;
-import Enums.SRWordLevel;
 import Objects.Course;
 import Objects.Recording;
 import pageObjects.EdoHomePage;
-import pageObjects.RecordPanel;
 import pageObjects.RecordPanel;
 import tests.misc.EdusoftWebTest;
 
@@ -328,6 +324,8 @@ public class RecoredYourself extends EdusoftWebTest {
 			int sentenceLevel = recordPanel.getSentenceLevel();
 			sentenceLevels.add(sentenceLevel);
 			recordPanel.checkAddedRecordingToList(sentenceLevel, i);
+			
+			pageHelper.calculateSLbyWL(wordsScoring,wordsScoring.toString());
 		}
 		startStep("try to add the 9th recording");
 		recordPanel.clickOnRecordButton();
@@ -386,6 +384,9 @@ public class RecoredYourself extends EdusoftWebTest {
 	public void testRecordPanelFromVacabulary() throws Exception {
 		startStep("Init test data");
 		Course course = pageHelper.initCouse(9);
+		int recordingId=7;
+		float sampleRate=8000.0F;
+		Recording recording=pageHelper.getRecordings().get(recordingId); 
 		String[] words = new String[] { "twenty-one" };
 
 		List<String[]> wordsScoreList = new ArrayList<String[]>();
@@ -406,7 +407,8 @@ public class RecoredYourself extends EdusoftWebTest {
 
 		startStep("Check that the record panel opens");
 		sleep(3);
-		recordPanel.clickOnRecordAndStop(5);
+//		recordPanel.clickOnRecordAndStop(5);
+		recordPanel.clickOnRecordButtonAndSendRecording(recording, sampleRate, audioService);
 		String[] wordsScoring = textService.splitStringToArray(recordPanel
 				.getWordsScoring("wl"));
 		wordsScoreList.add(wordsScoring);
@@ -473,6 +475,18 @@ public class RecoredYourself extends EdusoftWebTest {
 		recordPanel.checkAddedRecordingToList(sentenceLevel, 0);
 		recordPanel.checkWordsLevels(words, wordsScoring, textService);
 	}
+	
+	public void calculateSLbyWL(String[]WL,int SL){
+		double wordLevels=0;
+		for(int i=0;i<WL.length;i++){
+			wordLevels+=Integer.valueOf(WL[i]);
+		}
+		wordLevels=wordLevels/WL.length;
+		wordLevels=Math.ceil(wordLevels);
+		
+	}
+	
+	
 
 	@After
 	public void tearDown() throws Exception {

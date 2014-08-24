@@ -9,6 +9,7 @@ import java.util.Random;
 
 import jsystem.framework.system.SystemObjectImpl;
 
+import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +42,7 @@ public class PageHelperService extends SystemObjectImpl {
 	@Autowired
 	DbService dbService;
 
-	@Autowired
+
 	TestResultService testResultService;
 
 	// @Autowired
@@ -61,8 +62,9 @@ public class PageHelperService extends SystemObjectImpl {
 
 	}
 
-	public void init(GenericWebDriver webDriver, AutoInstitution autoInstitution)
+	public void init(GenericWebDriver webDriver, AutoInstitution autoInstitution,TestResultService testResultService)
 			throws Exception {
+		this.testResultService=testResultService;
 		this.webDriver = webDriver;
 		this.autoInstitution = autoInstitution;
 		courses = loadCoursedDetailsFromCsv();
@@ -311,6 +313,21 @@ public class PageHelperService extends SystemObjectImpl {
 
 	public Teacher getTeacher() {
 		return teacher;
+	}
+	
+	public void calculateSLbyWL(String[]WL,String SL){
+		Double wordLevels=0.0;
+		for(int i=0;i<WL.length;i++){
+			wordLevels+=Integer.valueOf(WL[i]);
+		}
+		wordLevels=wordLevels/WL.length;
+		wordLevels=Math.ceil(wordLevels);
+		int wl=wordLevels.intValue();
+		System.out.println("Rounded avg: "+wordLevels);
+		
+		System.out.println("testResultService:"+testResultService.toString());
+		testResultService.assertEquals(String.valueOf(wl), SL);
+		
 	}
 
 }

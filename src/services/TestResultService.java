@@ -24,7 +24,7 @@ public class TestResultService extends SystemObjectImpl {
 	}
 
 	public void addFailTest(String failCause) {
-		System.out.println("Failure added: "+failCause);
+		System.out.println("Failure added: " + failCause);
 		results.add(failCause);
 
 	}
@@ -60,13 +60,38 @@ public class TestResultService extends SystemObjectImpl {
 	}
 
 	public void assertEquals(String expected, String actual) {
-		System.out.println("Asserting "+expected +". and "+actual+".");
-		if (expected.equals(actual)==false) {
+		assertEquals(expected, actual, null);
+	}
+
+	public void assertEquals(String expected, String actual, String message) {
+		System.out.println("Asserting " + expected + ". and " + actual + ".");
+		if (expected.equals(actual) == false) {
 			addFailTest("Expected String was: " + expected
-					+ " but actual string was: " + actual);
-//			throw new ComparisonFailure("Assert failed", expected, actual);
+					+ " but actual string was: " + actual+" "+message);
+		
+			// throw new ComparisonFailure("Assert failed", expected, actual);
 
 		}
+		System.out.println("Assert passed");
+
+	}
+
+	public void assertEquals(boolean expected, boolean actual) {
+		assertEquals(expected, actual,null);
+	}
+
+	public boolean assertEquals(boolean expected, boolean actual, String message) {
+		boolean result=true;
+		System.out.println("Asserting " + expected + ". and " + actual + ".");
+		if (expected != actual) {
+			System.out.println(message);
+			addFailTest("Expected boolean was: " + expected
+					+ " but actual boolean was: " + actual+" "+message);
+			
+			// throw new ComparisonFailure("Assert failed", expected, actual);
+				result=false;
+		}
+		return result;
 
 	}
 
