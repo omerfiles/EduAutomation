@@ -33,7 +33,7 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 	protected TextService textService;
 	protected Configuration configuration;
 	protected DbService dbService;
-	NetService netService;
+	protected NetService netService;
 	protected EraterService eraterService;
 	protected InstitutionService institutionService;
 	protected TestResultService testResultService;
@@ -97,7 +97,7 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 	public void tearDown() throws Exception {
 		// report.startLevel("Test case id is: " + this.testCaseId,
 		// EnumReportLevel.MainFrame);
-		System.out.println("testResultService:"+testResultService.toString());
+		System.out.println("testResultService:" + testResultService.toString());
 		System.out.println("Test failed?: "
 				+ testResultService.hasFailedResults());
 		if (testResultService.hasFailedResults()) {

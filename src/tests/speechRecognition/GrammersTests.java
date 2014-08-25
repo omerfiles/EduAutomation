@@ -12,14 +12,17 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 
 import tests.misc.EdusoftWebTest;
 
 public class GrammersTests extends EdusoftWebTest {
 
 	private static final String SPEAKING_FOLDER = "\\\\frontqa3\\EDO_HTML_SR\\Runtime\\Content\\speaking";
-	private static final String LISTENING_FOLDER= "\\\\frontqa3\\EDO_HTML_SR\\Runtime\\Content\\listening";
-	private static final String GRAMMER_FOLDER= "\\\\frontqa3\\EDO_HTML_SR\\Runtime\\Content\\grammar";
+	private static final String LISTENING_FOLDER = "\\\\frontqa3\\EDO_HTML_SR\\Runtime\\Content\\listening";
+	private static final String GRAMMER_FOLDER = "\\\\frontqa3\\EDO_HTML_SR\\Runtime\\Content\\grammar";
+	private static final String Vocabulary_FOLDER = "\\\\frontqa3\\EDO_HTML_SR\\Runtime\\Content\\Vocabulary";
 	private final String grammerFilesPath = "\\\\NEWSTORAGE\\Sendhere\\_EDOHTML\\EduSpeak\\sample-grammars\\English\\baseEDOCources.grammar";
 
 	// private final String grammerFilesPath="C:\\automation\\testFile.txt";
@@ -27,55 +30,83 @@ public class GrammersTests extends EdusoftWebTest {
 	public void setup() throws Exception {
 		super.setup();
 	}
-	
-	
-	@Test
-	public void testSpeaking()throws Exception{
-		compareAllGrammers(SPEAKING_FOLDER);
-	}
-	
 
 	@Test
-	public void testListening()throws Exception{
+	public void testSpeaking() throws Exception {
+		compareAllGrammers(SPEAKING_FOLDER);
+	}
+
+	@Test
+	public void testListening() throws Exception {
 		compareAllGrammers(LISTENING_FOLDER);
 	}
-	
+
 	@Test
-	public void testGrammer()throws Exception{
+	public void testGrammer() throws Exception {
 		compareAllGrammers(GRAMMER_FOLDER);
 	}
 
-	
+	@Test
+	public void checkVocabaalaryGrammers() throws Exception {
+		startStep("Get folders list");
+		List<String> folders = getSubFolders(Vocabulary_FOLDER);
+		try {
+			outerloop: for (int i = 0; i < folders.size(); i++) {
+				startStep("For all folder, search for xml file, get its contend and compare texts to grammer file according the grammer id");
+				String filePath = Vocabulary_FOLDER + "\\" + folders.get(i)
+						+ "\\" + folders.get(i) + "e.xml";
+				startStep("Check that file exist");
+				boolean fileExist = textService.checkIfFileExist(filePath);
+				testResultService.assertEquals(true, fileExist, "File: "
+						+ folders.get(i) + " was not found");
+				List<String[]> list = getDataFromXmlFile(filePath,
+						folders.get(i));
+				for (int j = 0; j < list.size(); j++) {
+					String textFromXml = list.get(j)[0];
+					String[] segments = textService.splitStringToArray(
+							textFromXml, "\\s+");
+					System.out.println(textService.printStringArray(segments));
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+
+		}
+
+	}
+
 	public void compareAllGrammers(String testFolder) throws Exception {
 		startStep("Iterate on all Speakeing folders");
-		 testFolder=SPEAKING_FOLDER;
-		int passed=0;
-		int failed=0;
+		testFolder = SPEAKING_FOLDER;
+		int passed = 0;
+		int failed = 0;
 		// \\frontqa3\EDO_HTML_SR\Runtime\Content\speaking
 		List<String> folders = getSubFolders(testFolder);
 
 		startStep("For all folder, search for js file, get its contend and compare texts to grammer file according the grammer id");
-
+		String filePath = null;
 		try {
 			outerloop: for (int i = 0; i < folders.size(); i++) {
 				System.out.println("Checking folder:" + folders.get(i));
 
 				startStep("check if js file exist");
-
-				boolean fileExist = textService
-						.checkIfFileExist(testFolder + "\\"
-								+ folders.get(i) + "\\" + folders.get(i)
-								+ ".js");
+				// if testing vocabalary files
+				if (testFolder == Vocabulary_FOLDER) {
+					filePath = "testFolder" + "\\" + folders.get(i) + "\\"
+							+ folders.get(i) + ".xml";
+				} else {
+					filePath = "testFolder" + "\\" + folders.get(i) + "\\"
+							+ folders.get(i) + ".js";
+				}
+				boolean fileExist = textService.checkIfFileExist(filePath);
 
 				testResultService.assertEquals(true, fileExist, "File: "
 						+ folders.get(i) + " was not found");
 				if (fileExist == false) {
+					failed++;
 					continue;
 				}
-
-				String fileContent = textService.getTextFromFile(
-						testFolder + "\\" + folders.get(i) + "\\"
-								+ folders.get(i) + ".js",
+				String fileContent = textService.getTextFromFile(filePath,
 						Charset.defaultCharset());
 				String[] segments = textService.getHtmlElementFromHtmlFile(
 						"//span[@class='segment']", fileContent);
@@ -103,13 +134,22 @@ public class GrammersTests extends EdusoftWebTest {
 							segments[k], "\\s+");
 					String[] grammerWords = textService.splitStringToArray(
 							textFromGrammer[k], "\\s+");
-					if (testResultService.assertEquals(true,
+					if (testResultService.assertEquals(
+							true,
 							segmentsWords.length == grammerWords.length,
 							"number of words is not the same for grammer: "
-									+ folders.get(i) + "_" + k+" segment words: "+textService.printStringArray(segmentsWords)+" grammer words:"+textService.printStringArray(grammerWords)) == false) {
+									+ folders.get(i)
+									+ "_"
+									+ k
+									+ " segment words: "
+									+ textService
+											.printStringArray(segmentsWords)
+									+ " grammer words:"
+									+ textService
+											.printStringArray(grammerWords)) == false) {
 						System.out.println("segment words:");
 						report.report("segment words:");
-						
+
 						textService.printStringArray(segmentsWords);
 						System.out.println("Grammer words:");
 						report.report("grammer words:");
@@ -124,19 +164,21 @@ public class GrammersTests extends EdusoftWebTest {
 										+ folders.get(i) + "_" + k);
 					}
 				}
-				System.out.println(i+ "Finished checking folder: "+folders.get(0)+". folder is OK");
-				report.startLevel(i+ "Finished checking folder: "+folders.get(0)+". folder is OK", EnumReportLevel.MainFrame);
+				System.out.println(i + "Finished checking folder: "
+						+ folders.get(0) + ". folder is OK");
+				report.startLevel(
+						i + "Finished checking folder: " + folders.get(0)
+								+ ". folder is OK", EnumReportLevel.MainFrame);
 				passed++;
 			}
-		System.out.println("Passed:"+passed);
-		System.out.println("Failed:"+failed);
-		
+			System.out.println("Passed:" + passed);
+			System.out.println("Failed:" + failed);
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-
 
 	public void findGrammer() throws Exception {
 		String text = getGrammerTextFromGrammerFiles(".A3VEADE_886");
@@ -183,6 +225,36 @@ public class GrammersTests extends EdusoftWebTest {
 			}
 		}
 		return folders;
+
+	}
+
+	private List<String[]> getDataFromXmlFile(String xmlPath, String grammerId)
+			throws Exception {
+
+		List<String[]> list = new ArrayList<String[]>();
+
+		Document document = netService.getXmlFromFile(xmlPath);
+
+		NodeList idNodeList = netService.getNodesFromXml("//Word", document);
+		NodeList segmentNodeList = netService.getNodesFromXml(
+				"//Word//Example", document);
+		String id = null;
+		for (int i = 0; i < idNodeList.getLength(); i++) {
+			id = grammerId
+					+ "_"
+					+ idNodeList.item(i).getAttributes().getNamedItem("Id")
+							.getNodeValue();
+			// System.out.println("id:"+id);
+			// System.out.println(nodeList.item(i).getTextContent());
+			// System.out.println("Sample:"+
+			// segmentNodeList.item(i).getTextContent());
+
+			String[] str = new String[] { id,
+					segmentNodeList.item(i).getTextContent() };
+			list.add(str);
+		}
+
+		return list;
 
 	}
 

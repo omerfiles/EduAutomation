@@ -30,7 +30,9 @@ import org.htmlcleaner.DomSerializer;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.TagNode;
 import org.htmlcleaner.XPatherException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
@@ -38,6 +40,9 @@ import jsystem.framework.system.SystemObjectImpl;
 
 @Service
 public class TextService extends SystemObjectImpl {
+
+	@Autowired
+	protected NetService netService;
 
 	Scanner scanner;
 
@@ -129,12 +134,12 @@ public class TextService extends SystemObjectImpl {
 	public String[] splitStringToArray(String str, String ignorChars) {
 		String[] result = null;
 		try {
-			System.out.println("Splitting string: "+str+" to array."
+			System.out.println("Splitting string: " + str + " to array."
 					+ System.currentTimeMillis());
 			result = str.split("(" + ignorChars + ")");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			
+
 			e.printStackTrace();
 		}
 		return result;
@@ -211,12 +216,12 @@ public class TextService extends SystemObjectImpl {
 	}
 
 	public String printStringArray(String[] str) {
-		String output="";
+		String output = "";
 		for (int i = 0; i < str.length; i++) {
-			output=output+"|"+str[i];
+			output = output + "|" + str[i];
 		}
-		System.out.println("Strings are:"+output);
-		report.report("String are:"+output);
+		System.out.println("Strings are:" + output);
+		report.report("String are:" + output);
 		return output;
 	}
 
@@ -228,7 +233,7 @@ public class TextService extends SystemObjectImpl {
 		while ((line = br.readLine()) != null) {
 			if (line.contains(textToFind)) {
 				textLine = line;
-//				System.out.println("line found:" + line);
+				// System.out.println("line found:" + line);
 				break;
 			}
 
@@ -245,8 +250,6 @@ public class TextService extends SystemObjectImpl {
 	public String[] getHtmlElementFromHtmlFile(String xpathToFind,
 			String fileContent) throws ParserConfigurationException,
 			XPathExpressionException, XPatherException {
-
-		String result = null;
 		TagNode tagNode = new HtmlCleaner().clean(fileContent);
 		Object[] segments = tagNode.evaluateXPath(xpathToFind);
 		String[] arr = new String[segments.length];
@@ -257,7 +260,16 @@ public class TextService extends SystemObjectImpl {
 			System.out.println();
 		}
 		return arr;
+	}
 
+	public String[] getStringsfromXmlByXpath(String xpathToFind,
+			Document document) throws Exception {
+		String[] arr = null;
+
+		List<String[]> segments = netService.getListFromXmlNode(
+			document, xpathToFind);
+
+		return arr;
 	}
 
 	public String getFileContent(String string) {
@@ -268,7 +280,7 @@ public class TextService extends SystemObjectImpl {
 	public boolean checkIfFileExist(String path) {
 		File file = new File(path);
 		if (!file.exists()) {
-			report.report("File: "+path+" was not found");
+			report.report("File: " + path + " was not found");
 			return false;
 		} else
 			return true;

@@ -51,10 +51,27 @@ public class NetService extends SystemObjectImpl {
 					new StringReader(xmlString)));
 		} catch (Exception e) {
 			e.printStackTrace();
-			Assert.fail("Test failed during getting xml form sring");
+			// Assert.fail("Test failed during getting xml form sring");
 		} finally {
-			return document;
+
 		}
+		return document;
+	}
+
+	public Document getXmlFromFile(String filePath) throws Exception {
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder;
+		Document document = null;
+		try {
+			builder = factory.newDocumentBuilder();
+			document = builder.parse(filePath);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// Assert.fail("Test failed during getting xml form sring");
+		} finally {
+
+		}
+		return document;
 	}
 
 	public Document getXMLDocFromSQLXML(SQLXML sqlxml) throws Exception {
@@ -97,14 +114,22 @@ public class NetService extends SystemObjectImpl {
 						.getAttributes().getNamedItem("offset").toString();
 				arr[2] = arr[2].replace("offset=", "");
 				arr[2] = arr[2].replace("\"", "");
-				arr[3]=detailsNodeList.item(j).getChildNodes().item(0).getTextContent();
-				arr[3]=arr[3].replace("*", "");
+				arr[3] = detailsNodeList.item(j).getChildNodes().item(0)
+						.getTextContent();
+				arr[3] = arr[3].replace("*", "");
 				arrList.add(arr);
 				// detailsNodeList.item(j).getChildNodes().item(1).getAttributes().getNamedItem("offset");
 			}
 		}
 
 		return arrList;
+	}
+
+	public NodeList getNodesFromXml(String expression,Document document) throws Exception {
+		XPath xPath =  XPathFactory.newInstance().newXPath();
+		NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(document, XPathConstants.NODESET);
+		return nodeList;
+
 	}
 
 	public List<String[]> getListFromJson(String jsonString,
@@ -120,9 +145,9 @@ public class NetService extends SystemObjectImpl {
 			for (int j = 0; j < feedbacks.length(); j++) {
 
 				JSONObject feedbackObject = feedbacks.getJSONObject(j);
-				str=new String[names.length];
+				str = new String[names.length];
 				for (int y = 0; y < names.length; y++) {
-					
+
 					str[y] = feedbackObject.getString(names[y]);
 
 				}
@@ -131,7 +156,6 @@ public class NetService extends SystemObjectImpl {
 				}
 
 			}
-			
 
 		}
 
@@ -174,27 +198,27 @@ public class NetService extends SystemObjectImpl {
 			throws Exception {
 
 	}
-	public void sentHttpRequest(String request,String requestMethod)throws Exception
-    {
-        report.report("Request is: "+request);
-        URL url=new URL(request) ;
-        HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
-        httpCon.setDoOutput(true); httpCon.setRequestMethod(requestMethod);
-        OutputStreamWriter out = new OutputStreamWriter( httpCon.getOutputStream());
-//        System.out.println(httpCon.getResponseCode()) ;
-        report.report("Get response code: "+httpCon.getResponseCode());
-        System.out.println(httpCon.getResponseMessage());
-        report.report("Get response message: "+httpCon.getResponseMessage());
-        out.close();
 
+	public void sentHttpRequest(String request, String requestMethod)
+			throws Exception {
+		report.report("Request is: " + request);
+		URL url = new URL(request);
+		HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
+		httpCon.setDoOutput(true);
+		httpCon.setRequestMethod(requestMethod);
+		OutputStreamWriter out = new OutputStreamWriter(
+				httpCon.getOutputStream());
+		// System.out.println(httpCon.getResponseCode()) ;
+		report.report("Get response code: " + httpCon.getResponseCode());
+		System.out.println(httpCon.getResponseMessage());
+		report.report("Get response message: " + httpCon.getResponseMessage());
+		out.close();
 
-    }
-    
-    public void sentHttpRequest(String request)throws Exception
-    {
-      sentHttpRequest(request, "POST");
+	}
 
+	public void sentHttpRequest(String request) throws Exception {
+		sentHttpRequest(request, "POST");
 
-    }
+	}
 
 }
