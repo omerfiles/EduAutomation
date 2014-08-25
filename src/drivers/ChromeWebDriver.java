@@ -20,7 +20,6 @@ public class ChromeWebDriver extends GenericWebDriver {
 		setInitialized(true);
 		dbService = new DbService();
 
-
 		logsFolder = folderName;
 		try {
 
@@ -30,10 +29,12 @@ public class ChromeWebDriver extends GenericWebDriver {
 			DesiredCapabilities capabilities = DesiredCapabilities.chrome();
 			ChromeOptions options = new ChromeOptions();
 			options.addArguments("--disable-extensions");
-			capabilities.setCapability("chrome.switches",
-					Arrays.asList("--start-maximized"));
-			capabilities.setCapability("chrome.switches",
-					Arrays.asList("--use-fake-ui-for-media-stream"));
+
+			options.addArguments("--start-maximized");
+//			options.addArguments("--disable-user-media-security=true");
+			 options.addArguments("--use-fake-ui-for-media-stream");
+			// options.addArguments("--use-fake-device-for-media-stream");
+
 			capabilities.setCapability(ChromeOptions.CAPABILITY, options);
 			// capabilities.setCapability("platform", "Windows 2003");
 			webDriver = new RemoteWebDriver(new URL(remoteUrl + "/wd/hub"),

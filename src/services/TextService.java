@@ -210,11 +210,14 @@ public class TextService extends SystemObjectImpl {
 		return finalString.toString();
 	}
 
-	public void printStringArray(String[] str) {
+	public String printStringArray(String[] str) {
+		String output="";
 		for (int i = 0; i < str.length; i++) {
-			System.out.println("String number " + i + " :" + str[i]);
-			report.report("String number " + i + " :" + str[i]);
+			output=output+"|"+str[i];
 		}
+		System.out.println("Strings are:"+output);
+		report.report("String are:"+output);
+		return output;
 	}
 
 	public String getLineFromTextFile(File file, String textToFind)
@@ -225,7 +228,7 @@ public class TextService extends SystemObjectImpl {
 		while ((line = br.readLine()) != null) {
 			if (line.contains(textToFind)) {
 				textLine = line;
-				System.out.println("line found:" + line);
+//				System.out.println("line found:" + line);
 				break;
 			}
 
