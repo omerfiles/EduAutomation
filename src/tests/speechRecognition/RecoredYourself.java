@@ -40,7 +40,7 @@ public class RecoredYourself extends EdusoftWebTest {
 		Course course = pageHelper.initCouse(courseId);
 		// Recording recording=pageHelper.getRecordings().get(1);
 
-		String[] wordLevels = null;
+		String[] expectedWordLevels = null;
 		int sentenceLevel = 0;
 		boolean SRDebug = false;
 		String[] words = null;
@@ -88,22 +88,22 @@ public class RecoredYourself extends EdusoftWebTest {
 		webDriver.printScreen("After recording ended");
 		// audioService.sendSoundToVirtualMic(new File(
 		// "files/audioFiles/TheBeatMe16000_16.wav"), 16000.0F);
-		// sentenceLevel = recordPanel.getSentenceLevel();
+		int debugSentenceLevel = recordPanel.getSentenceLevel();
 
 		sentenceLevel = recording.getSL().get(0);
 
 		System.out.println("Sentence level is: " + sentenceLevel);
-		// wordLevels = textService.splitStringToArray(recordPanel
-		// .getWordsScoring("wl"));
-		wordLevels = recording.getWL().get(0);
-		System.out.println("Word level is: " + wordLevels.toString());
+		String[] debugWordLevels = textService.splitStringToArray(recordPanel
+		 .getWordsScoring("wl"));
+		expectedWordLevels = recording.getWL().get(0);
+		System.out.println("Word level is: " + expectedWordLevels.toString());
 
 		startStep("Check word level and sentence level");
-		recordPanel.checkWordsLevels(words, wordLevels, textService);
-		recordPanel.checckSentenceLevelLightBulbs(sentenceLevel);
-		recordPanel.checkSentenceScoreRatingText(sentenceLevel);
+		recordPanel.checkWordsLevels(words, debugWordLevels, textService);
+		recordPanel.checckSentenceLevelLightBulbs(debugSentenceLevel);
+		recordPanel.checkSentenceScoreRatingText(debugSentenceLevel);
 		// recordPanel.checkSentenceScoreText(sentenceLevel);
-		recordPanel.checkThatWlIsCloseToExpectedWL(wordLevels, textService
+		recordPanel.checkThatWlIsCloseToExpectedWL(expectedWordLevels, textService
 				.splitStringToArray(recordPanel.getWordsScoring("wl")));
 
 	}
@@ -324,8 +324,8 @@ public class RecoredYourself extends EdusoftWebTest {
 			int sentenceLevel = recordPanel.getSentenceLevel();
 			sentenceLevels.add(sentenceLevel);
 			recordPanel.checkAddedRecordingToList(sentenceLevel, i);
-			
-			pageHelper.calculateSLbyWL(wordsScoring,wordsScoring.toString());
+			startStep("Check SL according to word levels");
+			pageHelper.calculateSLbyWL(wordsScoring,String.valueOf(sentenceLevel) );
 		}
 		startStep("try to add the 9th recording");
 		recordPanel.clickOnRecordButton();
@@ -333,9 +333,9 @@ public class RecoredYourself extends EdusoftWebTest {
 		recordPanel.clickOnSendStatusCancelButton();
 		recordPanel.clickOnRecordButton();
 		recordPanel.clickOnSendStatusRecordButton();
-
+		sleep(1);
 		startStep("Record another time");
-		recordPanel.clickOnRecordButton();
+//		recordPanel.clickOnRecordButton();
 		String status = recordPanel.getRecordPanelStatus();
 		testResultService.assertEquals("SPEAK", status);
 		// recordPanel.waitForSpeakStatus();

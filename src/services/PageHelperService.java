@@ -323,10 +323,10 @@ public class PageHelperService extends SystemObjectImpl {
 		wordLevels=wordLevels/WL.length;
 		wordLevels=Math.ceil(wordLevels);
 		int wl=wordLevels.intValue();
-		System.out.println("Rounded avg: "+wordLevels);
+		System.out.println("Rounded avg: "+wl);
 		
-		System.out.println("testResultService:"+testResultService.toString());
-		testResultService.assertEquals(String.valueOf(wl), SL);
+//		System.out.println("testResultService:"+testResultService.toString());
+		testResultService.assertEquals(String.valueOf(wl), SL,"Sentence level do not match");
 		
 	}
 

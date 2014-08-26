@@ -134,8 +134,8 @@ public class TextService extends SystemObjectImpl {
 	public String[] splitStringToArray(String str, String ignorChars) {
 		String[] result = null;
 		try {
-			System.out.println("Splitting string: " + str + " to array."
-					+ System.currentTimeMillis());
+//			System.out.println("Splitting string: " + str + " to array."
+//					+ System.currentTimeMillis());
 			result = str.split("(" + ignorChars + ")");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -296,6 +296,9 @@ public class TextService extends SystemObjectImpl {
 			strArr[i] = strArr[i].replace(",", "");
 			strArr[i] = strArr[i].replace(".", "");
 			strArr[i] = strArr[i].replace("-", "");
+			strArr[i] = strArr[i].replace(";", "");
+			strArr[i] = strArr[i].replace("\\", "");
+			strArr[i] = strArr[i].replace("\"", "");
 			strArr[i] = strArr[i].trim();
 		}
 
