@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
@@ -36,6 +37,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
+import au.com.bytecode.opencsv.CSVWriter;
 import jsystem.framework.system.SystemObjectImpl;
 
 @Service
@@ -303,5 +305,12 @@ public class TextService extends SystemObjectImpl {
 		}
 
 		return strArr;
+	}
+	
+	public void writeArrayistToCSVFile(String path,List<String[]>list) throws IOException{
+		String csv = path;
+		CSVWriter writer = new CSVWriter(new FileWriter(csv));
+		writer.writeAll(list); 
+		writer.close();
 	}
 }

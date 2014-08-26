@@ -25,7 +25,7 @@ public class InteractSection extends SRpage {
 	public final String instructionText7 = "Your answer is unclear. Let's move on… ";
 	public final String instructionText8 = "Click 'Start' to begin the conversation.";
 	public final String instructionText9 = "Good! Let's move on...";
-	public final String instructionText10 = "You have completed the conversation. Click ‘See feedback’ below to view detailed feedback on your responses.";
+	public final String instructionText10 = "You have completed the conversation. Click 'See feedback' below to view detailed feedback on your responses.";
 	public final String instructionText11 = "Listen to the response.";
 	public final String instructionText12 = "Start";
 	public final String instructionText13 = "Try again";
