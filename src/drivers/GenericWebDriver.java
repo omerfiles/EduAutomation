@@ -2,10 +2,16 @@ package drivers;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.http.HttpHost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHttpEntityEnclosingRequest;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
 import org.junit.Assert;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -50,6 +56,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	private boolean initialized;
 	// private Config configuration;
 	protected DbService dbService;
+	protected String remoteMachine;
 	@Autowired
 	private services.Configuration configuration;
 
@@ -62,7 +69,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	public void init(TestResultService testResultService) throws Exception {
 		this.testResultService = testResultService;
-		String remoteMachine = null;
+		// String remoteMachine = null;
 
 		// getting remote machine from maven command line
 		// remoteMachine = System.getProperty("machine");
@@ -410,10 +417,11 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 					.frameToBeAvailableAndSwitchToIt(frameName));
 		} catch (TimeoutException e) {
 			// Assert.fail("Frame waw not found");
-			testResultService.addFailTest("Frame waw not found", true);
+//			testResultService.addFailTest("Frame was not found", true);
 		} finally {
-			return currentWindow;
+			
 		}
+		return currentWindow;
 	}
 
 	public String switchToFrame(WebElement element) throws Exception {
@@ -779,7 +787,44 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 		return html;
 	}
-	
-	
+
+	public JSONObject getWebDriverJson() throws Exception {
+		// String hub = "grid_server_host"; //IP or hostname of GRID
+
+		int port = 4444; // port no.
+
+		HttpHost host = new HttpHost("10.1.0.56", port);
+
+		DefaultHttpClient client = new DefaultHttpClient();
+
+		String url = host + "/grid/api/testsession?session=";
+
+		URL session = new URL(url
+				+ ((RemoteWebDriver) webDriver).getSessionId());
+
+		BasicHttpEntityEnclosingRequest req;
+
+		req = new BasicHttpEntityEnclosingRequest("POST",
+				session.toExternalForm());
+
+		org.apache.http.HttpResponse response = client.execute(host, req);
+
+		JSONObject object = new JSONObject(EntityUtils.toString(response
+				.getEntity()));
+
+		// String proxyID = (String) object.get("proxyId");
+
+		// String node = (proxyID.split("//")[1].split(":")[0]);
+
+		return object;
+	}
+
+	public String getRemoteMachine() {
+		return remoteMachine;
+	}
+
+	public void setRemoteMachine(String remoteMachine) {
+		this.remoteMachine = remoteMachine;
+	}
 
 }

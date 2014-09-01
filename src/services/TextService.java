@@ -297,7 +297,7 @@ public class TextService extends SystemObjectImpl {
 			strArr[i] = strArr[i].replace("!", "");
 			strArr[i] = strArr[i].replace(",", "");
 			strArr[i] = strArr[i].replace(".", "");
-			strArr[i] = strArr[i].replace("-", "");
+			strArr[i] = strArr[i].replace("-", " ");
 			strArr[i] = strArr[i].replace(";", "");
 			strArr[i] = strArr[i].replace("\\", "");
 			strArr[i] = strArr[i].replace("\"", "");

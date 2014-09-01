@@ -33,8 +33,9 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		courses = pageHelper.getCourses();
 		report.startLevel("delete all student assignments",
 				Reporter.EnumReportLevel.CurrentPlace);
-		String userId = dbService.getUserIdByUserName(configuration
-				.getStudentUserName(),autoInstitution.getInstitutionId());
+		String userId = dbService.getUserIdByUserName(
+				configuration.getStudentUserName(),
+				autoInstitution.getInstitutionId());
 		eraterService.deleteStudentAssignments(userId);
 		report.stopLevel();
 		report.startLevel("Set institution to 'Teacher first' settings",
@@ -65,18 +66,23 @@ public class EraterRegressionTests extends EdusoftWebTest {
 	@Test
 	public void testSubmitTextAsStudentAndCheckFeedbackAsTeacherAndSendAgain()
 			throws Exception {
+		startStep("Create a student for the test");
+		String StudentUserName = "student" + dbService.sig(6);
+		pageHelper.addStudent(StudentUserName);
 		startStep("Login to Edo");
 		int courseId = 12;
 		String textFile = "files/assayFiles/text24.txt";
 		report.report("using file: " + textFile);
-		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver,testResultService);
-		edoLoginPage.OpenPage(getSutAndSubDomain());
-
+		// EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver,
+		// testResultService);
+		// edoLoginPage.OpenPage(getSutAndSubDomain());
+		//
 		Student student = new Student();
-		student.setUserName(configuration.getStudentUserName());
+		student.setUserName(StudentUserName);
 		student.setPassword(configuration.getStudentPassword());
-		student.setId(dbService.getUserIdByUserName(student.getUserName(),autoInstitution.getInstitutionId()));
-		EdoHomePage edoHomePage = pageHelper.loginAsStudent();
+		student.setId(dbService.getUserIdByUserName(StudentUserName,
+				autoInstitution.getInstitutionId()));
+		EdoHomePage edoHomePage = pageHelper.loginAsStudent(student);
 
 		startStep("Open home page and start a writing drill");
 		String courseName = courses.get(courseId).getName();
@@ -101,7 +107,8 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		// Thread.sleep(60000);
 
 		startStep("start checking the xml and json");
-		String userId = dbService.getUserIdByUserName(student.getUserName(),autoInstitution.getInstitutionId());
+		String userId = dbService.getUserIdByUserName(student.getUserName(),
+				autoInstitution.getInstitutionId());
 		String textStart = textService.getFirstCharsFromCsv(10, textFile);
 		String writingId = eraterService.getWritingIdByUserIdAndTextStart(
 				userId, textStart);
@@ -126,11 +133,14 @@ public class EraterRegressionTests extends EdusoftWebTest {
 
 		startStep("Login as teacher and send feedback to the student");
 		webDriver.deleteCookiesAndRefresh();
-		Teacher teacher = new Teacher(configuration.getProperty("teacher.username"),
+		Teacher teacher = new Teacher(
+				configuration.getProperty("teacher.username"),
 				configuration.getProperty("teacher.password"));
-		edoLoginPage.OpenPage(getSutAndSubDomain());
-		edoHomePage = edoLoginPage.login(teacher);
-		edoHomePage.waitForPageToLoad();
+		// edoLoginPage.OpenPage(getSutAndSubDomain());
+		// edoHomePage = edoLoginPage.login(teacher);
+		// edoHomePage.waitForPageToLoad();
+
+		pageHelper.loginAsTeacher();
 		TmsHomePage tmsHomePage = edoHomePage.openTeachersCorner();
 		String newWritingId = eraterService.getWritingIdByUserIdAndTextStart(
 				student.getId(), newText);
@@ -147,18 +157,21 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		tmsHomePage.clickOnApproveAssignmentButton();
 		Thread.sleep(2000);
 		tmsHomePage.sendFeedback();
+	
 		Thread.sleep(2000);
 
 		startStep("Login again as student and check the feedback from the teacher");
 		webDriver.quitBrowser();
 		webDriver.init(testResultService);
 		webDriver.openUrl(getSutAndSubDomain());
-		edoLoginPage.login(student);
+		// edoLoginPage.login(student);
+		pageHelper.loginAsStudent(student);
 		sleep(5);
 		edoHomePage.clickOnMyAssignments();
 		edoHomePage.switchToAssignmentsFrame();
 		edoHomePage.clickOnWritingAssignmentsTab(courseName);
 		// edoHomePage.clickToViewAssignment(courseName);
+		sleep(2);
 		edoHomePage.clickOnSeeFeedback();
 		edoHomePage.switchToAssignmentsFrame();
 		Thread.sleep(3000);
@@ -175,10 +188,12 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		Student student = new Student();
 		student.setUserName(configuration.getStudentUserName());
 		student.setPassword(configuration.getStudentPassword());
-		student.setId(dbService.getUserIdByUserName(student.getUserName(),autoInstitution.getInstitutionId()));
+		student.setId(dbService.getUserIdByUserName(student.getUserName(),
+				autoInstitution.getInstitutionId()));
 
 		startStep("Login as student and enter some text");
-		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver,testResultService);
+		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver,
+				testResultService);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
 		EdoHomePage edoHomePage = edoLoginPage.login(student);
 
@@ -204,10 +219,10 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		edoHomePage.clickOnSubmitAssignment();
 
 		startStep("Check the assignment in the DB");
-		String userId = dbService.getUserIdByUserName(student.getUserName(),autoInstitution.getInstitutionId());
+		String userId = dbService.getUserIdByUserName(student.getUserName(),
+				autoInstitution.getInstitutionId());
 		Assert.assertNotNull("validate writing id in DB",
 				eraterService.getWritingIdByUserId(userId));
-		
 
 	}
 

@@ -22,10 +22,17 @@ public class GrammersTests extends EdusoftWebTest {
 	private static final String SPEAKING_FOLDER = "\\\\frontqa3\\EDO_HTML_SR\\Runtime\\Content\\speaking";
 	private static final String LISTENING_FOLDER = "\\\\frontqa3\\EDO_HTML_SR\\Runtime\\Content\\listening";
 	private static final String GRAMMER_FOLDER = "\\\\frontqa3\\EDO_HTML_SR\\Runtime\\Content\\grammar";
-	private static final String Vocabulary_FOLDER = "\\\\frontqa3\\EDO_HTML_SR\\Runtime\\Content\\Vocabulary";
+	// private static final String Vocabulary_FOLDER =
+	// "\\\\frontqa3\\EDO_HTML_SR\\Runtime\\Content\\Vocabulary";
+	private static final String Vocabulary_FOLDER = "\\\\newstorage\\sendhere\\_EDOHTML\\EDO_GRAMMAR_CHANGES\\BaseCourses\\Alphabet";
+	private static final String tempTestFile = "C:\\automation\\vocabulary.grammar";
+
 	private final String grammerFilesPath = "\\\\NEWSTORAGE\\Sendhere\\_EDOHTML\\EduSpeak\\sample-grammars\\English\\baseEDOCources.grammar";
 
 	// private final String grammerFilesPath="C:\\automation\\testFile.txt";
+
+	List<String[]> results = new ArrayList<>();
+
 	@Before
 	public void setup() throws Exception {
 		super.setup();
@@ -49,7 +56,7 @@ public class GrammersTests extends EdusoftWebTest {
 	@Test
 	public void checkVocabaalaryGrammers() throws Exception {
 		int failed = 0;
-		int passed=0;
+		int passed = 0;
 		startStep("Get folders list");
 		List<String> folders = getSubFolders(Vocabulary_FOLDER);
 		try {
@@ -59,9 +66,15 @@ public class GrammersTests extends EdusoftWebTest {
 						+ "\\" + folders.get(i) + "e.xml";
 				startStep("Check that file exist");
 				boolean fileExist = textService.checkIfFileExist(filePath);
-				testResultService.assertEquals(true, fileExist, "File: "
-						+ folders.get(i) + " was not found");
-				List<String[]> list = getDataFromXmlFile(filePath,
+				boolean fileFound = testResultService
+						.assertEquals(true, fileExist,
+								"File: " + folders.get(i) + " was not found");
+				if (fileFound == false) {
+					String[] str = new String[] { "File not found",
+							folders.get(i), "File " + filePath + " Not Found" };
+					results.add(str);
+				}
+				List<String[]> list = getTextSegmensFromXmlFile(filePath,
 						folders.get(i));
 				if (list == null) {
 					System.out.println("file " + folders.get(i)
@@ -79,10 +92,18 @@ public class GrammersTests extends EdusoftWebTest {
 					segments[j] = textFromXml;
 					textFromGrammer[j] = getGrammerTextFromGrammerFiles("."
 							+ subGrammerIds[j]);
-					int index=j+1;
+					int index = j + 1;
 					if (textFromGrammer[j] == null) {
 						report.report("Grammer text not found in grammer file:"
 								+ folders.get(i).toUpperCase() + "_" + index);
+
+						String[] str = new String[] {
+								"Missing grammer",
+								folders.get(i),
+								"Grammer missing "
+										+ folders.get(i).toUpperCase() + "_"
+										+ index };
+						results.add(str);
 						failed++;
 						continue outerloop;
 					}
@@ -90,12 +111,12 @@ public class GrammersTests extends EdusoftWebTest {
 				}
 				for (int k = 0; k < segments.length; k++) {
 					int index = k + 1;
-					
 
 					startStep("Compare grammer texts and segements texts");
 
 					if (compareSegmentTextAndGrammerTexsts(segments,
 							textFromGrammer, folders.get(i)) == false) {
+
 						failed++;
 						continue outerloop;
 					}
@@ -110,11 +131,14 @@ public class GrammersTests extends EdusoftWebTest {
 
 		}
 
+		textService.writeArrayistToCSVFile(
+				"files/csvFIles/resultOutput_vocab.csv", results);
+
 	}
 
 	public void compareAllGrammers(String testFolder) throws Exception {
 		startStep("Iterate on all Speakeing folders");
-//		testFolder = testFolder;
+		// testFolder = testFolder;
 		int passed = 0;
 		int failed = 0;
 		// \\frontqa3\EDO_HTML_SR\Runtime\Content\speaking
@@ -140,6 +164,9 @@ public class GrammersTests extends EdusoftWebTest {
 				testResultService.assertEquals(true, fileExist, "File: "
 						+ folders.get(i) + " was not found");
 				if (fileExist == false) {
+					String[] str = new String[] { "File not found",
+							folders.get(i), "File " + filePath + " Not Found" };
+					results.add(str);
 					failed++;
 					continue;
 				}
@@ -158,6 +185,13 @@ public class GrammersTests extends EdusoftWebTest {
 					if (grammerText == null) {
 						report.report("Grammer text not found in grammer file:"
 								+ folders.get(i).toUpperCase() + "_" + index);
+						String[] str = new String[] {
+								"Missing grammer",
+								folders.get(i),
+								"Grammer missing "
+										+ folders.get(i).toUpperCase() + "_"
+										+ index };
+						results.add(str);
 						failed++;
 						continue outerloop;
 					}
@@ -191,14 +225,32 @@ public class GrammersTests extends EdusoftWebTest {
 						System.out.println("Grammer words:");
 						report.report("grammer words:");
 						textService.printStringArray(grammerWords);
+						String[] str = new String[] {
+								"Error",
+								folders.get(i),
+								"Missing word count",
+								"Grammer words:"
+										+ textService
+												.printStringArray(grammerWords),
+								"Segment words:"
+										+ textService
+												.printStringArray(segmentsWords) };
+						results.add(str);
 						failed++;
 						continue outerloop;
 
 					}
 					for (int h = 0; h < segmentsWords.length; h++) {
-						testResultService.assertEquals(segmentsWords[h],
-								grammerWords[h], "problem in grammer: "
-										+ folders.get(i) + "_" + k);
+						boolean wordMatch = testResultService.assertEquals(
+								segmentsWords[h], grammerWords[h],
+								"problem in grammer: " + folders.get(i) + "_"
+										+ k);
+						if (wordMatch == false) {
+							String[] str = new String[] { "Word mismatch",
+									folders.get(i), segmentsWords[h],
+									grammerWords[h] };
+							results.add(str);
+						}
 					}
 				}
 				System.out.println(i + "Finished checking folder: "
@@ -215,6 +267,11 @@ public class GrammersTests extends EdusoftWebTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		textService.writeArrayistToCSVFile(
+				"files/csvFIles/resultOutput"
+						+ testFolder.substring(testFolder.length() - 6,
+								testFolder.length()) + ".csv", results);
 	}
 
 	public void findGrammer() throws Exception {
@@ -231,7 +288,7 @@ public class GrammersTests extends EdusoftWebTest {
 			throws IOException {
 		String text = null;
 		try {
-			text = textService.getLineFromTextFile(new File(grammerFilesPath),
+			text = textService.getLineFromTextFile(new File(tempTestFile),
 					grammerID);
 			int begin = text.indexOf("(");
 			begin++;
@@ -265,31 +322,60 @@ public class GrammersTests extends EdusoftWebTest {
 
 	}
 
-	private List<String[]> getDataFromXmlFile(String xmlPath, String grammerId)
-			throws Exception {
-
+	private List<String[]> getTextSegmensFromXmlFile(String xmlPath,
+			String grammerId) throws Exception {
+		boolean VocabData = false;
 		List<String[]> list = new ArrayList<String[]>();
 
 		Document document = netService.getXmlFromFile(xmlPath);
 
 		NodeList idNodeList = netService.getNodesFromXml("//Word", document);
+		if (idNodeList.item(0).getAttributes().getNamedItem("Id") == null) {
+			idNodeList = netService.getNodesFromXml("//Word//Id", document);
+			VocabData = true;
+		}
 		NodeList segmentNodeList = netService.getNodesFromXml(
 				"//Word//Example", document);
+		// check if segments are not null. if null try //Word//Sentence
+		if (segmentNodeList.getLength() == 0) {
+			segmentNodeList = netService.getNodesFromXml("//Word//Sentence",
+					document);
+		}
 		if (segmentNodeList.getLength() == 0) {
 			// file does not contains valid data
 			return list;
 		}
 		String id = null;
 		for (int i = 0; i < idNodeList.getLength(); i++) {
-			id = grammerId
-					+ "E_"
-					+ idNodeList.item(i).getAttributes().getNamedItem("Id")
-							.getNodeValue();
-			// System.out.println("id:"+id);
-			// System.out.println(nodeList.item(i).getTextContent());
-			// System.out.println("Sample:"+
-			// segmentNodeList.item(i).getTextContent());
+			try {
+				id=null;
+				id = grammerId
+						+ "E_"
+						+ idNodeList.item(i).getAttributes().getNamedItem("Id")
+								.getNodeValue();
+			} catch (Exception e) {
 
+			}
+			// check other location of id
+
+			// if id=-1, add failure
+			if (id == "-1") {
+				String[] errorStr = new String[] { "Error", grammerId,
+						"SubGrammar id in XML=-1", };
+				results.add(errorStr);
+				continue;
+			}
+			if (id == null && VocabData == true) {
+				id = grammerId + "_";
+				id = id + idNodeList.item(i).getTextContent();
+				
+				// id = grammerId
+				// + "E_"
+				// + idNodeList.item(i).getChildNodes().item(2)
+				// .getTextContent();
+				System.out.println(idNodeList.item(i).getTextContent());
+
+			}
 			String[] str = new String[] { id,
 					segmentNodeList.item(i).getTextContent() };
 			list.add(str);
@@ -301,7 +387,7 @@ public class GrammersTests extends EdusoftWebTest {
 
 	public boolean compareSegmentTextAndGrammerTexsts(String[] segmentTexts,
 			String[] grammerTexts, String folder) {
-		segmentTexts=	textService.trimLowerCaseAndRemoveChars(segmentTexts);
+		segmentTexts = textService.trimLowerCaseAndRemoveChars(segmentTexts);
 		for (int k = 0; k < segmentTexts.length; k++) {
 			String[] segmentsWords = textService.splitStringToArray(
 					segmentTexts[k], "\\s+");
@@ -322,12 +408,27 @@ public class GrammersTests extends EdusoftWebTest {
 				System.out.println("Grammer words:");
 				report.report("grammer words:");
 				textService.printStringArray(grammerWords);
+
+				String[] str = new String[] {
+						"Word count mismatch",
+						folder,
+
+						"Grammer words:"
+								+ textService.printStringArray(grammerWords),
+						"Segment words:"
+								+ textService.printStringArray(segmentsWords) };
+				results.add(str);
+
 				return false;
 			}
 			for (int h = 0; h < segmentsWords.length; h++) {
-				if(testResultService.assertEquals(segmentsWords[h],
+				if (testResultService.assertEquals(segmentsWords[h],
 						grammerWords[h], "problem in grammer: " + folder + "_"
-								+ k)==false){
+								+ k) == false) {
+					// /////
+					String[] str = new String[] { "Word mismatch", folder,
+							segmentsWords[h], grammerWords[h] };
+					results.add(str);
 					return false;
 				}
 			}

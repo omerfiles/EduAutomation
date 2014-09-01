@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import jsystem.framework.report.Reporter.EnumReportLevel;
 import jsystem.framework.system.SystemObjectImpl;
 
 import org.junit.Assert;
@@ -28,6 +29,7 @@ import Objects.SchoolAdmin;
 import Objects.Student;
 import Objects.Teacher;
 import Objects.UnitComponent;
+import Objects.UserObject;
 
 @Service
 public class PageHelperService extends SystemObjectImpl {
@@ -87,6 +89,10 @@ public class PageHelperService extends SystemObjectImpl {
 		}
 		teacher.setPassword(configuration.getProperty("teacher.password"));
 
+	}
+	public EdoHomePage loginAsStudent(Student student) throws Exception {
+		this.student=student;
+		return loginAsStudent();
 	}
 
 	public EdoHomePage loginAsStudent() throws Exception {
@@ -328,6 +334,40 @@ public class PageHelperService extends SystemObjectImpl {
 //		System.out.println("testResultService:"+testResultService.toString());
 		testResultService.assertEquals(String.valueOf(wl), SL,"Sentence level do not match");
 		
+	}
+	
+	public void addStudent(String studentName)throws Exception{
+//		String studentName = "student" + dbService.sig(6);
+		String studentPassword = "12345";
+		TmsLoginPage tmsLoginPage = new TmsLoginPage(webDriver,
+				testResultService);
+		UserObject tmsAdmin = new UserObject();
+		tmsAdmin.setUserName(configuration.getProperty("tmsadmin.user"));
+		tmsAdmin.setPassword(configuration.getProperty("tmsadmin.password"));
+		tmsLoginPage.OpenPage(configuration.getProperty("tms.url"));
+		TmsHomePage tmsHomePage = tmsLoginPage.Login(tmsAdmin);
+		tmsHomePage.waitForPageToLoad();
+		report.stopLevel();
+
+		report.startLevel("Go to students section and select the institute",
+				EnumReportLevel.CurrentPlace);
+		tmsHomePage.clickOnStudents();
+		String institutionId = configuration.getProperty("institution.id");
+		String instituteName = dbService.getInstituteNameById(institutionId);
+		tmsHomePage.selectInstitute(instituteName, institutionId, false);
+		Thread.sleep(1000);
+		tmsHomePage.selectClass(configuration.getProperty("classname"));
+
+		report.stopLevel();
+
+		report.startLevel("Enter new student details",
+				EnumReportLevel.CurrentPlace);
+
+
+		tmsHomePage.enterStudentDetails(studentName);
+		String userId = dbService.getUserIdByUserName(studentName,
+				autoInstitution.getInstitutionId());
+		tmsHomePage.enterStudentPassword(userId, studentPassword);
 	}
 
 }

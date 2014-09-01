@@ -19,6 +19,7 @@ public class ChromeWebDriver extends GenericWebDriver {
 		setBrowserName("chrome");
 		setInitialized(true);
 		dbService = new DbService();
+//		setRemoteMachine(remoteUrl);
 
 		logsFolder = folderName;
 		try {

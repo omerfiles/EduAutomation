@@ -69,10 +69,10 @@ public class FirefoxWebDriver extends GenericWebDriver {
 	}
 
 	@Override
-	public void clickOnElement(WebElement td) {
+	public void clickOnElement(WebElement element) {
 		// td.sendKeys(Keys.ENTER);
 		JavascriptExecutor executor = (JavascriptExecutor) webDriver;
-		executor.executeScript("arguments[0].click();", td);
+		executor.executeScript("arguments[0].click();", element);
 
 	}
 

@@ -104,7 +104,9 @@ public class TmsHomePage extends GenericPage {
 	}
 
 	public TmsHomePage clickOnApproveAssignmentButton() throws Exception {
-		webDriver.waitForElement("Approve", ByTypes.partialLinkText).click();
+		WebElement element = webDriver.waitForElement("Approve",
+				ByTypes.partialLinkText);
+		webDriver.clickOnElement(element);
 		return this;
 	}
 
@@ -120,7 +122,8 @@ public class TmsHomePage extends GenericPage {
 	}
 
 	public TmsHomePage sendFeedback() throws Exception {
-		webDriver.waitForElement("btSubmit", ByTypes.id).click();
+//		webDriver.waitForElement("btSubmit", ByTypes.id).click();
+		webDriver.waitForElement("//div[@id='btSubmit']//a", ByTypes.xpath).click();
 		return this;
 	}
 
@@ -177,8 +180,9 @@ public class TmsHomePage extends GenericPage {
 		String mainWin = webDriver.switchToFrame("FormFrame");
 		webDriver.waitForElementAndClick("SelectClass", ByTypes.id);
 		Thread.sleep(1000);
-		webDriver.waitForElement("//select[@id='SelectClass']//option[2]",
-				ByTypes.xpath).click();
+		webDriver.waitForElement(
+				"//select[@id='SelectClass']//option[contains(text(),'"
+						+ className + "')]", ByTypes.xpath).click();
 		webDriver.waitForElement("//input[@value='  GO  ']", ByTypes.xpath)
 				.click();
 		webDriver.switchToFrame("mainFrame");
