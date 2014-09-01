@@ -360,6 +360,9 @@
 								<url>${URL}</url>
 								<browser>${browserCMD}</browser>
 								<student>${student}</student>
+								<teacher>${teacher}</teacher>
+								<machine>${machine}</machine>
+								<envFile>${envFileCMD}</envFile>
 							</properties>
 							<systemProperties>
 								<property>
@@ -402,6 +405,8 @@
 								<browser>${browserCMD}</browser>
 								<student>${student}</student>
 								<teacher>${teacher}</teacher>
+								<machine>${machine}</machine>
+								<envFile>${envFileCMD}</envFile>
 							</properties>
 
 							<systemProperties>
@@ -417,6 +422,10 @@
 									<name>institutionId</name>
 									<value>1</value>
 
+								</property>
+								<property>
+									<name>envFile</name>
+									<value>qa.properties</value>
 								</property>
 
 							</systemProperties>
@@ -463,6 +472,8 @@
 								<browser>${browserCMD}</browser>
 								<student>${student}</student>
 								<teacher>${teacher}</teacher>
+								<machine>${machine}</machine>
+								<envFile>${envFileCMD}</envFile>
 							</properties>
 
 							<systemProperties>
@@ -528,6 +539,8 @@
 								<browser>${browserCMD}</browser>
 								<student>${student}</student>
 								<teacher>${teacher}</teacher>
+								<machine>${machine}</machine>
+								<envFile>${envFileCMD}</envFile>
 							</properties>
 							<systemProperties>
 								<property>
@@ -586,6 +599,7 @@
 								<student>${student}</student>
 								<teacher>${teacher}</teacher>
 								<machine>${machine}</machine>
+								<envFile>${envFileCMD}</envFile>
 							</properties>
 							<systemProperties>
 								<property>
@@ -651,7 +665,7 @@
 								<student>${student}</student>
 								<teacher>${teacher}</teacher>
 								<machine>${machine}</machine>
-								<envFile>${envFile}</envFile>
+								<envFile>${envFileCMD}</envFile>
 							</properties>
 							<systemProperties>
 								<property>
@@ -668,7 +682,7 @@
 								</property>
 								<property>
 									<name>envFile</name>
-									<value>qa.properties</value>
+									<value>sr.properties</value>
 								</property>
 
 							</systemProperties>

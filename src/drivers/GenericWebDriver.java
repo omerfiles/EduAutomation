@@ -91,7 +91,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		// if (remoteMachine == null) {
 		// Assert.fail("Remote machine value is null");
 		// }
-		remoteMachine = configuration.getAutomationParam("remote.machine",
+		remoteMachine = configuration.getAutomationParam(AutoParams.remoteMachine.toString(),
 				"machine");
 		setSutUrl(configuration.getAutomationParam(
 				AutoParams.sutUrl.toString(), "suturl"));

@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import Enums.AutoParams;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 //import javax.mail.internet.InternetAddress;
@@ -36,24 +38,26 @@ public class Configuration {
 		String localPropertiesFile = null;
 		// load a properties file
 		try {
+			
+			localPropertiesFile=getAutomationParam(AutoParams.envFile.toString(), "envFileCMD");
 
-			// try to get properties file name from pom profile
-			localPropertiesFile = System.getProperty("envFile");
-			System.out
-					.println("Got envFile propery from pom profile. EnvFile is: "
-							+ localPropertiesFile);
-
-			// if local properties files does not exist in the pom xml, get if
-			// from the global properties file
-			if (localPropertiesFile == null) {
-				globalProperties.load(globaConfigInput);
-				localPropertiesFile = getGlobalProperties("envFile");
-				System.out
-						.println("Got envFile propery from Global config file");
-			}
-
-			// input = new FileInputStream("files/properties/QA/"
-			// + localPropertiesFile);
+//			// try to get properties file name from pom profile
+//			localPropertiesFile = System.getProperty("envFile");
+//			System.out
+//					.println("Got envFile propery from pom profile. EnvFile is: "
+//							+ localPropertiesFile);
+//
+//			// if local properties files does not exist in the pom xml, get if
+//			// from the global properties file
+//			if (localPropertiesFile == null) {
+//				globalProperties.load(globaConfigInput);
+//				localPropertiesFile = getGlobalProperties("envFile");
+//				System.out
+//						.println("Got envFile propery from Global config file");
+//			}
+//
+//			// input = new FileInputStream("files/properties/QA/"
+//			// + localPropertiesFile);
 			input = new FileInputStream("C:\\automation\\"
 					+ localPropertiesFile);
 			properties.load(input);

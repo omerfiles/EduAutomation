@@ -2,7 +2,9 @@ package Enums;
 
 public enum AutoParams {
 	remoteMachine("remote.machine"),
-	sutUrl("sut.url")
+	machine("machine"),
+	sutUrl("sut.url"),
+	envFile("env.file")
 	
 	;
 	
