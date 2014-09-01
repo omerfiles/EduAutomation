@@ -22,18 +22,19 @@ import java.util.Set;
 public class Configuration {
 	private static Configuration configuration = new Configuration();
 
-	public Configuration() {
+	public Configuration()    {
 		InputStream input = null;
 		InputStream globaConfigInput = null;
 
 		try {
 			globaConfigInput = new FileInputStream(
 					"files/properties/global.properties");
+			globalProperties.load(globaConfigInput);
 
 			// input = new FileInputStream("C:\\qa.properties");
-		} catch (FileNotFoundException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 		String localPropertiesFile = null;
 		// load a properties file
@@ -62,7 +63,7 @@ public class Configuration {
 					+ localPropertiesFile);
 			properties.load(input);
 
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -298,7 +299,8 @@ public class Configuration {
 			System.out.println("got from global properties: " + value);
 			return value;
 		} else {
-			System.out.println("value not founnd");
+			System.out.println("value not found");
+			org.junit.Assert.fail("Auto param value not found. Check properties file or maven CMD param");
 		}
 
 		return value;

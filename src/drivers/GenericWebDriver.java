@@ -610,11 +610,12 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 						+ configuration.getProperty("screenshotFolder")
 						+ "\\\\ScreenShot" + message.replace(" ", "") + sig
 						+ ".png";
+				System.out.println("File path is :"+newFileName);
 
 				path = "http://"
 						+ configuration.getProperty("logserver").replace("\\",
 								"") + "/"
-						+ configuration.getProperty("webFolder")
+						+ configuration.getProperty("screenshotFolder")
 						+ "/ScreenShot" + message.replace(" ", "") + sig
 						+ ".png";
 

@@ -47,10 +47,6 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 
 	@Before
 	public void setup() throws Exception {
-		// System.setProperty("java.ibrary.path","C:\\Users\\omers\\Downloads\\Microsoft JDBC Driver 4.0 for SQL Server\\sqljdbc_4.0\\enu\\auth\\x86");
-
-		// ctx = new ClassPathXmlApplicationContext("beans.xml");
-
 		System.out.println("url from maven command line: "
 				+ System.getProperty("URL"));
 
