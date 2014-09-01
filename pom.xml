@@ -373,6 +373,10 @@
 									<name>remote.machine</name>
 									<value>http://10.1.0.66:5555</value>
 								</property>
+								<property>
+									<name>envFile</name>
+									<value>qa.properties</value>
+								</property>
 
 							</systemProperties>
 							<testSourceDirectory>${project.basedir}/src/tests/</testSourceDirectory>
