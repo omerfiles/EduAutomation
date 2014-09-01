@@ -117,7 +117,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		eraterService.compareJsonAndXmlByWritingId(writingId);
 		edoHomePage.waitForPageToLoad();
 		edoHomePage.clickOnCourses();
-
+		sleep(3);
 		startStep("Check the Erater feedback as a student and send again");
 		edoHomePage.clickOnMyAssignments();
 		edoHomePage.switchToAssignmentsFrame();
@@ -166,7 +166,9 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		webDriver.openUrl(getSutAndSubDomain());
 		// edoLoginPage.login(student);
 		pageHelper.loginAsStudent(student);
-		sleep(5);
+		sleep(2);
+		webDriver.closeAlertByAccept();
+		
 		edoHomePage.clickOnMyAssignments();
 		edoHomePage.switchToAssignmentsFrame();
 		edoHomePage.clickOnWritingAssignmentsTab(courseName);

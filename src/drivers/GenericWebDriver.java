@@ -210,6 +210,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 		} catch (Exception e) {
 			if (isElementMandatory == true) {
+				Assert.fail("Exception when waiting for element:"+idValue+".| "+e.toString());
 			}
 
 		} finally {
