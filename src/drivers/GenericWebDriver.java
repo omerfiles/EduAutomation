@@ -550,12 +550,17 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	}
 
 	public void closeAlertByAccept() {
-		System.out.println("Closing alert");
-		WebDriverWait wait = new WebDriverWait(webDriver, 10, 1000);
-		if (wait.until(ExpectedConditions.alertIsPresent()) != null) {
-			webDriver.switchTo().alert().accept();
+		try {
+			System.out.println("Closing alert");
+			WebDriverWait wait = new WebDriverWait(webDriver, 10, 1000);
+			if (wait.until(ExpectedConditions.alertIsPresent()) != null) {
+				webDriver.switchTo().alert().accept();
+			}
+			System.out.println("Finished closing alert");
+		} catch (TimeoutException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Alert was not found after 10 seconds");
 		}
-		System.out.println("Finished closing alert");
 
 	}
 
