@@ -12,6 +12,7 @@ import org.junit.Test;
 import pageObjects.EdoHomePage;
 import pageObjects.EdoLoginPage;
 import pageObjects.tms.TmsHomePage;
+import Enums.ByTypes;
 import Objects.Course;
 import Objects.Student;
 import Objects.Teacher;
@@ -120,7 +121,7 @@ public class EraterAddRemoveFeedbackComments extends EdusoftWebTest {
 		tmsHomePage.clickOnXFeedback();
 		tmsHomePage.checkRemoveCommentButtonStatus(false, true);
 
-		startStep("Select a comment and check the remve button");
+		startStep("Select a comment and check the remove button");
 		String commentText = tmsHomePage.selectFeedbackComment(commentID);
 		tmsHomePage.checkRemoveCommentButtonStatus(true, false);
 
@@ -159,6 +160,10 @@ public class EraterAddRemoveFeedbackComments extends EdusoftWebTest {
 	
 	@Test
 	public void testAddTeacherCommentToStudentAssignment()throws Exception{
+		startStep("Create a student for the test");
+		String StudentUserName = "student" + dbService.sig(6);
+		pageHelper.addStudent(StudentUserName);
+		
 		startStep("Login to Edo");
 		int courseId = 3;
 		String textFile = "files/assayFiles/text24.txt";
@@ -167,17 +172,24 @@ public class EraterAddRemoveFeedbackComments extends EdusoftWebTest {
 		// EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
 		// edoLoginPage.OpenPage(getSutAndSubDomain());
 		//
-		Student student = new Student();
-		student.setUserName(configuration.getStudentUserName());
-		student.setPassword(configuration.getStudentPassword());
-		student.setId(dbService.getUserIdByUserName(student.getUserName(),
-				autoInstitution.getInstitutionId()));
+//		Student student = new Student();
+//		student.setUserName(configuration.getStudentUserName());
+//		student.setPassword(configuration.getStudentPassword());
+//		student.setId(dbService.getUserIdByUserName(student.getUserName(),
+//				autoInstitution.getInstitutionId()));
 		// EdoHomePage edoHomePage = edoLoginPage.login(student);
-		EdoHomePage edoHomePage = pageHelper.loginAsStudent();
+		Student student = new Student();
+		student.setUserName(StudentUserName);
+		student.setPassword(configuration.getStudentPassword());
+		student.setId(dbService.getUserIdByUserName(StudentUserName,
+				autoInstitution.getInstitutionId()));
+		EdoHomePage edoHomePage = pageHelper.loginAsStudent(student);
 
 		startStep("Open home page and start a writing drill");
 		String courseName = courses.get(courseId).getName();
+		sleep(2);
 		edoHomePage.clickOnCourses();
+		sleep(5);
 		edoHomePage.clickOnCourseByName(courseName);
 		edoHomePage.waitForCourseDetailsToBeDisplayed(courseName);
 		String courseUnit = courses.get(courseId).getCourseUnits().get(0)
@@ -236,10 +248,17 @@ public class EraterAddRemoveFeedbackComments extends EdusoftWebTest {
 		//********************
 		startStep("Check that the Add button is disabled when no comment is selected");
 		tmsHomePage.clickOnXFeedback();
+//		webDriver.switchToFrame("cboxIframe");
 		tmsHomePage.checkAddCommentButtonStatus(true);
 
 		startStep("Click the Add buttom, select a plave and add a comment");
 		tmsHomePage.ClickAddCommentButton();
+		
+		//click on position to add commentR
+		tmsHomePage.clickOnTextArea(20,20);
+		String commentText="comment"+dbService.sig(5);
+		tmsHomePage.enterTeacherCommentText(commentText);
+		tmsHomePage.clickAddCommentDoneButton();
 
 		
 		
@@ -260,7 +279,10 @@ public class EraterAddRemoveFeedbackComments extends EdusoftWebTest {
 		webDriver.quitBrowser();
 		webDriver.init(testResultService);
 		pageHelper.loginAsStudent();
+		sleep(5);
+		webDriver.printScreen("after student login");
 		edoHomePage.clickOnMyAssignments();
+		sleep(3);
 		edoHomePage.switchToAssignmentsFrame();
 		edoHomePage.clickOnWritingAssignmentsTab(courseName);
 		// edoHomePage.clickToViewAssignment(courseName);
@@ -269,7 +291,9 @@ public class EraterAddRemoveFeedbackComments extends EdusoftWebTest {
 		Thread.sleep(3000);
 		edoHomePage.clickOnFeedbackMoreDetails();
 //		edoHomePage.clickOnWritingAssignmentsTab(courseName);
-//		edoHomePage.checkAsStudentFeedbackComment(commentID, false,commentText);
+		webDriver.switchToFrame(webDriver.waitForElement(
+				"//iframe[@class='cboxIframe']", ByTypes.xpath));
+		edoHomePage.checkForTeacherComment("t0_0_0",commentText);
 		
 	}
 

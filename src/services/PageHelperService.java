@@ -106,6 +106,7 @@ public class PageHelperService extends SystemObjectImpl {
 		EdoHomePage edoHomePage = edoLoginPage.login(student);
 		// edoHomePage.waitForPageToLoad();
 		edoLogoutNeeded = true;
+		webDriver.closeAlertByAccept();
 		return edoHomePage;
 	}
 

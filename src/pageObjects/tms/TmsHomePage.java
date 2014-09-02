@@ -122,8 +122,9 @@ public class TmsHomePage extends GenericPage {
 	}
 
 	public TmsHomePage sendFeedback() throws Exception {
-//		webDriver.waitForElement("btSubmit", ByTypes.id).click();
-		webDriver.waitForElement("//div[@id='btSubmit']//a", ByTypes.xpath).click();
+		// webDriver.waitForElement("btSubmit", ByTypes.id).click();
+		webDriver.waitForElement("//div[@id='btSubmit']//a", ByTypes.xpath)
+				.click();
 		return this;
 	}
 
@@ -668,15 +669,34 @@ public class TmsHomePage extends GenericPage {
 
 	public void checkAddCommentButtonStatus(boolean enabled) throws Exception {
 		swithchToMainFrame();
+
 		webDriver.switchToFrame(webDriver.waitForElement(
 				"//iframe[@class='cboxIframe']", ByTypes.xpath));
-		webDriver.waitForElement("butAdd", ByTypes.xpath).isEnabled();
+		webDriver.waitForElement("butAdd", ByTypes.id).isEnabled();
 
 	}
 
 	public void ClickAddCommentButton() throws Exception {
-		webDriver.waitForElement("butAdd", ByTypes.xpath).click();
+		webDriver.waitForElement("butAdd", ByTypes.id).click();
 
+	}
+
+	public void clickOnTextArea(int x, int y) throws Exception {
+		WebElement assayText = webDriver
+				.waitForElement("//div[@id='essayText']//div[1]//div", ByTypes.xpath);
+		webDriver.clickOnElementWithOffset(assayText, x, y);
+
+	}
+
+	public void enterTeacherCommentText(String commentText) throws Exception {
+		webDriver.waitForElement("editedComments", ByTypes.id).click();
+		webDriver.waitForElement("editedComments", ByTypes.id).sendKeys(commentText);
+		
+	}
+
+	public void clickAddCommentDoneButton() throws Exception {
+		webDriver.waitForElement("butDone", ByTypes.id).click();
+		
 	}
 
 }

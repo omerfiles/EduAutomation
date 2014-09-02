@@ -21,8 +21,10 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -120,10 +122,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			webDriver.get(url);
 
 		} catch (Exception e) {
-			printScreen("OpenUrlFailed");
-			// Assert.fail("Open url failed ." + e.toString());
-			testResultService.addFailTest("Open url failed ." + e.toString(),
-					true);
+			System.out.println("Closed unexpected alert");
+			closeAlertByAccept();
+			
 		}
 
 	}
@@ -832,6 +833,12 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	public void setRemoteMachine(String remoteMachine) {
 		this.remoteMachine = remoteMachine;
+	}
+	
+	public void clickOnElementWithOffset(WebElement element,int X_offset,int Y_offset){
+		Actions builder = new Actions(webDriver);
+		Action action = builder.moveToElement(element, X_offset, Y_offset).click().build();
+		action.perform();
 	}
 
 }

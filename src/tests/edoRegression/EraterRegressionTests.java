@@ -167,7 +167,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		// edoLoginPage.login(student);
 		pageHelper.loginAsStudent(student);
 		sleep(2);
-		webDriver.closeAlertByAccept();
+		
 		
 		edoHomePage.clickOnMyAssignments();
 		edoHomePage.switchToAssignmentsFrame();

@@ -196,8 +196,8 @@ public class EdoHomePage extends GenericPage {
 
 		// System.out.println("Clipboard text is set to: " + assayText);
 		// textService.setClipboardText(assayText);
-		webDriver.swithcToFrameAndSendKeys("//body[@id='tinymce']", timeStamp+ assayText,
-				"elm1_ifr");
+		webDriver.swithcToFrameAndSendKeys("//body[@id='tinymce']", timeStamp
+				+ assayText, "elm1_ifr");
 		Thread.sleep(3000);
 		// String mainWindow = webDriver.switchToFrame("elm1_ifr");
 		// WebElement textArea =
@@ -703,6 +703,14 @@ public class EdoHomePage extends GenericPage {
 		webDriver.waitForElement("//td//img[contains(@src,'idioms')]",
 				ByTypes.xpath).click();
 
+	}
+
+	public void checkForTeacherComment(String commentID, String commentText)
+			throws Exception {
+		webDriver.waitForElement(commentID, ByTypes.id).click();
+		String actualText = webDriver.waitForElement(
+				"//div[@id='comments']//div[2]", ByTypes.xpath).getText();
+		testResultService.assertEquals(commentText, actualText, "Teacher comment text not found or do not match");
 	}
 
 	public void checkAsStudentFeedbackComment(String commentId,
