@@ -198,6 +198,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 				testResultService);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
 		EdoHomePage edoHomePage = edoLoginPage.login(student);
+		sleep(2);
 
 		String addedText = textService.getTextFromFile(
 				"files/assayFiles/text2.txt", Charset.defaultCharset());
