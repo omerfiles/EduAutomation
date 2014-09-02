@@ -4,16 +4,13 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import jsystem.framework.analyzer.Analyzer;
 import jsystem.framework.report.Reporter;
-import jsystem.framework.report.Reporter.EnumReportLevel;
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import drivers.GenericWebDriver;
 import pageObjects.EdoHomePage;
 import pageObjects.EdoLoginPage;
 import pageObjects.tms.TmsHomePage;
@@ -214,7 +211,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		startStep("Move back to the writing assignment and check the text");
 		edoHomePage.clickOnNextComponent(1);
 		Thread.sleep(3000);
-		String AssignmentText = edoHomePage.getAssignmentTextFromEditor();
+//		String AssignmentText = edoHomePage.getAssignmentTextFromEditor();
 		// Assert.assertEquals("Saved text and current text are not equal",
 		// AssignmentText, addedText);
 
@@ -227,6 +224,147 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		Assert.assertNotNull("validate writing id in DB",
 				eraterService.getWritingIdByUserId(userId));
 
+	}
+	
+	@Test
+	public void testAddTeacherCommentToStudentAssignment()throws Exception{
+		startStep("Create a student for the test");
+		String StudentUserName = "student" + dbService.sig(6);
+		pageHelper.addStudent(StudentUserName);
+		
+		startStep("Login to Edo");
+		int courseId = 3;
+		String textFile = "files/assayFiles/text24.txt";
+		String commentID = "0_0";
+		report.report("using file: " + textFile);
+		// EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
+		// edoLoginPage.OpenPage(getSutAndSubDomain());
+		//
+//		Student student = new Student();
+//		student.setUserName(configuration.getStudentUserName());
+//		student.setPassword(configuration.getStudentPassword());
+//		student.setId(dbService.getUserIdByUserName(student.getUserName(),
+//				autoInstitution.getInstitutionId()));
+		// EdoHomePage edoHomePage = edoLoginPage.login(student);
+		Student student = new Student();
+		student.setUserName(StudentUserName);
+		student.setPassword(configuration.getStudentPassword());
+		student.setId(dbService.getUserIdByUserName(StudentUserName,
+				autoInstitution.getInstitutionId()));
+		EdoHomePage edoHomePage = pageHelper.loginAsStudent(student);
+
+		startStep("Open home page and start a writing drill");
+		String courseName = courses.get(courseId).getName();
+		sleep(2);
+		edoHomePage.clickOnCourses();
+		sleep(5);
+		edoHomePage.clickOnCourseByName(courseName);
+		edoHomePage.waitForCourseDetailsToBeDisplayed(courseName);
+		String courseUnit = courses.get(courseId).getCourseUnits().get(0)
+				.getName();
+		edoHomePage.clickOnCourseUnit(courseUnit);
+		String unitComponent = courses.get(courseId).getCourseUnits().get(0)
+				.getUnitComponent().get(0).getName();
+		edoHomePage.clickOntUnitComponent(unitComponent, "Practice");
+		Thread.sleep(5000);
+		int unitStage = Integer.valueOf(courses.get(courseId).getCourseUnits()
+				.get(0).getUnitComponent().get(0).getStageNumber());
+		edoHomePage.ClickOnComponentsStage(unitStage);
+		sleep(3);
+		edoHomePage.submitWritingAssignment(textFile, textService);
+		// System.out.println("sleeping for 60 seconds");
+		// Thread.sleep(60000);
+
+		startStep("start checking the xml and json");
+		String userId = dbService.getUserIdByUserName(student.getUserName(),
+				autoInstitution.getInstitutionId());
+		String textStart = textService.getFirstCharsFromCsv(10, textFile);
+		String writingId = eraterService.getWritingIdByUserIdAndTextStart(
+				userId, textStart);
+		writingIdForDelete.add(writingId);
+		report.report("writing id is: " + writingId);
+		eraterService.compareJsonAndXmlByWritingId(writingId);
+		edoHomePage.waitForPageToLoad();
+		edoHomePage.clickOnCourses();
+
+		startStep("Check the Erater feedback as a student and send again");
+		edoHomePage.clickOnMyAssignments();
+		edoHomePage.switchToAssignmentsFrame();
+		edoHomePage.clickOnWritingAssignmentsTab(courseName);
+		// edoHomePage.clickToViewAssignment(courseName);
+		edoHomePage.clickOnSeeFeedbackAndTryAgsin();
+		edoHomePage.switchToAssignmentsFrame();
+		edoHomePage.clickOnFeedbackMoreDetails();
+		String newText = "this is new text";
+		edoHomePage.editFeedbackAssignmentText(newText);
+
+		edoHomePage.clickOnFeedbackSubmitBtn();
+
+		startStep("Login as teacher and send feedback to the student");
+		webDriver.deleteCookiesAndRefresh();
+		// edoLoginPage.OpenPage(getSutAndSubDomain());
+		// edoHomePage = edoLoginPage.login(teacher);
+		edoHomePage = pageHelper.loginAsTeacher();
+		edoHomePage.waitForPageToLoad();
+		TmsHomePage tmsHomePage = edoHomePage.openTeachersCorner();
+		String newWritingId = eraterService.getWritingIdByUserIdAndTextStart(
+				student.getId(), newText);
+		eraterService.checkWritingIsProcessed(newWritingId);
+		tmsHomePage.clickOnWritingAssignments();
+
+		tmsHomePage.clickOnStudentAssignment(student.getUserName(), courseName);
+		//********************
+		startStep("Check that the Add button is disabled when no comment is selected");
+		tmsHomePage.clickOnXFeedback();
+//		webDriver.switchToFrame("cboxIframe");
+		tmsHomePage.checkAddCommentButtonStatus(true);
+
+		startStep("Click the Add buttom, select a plave and add a comment");
+		tmsHomePage.ClickAddCommentButton();
+		
+		//click on position to add commentR
+		tmsHomePage.clickOnTextArea(20,20);
+		String commentText="comment"+dbService.sig(5);
+		tmsHomePage.enterTeacherCommentText(commentText);
+		tmsHomePage.clickAddCommentDoneButton();
+
+		
+		
+		
+		//****************************
+		startStep("Send the feedback to the student");
+		tmsHomePage.clickOnTeacherFeedbackContinueButton();
+		tmsHomePage.clickOnRateAssignmentButton();
+		int rating = 1;
+		tmsHomePage.rateAssignment(rating);
+		Thread.sleep(2000);
+		tmsHomePage.clickOnApproveAssignmentButton();
+		Thread.sleep(2000);
+		tmsHomePage.sendFeedback();
+		Thread.sleep(2000);
+
+		startStep("Login as student and check that the commnet is not displayed");
+		webDriver.quitBrowser();
+		webDriver.init(testResultService);
+		pageHelper.loginAsStudent();
+		sleep(5);
+		webDriver.printScreen("after student login");
+		edoHomePage.clickOnMyAssignments();
+		sleep(3);
+		edoHomePage.switchToAssignmentsFrame();
+		edoHomePage.clickOnWritingAssignmentsTab(courseName);
+		// edoHomePage.clickToViewAssignment(courseName);
+		edoHomePage.clickOnSeeFeedback();
+		edoHomePage.switchToAssignmentsFrame();
+		Thread.sleep(3000);
+		edoHomePage.clickOnFeedbackMoreDetails();
+		sleep(2);
+//		edoHomePage.clickOnWritingAssignmentsTab(courseName);
+//		webDriver.switchToFrame(webDriver.waitForElement(
+//				"//iframe[@class='cboxIframe']", ByTypes.xpath));
+
+		edoHomePage.checkForTeacherComment("t0_1_0",commentText);
+		
 	}
 
 	@After
