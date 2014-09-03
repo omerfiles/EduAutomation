@@ -42,6 +42,10 @@ public class EraterAddRemoveFeedbackComments extends EdusoftWebTest {
 
 	@Test
 	public void testCheckRemoveButtonEnabledDisabled() throws Exception {
+		startStep("Create a student for the test");
+		String StudentUserName = "student" + dbService.sig(6);
+		pageHelper.addStudent(StudentUserName);
+		
 		startStep("Login to Edo");
 		int courseId = 3;
 		String textFile = "files/assayFiles/text24.txt";
@@ -51,12 +55,11 @@ public class EraterAddRemoveFeedbackComments extends EdusoftWebTest {
 		// edoLoginPage.OpenPage(getSutAndSubDomain());
 		//
 		Student student = new Student();
-		student.setUserName(configuration.getStudentUserName());
+		student.setUserName(StudentUserName);
 		student.setPassword(configuration.getStudentPassword());
-		student.setId(dbService.getUserIdByUserName(student.getUserName(),
+		student.setId(dbService.getUserIdByUserName(StudentUserName,
 				autoInstitution.getInstitutionId()));
-		// EdoHomePage edoHomePage = edoLoginPage.login(student);
-		EdoHomePage edoHomePage = pageHelper.loginAsStudent();
+		EdoHomePage edoHomePage = pageHelper.loginAsStudent(student);
 
 		startStep("Open home page and start a writing drill");
 		String courseName = courses.get(courseId).getName();
@@ -145,7 +148,10 @@ public class EraterAddRemoveFeedbackComments extends EdusoftWebTest {
 		webDriver.quitBrowser();
 		webDriver.init(testResultService);
 		pageHelper.loginAsStudent();
+		sleep(5);
+		webDriver.printScreen("after student login");
 		edoHomePage.clickOnMyAssignments();
+		sleep(3);
 		edoHomePage.switchToAssignmentsFrame();
 		edoHomePage.clickOnWritingAssignmentsTab(courseName);
 		// edoHomePage.clickToViewAssignment(courseName);
@@ -153,7 +159,10 @@ public class EraterAddRemoveFeedbackComments extends EdusoftWebTest {
 		edoHomePage.switchToAssignmentsFrame();
 		Thread.sleep(3000);
 		edoHomePage.clickOnFeedbackMoreDetails();
-//		edoHomePage.clickOnWritingAssignmentsTab(courseName);
+		sleep(2);
+		
+		
+		
 		edoHomePage.checkAsStudentFeedbackComment(commentID, false,commentText);
 		
 	}

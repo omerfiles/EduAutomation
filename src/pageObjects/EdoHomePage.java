@@ -217,11 +217,19 @@ public class EdoHomePage extends GenericPage {
 	public EdoHomePage clickOnSubmitAssignment() throws Exception {
 		webDriver.waitForElement("//a[@title='Submit']", ByTypes.xpath).click();
 		Thread.sleep(3000);
-		webDriver.closeAlertByAccept();
+		// webDriver.closeAlertByAccept();
+		approveEraterPopup();
 		Thread.sleep(3000);
 		webDriver.closeAlertByAccept();
 		Thread.sleep(3000);
 		return this;
+	}
+
+	private void approveEraterPopup() throws Exception {
+		webDriver.switchToFrame(webDriver.waitForElement(
+				"//div[@id='EdoFrameBoxContent']//iframe", ByTypes.xpath));
+		webDriver.waitForElement("btnOk", ByTypes.id).click();
+
 	}
 
 	public String getAssignmentTextFromEditor() throws Exception {
@@ -433,7 +441,8 @@ public class EdoHomePage extends GenericPage {
 		webDriver.waitForElement("//div[@id='btSubmit']/a", ByTypes.xpath)
 				.click();
 		Thread.sleep(3000);
-		webDriver.closeAlertByAccept();
+		approveEraterPopup();
+		// webDriver.closeAlertByAccept();
 		Thread.sleep(3000);
 		// webDriver.switchToAlert();
 		// webDriver.sendKey(Keys.ENTER);
@@ -707,10 +716,15 @@ public class EdoHomePage extends GenericPage {
 
 	public void checkForTeacherComment(String commentID, String commentText)
 			throws Exception {
-		webDriver.waitForElement(commentID, ByTypes.id).click();
-		String actualText = webDriver.waitForElement(
-				"//div[@id='comments']//div[2]", ByTypes.xpath).getText();
-		testResultService.assertEquals(commentText, actualText, "Teacher comment text not found or do not match");
+		webDriver.waitForElement("//span[@id='0_0']//span", ByTypes.xpath)
+				.click();
+		String actualText = webDriver.waitForElement("//div[@id='comments']//div[2]",
+				ByTypes.xpath).getText();
+		boolean commentOK = testResultService.assertEquals(commentText,
+				actualText, "Teacher comment text not found or do not match");
+		if (commentOK == false) {
+			webDriver.printScreen("Comment do not match");
+		}
 	}
 
 	public void checkAsStudentFeedbackComment(String commentId,

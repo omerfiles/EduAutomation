@@ -325,5 +325,15 @@ public class EraterService extends SystemObjectImpl {
 				+ writingId;
 		dbService.getStringFromQuery(sql);
 	}
+	public void checkWritingIsReviewed(String writingId)throws Exception{
+		String institutionSubmissions = dbService
+				.getStringFromQuery(" select NumberOfSubmissions from institutions where institutionid="
+						+ configuration.getProperty("institution.id"));
+		String sql = "select writingid from writing where Processed=1 and Submissions="
+				+ institutionSubmissions
+				+ " and reviewed=1  and writingid="
+				+ writingId;
+		dbService.getStringFromQuery(sql);
+	}
 
 }

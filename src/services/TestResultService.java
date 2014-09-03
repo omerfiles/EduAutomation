@@ -66,6 +66,7 @@ public class TestResultService extends SystemObjectImpl {
 	public boolean assertEquals(String expected, String actual, String message) {
 //		System.out.println("Asserting " + expected + ". and " + actual + ".");
 		if (expected.equals(actual) == false) {
+			
 			addFailTest("Expected String was: " + expected
 					+ " but actual string was: " + actual+" "+message);
 		

@@ -104,8 +104,8 @@ public class TmsHomePage extends GenericPage {
 	}
 
 	public TmsHomePage clickOnApproveAssignmentButton() throws Exception {
-		WebElement element = webDriver.waitForElement("Approve",
-				ByTypes.partialLinkText);
+		WebElement element = webDriver.waitForElement("//a[@class='button blue approve']",
+				ByTypes.xpath);
 		webDriver.clickOnElement(element);
 		return this;
 	}

@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jsystem.framework.report.Reporter;
-import org.junit.Assert;
 
+import org.junit.Assert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,6 +23,10 @@ public class EraterRegressionTests extends EdusoftWebTest {
 
 	List<Course> courses = null;
 	List<String> writingIdForDelete = new ArrayList<String>();
+
+	TmsHomePage tmsHomePage;
+	String writingId = null;
+	String newWritingId = null;
 
 	@Before
 	public void setup() throws Exception {
@@ -98,17 +102,17 @@ public class EraterRegressionTests extends EdusoftWebTest {
 				.get(0).getUnitComponent().get(0).getStageNumber());
 		edoHomePage.ClickOnComponentsStage(unitStage);
 		sleep(3);
-
-		edoHomePage.submitWritingAssignment(textFile, textService);
+		String textStart = dbService.sig(8);
+		edoHomePage.submitWritingAssignment(textFile, textService, textStart);
 		// System.out.println("sleeping for 60 seconds");
 		// Thread.sleep(60000);
 
 		startStep("start checking the xml and json");
 		String userId = dbService.getUserIdByUserName(student.getUserName(),
 				autoInstitution.getInstitutionId());
-		String textStart = textService.getFirstCharsFromCsv(10, textFile);
-		String writingId = eraterService.getWritingIdByUserIdAndTextStart(
-				userId, textStart);
+		// String textStart = textService.getFirstCharsFromCsv(10, textFile);
+		writingId = eraterService.getWritingIdByUserIdAndTextStart(userId,
+				textStart);
 		writingIdForDelete.add(writingId);
 		report.report("writing id is: " + writingId);
 		eraterService.compareJsonAndXmlByWritingId(writingId);
@@ -138,8 +142,9 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		// edoHomePage.waitForPageToLoad();
 
 		pageHelper.loginAsTeacher();
+		webDriver.closeAlertByAccept();
 		TmsHomePage tmsHomePage = edoHomePage.openTeachersCorner();
-		String newWritingId = eraterService.getWritingIdByUserIdAndTextStart(
+		newWritingId = eraterService.getWritingIdByUserIdAndTextStart(
 				student.getId(), newText);
 		eraterService.checkWritingIsProcessed(newWritingId);
 		tmsHomePage.clickOnWritingAssignments();
@@ -154,7 +159,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		tmsHomePage.clickOnApproveAssignmentButton();
 		Thread.sleep(2000);
 		tmsHomePage.sendFeedback();
-	
+
 		Thread.sleep(2000);
 
 		startStep("Login again as student and check the feedback from the teacher");
@@ -164,9 +169,9 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		// edoLoginPage.login(student);
 		pageHelper.loginAsStudent(student);
 		sleep(2);
-		
-		
+
 		edoHomePage.clickOnMyAssignments();
+
 		edoHomePage.switchToAssignmentsFrame();
 		edoHomePage.clickOnWritingAssignmentsTab(courseName);
 		// edoHomePage.clickToViewAssignment(courseName);
@@ -194,7 +199,8 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver,
 				testResultService);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
-		EdoHomePage edoHomePage = edoLoginPage.login(student);
+		
+		EdoHomePage edoHomePage = pageHelper.loginAsStudent(student);
 		sleep(2);
 
 		String addedText = textService.getTextFromFile(
@@ -211,7 +217,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		startStep("Move back to the writing assignment and check the text");
 		edoHomePage.clickOnNextComponent(1);
 		Thread.sleep(3000);
-//		String AssignmentText = edoHomePage.getAssignmentTextFromEditor();
+		// String AssignmentText = edoHomePage.getAssignmentTextFromEditor();
 		// Assert.assertEquals("Saved text and current text are not equal",
 		// AssignmentText, addedText);
 
@@ -225,13 +231,13 @@ public class EraterRegressionTests extends EdusoftWebTest {
 				eraterService.getWritingIdByUserId(userId));
 
 	}
-	
+
 	@Test
-	public void testAddTeacherCommentToStudentAssignment()throws Exception{
+	public void testAddTeacherCommentToStudentAssignment() throws Exception {
 		startStep("Create a student for the test");
 		String StudentUserName = "student" + dbService.sig(6);
 		pageHelper.addStudent(StudentUserName);
-		
+
 		startStep("Login to Edo");
 		int courseId = 3;
 		String textFile = "files/assayFiles/text24.txt";
@@ -240,11 +246,11 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		// EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver);
 		// edoLoginPage.OpenPage(getSutAndSubDomain());
 		//
-//		Student student = new Student();
-//		student.setUserName(configuration.getStudentUserName());
-//		student.setPassword(configuration.getStudentPassword());
-//		student.setId(dbService.getUserIdByUserName(student.getUserName(),
-//				autoInstitution.getInstitutionId()));
+		// Student student = new Student();
+		// student.setUserName(configuration.getStudentUserName());
+		// student.setPassword(configuration.getStudentPassword());
+		// student.setId(dbService.getUserIdByUserName(student.getUserName(),
+		// autoInstitution.getInstitutionId()));
 		// EdoHomePage edoHomePage = edoLoginPage.login(student);
 		Student student = new Student();
 		student.setUserName(StudentUserName);
@@ -271,16 +277,17 @@ public class EraterRegressionTests extends EdusoftWebTest {
 				.get(0).getUnitComponent().get(0).getStageNumber());
 		edoHomePage.ClickOnComponentsStage(unitStage);
 		sleep(3);
-		edoHomePage.submitWritingAssignment(textFile, textService);
+		String textStart = dbService.sig(8);
+		edoHomePage.submitWritingAssignment(textFile, textService, textStart);
 		// System.out.println("sleeping for 60 seconds");
 		// Thread.sleep(60000);
 
 		startStep("start checking the xml and json");
 		String userId = dbService.getUserIdByUserName(student.getUserName(),
 				autoInstitution.getInstitutionId());
-		String textStart = textService.getFirstCharsFromCsv(10, textFile);
-		String writingId = eraterService.getWritingIdByUserIdAndTextStart(
-				userId, textStart);
+		// String textStart = textService.getFirstCharsFromCsv(10, textFile);
+		writingId = eraterService.getWritingIdByUserIdAndTextStart(userId,
+				textStart);
 		writingIdForDelete.add(writingId);
 		report.report("writing id is: " + writingId);
 		eraterService.compareJsonAndXmlByWritingId(writingId);
@@ -306,42 +313,40 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		// edoHomePage = edoLoginPage.login(teacher);
 		edoHomePage = pageHelper.loginAsTeacher();
 		edoHomePage.waitForPageToLoad();
-		TmsHomePage tmsHomePage = edoHomePage.openTeachersCorner();
-		String newWritingId = eraterService.getWritingIdByUserIdAndTextStart(
-				student.getId(), newText);
+		tmsHomePage = edoHomePage.openTeachersCorner();
+		newWritingId = eraterService.getWritingIdByUserIdAndTextStart(
+				student.getId(), textStart);
 		eraterService.checkWritingIsProcessed(newWritingId);
 		tmsHomePage.clickOnWritingAssignments();
 
 		tmsHomePage.clickOnStudentAssignment(student.getUserName(), courseName);
-		//********************
+		// ********************
 		startStep("Check that the Add button is disabled when no comment is selected");
 		tmsHomePage.clickOnXFeedback();
-//		webDriver.switchToFrame("cboxIframe");
+		// webDriver.switchToFrame("cboxIframe");
 		tmsHomePage.checkAddCommentButtonStatus(true);
 
 		startStep("Click the Add buttom, select a plave and add a comment");
 		tmsHomePage.ClickAddCommentButton();
-		
-		//click on position to add commentR
-		tmsHomePage.clickOnTextArea(20,20);
-		String commentText="comment"+dbService.sig(5);
+
+		// click on position to add commentR
+		tmsHomePage.clickOnTextArea(20, 20);
+		String commentText = "comment" + dbService.sig(5);
 		tmsHomePage.enterTeacherCommentText(commentText);
 		tmsHomePage.clickAddCommentDoneButton();
 
-		
-		
-		
-		//****************************
-		startStep("Send the feedback to the student");
-		tmsHomePage.clickOnTeacherFeedbackContinueButton();
-		tmsHomePage.clickOnRateAssignmentButton();
-		int rating = 1;
-		tmsHomePage.rateAssignment(rating);
-		Thread.sleep(2000);
-		tmsHomePage.clickOnApproveAssignmentButton();
-		Thread.sleep(2000);
-		tmsHomePage.sendFeedback();
-		Thread.sleep(2000);
+		// ****************************
+		// startStep("Send the feedback to the student");
+		// tmsHomePage.clickOnTeacherFeedbackContinueButton();
+		// tmsHomePage.clickOnRateAssignmentButton();
+		// int rating = 1;
+		// tmsHomePage.rateAssignment(rating);
+		// Thread.sleep(2000);
+		// tmsHomePage.clickOnApproveAssignmentButton();
+		// sleep(4);
+		// tmsHomePage.sendFeedback();
+		// sleep(4);
+		sendTeacherFeedback();
 
 		startStep("Login as student and check that the commnet is not displayed");
 		webDriver.quitBrowser();
@@ -359,12 +364,12 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		Thread.sleep(3000);
 		edoHomePage.clickOnFeedbackMoreDetails();
 		sleep(2);
-//		edoHomePage.clickOnWritingAssignmentsTab(courseName);
-//		webDriver.switchToFrame(webDriver.waitForElement(
-//				"//iframe[@class='cboxIframe']", ByTypes.xpath));
+		// edoHomePage.clickOnWritingAssignmentsTab(courseName);
+		// webDriver.switchToFrame(webDriver.waitForElement(
+		// "//iframe[@class='cboxIframe']", ByTypes.xpath));
 
-		edoHomePage.checkForTeacherComment("t0_1_0",commentText);
-		
+		edoHomePage.checkForTeacherComment("t0_1_0", commentText);
+
 	}
 
 	@After
@@ -374,6 +379,22 @@ public class EraterRegressionTests extends EdusoftWebTest {
 			eraterService.deleteWritngFromDb(writingIdForDelete.get(i));
 		}
 		super.tearDown();
+
+	}
+
+	public void sendTeacherFeedback() throws Exception {
+		startStep("Send the feedback to the student");
+		tmsHomePage.clickOnTeacherFeedbackContinueButton();
+		tmsHomePage.clickOnRateAssignmentButton();
+		int rating = 1;
+		tmsHomePage.rateAssignment(rating);
+		Thread.sleep(2000);
+		tmsHomePage.clickOnApproveAssignmentButton();
+		sleep(4);
+		tmsHomePage.sendFeedback();
+		sleep(4);
+		webDriver.printScreen("After clicking send to all");
+		eraterService.checkWritingIsReviewed(newWritingId);
 
 	}
 

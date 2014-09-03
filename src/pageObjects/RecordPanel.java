@@ -373,7 +373,7 @@ public class RecordPanel extends SRpage {
 
 	public void waitForRecordingToEnd(int indexOfRecording) throws Exception {
 		webDriver.waitForElement("//ul[@id='ulURecords']//li["
-				+ indexOfRecording + "]//a//span[3]", ByTypes.xpath, true, 20);
+				+ indexOfRecording + "]//a//span[3]", ByTypes.xpath, 20, true,"failed in waitForRecordingToEnd");
 
 	}
 
