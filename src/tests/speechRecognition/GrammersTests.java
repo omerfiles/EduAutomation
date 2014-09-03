@@ -311,17 +311,23 @@ public class GrammersTests extends EdusoftWebTest {
 	}
 
 	public List<String> getSubFolders(String path) {
-		File file = new File(path);
-		String[] names = file.list();
-		List<String> folders = new ArrayList<String>();
+		List<String> folders = null;
+		try {
+			File file = new File(path);
+			String[] names = file.list();
+			folders = new ArrayList<String>();
 
-		for (String name : names) {
-			if (new File(path + "\\" + name).isDirectory()) {
-				System.out.println(name);
-				if (name.length() <= 6) {
-					folders.add(name);
+			for (String name : names) {
+				if (new File(path + "\\" + name).isDirectory()) {
+					System.out.println(name);
+					if (name.length() <= 6) {
+						folders.add(name);
+					}
 				}
 			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("Failed in getSubFolders:"+e.toString());
 		}
 		return folders;
 
