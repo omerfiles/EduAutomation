@@ -152,6 +152,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		// tmsHomePage.clickOnAssignment(courseUnit);
 		tmsHomePage.clickOnStudentAssignment(student.getUserName(), courseName);
 		tmsHomePage.clickOnAssignmentSummary();
+		sleep(2);
 		tmsHomePage.clickOnRateAssignmentButton();
 		int rating = 1;
 		tmsHomePage.rateAssignment(rating);
@@ -385,6 +386,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 	public void sendTeacherFeedback() throws Exception {
 		startStep("Send the feedback to the student");
 		tmsHomePage.clickOnTeacherFeedbackContinueButton();
+		sleep(2);
 		tmsHomePage.clickOnRateAssignmentButton();
 		int rating = 1;
 		tmsHomePage.rateAssignment(rating);
