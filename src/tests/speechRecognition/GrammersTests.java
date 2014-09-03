@@ -328,7 +328,7 @@ public class GrammersTests extends EdusoftWebTest {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.out.println("Path is: "+path);
-			System.out.println(" Failed in getSubFolders:");
+			System.out.println(" Failed in getSubFolders:"+e.getMessage());
 			e.printStackTrace();
 		}
 		return folders;
