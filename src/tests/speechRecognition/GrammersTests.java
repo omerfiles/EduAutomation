@@ -36,10 +36,12 @@ public class GrammersTests extends EdusoftWebTest {
 	@Before
 	public void setup() throws Exception {
 		super.setup();
+		setPrintResults(false);
 	}
 
 	@Test
 	public void testSpeaking() throws Exception {
+		
 		compareAllGrammers(SPEAKING_FOLDER);
 	}
 
@@ -178,24 +180,19 @@ public class GrammersTests extends EdusoftWebTest {
 
 				startStep("Compare each segment with the text from grammer file");
 				String[] textFromGrammer = new String[segments.length];
-				for (int j = 0; j < segments.length; j++) {
+				innerloop: for (int j = 0; j < segments.length; j++) {
 					int index = j + 1;
 					String grammerText = getGrammerTextFromGrammerFiles("."
 							+ folders.get(i).toUpperCase() + "_" + index);
 					if (grammerText == null) {
 						report.report("Grammer text not found in grammer file:"
 								+ folders.get(i).toUpperCase() + "_" + index);
-						String[] str = new String[] {
-								"Missing grammer",
-								folders.get(i),
-								"Grammer missing "
-										+ folders.get(i).toUpperCase() + "_"
-										+ index };
-						results.add(str);
+
 						failed++;
-						continue outerloop;
+						continue innerloop;
+					} else {
+						textFromGrammer[j] = grammerText;
 					}
-					textFromGrammer[j] = grammerText;
 
 				}
 
@@ -203,53 +200,57 @@ public class GrammersTests extends EdusoftWebTest {
 				for (int k = 0; k < segments.length; k++) {
 					String[] segmentsWords = textService.splitStringToArray(
 							segments[k], "\\s+");
-					String[] grammerWords = textService.splitStringToArray(
-							textFromGrammer[k], "\\s+");
-					if (testResultService.assertEquals(
-							true,
-							segmentsWords.length == grammerWords.length,
-							"number of words is not the same for grammer: "
-									+ folders.get(i)
-									+ "_"
-									+ k
-									+ " segment words: "
-									+ textService
-											.printStringArray(segmentsWords)
-									+ " grammer words:"
-									+ textService
-											.printStringArray(grammerWords)) == false) {
-						System.out.println("segment words:");
-						report.report("segment words:");
+					if (textFromGrammer[k] != null) {
+						String[] grammerWords = textService.splitStringToArray(
+								textFromGrammer[k], "\\s+");
 
-						textService.printStringArray(segmentsWords);
-						System.out.println("Grammer words:");
-						report.report("grammer words:");
-						textService.printStringArray(grammerWords);
-						String[] str = new String[] {
-								"Error",
-								folders.get(i),
-								"Missing word count",
-								"Grammer words:"
-										+ textService
-												.printStringArray(grammerWords),
-								"Segment words:"
-										+ textService
-												.printStringArray(segmentsWords) };
-						results.add(str);
-						failed++;
-						continue outerloop;
+						if (testResultService
+								.assertEquals(
+										true,
+										segmentsWords.length == grammerWords.length,
+										"number of words is not the same for grammer: "
+												+ folders.get(i)
+												+ "_"
+												+ k
+												+ " segment words: "
+												+ textService
+														.printStringArray(segmentsWords)
+												+ " grammer words:"
+												+ textService
+														.printStringArray(grammerWords)) == false) {
+							System.out.println("segment words:");
+							report.report("segment words:");
 
-					}
-					for (int h = 0; h < segmentsWords.length; h++) {
-						boolean wordMatch = testResultService.assertEquals(
-								segmentsWords[h], grammerWords[h],
-								"problem in grammer: " + folders.get(i) + "_"
-										+ k);
-						if (wordMatch == false) {
-							String[] str = new String[] { "Word mismatch",
-									folders.get(i), segmentsWords[h],
-									grammerWords[h] };
+							textService.printStringArray(segmentsWords);
+							System.out.println("Grammer words:");
+							report.report("grammer words:");
+							textService.printStringArray(grammerWords);
+							String[] str = new String[] {
+									"Error",
+									folders.get(i),
+									"Missing word count",
+									"Grammer words:"
+											+ textService
+													.printStringArray(grammerWords),
+									"Segment words:"
+											+ textService
+													.printStringArray(segmentsWords) };
 							results.add(str);
+							failed++;
+							continue outerloop;
+
+						}
+						for (int h = 0; h < segmentsWords.length; h++) {
+							boolean wordMatch = testResultService.assertEquals(
+									segmentsWords[h], grammerWords[h],
+									"problem in grammer: " + folders.get(i)
+											+ "_" + k);
+							if (wordMatch == false) {
+								String[] str = new String[] { "Word mismatch",
+										folders.get(i), segmentsWords[h],
+										grammerWords[h] };
+								results.add(str);
+							}
 						}
 					}
 				}
@@ -267,11 +268,11 @@ public class GrammersTests extends EdusoftWebTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		textService.writeArrayistToCSVFile(
-				"files/csvFIles/resultOutput"
-						+ testFolder.substring(testFolder.length() - 6,
-								testFolder.length()) + ".csv", results);
+		String csvFilepath = "D:\\automationLogs\\csvFiles\\grammerTests\\resultOutput"
+				+ testFolder.substring(testFolder.length() - 6,
+						testFolder.length()) + "_" + dbService.sig(8) + ".csv";
+		textService.writeArrayistToCSVFile(csvFilepath, results);
+		System.out.println("csv file path:"+"file:///"+ csvFilepath);
 	}
 
 	public void findGrammer() throws Exception {
@@ -288,7 +289,7 @@ public class GrammersTests extends EdusoftWebTest {
 			throws IOException {
 		String text = null;
 		try {
-			text = textService.getLineFromTextFile(new File(tempTestFile),
+			text = textService.getLineFromTextFile(new File(grammerFilesPath),
 					grammerID);
 			int begin = text.indexOf("(");
 			begin++;
@@ -300,6 +301,10 @@ public class GrammersTests extends EdusoftWebTest {
 			testResultService
 					.addFailTest("Problem getting text for grammer in grammer file:"
 							+ grammerID);
+			String[] str = new String[] { "Missing grammer",
+
+			"Grammer missing: " + grammerID };
+			results.add(str);
 
 		}
 		return text;
@@ -348,7 +353,7 @@ public class GrammersTests extends EdusoftWebTest {
 		String id = null;
 		for (int i = 0; i < idNodeList.getLength(); i++) {
 			try {
-				id=null;
+				id = null;
 				id = grammerId
 						+ "E_"
 						+ idNodeList.item(i).getAttributes().getNamedItem("Id")
@@ -368,7 +373,7 @@ public class GrammersTests extends EdusoftWebTest {
 			if (id == null && VocabData == true) {
 				id = grammerId + "_";
 				id = id + idNodeList.item(i).getTextContent();
-				
+
 				// id = grammerId
 				// + "E_"
 				// + idNodeList.item(i).getChildNodes().item(2)
