@@ -394,6 +394,8 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		tmsHomePage.clickOnApproveAssignmentButton();
 		sleep(4);
 		tmsHomePage.sendFeedback();
+		sleep(1);
+		tmsHomePage.sendFeedback();
 		sleep(4);
 		webDriver.printScreen("After clicking send to all");
 		eraterService.checkWritingIsReviewed(newWritingId);
