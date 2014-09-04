@@ -45,7 +45,7 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 
 	protected AutoInstitution autoInstitution;
 
-	private boolean printResults;
+	private boolean printResults=true;
 
 	@Before
 	public void setup() throws Exception {
