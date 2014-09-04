@@ -98,12 +98,11 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 		System.out.println("testResultService:" + testResultService.toString());
 		System.out.println("Test failed?: "
 				+ testResultService.hasFailedResults());
-		if (testResultService.hasFailedResults()) {
+		if (testResultService.hasFailedResults() && this.isPass == true) {
 			Assert.fail("Test failed due to several errors");
-			if (printResults == true) {
-				testResultService.printAllFailures();
-			}
-
+		}
+		if (printResults == true) {
+			testResultService.printAllFailures();
 		}
 
 		// if (this.isPass == false) {
