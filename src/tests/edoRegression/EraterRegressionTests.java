@@ -143,7 +143,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 
 		pageHelper.loginAsTeacher();
 		webDriver.closeAlertByAccept();
-		TmsHomePage tmsHomePage = edoHomePage.openTeachersCorner();
+		tmsHomePage = edoHomePage.openTeachersCorner();
 		newWritingId = eraterService.getWritingIdByUserIdAndTextStart(
 				student.getId(), newText);
 		eraterService.checkWritingIsProcessed(newWritingId);
@@ -153,13 +153,16 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		tmsHomePage.clickOnStudentAssignment(student.getUserName(), courseName);
 		tmsHomePage.clickOnAssignmentSummary();
 		sleep(2);
-		tmsHomePage.clickOnRateAssignmentButton();
+		// *****************
+		// tmsHomePage.clickOnRateAssignmentButton();
 		int rating = 1;
-		tmsHomePage.rateAssignment(rating);
-		Thread.sleep(2000);
-		tmsHomePage.clickOnApproveAssignmentButton();
-		Thread.sleep(2000);
-		tmsHomePage.sendFeedback();
+		// tmsHomePage.rateAssignment(rating);
+		// Thread.sleep(2000);
+		// tmsHomePage.clickOnApproveAssignmentButton();
+		// Thread.sleep(2000);
+		// tmsHomePage.sendFeedback();
+		sendTeacherFeedback(false);
+		// ***********************
 
 		Thread.sleep(2000);
 
@@ -192,7 +195,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		startStep("Create a student for the test");
 		String StudentUserName = "student" + dbService.sig(6);
 		pageHelper.addStudent(StudentUserName);
-		
+
 		Student student = new Student();
 		student.setUserName(StudentUserName);
 		student.setPassword(configuration.getStudentPassword());
@@ -348,7 +351,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		// sleep(4);
 		// tmsHomePage.sendFeedback();
 		// sleep(4);
-		sendTeacherFeedback();
+		sendTeacherFeedback(true);
 
 		startStep("Login as student and check that the commnet is not displayed");
 		webDriver.quitBrowser();
@@ -384,9 +387,11 @@ public class EraterRegressionTests extends EdusoftWebTest {
 
 	}
 
-	public void sendTeacherFeedback() throws Exception {
+	public void sendTeacherFeedback(boolean clickOnContinue) throws Exception {
 		startStep("Send the feedback to the student");
-		tmsHomePage.clickOnTeacherFeedbackContinueButton();
+		if (clickOnContinue) {
+			tmsHomePage.clickOnTeacherFeedbackContinueButton();
+		}
 		sleep(2);
 		tmsHomePage.clickOnRateAssignmentButton();
 		int rating = 1;
