@@ -45,7 +45,7 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 
 	protected AutoInstitution autoInstitution;
 
-	private boolean printResults=true;
+	private boolean printResults = true;
 
 	@Before
 	public void setup() throws Exception {
@@ -98,12 +98,14 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 		System.out.println("testResultService:" + testResultService.toString());
 		System.out.println("Test failed?: "
 				+ testResultService.hasFailedResults());
-		if (testResultService.hasFailedResults() && printResults == true) {
-			testResultService.printAllFailures();
+		if (testResultService.hasFailedResults()) {
+			Assert.fail("Test failed due to several errors");
+			if (printResults == true) {
+				testResultService.printAllFailures();
+			}
+
 		}
-		if (this.isPass == true) {
-			Assert.fail("Test has filed due to one or more problems");
-		}
+
 		// if (this.isPass == false) {
 		// report.startLevel("Test failed", EnumReportLevel.MainFrame);
 		// }

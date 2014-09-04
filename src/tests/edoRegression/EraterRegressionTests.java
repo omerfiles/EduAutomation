@@ -189,18 +189,17 @@ public class EraterRegressionTests extends EdusoftWebTest {
 	@Test
 	public void testSaveAssignmentAndSend() throws Exception {
 
-		startStep("init test data");
+		startStep("Create a student for the test");
+		String StudentUserName = "student" + dbService.sig(6);
+		pageHelper.addStudent(StudentUserName);
+		
 		Student student = new Student();
-		student.setUserName(configuration.getStudentUserName());
+		student.setUserName(StudentUserName);
 		student.setPassword(configuration.getStudentPassword());
-		student.setId(dbService.getUserIdByUserName(student.getUserName(),
+		student.setId(dbService.getUserIdByUserName(StudentUserName,
 				autoInstitution.getInstitutionId()));
 
 		startStep("Login as student and enter some text");
-		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver,
-				testResultService);
-		edoLoginPage.OpenPage(getSutAndSubDomain());
-		
 		EdoHomePage edoHomePage = pageHelper.loginAsStudent(student);
 		sleep(2);
 
@@ -212,6 +211,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 
 		startStep("Save and leave the writing assignment");
 		edoHomePage.clickToSaveAssignment();
+		sleep(3);
 		edoHomePage.clickOnLastComponent(1);
 		Thread.sleep(3000);
 
@@ -323,6 +323,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		tmsHomePage.clickOnStudentAssignment(student.getUserName(), courseName);
 		// ********************
 		startStep("Check that the Add button is disabled when no comment is selected");
+		sleep(3);
 		tmsHomePage.clickOnXFeedback();
 		// webDriver.switchToFrame("cboxIframe");
 		tmsHomePage.checkAddCommentButtonStatus(true);
@@ -396,7 +397,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		tmsHomePage.sendFeedback();
 		sleep(1);
 		tmsHomePage.sendFeedback();
-		sleep(4);
+		sleep(6);
 		webDriver.printScreen("After clicking send to all");
 		eraterService.checkWritingIsReviewed(newWritingId);
 
