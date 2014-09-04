@@ -94,7 +94,8 @@ public class TmsHomePage extends GenericPage {
 
 		webDriver.switchToFrame("mainFrame");
 		String mainFrame = webDriver.switchToFrame(webDriver.waitForElement(
-				"//div[@id='cboxLoadedContent']//iframe", ByTypes.xpath));
+				"//div[@id='cboxLoadedContent']//iframe", ByTypes.xpath,
+				"Failed while clicking on assignment summary"));
 		webDriver
 				.waitForElement("//div[@class='right closeBt']", ByTypes.xpath)
 				.click();
@@ -104,8 +105,8 @@ public class TmsHomePage extends GenericPage {
 	}
 
 	public TmsHomePage clickOnApproveAssignmentButton() throws Exception {
-		WebElement element = webDriver.waitForElement("//a[@class='button blue approve']",
-				ByTypes.xpath);
+		WebElement element = webDriver.waitForElement(
+				"//a[@class='button blue approve']", ByTypes.xpath);
 		webDriver.clickOnElement(element);
 		return this;
 	}
@@ -682,21 +683,22 @@ public class TmsHomePage extends GenericPage {
 	}
 
 	public void clickOnTextArea(int x, int y) throws Exception {
-		WebElement assayText = webDriver
-				.waitForElement("//div[@id='essayText']//div[1]//div", ByTypes.xpath);
+		WebElement assayText = webDriver.waitForElement(
+				"//div[@id='essayText']//div[1]//div", ByTypes.xpath);
 		webDriver.clickOnElementWithOffset(assayText, x, y);
 
 	}
 
 	public void enterTeacherCommentText(String commentText) throws Exception {
 		webDriver.waitForElement("editedComments", ByTypes.id).click();
-		webDriver.waitForElement("editedComments", ByTypes.id).sendKeys(commentText);
-		
+		webDriver.waitForElement("editedComments", ByTypes.id).sendKeys(
+				commentText);
+
 	}
 
 	public void clickAddCommentDoneButton() throws Exception {
 		webDriver.waitForElement("butDone", ByTypes.id).click();
-		
+
 	}
 
 }

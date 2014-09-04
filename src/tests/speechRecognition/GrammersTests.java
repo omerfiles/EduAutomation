@@ -21,7 +21,7 @@ public class GrammersTests extends EdusoftWebTest {
 
 	private static final String SPEAKING_FOLDER = "\\\\frontqa3\\EDO_HTML_SR\\Runtime\\Content\\speaking";
 	private static final String LISTENING_FOLDER = "\\\\frontqa3\\EDO_HTML_SR\\Runtime\\Content\\listening";
-	private static final String GRAMMER_FOLDER = "\\\\frontqa3\\EDO_HTML_SR\\Runtime\\Content\\grammar";
+	private static final String GRAMMER_FOLDER = "\\\\frontq_a3\\EDO_HTML_SR\\Runtime\\Content\\grammar";
 	// private static final String Vocabulary_FOLDER =
 	// "\\\\frontqa3\\EDO_HTML_SR\\Runtime\\Content\\Vocabulary";
 	private static final String Vocabulary_FOLDER = "\\\\newstorage\\sendhere\\_EDOHTML\\EDO_GRAMMAR_CHANGES\\BaseCourses\\Alphabet";
@@ -328,7 +328,7 @@ public class GrammersTests extends EdusoftWebTest {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.out.println("Path is: "+path);
-			System.out.println(" Failed in getSubFolders:");
+			System.out.println(" Failed in getSubFolders:"+e.getMessage());
 			e.printStackTrace();
 		}
 		return folders;

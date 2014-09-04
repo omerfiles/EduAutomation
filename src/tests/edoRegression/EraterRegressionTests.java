@@ -148,9 +148,10 @@ public class EraterRegressionTests extends EdusoftWebTest {
 				student.getId(), newText);
 		eraterService.checkWritingIsProcessed(newWritingId);
 		tmsHomePage.clickOnWritingAssignments();
-
+		sleep(2);
 		// tmsHomePage.clickOnAssignment(courseUnit);
 		tmsHomePage.clickOnStudentAssignment(student.getUserName(), courseName);
+		sleep(2);
 		tmsHomePage.clickOnAssignmentSummary();
 		sleep(2);
 		// *****************
