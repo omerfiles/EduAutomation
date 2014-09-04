@@ -315,6 +315,10 @@ public class GrammersTests extends EdusoftWebTest {
 		try {
 			File file = new File(path);
 			String[] names = file.list();
+			if(names==null){
+				System.out.println("Folder is empty");
+				Assert.fail("Test faolder is empty");
+			}
 			folders = new ArrayList<String>();
 
 			for (String name : names) {
@@ -329,6 +333,7 @@ public class GrammersTests extends EdusoftWebTest {
 			// TODO Auto-generated catch block
 			System.out.println("Path is: "+path);
 			System.out.println(" Failed in getSubFolders:"+e.getMessage());
+			testResultService.addFailTest("Failed on getSybFolder "+e.getMessage() );
 			e.printStackTrace();
 		}
 		return folders;
