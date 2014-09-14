@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 import org.apache.http.HttpHost;
@@ -26,6 +28,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.logging.LogEntries;
+import org.openqa.selenium.logging.LogEntry;
+import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -59,6 +64,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	// private Config configuration;
 	protected DbService dbService;
 	protected String remoteMachine;
+	protected boolean enableConsoleLog = false;
 	@Autowired
 	private services.Configuration configuration;
 
@@ -93,8 +99,11 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		// if (remoteMachine == null) {
 		// Assert.fail("Remote machine value is null");
 		// }
-		remoteMachine = configuration.getAutomationParam(AutoParams.remoteMachine.toString(),
-				"machine");
+		if (enableConsoleLog == true) {
+			enableConsoleLog = true;
+		}
+		remoteMachine = configuration.getAutomationParam(
+				AutoParams.remoteMachine.toString(), "machine");
 		setSutUrl(configuration.getAutomationParam(
 				AutoParams.sutUrl.toString(), "suturl"));
 		setSutSubDomain(configuration.getProperty("institution.name"));
@@ -124,7 +133,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		} catch (Exception e) {
 			System.out.println("Closed unexpected alert");
 			closeAlertByAccept();
-			
+
 		}
 
 	}
@@ -209,9 +218,14 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 				break;
 			}
 
-		} catch (Exception e) {
+		} catch (UnhandledAlertException | NoSuchElementException e) {
+			closeAlertByAccept();
+		}
+
+		catch (Exception e) {
 			if (isElementMandatory == true) {
-				Assert.fail("Exception when waiting for element:"+idValue+".| "+e.toString());
+				Assert.fail("Exception when waiting for element:" + idValue
+						+ ".| " + e.toString());
 			}
 
 		} finally {
@@ -419,9 +433,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 					.frameToBeAvailableAndSwitchToIt(frameName));
 		} catch (TimeoutException e) {
 			// Assert.fail("Frame waw not found");
-//			testResultService.addFailTest("Frame was not found", true);
+			// testResultService.addFailTest("Frame was not found", true);
 		} finally {
-			
+
 		}
 		return currentWindow;
 	}
@@ -517,6 +531,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			WebElement element = waitForElement(xpath, ByTypes.xpath, false, 10);
 			if (element != null) {
 				elementFound = true;
+				printScreen(message);
 			}
 
 		} catch (Exception e) {
@@ -529,7 +544,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	}
 
 	public void checkElementNotExist(String xpath) throws Exception {
-		checkElementNotExist(xpath, null);
+		checkElementNotExist(xpath, "Element with xpath: "+xpath+" was found when it should not");
 	}
 
 	public WebElement getElement(By by) {
@@ -617,7 +632,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 						+ configuration.getProperty("screenshotFolder")
 						+ "\\\\ScreenShot" + message.replace(" ", "") + sig
 						+ ".png";
-				System.out.println("File path is :"+newFileName);
+				System.out.println("File path is :" + newFileName);
 
 				path = "http://"
 						+ configuration.getProperty("logserver").replace("\\",
@@ -834,11 +849,31 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	public void setRemoteMachine(String remoteMachine) {
 		this.remoteMachine = remoteMachine;
 	}
-	
-	public void clickOnElementWithOffset(WebElement element,int X_offset,int Y_offset){
+
+	public void clickOnElementWithOffset(WebElement element, int X_offset,
+			int Y_offset) {
 		Actions builder = new Actions(webDriver);
-		Action action = builder.moveToElement(element, X_offset, Y_offset).click().build();
+		Action action = builder.moveToElement(element, X_offset, Y_offset)
+				.click().build();
 		action.perform();
+	}
+
+	public boolean isEnableConsoleLog() {
+		return enableConsoleLog;
+	}
+
+	public void setEnableConsoleLog(boolean enableConsoleLog) {
+		this.enableConsoleLog = enableConsoleLog;
+	}
+
+	public LogEntries getConsoleLogEntries() {
+		LogEntries logEntries = webDriver.manage().logs().get(LogType.BROWSER);
+
+		// for (LogEntry entry : logEntries) {
+		// System.out.println(entry.getMessage());
+		// // do something useful with the data
+		// }
+		return logEntries;
 	}
 
 }

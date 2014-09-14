@@ -18,6 +18,7 @@ public class RecoredYourself extends EdusoftWebTest {
 	@Before
 	public void setup() throws Exception {
 		super.setup();
+		setEnableLoggin(true);
 
 	}
 
@@ -30,10 +31,51 @@ public class RecoredYourself extends EdusoftWebTest {
 	public void testRecordPanel2() throws Exception {
 		testRecordYourselfIntegrated(15, 6, 3, 8000.0F);
 	}
+	
+	//4
+	@Test
+	public void testSentenceLevel1()throws Exception{
+		testRecordYourselfIntegrated(16, 1, 6, 0);
+		testRecordYourselfIntegrated(16, 1, 6, 0);
+		testRecordYourselfIntegrated(16, 1, 6, 0);
+		testRecordYourselfIntegrated(16, 1, 6, 0);
+		testRecordYourselfIntegrated(16, 1, 6, 0);
+	}
+	//5
+	@Test
+	public void testSentenceLevel2()throws Exception{
+		testRecordYourselfIntegrated(16, 1, 7, 0);
+	}
+	//1
+	@Test
+	public void testSentenceLevel3()throws Exception{
+		testRecordYourselfIntegrated(16, 1, 8, 0);
+	}
+	//3
+	//8,42432,3,whatDoYouDoSarah2.wav
+	@Test
+	public void testSentenceLevel4()throws Exception{
+		testRecordYourselfIntegrated(16, 1, 9, 0);
+	}
+	
+	//2
+	@Test
+	public void testSentenceLevel5()throws Exception{
+		testRecordYourselfIntegrated(16, 1, 11, 0);
+	}
+	
+	
+	
+	
+	@Test
+	public void testLongSpeech()throws Exception{
+		testRecordYourselfIntegrated(16, 1, 12, 0);
+	}
 
 	public void testRecordYourselfIntegrated(int courseId, int scriptSection,
 			int recordingId, float sampleRate) throws Exception {
 		startStep("Init test data");
+		int timeoutBeforeRecording=2;
 		// int courseId = 13;
 		// int scriptSection = 1;
 		Recording recording = pageHelper.getRecordings().get(recordingId);
@@ -41,7 +83,7 @@ public class RecoredYourself extends EdusoftWebTest {
 		// Recording recording=pageHelper.getRecordings().get(1);
 
 		String[] expectedWordLevels = null;
-		int sentenceLevel = 0;
+		int expectedSentenceLevel = 0;
 		boolean SRDebug = false;
 		String[] words = null;
 		int numOfRecordingsInTest = 6;
@@ -78,21 +120,22 @@ public class RecoredYourself extends EdusoftWebTest {
 		recordPanel.clickOnRecordButton();
 		String status = recordPanel.getRecordPanelStatus();
 		testResultService.assertEquals("SPEAK", status);
+		sleep(1);
 		// recordPanel.waitForSpeakStatus();
 		audioService.sendSoundToVirtualMic(recording.getFiles().get(0),
 				sampleRate);
 
 		startStep("Check that recording ended");
-		sleep(2);
+		sleep(timeoutBeforeRecording);
 		recordPanel.waitForRecordingToEnd(1);
 		webDriver.printScreen("After recording ended");
 		// audioService.sendSoundToVirtualMic(new File(
 		// "files/audioFiles/TheBeatMe16000_16.wav"), 16000.0F);
 		int debugSentenceLevel = recordPanel.getSentenceLevel();
 
-		sentenceLevel = recording.getSL().get(0);
+		expectedSentenceLevel = recording.getSL().get(0);
 
-		System.out.println("Sentence level is: " + sentenceLevel);
+		System.out.println("Sentence level is: " + expectedSentenceLevel);
 		String[] debugWordLevels = textService.splitStringToArray(recordPanel
 		 .getWordsScoring("wl"));
 		expectedWordLevels = recording.getWL().get(0);
@@ -101,8 +144,8 @@ public class RecoredYourself extends EdusoftWebTest {
 		startStep("Check word level and sentence level");
 		recordPanel.checkWordsLevels(words, debugWordLevels, textService);
 		recordPanel.checckSentenceLevelLightBulbs(debugSentenceLevel);
-		recordPanel.checkSentenceScoreRatingText(debugSentenceLevel);
-		// recordPanel.checkSentenceScoreText(sentenceLevel);
+		recordPanel.checkSentenceScoreRatingText(expectedSentenceLevel);
+		recordPanel.checkSentenceScoreText(expectedSentenceLevel);
 		recordPanel.checkThatWlIsCloseToExpectedWL(expectedWordLevels, textService
 				.splitStringToArray(recordPanel.getWordsScoring("wl")));
 

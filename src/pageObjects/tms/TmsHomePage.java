@@ -701,4 +701,15 @@ public class TmsHomePage extends GenericPage {
 
 	}
 
+	public void swithchToCboxFrame() throws Exception {
+		webDriver.switchToFrame(webDriver.waitForElement(
+				"//iframe[@class='cboxIframe']", ByTypes.xpath));
+		
+	}
+
+	public void clickOnRemoveCommentButton()throws Exception {
+		webDriver.waitForElement("butRemove", ByTypes.id).click();;
+		
+	}
+
 }

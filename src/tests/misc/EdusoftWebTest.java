@@ -1,7 +1,10 @@
 package tests.misc;
 
+import java.util.List;
+
 import org.junit.After;
 import org.junit.Assert;
+import org.openqa.selenium.logging.LogEntries;
 
 import services.AudioService;
 import services.PageHelperService;
@@ -20,6 +23,7 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 	public AudioService audioService;
 
 	String browser = null;
+	private boolean enableLoggin = false;
 
 	@Override
 	public void setup() throws Exception {
@@ -61,7 +65,9 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 			testResultService
 					.addFailTest("No webdriver found. Please check properties file or pom for webdriver name");
 		}
-
+		if (enableLoggin == true) {
+			webDriver.setEnableConsoleLog(true);
+		}
 		webDriver.init(testResultService);
 		try {
 			webDriver.maximize();
@@ -69,13 +75,23 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 			Assert.fail("openening Webdriver failed. Check that selenium node/grid are running and also check configurations");
 		}
 		pageHelper = (PageHelperService) ctx.getBean("PageHelperService");
-		pageHelper.init(webDriver, autoInstitution,testResultService);
+		pageHelper.init(webDriver, autoInstitution, testResultService);
 		audioService = (AudioService) ctx.getBean("AudioService");
 
 	}
 
 	@After
 	public void tearDown() throws Exception {
+
+		if (enableLoggin == true && browser.equals(Browsers.chrome.toString())) {
+			LogEntries logEntries = webDriver.getConsoleLogEntries();
+			List<String[]> logList = textService
+					.getListFromLogEntries(logEntries);
+			textService.writeArrayistToCSVFile("files/csvFiles/consoleLog"+dbService.sig()+".csv",
+					logList);
+
+		}
+
 		System.out.println("Start of EdusoftWebTest teardown");
 		try {
 			if (this.isPass == false) {
@@ -99,7 +115,9 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 	}
 
 	public String getSutAndSubDomain() {
-		return configuration.getAutomationParam(AutoParams.sutUrl.toString(), AutoParams.sutUrl.toString()+"CMD") + "//"
+		return configuration.getAutomationParam(AutoParams.sutUrl.toString(),
+				AutoParams.sutUrl.toString() + "CMD")
+				+ "//"
 				+ configuration.getProperty("institutaion.subdomain");
 
 	}
@@ -110,5 +128,13 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 
 	public void setBrowser(String browser) {
 		this.browser = browser;
+	}
+
+	public boolean isEnableLoggin() {
+		return enableLoggin;
+	}
+
+	public void setEnableLoggin(boolean enableLoggin) {
+		this.enableLoggin = enableLoggin;
 	}
 }

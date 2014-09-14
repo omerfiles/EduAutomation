@@ -132,7 +132,7 @@ public class RecordPanel extends SRpage {
 		webDriver.waitForElement("btnHear", ByTypes.id).click();
 	}
 
-	public void checkSentenceScoreText(String expectedScore) throws Exception {
+	public void checkSentenceScoreText(int expectedScore) throws Exception {
 		String actualSentenceScore = webDriver.waitForElement(
 				"//div[@class='srPanelScoreWrapper']//div[1]//div[1]",
 				ByTypes.xpath).getText();
@@ -211,7 +211,7 @@ public class RecordPanel extends SRpage {
 		String text = webDriver.waitForElement("txtOriginal", ByTypes.id)
 				.getText();
 		System.out.println("words text is: " + text);
-		text = text.replaceAll("[-.!]", "");
+		text = text.replaceAll("[-.!,?]", "");
 		text = text.trim();
 		String[] words = textService.splitStringToArray(text, "\\s+");
 

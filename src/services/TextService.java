@@ -31,6 +31,8 @@ import org.htmlcleaner.DomSerializer;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.TagNode;
 import org.htmlcleaner.XPatherException;
+import org.openqa.selenium.logging.LogEntries;
+import org.openqa.selenium.logging.LogEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
@@ -98,6 +100,33 @@ public class TextService extends SystemObjectImpl {
 
 	}
 
+	public List<String> getStrListFromCsv(String filePath, int colIndex)
+			throws Exception {
+		List<String> list = new ArrayList<String>();
+
+		BufferedReader br = null;
+		String line = "";
+		String cvsSplitBy = ",";
+		String[] str = null;
+
+		try {
+
+			br = new BufferedReader(new FileReader(filePath));
+			while ((line = br.readLine()) != null) {
+				str = line.split(cvsSplitBy);
+				list.add(str[colIndex]);
+			}
+
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		} finally {
+
+		}
+		br.close();
+		return list;
+
+	}
+
 	public String[] getStrArrayFromCsv(String filePath, int index)
 			throws Exception {
 		BufferedReader br = null;
@@ -136,8 +165,8 @@ public class TextService extends SystemObjectImpl {
 	public String[] splitStringToArray(String str, String ignorChars) {
 		String[] result = null;
 		try {
-//			System.out.println("Splitting string: " + str + " to array."
-//					+ System.currentTimeMillis());
+			// System.out.println("Splitting string: " + str + " to array."
+			// + System.currentTimeMillis());
 			result = str.split("(" + ignorChars + ")");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -268,8 +297,8 @@ public class TextService extends SystemObjectImpl {
 			Document document) throws Exception {
 		String[] arr = null;
 
-		List<String[]> segments = netService.getListFromXmlNode(
-			document, xpathToFind);
+		List<String[]> segments = netService.getListFromXmlNode(document,
+				xpathToFind);
 
 		return arr;
 	}
@@ -306,11 +335,23 @@ public class TextService extends SystemObjectImpl {
 
 		return strArr;
 	}
-	
-	public void writeArrayistToCSVFile(String path,List<String[]>list) throws IOException{
+
+	public void writeArrayistToCSVFile(String path, List<String[]> list)
+			throws IOException {
 		String csv = path;
 		CSVWriter writer = new CSVWriter(new FileWriter(csv));
-		writer.writeAll(list); 
+		writer.writeAll(list);
 		writer.close();
+	}
+	
+	public List<String[]>getListFromLogEntries(LogEntries logEntries){
+		List<String[]>strList=new ArrayList<String[]>();
+		for (LogEntry entry : logEntries) {
+			String[]str=new String[]{entry.getMessage(),String.valueOf(entry.getTimestamp()),entry.getLevel().toString() };
+			strList.add(str);
+		}
+		
+		return strList;
+		
 	}
 }

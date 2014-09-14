@@ -835,4 +835,17 @@ public class EdoHomePage extends GenericPage {
 				ByTypes.xpath).click();
 
 	}
+
+	public void clickOnTextAreaAndCheckThatCommentIsNotDislayed() throws Exception {
+		clickOnTextArea(20,20);
+		Thread.sleep(2000);
+		webDriver.checkElementNotExist("//div[@id='comments']//div[@class='commentTitle']");
+		
+	}
+	public void clickOnTextArea(int x, int y) throws Exception {
+		WebElement assayText = webDriver.waitForElement(
+				"//div[@id='essayText']//div[1]//div", ByTypes.xpath);
+		webDriver.clickOnElementWithOffset(assayText, x, y);
+
+	}
 }

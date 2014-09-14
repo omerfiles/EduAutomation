@@ -17,7 +17,7 @@ import org.w3c.dom.NodeList;
 
 import tests.misc.EdusoftWebTest;
 
-public class GrammersTests extends EdusoftWebTest {
+public class GrammarsTests extends EdusoftWebTest {
 
 	private static final String SPEAKING_FOLDER = "\\\\frontqa3\\EDO_HTML_SR\\Runtime\\Content\\speaking";
 	private static final String LISTENING_FOLDER = "\\\\frontqa3\\EDO_HTML_SR\\Runtime\\Content\\listening";
@@ -27,8 +27,9 @@ public class GrammersTests extends EdusoftWebTest {
 	private static final String Vocabulary_FOLDER = "\\\\newstorage\\sendhere\\_EDOHTML\\EDO_GRAMMAR_CHANGES\\BaseCourses\\Alphabet";
 	private static final String tempTestFile = "C:\\automation\\vocabulary.grammar";
 
-	private final String grammerFilesPath = "\\\\NEWSTORAGE\\Sendhere\\_EDOHTML\\EduSpeak\\sample-grammars\\English\\baseEDOCources.grammar";
-
+	// private final String grammerFilesPath =
+	// "\\\\NEWSTORAGE\\Sendhere\\_EDOHTML\\EduSpeak\\sample-grammars\\English\\baseEDOCources.grammar";
+	private final String grammerFilesPath = "\\\\NEWSTORAGE\\Sendhere\\_EDOHTML\\SR_grammars\\OnlyExcel\\UnitedBaseEDO\\speakingBaseEDO.grammar";
 	// private final String grammerFilesPath="C:\\automation\\testFile.txt";
 
 	List<String[]> results = new ArrayList<>();
@@ -41,18 +42,24 @@ public class GrammersTests extends EdusoftWebTest {
 
 	@Test
 	public void testSpeaking() throws Exception {
-		
-		compareAllGrammers(SPEAKING_FOLDER);
+
+		compareAllGrammers(
+				SPEAKING_FOLDER,
+				"speaking_AlteredPedagogy.csv",
+				"\\\\newstorage\\Sendhere\\_EDOHTML\\SR_grammars\\OnlyExcel\\UnitedBaseEDO\\speakingBaseEDO.grammar");
 	}
 
 	@Test
 	public void testListening() throws Exception {
-		compareAllGrammers(LISTENING_FOLDER);
+		compareAllGrammers(
+				LISTENING_FOLDER,
+				"listening_AlteredPedagogy.csv",
+				"\\\\newstorage\\Sendhere\\_EDOHTML\\SR_grammars\\OnlyExcel\\UnitedBaseEDO\\listeningBaseEDO.grammar");
 	}
 
 	@Test
 	public void testGrammer() throws Exception {
-		compareAllGrammers(GRAMMER_FOLDER);
+		// compareAllGrammers(GRAMMER_FOLDER);
 	}
 
 	@Test
@@ -93,7 +100,7 @@ public class GrammersTests extends EdusoftWebTest {
 					subGrammerIds[j] = subGrammerIds[j].toUpperCase();
 					segments[j] = textFromXml;
 					textFromGrammer[j] = getGrammerTextFromGrammerFiles("."
-							+ subGrammerIds[j]);
+							+ subGrammerIds[j], grammerFilesPath);
 					int index = j + 1;
 					if (textFromGrammer[j] == null) {
 						report.report("Grammer text not found in grammer file:"
@@ -138,13 +145,17 @@ public class GrammersTests extends EdusoftWebTest {
 
 	}
 
-	public void compareAllGrammers(String testFolder) throws Exception {
+	public void compareAllGrammers(String testFolder, String csvFile,
+			String grammarFile) throws Exception {
 		startStep("Iterate on all Speakeing folders");
+		
+		
 		// testFolder = testFolder;
 		int passed = 0;
 		int failed = 0;
 		// \\frontqa3\EDO_HTML_SR\Runtime\Content\speaking
-		List<String> folders = getSubFolders(testFolder);
+		List<String> folders = getSubFolders(testFolder, "files/csvFIles/"
+				+ csvFile);
 
 		startStep("For all folder, search for js file, get its contend and compare texts to grammer file according the grammer id");
 		String filePath = null;
@@ -183,7 +194,8 @@ public class GrammersTests extends EdusoftWebTest {
 				innerloop: for (int j = 0; j < segments.length; j++) {
 					int index = j + 1;
 					String grammerText = getGrammerTextFromGrammerFiles("."
-							+ folders.get(i).toUpperCase() + "_" + index);
+							+ folders.get(i).toUpperCase() + "_" + index,
+							grammarFile);
 					if (grammerText == null) {
 						report.report("Grammer text not found in grammer file:"
 								+ folders.get(i).toUpperCase() + "_" + index);
@@ -272,12 +284,7 @@ public class GrammersTests extends EdusoftWebTest {
 				+ testFolder.substring(testFolder.length() - 6,
 						testFolder.length()) + "_" + dbService.sig(8) + ".csv";
 		textService.writeArrayistToCSVFile(csvFilepath, results);
-		System.out.println("csv file path:"+"file:///"+ csvFilepath);
-	}
-
-	public void findGrammer() throws Exception {
-		String text = getGrammerTextFromGrammerFiles(".A3VEADE_886");
-		System.out.println(text);
+		System.out.println("csv file path:" + "file:///" + csvFilepath);
 	}
 
 	@After
@@ -285,11 +292,11 @@ public class GrammersTests extends EdusoftWebTest {
 		super.tearDown();
 	}
 
-	public String getGrammerTextFromGrammerFiles(String grammerID)
-			throws IOException {
+	public String getGrammerTextFromGrammerFiles(String grammerID,
+			String grammarFilePath) throws IOException {
 		String text = null;
 		try {
-			text = textService.getLineFromTextFile(new File(grammerFilesPath),
+			text = textService.getLineFromTextFile(new File(grammarFilePath),
 					grammerID);
 			int begin = text.indexOf("(");
 			begin++;
@@ -310,19 +317,31 @@ public class GrammersTests extends EdusoftWebTest {
 		return text;
 	}
 
-	public List<String> getSubFolders(String path) {
+	public List<String> getSubFolders(String path) throws Exception {
+		return getSubFolders(path, null);
+	}
+
+	public List<String> getSubFolders(String path, String csvFilePath)
+			throws Exception {
 		List<String> folders = null;
+
+		List<String> grammarsFromExcel = null;
+		if (csvFilePath != null) {
+			grammarsFromExcel = textService.getStrListFromCsv(csvFilePath, 0);
+		}
 		try {
 			File file = new File(path);
 			String[] names = file.list();
-			if(names==null){
+			if (names == null) {
 				System.out.println("Folder is empty");
 				Assert.fail("Test faolder is empty");
 			}
 			folders = new ArrayList<String>();
 
 			for (String name : names) {
-				if (new File(path + "\\" + name).isDirectory()) {
+
+				if (new File(path + "\\" + name).isDirectory()
+						&& grammarsFromExcel.contains(name.toUpperCase())) {
 					System.out.println(name);
 					if (name.length() <= 6) {
 						folders.add(name);
@@ -331,9 +350,10 @@ public class GrammersTests extends EdusoftWebTest {
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			System.out.println("Path is: "+path);
-			System.out.println(" Failed in getSubFolders:"+e.getMessage());
-			testResultService.addFailTest("Failed on getSybFolder "+e.getMessage() );
+			System.out.println("Path is: " + path);
+			System.out.println(" Failed in getSubFolders:" + e.getMessage());
+			testResultService.addFailTest("Failed on getSybFolder "
+					+ e.getMessage());
 			e.printStackTrace();
 		}
 		return folders;
@@ -404,7 +424,7 @@ public class GrammersTests extends EdusoftWebTest {
 	}
 
 	public boolean compareSegmentTextAndGrammerTexsts(String[] segmentTexts,
-			String[] grammerTexts, String folder) {
+			String[] grammerTexts, String folder) throws Exception {
 		segmentTexts = textService.trimLowerCaseAndRemoveChars(segmentTexts);
 		for (int k = 0; k < segmentTexts.length; k++) {
 			String[] segmentsWords = textService.splitStringToArray(

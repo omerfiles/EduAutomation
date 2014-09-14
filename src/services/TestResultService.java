@@ -8,10 +8,15 @@ import jsystem.framework.system.SystemObjectImpl;
 
 import org.junit.Assert;
 import org.junit.ComparisonFailure;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import drivers.GenericWebDriver;
 
 @Service
 public class TestResultService extends SystemObjectImpl {
+
+
 
 	List<String> results = new ArrayList<String>();
 
@@ -43,6 +48,7 @@ public class TestResultService extends SystemObjectImpl {
 
 	public void assertTrue(String message, boolean condition) {
 		if (condition != true) {
+
 			addFailTest(message);
 		}
 
@@ -64,34 +70,37 @@ public class TestResultService extends SystemObjectImpl {
 	}
 
 	public boolean assertEquals(String expected, String actual, String message) {
-//		System.out.println("Asserting " + expected + ". and " + actual + ".");
+		// System.out.println("Asserting " + expected + ". and " + actual +
+		// ".");
 		if (expected.equals(actual) == false) {
-			
+
 			addFailTest("Expected String was: " + expected
-					+ " but actual string was: " + actual+" "+message);
-		
+					+ " but actual string was: " + actual + " " + message);
+
 			// throw new ComparisonFailure("Assert failed", expected, actual);
 			return false;
 		}
 		return true;
-//		System.out.println("Assert passed");
+		// System.out.println("Assert passed");
 
 	}
 
-	public void assertEquals(boolean expected, boolean actual) {
-		assertEquals(expected, actual,null);
+	public void assertEquals(boolean expected, boolean actual) throws Exception {
+		assertEquals(expected, actual, null);
 	}
 
-	public boolean assertEquals(boolean expected, boolean actual, String message) {
-		boolean result=true;
+	public boolean assertEquals(boolean expected, boolean actual, String message)
+			throws Exception {
+		boolean result = true;
 		System.out.println("Asserting " + expected + ". and " + actual + ".");
 		if (expected != actual) {
 			System.out.println(message);
 			addFailTest("Expected boolean was: " + expected
-					+ " but actual boolean was: " + actual+" "+message);
-			
+					+ " but actual boolean was: " + actual + " " + message);
+
 			// throw new ComparisonFailure("Assert failed", expected, actual);
-				result=false;
+			result = false;
+			
 		}
 		return result;
 

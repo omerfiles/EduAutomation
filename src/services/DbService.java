@@ -32,7 +32,8 @@ public class DbService extends SystemObjectImpl {
 
 	private static final String SQL_SERVER_DRIVER_CLASS = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
 	private JdbcTemplate jdbcTemplate;
-	private final String db_connect_string = "jdbc:sqlserver://BACKQA:1433;databaseName=EDODOTNet3;";
+	// private final String db_connect_string =
+	// "jdbc:sqlserver://BACKQA:1433;databaseName=EDODOTNet3;";
 	private String db_userid = null;
 	private String db_password = null;
 	private final int MAX_DB_TIMEOUT = 120;
@@ -40,6 +41,11 @@ public class DbService extends SystemObjectImpl {
 
 	@Autowired
 	Configuration configuration;
+
+//	private String db_connect_string = configuration
+//			.getProperty("db.connection");
+
+	// private String db_connect_string = null;
 
 	@Autowired
 	InstitutionService institutionService;
@@ -337,11 +343,12 @@ public class DbService extends SystemObjectImpl {
 		report.report("Query is: " + sql);
 		db_userid = configuration.getProperty("db.connection.username");
 		db_password = configuration.getProperty("db.connection.password");
+
 		System.out.println(sql);
 		Statement statement = null;
 		try {
 			Class.forName(SQL_SERVER_DRIVER_CLASS);
-			conn = DriverManager.getConnection(db_connect_string, db_userid,
+			conn = DriverManager.getConnection(getDbConnString(), db_userid,
 					db_password);
 			System.out.println("connected");
 
@@ -377,22 +384,22 @@ public class DbService extends SystemObjectImpl {
 
 		try {
 			Class.forName(SQL_SERVER_DRIVER_CLASS);
-			conn = DriverManager.getConnection(db_connect_string, db_userid,
+			conn = DriverManager.getConnection(getDbConnString(), db_userid,
 					db_password);
 			System.out.println("connected");
 			if (conn.isClosed() == true) {
 				System.out.println("connection is closed");
 			}
 			statement = conn.createStatement();
-			
-				rs = statement.executeQuery(sql);
-				while (rs.next()) {
-					// System.out.println(rs.getString(1));
-					// str = rs.getString(1);
-					list.add(rs.getString(1));
+
+			rs = statement.executeQuery(sql);
+			while (rs.next()) {
+				// System.out.println(rs.getString(1));
+				// str = rs.getString(1);
+				list.add(rs.getString(1));
 				System.out.println(rs.getString(1));
-				}
-			
+			}
+
 			conn.close();
 		} catch (Exception e) {
 
@@ -400,7 +407,7 @@ public class DbService extends SystemObjectImpl {
 		} finally {
 
 			try {
-				
+
 			} catch (Exception e) {
 			}
 			if (statement != null) {
@@ -427,7 +434,7 @@ public class DbService extends SystemObjectImpl {
 		try {
 			Class.forName(SQL_SERVER_DRIVER_CLASS);
 			System.out.println("DB user id is: " + db_userid);
-			conn = DriverManager.getConnection(db_connect_string, db_userid,
+			conn = DriverManager.getConnection(getDbConnString(), db_userid,
 					db_password);
 			System.out.println("connected");
 
@@ -487,7 +494,7 @@ public class DbService extends SystemObjectImpl {
 		try {
 			Class.forName(SQL_SERVER_DRIVER_CLASS);
 
-			conn = DriverManager.getConnection(db_connect_string, db_userid,
+			conn = DriverManager.getConnection(getDbConnString(), db_userid,
 					db_password);
 			System.out.println("connected");
 
@@ -526,7 +533,7 @@ public class DbService extends SystemObjectImpl {
 		String result = getStringFromQuery(sql);
 		return result;
 	}
-	
+
 	public String getUserNameById(String id, String institutionId)
 			throws Exception {
 		// String institutionid =
@@ -579,7 +586,12 @@ public class DbService extends SystemObjectImpl {
 
 		return dayOfMonth;
 	}
-
 	
+	public String getDbConnString(){
+		return configuration.getProperty("db.connection");
+		
+	}
+
+	// s}
 
 }
