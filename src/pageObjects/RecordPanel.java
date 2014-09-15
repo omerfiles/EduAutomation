@@ -80,7 +80,7 @@ public class RecordPanel extends SRpage {
 		boolean selected = webDriver.waitForElement(
 				"//ul[@id='ulURecords']//li[" + index + "]//a//input",
 				ByTypes.xpath).isSelected();
-		if(selected==false){
+		if (selected == false) {
 			System.out.println("record was not selected. try again");
 			radioBtn.click();
 		}
@@ -100,6 +100,11 @@ public class RecordPanel extends SRpage {
 		// webDriver.closeAlertByAccept();
 
 		// checkThatHearButtonIsDisabled();
+	}
+
+	public void allowMicFirefox() {
+		// TODO Auto-generated method stub
+
 	}
 
 	public void clickOnRecordAndStop(int seconds) throws Exception {
@@ -373,7 +378,8 @@ public class RecordPanel extends SRpage {
 
 	public void waitForRecordingToEnd(int indexOfRecording) throws Exception {
 		webDriver.waitForElement("//ul[@id='ulURecords']//li["
-				+ indexOfRecording + "]//a//span[3]", ByTypes.xpath, 20, true,"failed in waitForRecordingToEnd");
+				+ indexOfRecording + "]//a//span[3]", ByTypes.xpath, 20, true,
+				"failed in waitForRecordingToEnd");
 
 	}
 
@@ -391,7 +397,9 @@ public class RecordPanel extends SRpage {
 		}
 
 	}
-	public void clickOnRecordButtonAndSendRecording(Recording recording,float sampleRate,AudioService audioService) throws Exception{
+
+	public void clickOnRecordButtonAndSendRecording(Recording recording,
+			float sampleRate, AudioService audioService) throws Exception {
 		clickOnRecordButton();
 		String status = getRecordPanelStatus();
 		testResultService.assertEquals("SPEAK", status);
@@ -399,9 +407,15 @@ public class RecordPanel extends SRpage {
 		audioService.sendSoundToVirtualMic(recording.getFiles().get(0),
 				sampleRate);
 
-		
 		Thread.sleep(2000);
 		waitForRecordingToEnd(1);
+	}
+
+	public void checkForLongRecordText() throws Exception {
+		String text = webDriver.waitForElement(
+				"//div[@class='scoreExpWrapper']", ByTypes.xpath).getText();
+		testResultService.assertEquals("Speech too long", text,
+				"Message about long speech is not displayed");
 	}
 
 }

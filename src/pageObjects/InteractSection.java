@@ -107,25 +107,22 @@ public class InteractSection extends SRpage {
 		String actualText = webDriver.waitForElement(
 				"//div[@class='questionInstructions']", ByTypes.xpath,
 				"instruction text not found").getText();
-		Assert.assertEquals("Text not found or do not match", text, actualText);
+		// Assert.assertEquals("Text not found or do not match", text,
+		// actualText);
+		testResultService.assertEquals(text, actualText,
+				"Instruction text did not matched");
 	}
 
 	public void checkThatSpeakerTextIsHighlighted(int speaker) throws Exception {
-		// right speaker{
-		if (speaker == 1) {
+	
+		
 			webDriver
 					.waitForElement(
-							"//div[@class='recordingPanelWrapper']//div[1][contains(@class,'selected')]",
-							ByTypes.xpath);
-		}
-		// left speaker
-		if (speaker == 2) {
-			webDriver
-					.waitForElement(
-							"//div[@class='recordingPanelWrapper']//div[2][contains(@class,'selected')]",
-							ByTypes.xpath);
-
-		}
+							"//div[@class='recordingPanelWrapper']//div["+speaker+"][contains(@class,'selected')]",
+							ByTypes.xpath,true,20);
+		
+	
+		
 
 	}
 
@@ -150,7 +147,7 @@ public class InteractSection extends SRpage {
 						+ "]//div", ByTypes.xpath).getText();
 		System.out.println("words text is: " + text);
 		text = text.substring(1, text.length());
-		text=text.replace(".", "");
+		text = text.replace(".", "");
 		String[] words = textService.splitStringToArray(text, "\\s+");
 		return words;
 	}
@@ -219,15 +216,23 @@ public class InteractSection extends SRpage {
 
 	}
 
+	public void checkFinalViewWordLevels(String[] words, String[] wordLevels,
+			TextService textService, int sentenceNumber) throws Exception {
+		for (int i = 0; i < words.length; i++) {
+			checkFinalViewWordLevel(words[i], Integer.valueOf(wordLevels[i]),
+					textService, sentenceNumber);
+		}
+	}
+
 	public void checkInteract1WordsLevels(String[] words, String[] wordLevels,
 			TextService textService, int speaker) throws NumberFormatException,
 			Exception {
-		webDriver.printScreen("checkngWordScore");
-		webDriver.getElementHTML(webDriver.waitForElement(
-				"//div[@class='recordingPanelWrapper']//div[2]//div",
-				ByTypes.xpath));
-		System.out.println("Starting to chec word levels."
-				+ System.currentTimeMillis());
+		// webDriver.printScreen("checkngWordScore");
+		// webDriver.getElementHTML(webDriver.waitForElement(
+		// "//div[@class='recordingPanelWrapper']//div[2]//div",
+		// ByTypes.xpath));
+		// System.out.println("Starting to chec word levels."
+		// + System.currentTimeMillis());
 		for (int i = 0; i < words.length; i++) {
 			checkInteract1WordScore(words[i], Integer.valueOf(wordLevels[i]),
 					textService, speaker);
@@ -248,21 +253,27 @@ public class InteractSection extends SRpage {
 	private void checkInteract2WordScore(String word, int expectedWordLevel,
 			TextService textService, int speaker) throws Exception {
 
-		CheckInteractWordScore(word, expectedWordLevel, textService, speaker,
+		CheckInteractWordScore(word, expectedWordLevel, textService,
 				"//div[@class='recordingPanelSentenceText']//");
 	}
 
 	private void checkInteract1WordScore(String word, int expectedWordLevel,
 			TextService textService, int speaker) throws Exception {
 		System.out.println("Check word level." + System.currentTimeMillis());
-		CheckInteractWordScore(word, expectedWordLevel, textService, speaker,
+		CheckInteractWordScore(word, expectedWordLevel, textService,
 				"//div[@class='recordingPanelWrapper']//div[" + speaker
 						+ "]//div//div//");
 	}
 
+	private void checkFinalViewWordLevel(String word, int expectedWordLevel,
+			TextService textService, int sentenceNumber) throws Exception {
+		CheckInteractWordScore(word, expectedWordLevel, textService,
+				"//div[@class='speakingInteractPanelsWrapper']//div//div["
+						+ sentenceNumber + "]//div//div//div//");
+	}
+
 	private void CheckInteractWordScore(String word, int expectedWordLevel,
-			TextService textService, int speaker, String xpath)
-			throws Exception {
+			TextService textService, String xpath) throws Exception {
 		boolean found = false;
 		SRWordLevel wordLevel = null;
 		if (expectedWordLevel <= 2) {
@@ -333,6 +344,11 @@ public class InteractSection extends SRpage {
 		}
 		System.out.println("Instruction text changed."
 				+ System.currentTimeMillis());
+
+	}
+
+	public void clickOnListenToAllButton() throws Exception {
+		webDriver.waitForElement("Listen to all", ByTypes.linkText).click();
 
 	}
 

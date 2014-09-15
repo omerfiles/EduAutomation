@@ -98,12 +98,13 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 		System.out.println("testResultService:" + testResultService.toString());
 		System.out.println("Test failed?: "
 				+ testResultService.hasFailedResults());
+		if (printResults == true && testResultService.hasFailedResults()) {
+			testResultService.printAllFailures();
+		}
 		if (testResultService.hasFailedResults() && this.isPass == true) {
 			Assert.fail("Test failed due to several errors");
 		}
-		if (printResults == true) {
-			testResultService.printAllFailures();
-		}
+		
 
 		// if (this.isPass == false) {
 		// report.startLevel("Test failed", EnumReportLevel.MainFrame);
