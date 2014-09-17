@@ -24,6 +24,7 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 
 	String browser = null;
 	private boolean enableLoggin = false;
+	private String logFilter=null;
 
 	@Override
 	public void setup() throws Exception {
@@ -86,8 +87,8 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 		if (enableLoggin == true && browser.equals(Browsers.chrome.toString())) {
 			LogEntries logEntries = webDriver.getConsoleLogEntries();
 			List<String[]> logList = textService
-					.getListFromLogEntries(logEntries);
-			textService.writeArrayistToCSVFile("files/csvFiles/consoleLog"+dbService.sig()+".csv",
+					.getListFromLogEntries(logEntries,logFilter);
+			textService.writeArrayistToCSVFile("files/consoleOutput/consoleLog"+dbService.sig()+".csv",
 					logList);
 
 		}
@@ -136,5 +137,13 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 
 	public void setEnableLoggin(boolean enableLoggin) {
 		this.enableLoggin = enableLoggin;
+	}
+
+	public String getLogFilter() {
+		return logFilter;
+	}
+
+	public void setLogFilter(String logFilter) {
+		this.logFilter = logFilter;
 	}
 }

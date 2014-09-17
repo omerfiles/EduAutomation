@@ -3,6 +3,9 @@ package pageObjects;
 import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
+import java.util.List;
+
+import org.openqa.selenium.logging.LogEntries;
 
 import services.TestResultService;
 import services.TextService;
@@ -67,6 +70,16 @@ public class SRpage extends GenericPage {
 		str = str.replace(",", "");
 		return str;
 
+	}
+	
+	public int getSLFromConsoleLog(String message,TextService textService){
+//		LogEntries logEntries = webDriver.getConsoleLogEntries();
+//		List<String[]> logList = textService
+//				.getListFromLogEntries(logEntries,"result");
+//		String json=logList.get(0)[0];
+//		 json=message.substring(message.indexOf("{"));
+//		System.out.println(json);
+		return 0;
 	}
 	
 

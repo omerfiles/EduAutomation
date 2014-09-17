@@ -237,6 +237,7 @@ public class RecordPanel extends SRpage {
 		return level;
 	}
 
+
 	public void checckSentenceLevelLightBulbs(int sentenceLevel)
 			throws Exception {
 		WebElement element = webDriver.waitForElement(

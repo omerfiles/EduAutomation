@@ -21,6 +21,8 @@ public class SpeechRecognitonInteract1 extends EdusoftWebTest {
 	@Before
 	public void setup() throws Exception {
 		super.setup();
+		setEnableLoggin(true);
+		setLogFilter("Incomming message");
 
 	}
 
@@ -53,9 +55,13 @@ public class SpeechRecognitonInteract1 extends EdusoftWebTest {
 		// interactSection.checkInstructionText(interactSection.instructionText0);
 
 		sleep(1);
+		
+		sleep(1);
+		interactSection.hoverOnSpeaker(2);
+		interactSection.checkThatSpeakerTextIsHighlighted(2);
 		interactSection.selectRightSpeaker();
 		interactSection.checkInstructionText(interactSection.instructionText8);
-		interactSection.checkThatSpeakerTextIsHighlighted(2);
+	
 		interactSection.checkInstructionText(interactSection.instructionText1);
 		sleep(1);
 
@@ -166,9 +172,11 @@ public class SpeechRecognitonInteract1 extends EdusoftWebTest {
 
 		sleep(1);
 		interactSection.selectRightSpeaker();
+		sleep(1);
+		interactSection.checkThatSpeakerTextIsHighlighted(2);
 		interactSection.checkInstructionText(interactSection.instructionText8);
 		sleep(2);
-		interactSection.checkThatSpeakerTextIsHighlighted(2);
+		
 		interactSection.checkInstructionText(interactSection.instructionText1);
 		sleep(1);
 

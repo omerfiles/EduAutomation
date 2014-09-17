@@ -218,17 +218,28 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 				break;
 			}
 
-		} catch (UnhandledAlertException | NoSuchElementException e) {
+		} catch (UnhandledAlertException e) {
 			closeAlertByAccept();
-		}
+		} catch (NoSuchElementException e) {
 
-		catch (Exception e) {
 			if (isElementMandatory == true) {
 				Assert.fail("Exception when waiting for element:" + idValue
 						+ ".| " + e.toString());
 			}
 
-		} finally {
+		} catch (TimeoutException e) {
+			if (isElementMandatory == true) {
+				testResultService.addFailTest("Element " + idValue
+						+ " was not found after the specified timeout: "
+						+ timeout);
+			}
+		}
+
+		catch (Exception e) {
+			System.out.println("Unknown exception was found:" + e.toString());
+		}
+
+		finally {
 			if (isElementMandatory == true && element == null) {
 				if (message != null) {
 					report.report(message);
@@ -236,6 +247,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 				testResultService.addFailTest("Element: " + idValue
 						+ " not found");
 				Assert.fail("Element: " + idValue + " not found");
+
 			}
 			report.stopLevel();
 			return element;
@@ -544,7 +556,8 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	}
 
 	public void checkElementNotExist(String xpath) throws Exception {
-		checkElementNotExist(xpath, "Element with xpath: "+xpath+" was found when it should not");
+		checkElementNotExist(xpath, "Element with xpath: " + xpath
+				+ " was found when it should not");
 	}
 
 	public WebElement getElement(By by) {
@@ -874,6 +887,12 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		// // do something useful with the data
 		// }
 		return logEntries;
+	}
+
+	public void hoverOnElement(WebElement element) throws Exception {
+		Actions builder = new Actions(webDriver);
+		builder.moveToElement(element).perform();
+
 	}
 
 }

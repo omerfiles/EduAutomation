@@ -19,7 +19,7 @@ public class InteractSection extends SRpage {
 	public final String instructionText1 = "Click 'Start' to begin the conversation.";
 	public final String instructionText2 = "Click 'Hear all' to hear the whole conversation. ";
 	public final String instructionText3 = "Listen to the first speaker and prepare to speak.";
-	public final String instructionText4 = "Prepare to speak.";
+	public final String instructionText4 = "Prepare to speak...";
 	public final String instructionText5 = "Speak now.";
 	public final String instructionText6 = "Click 'Try again' to repeat your response.";
 	public final String instructionText7 = "Your answer is unclear. Let's move on… ";
@@ -30,6 +30,7 @@ public class InteractSection extends SRpage {
 	public final String instructionText12 = "Start";
 	public final String instructionText13 = "Try again";
 	public final String instructionText14 = "See feedback";
+	public final String instructionText15 = "Please follow the instructions provided by your browser in order to activate your microphone.";
 	public final String instructionText20 = "Listen to the first speaker and choose a response.";
 
 	public InteractSection(GenericWebDriver webDriver,
@@ -50,6 +51,22 @@ public class InteractSection extends SRpage {
 				"//div[@class='bgImgContainerWrapper']//div[1]//a",
 				ByTypes.xpath);
 		speakerElement.click();
+	}
+
+	public void hoverOnSpeaker(int speaker) throws Exception {
+		String speakerID = null;
+		if (speaker == 1) {
+			speakerID = "1";
+		}
+		if (speaker == 2) {
+			speakerID = "3";
+		}
+
+		WebElement speakerElement = webDriver.waitForElement(
+				"//div[@class='bgImgContainerWrapper']//div[" + speakerID
+						+ "]//a", ByTypes.xpath);
+		webDriver.hoverOnElement(speakerElement);
+
 	}
 
 	@Override
@@ -114,16 +131,11 @@ public class InteractSection extends SRpage {
 	}
 
 	public void checkThatSpeakerTextIsHighlighted(int speaker) throws Exception {
-	
-		
-			webDriver
-					.waitForElement(
-							"//div[@class='recordingPanelWrapper']//div["+speaker+"][contains(@class,'selected')]",
-							ByTypes.xpath,true,20);
-		
-	
-		
 
+		webDriver
+				.waitForElement("//div[@class='recordingPanelWrapper']//div["
+						+ speaker + "][contains(@class,'hl')]", ByTypes.xpath,
+						true, 20);
 	}
 
 	public void checkThatStartButtonIsDisabled() throws Exception {
