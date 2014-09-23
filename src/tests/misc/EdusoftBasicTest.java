@@ -80,7 +80,7 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 
 		institutionService.init();
 		autoInstitution = institutionService.getInstitution();
-		System.out.println(autoInstitution.getInstitutionId());
+	
 
 		// System.out.println("Automation isntitution id is: "
 		// + autoInstitution.getInstitutionId());
@@ -95,9 +95,10 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 	public void tearDown() throws Exception {
 		// report.startLevel("Test case id is: " + this.testCaseId,
 		// EnumReportLevel.MainFrame);
-		System.out.println("testResultService:" + testResultService.toString());
-		System.out.println("Test failed?: "
-				+ testResultService.hasFailedResults());
+		
+		System.out.println("***************** Test case id: "+this.testCaseId+"**********************");
+		
+		
 		if (printResults == true && testResultService.hasFailedResults()) {
 			testResultService.printAllFailures();
 		}
@@ -117,7 +118,14 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 		}
 		// report.step(stepName);
 		report.startLevel(stepName, EnumReportLevel.CurrentPlace);
+		System.out.println("Step: "+stepName);
 		inStep = true;
+	}
+	
+	
+	public void printMessage(String message){
+		
+		System.out.println(message);
 	}
 
 	public void endStep() throws Exception {
@@ -159,6 +167,14 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 
 	public void setPrintResults(boolean printResults) {
 		this.printResults = printResults;
+	}
+
+	public String getTestCaseId() {
+		return testCaseId;
+	}
+
+	public void setTestCaseId(String testCaseId) {
+		this.testCaseId = testCaseId;
 	}
 
 }

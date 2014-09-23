@@ -797,6 +797,9 @@ public class EdoHomePage extends GenericPage {
 
 	public RecordPanel clickOnRecordYourself() throws Exception {
 		webDriver.waitForElementAndClick("open_srp", ByTypes.id);
+//		webDriver.waitForJSFunctionToEnd("pause(duration, func, isDebug);");
+//		webDriver.executeJsScript("debug=true;");
+//		webDriver.executeJsScript("alert(debug)");
 		return new RecordPanel(webDriver, testResultService);
 
 	}

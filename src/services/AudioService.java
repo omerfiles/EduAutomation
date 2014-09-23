@@ -129,7 +129,7 @@ public class AudioService extends SystemObjectImpl {
 		int sampleSizeInBits = 16;
 		//16 for my recordings!!!!
 		// 8,16
-		int channels = 2;
+		int channels = 1;
 		// 1,2
 		boolean signed = true;
 		//true for my recordings

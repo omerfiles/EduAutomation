@@ -63,9 +63,13 @@ public class EraterRegressionTests extends EdusoftWebTest {
 	// throws Exception {
 	// testSubmitTextAsStudentAndCheckFeedbackAsTeacherAndSendAgain(webDriver);
 	// }
+	
+	
+	//Test case id:15621
 	@Test
 	public void testSubmitTextAsStudentAndCheckFeedbackAsTeacherAndSendAgain()
 			throws Exception {
+		setTestCaseId("15621");
 		startStep("Create a student for the test");
 		String StudentUserName = "student" + dbService.sig(6);
 		pageHelper.addStudent(StudentUserName);
@@ -162,7 +166,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		edoHomePage.checkRatingFromTeacher(rating);
 
 	}
-
+	//
 	@Test
 	public void testSaveAssignmentAndSend() throws Exception {
 
@@ -206,7 +210,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 				eraterService.getWritingIdByUserId(userId));
 
 	}
-
+	//Test case: 13569,13572,13573
 	@Test
 	public void testAddTeacherCommentToStudentAssignment() throws Exception {
 		startStep("Create a student for the test");
@@ -452,6 +456,8 @@ public class EraterRegressionTests extends EdusoftWebTest {
 //
 //	}
 	
+	
+	//Test case id:13268,13265
 	@Test
 	public void testRemoveCommentAsTeacher() throws Exception {
 		startStep("Create a student for the test");

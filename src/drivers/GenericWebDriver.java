@@ -8,6 +8,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
+
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 
 import org.apache.http.HttpHost;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -17,6 +21,7 @@ import org.json.JSONObject;
 import org.junit.Assert;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.OutputType;
@@ -893,6 +898,29 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		Actions builder = new Actions(webDriver);
 		builder.moveToElement(element).perform();
 
+	}
+	
+	public void executeJsScript(String script)throws Exception{
+//		ScriptEngineManager factory = new ScriptEngineManager();
+//		 // create a JavaScript engine
+//		 ScriptEngine engine = factory.getEngineByName("JavaScript");
+//		 engine.eval(script);
+		 // evaluate JavaScript code from String
+		((JavascriptExecutor)webDriver).executeScript(script);
+		
+	}
+	
+	public void waitForJSFunctionToEnd(String function){
+		String script = "var callback = arguments[arguments.length - 1];"
+			    + "callback("+function+"());";
+
+		try {
+			webDriver.manage().timeouts().setScriptTimeout(15, TimeUnit.SECONDS);
+				((JavascriptExecutor)webDriver).executeAsyncScript(script);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

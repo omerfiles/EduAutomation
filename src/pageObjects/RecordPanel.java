@@ -237,7 +237,6 @@ public class RecordPanel extends SRpage {
 		return level;
 	}
 
-
 	public void checckSentenceLevelLightBulbs(int sentenceLevel)
 			throws Exception {
 		WebElement element = webDriver.waitForElement(
@@ -393,7 +392,9 @@ public class RecordPanel extends SRpage {
 			if (Math.abs(expWL - actWL) > 1) {
 				System.out
 						.println("Diffrence between expected WL and actual WL was bigger then 1");
-
+				testResultService
+						.addFailTest("difference between expected WL and actual WL was:"
+								+ Math.abs(expWL - actWL));
 			}
 		}
 
