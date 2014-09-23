@@ -73,56 +73,56 @@ public class RecoredYourself extends EdusoftWebTest {
 //	<word score="6"/>
 //	<word score="4"/>
 //	<word score="6"/>
-	@Test
-	public void testSoJeff1()throws Exception{
-		testRecordYourselfIntegrated(17, 1, 18, 0);
-	}
-	
-//	<sentence score="4" duration_score="2" words_count="6">
-//	<word score="5"/>
-//	<word score="4"/>
-//	<word score="1"/>
-//	<word score="3"/>
-//	<word score="2"/>
-//	<word score="5"/>
-//	utter-16kHz-6c04da98bccda148.raw
-	@Test
-	public void testSoJeff2()throws Exception{
-		testRecordYourselfIntegrated(17, 1, 19, 0);
-	}
-	
-	@Test
-	public void testSoJeff3()throws Exception{
-		testRecordYourselfIntegrated(17, 1, 20, 0);
-	}
-	@Test
-	public void testSoJeff4()throws Exception{
-		testRecordYourselfIntegrated(17, 1, 21, 0);
-	}
-	@Test
-	public void testSoJeff5()throws Exception{
-		testRecordYourselfIntegrated(17, 1, 22, 0);
-	}
-	@Test
-	public void testSoJeff6()throws Exception{
-		testRecordYourselfIntegrated(17, 1, 23, 0);
-	}
-	@Test
-	public void testSoJeff7()throws Exception{
-		testRecordYourselfIntegrated(17, 1, 24, 0);
-	}
-	@Test
-	public void testSoJeff8()throws Exception{
-		testRecordYourselfIntegrated(17, 1, 25, 0);
-	}
-	@Test
-	public void testSoJeff9()throws Exception{
-		testRecordYourselfIntegrated(17, 1, 26, 0);
-	}
-	@Test
-	public void testSoJeff10()throws Exception{
-		testRecordYourselfIntegrated(17, 1, 27, 0);
-	}
+//	@Test
+//	public void testSoJeff1()throws Exception{
+//		testRecordYourselfIntegrated(17, 1, 18, 0);
+//	}
+//	
+////	<sentence score="4" duration_score="2" words_count="6">
+////	<word score="5"/>
+////	<word score="4"/>
+////	<word score="1"/>
+////	<word score="3"/>
+////	<word score="2"/>
+////	<word score="5"/>
+////	utter-16kHz-6c04da98bccda148.raw
+//	@Test
+//	public void testSoJeff2()throws Exception{
+//		testRecordYourselfIntegrated(17, 1, 19, 0);
+//	}
+//	
+//	@Test
+//	public void testSoJeff3()throws Exception{
+//		testRecordYourselfIntegrated(17, 1, 20, 0);
+//	}
+//	@Test
+//	public void testSoJeff4()throws Exception{
+//		testRecordYourselfIntegrated(17, 1, 21, 0);
+//	}
+//	@Test
+//	public void testSoJeff5()throws Exception{
+//		testRecordYourselfIntegrated(17, 1, 22, 0);
+//	}
+//	@Test
+//	public void testSoJeff6()throws Exception{
+//		testRecordYourselfIntegrated(17, 1, 23, 0);
+//	}
+//	@Test
+//	public void testSoJeff7()throws Exception{
+//		testRecordYourselfIntegrated(17, 1, 24, 0);
+//	}
+//	@Test
+//	public void testSoJeff8()throws Exception{
+//		testRecordYourselfIntegrated(17, 1, 25, 0);
+//	}
+//	@Test
+//	public void testSoJeff9()throws Exception{
+//		testRecordYourselfIntegrated(17, 1, 26, 0);
+//	}
+//	@Test
+//	public void testSoJeff10()throws Exception{
+//		testRecordYourselfIntegrated(17, 1, 27, 0);
+//	}
 
 	@Test
 	public void testLongSpeech() throws Exception {
