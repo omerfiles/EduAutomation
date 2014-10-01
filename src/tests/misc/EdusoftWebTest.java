@@ -2,11 +2,15 @@ package tests.misc;
 
 import java.util.List;
 
+import jsystem.framework.TestProperties;
+
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.runner.RunWith;
 import org.openqa.selenium.logging.LogEntries;
 
 import services.AudioService;
+import services.MyTestRunner;
 import services.PageHelperService;
 import Enums.AutoParams;
 import Enums.Browsers;
@@ -49,7 +53,8 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 		// // name from
 		// properties file
 		// }
-
+	
+	
 		browser = configuration.getAutomationParam("browser", "browserCMD");
 
 		if (browser.equals(Browsers.chrome.toString())) {
@@ -95,10 +100,10 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 
 		System.out.println("Start of EdusoftWebTest teardown");
 		try {
-			if (this.isPass == false) {
+			if (testResultService.hasFailedResults()) {
 
 				webDriver
-						.printScreen("FailCause_" + this.getMethodName(), null);
+						.printScreen("FailCause_", null);
 			}
 
 			// if (pageHelper.isLogoutNeeded()) {
