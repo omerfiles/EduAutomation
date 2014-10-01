@@ -2,38 +2,19 @@ package tests.misc;
 
 import java.lang.reflect.Method;
 
-import jsystem.framework.report.ListenerstManager;
-import jsystem.framework.report.Reporter;
 import jsystem.framework.report.Reporter.EnumReportLevel;
-import junit.framework.AssertionFailedError;
-import junit.framework.SystemTestCase4;
 import junit.framework.SystemTestCaseImpl;
-import junit.framework.TestCase;
-
 import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Rule;
-import org.junit.internal.runners.TestClass;
-import org.junit.rules.ErrorCollector;
-import org.junit.runner.JUnitCore;
-import org.junit.runner.RunWith;
-import org.openqa.selenium.logging.NeedsLocalLogs;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import services.AudioService;
 import services.Configuration;
 import services.DbService;
 import services.EraterService;
 import services.InstitutionService;
-import services.ExtendedRunner;
-import services.MyTestRunner;
 import services.NetService;
 import services.TestResultService;
 import services.TextService;
-import Interfaces.TestCaseParams;
-import Interfaces.TestCaseParams;
 import Objects.AutoInstitution;
 import drivers.GenericWebDriver;
 
