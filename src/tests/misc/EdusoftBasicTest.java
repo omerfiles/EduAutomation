@@ -2,14 +2,23 @@ package tests.misc;
 
 import java.lang.reflect.Method;
 
+import jsystem.framework.report.ListenerstManager;
+import jsystem.framework.report.Reporter;
 import jsystem.framework.report.Reporter.EnumReportLevel;
+import junit.framework.AssertionFailedError;
 import junit.framework.SystemTestCase4;
+import junit.framework.SystemTestCaseImpl;
+import junit.framework.TestCase;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
+import org.junit.internal.runners.TestClass;
 import org.junit.rules.ErrorCollector;
+import org.junit.runner.JUnitCore;
+import org.junit.runner.RunWith;
 import org.openqa.selenium.logging.NeedsLocalLogs;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -18,6 +27,8 @@ import services.Configuration;
 import services.DbService;
 import services.EraterService;
 import services.InstitutionService;
+import services.ExtendedRunner;
+import services.MyTestRunner;
 import services.NetService;
 import services.TestResultService;
 import services.TextService;
@@ -26,7 +37,8 @@ import Interfaces.TestCaseParams;
 import Objects.AutoInstitution;
 import drivers.GenericWebDriver;
 
-public class EdusoftBasicTest extends SystemTestCase4 {
+//@RunWith(ExtendedRunner.class)
+public class EdusoftBasicTest extends SystemTestCaseImpl {
 
 	protected GenericWebDriver webDriver;
 
@@ -37,6 +49,7 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 	protected EraterService eraterService;
 	protected InstitutionService institutionService;
 	protected TestResultService testResultService;
+	protected services.Reporter report;
 	// protected static AudioService audioService;
 	public ClassPathXmlApplicationContext ctx;
 
@@ -46,6 +59,11 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 	protected AutoInstitution autoInstitution;
 
 	private boolean printResults = true;
+	// public services.Reporter report=new services.Reporter();
+
+	private boolean hasFailures;
+
+	// public static Reporter report = ListenerstManager.getInstance();
 
 	@Before
 	public void setup() throws Exception {
@@ -64,6 +82,7 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 				.getBean("InstitutionService");
 		testResultService = (TestResultService) ctx
 				.getBean("TestResultService");
+		report = (services.Reporter) ctx.getBean("Reporter");
 		// audioService = (AudioService) ctx.getBean("AudioService");
 
 		int institutionId;
@@ -79,8 +98,8 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 		}
 
 		institutionService.init();
+		report.init();
 		autoInstitution = institutionService.getInstitution();
-	
 
 		// System.out.println("Automation isntitution id is: "
 		// + autoInstitution.getInstitutionId());
@@ -95,22 +114,38 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 	public void tearDown() throws Exception {
 		// report.startLevel("Test case id is: " + this.testCaseId,
 		// EnumReportLevel.MainFrame);
-		
-		System.out.println("***************** Test case id: "+this.testCaseId+"**********************");
-		
-		
-		if (printResults == true && testResultService.hasFailedResults()) {
+
+		textService.writeArrayistToCSVFile(System.getProperty("user.dir")
+				+ "/log//current//TestLog.csv", report.getReportLogs());
+		boolean testHasFailedResult = testResultService.hasFailedResults();
+		if (printResults == true && testHasFailedResult) {
 			testResultService.printAllFailures();
 		}
-		if (testResultService.hasFailedResults() && this.isPass == true) {
-			Assert.fail("Test failed due to several errors");
-		}
-		
-
-		// if (this.isPass == false) {
-		// report.startLevel("Test failed", EnumReportLevel.MainFrame);
+		// if (testResultService.hasFailedResults() && run().errorCount()==0) {
+		// // Assert.fail("Test failed due to several errors");
 		// }
+		//
+//		System.out.println("Test passed: " + testPassed());
+//		if (testPassed() && testHasFailedResult) {
+//			System.out.println("Test failed due to some errors");
+//			Assert.fail("Test failed due to some errors");
+//		}
+		 if (this.isPass == false) {
+		 report.startLevel("Test failed", EnumReportLevel.MainFrame);
+		 }
 	}
+
+	// @AfterClass
+	// public static void afterClass(){
+	//
+	// }
+
+//	public boolean testPassed() {
+//		if (run().errorCount() == 0) {
+//			return true;
+//		} else
+//			return false;
+//	}
 
 	public void startStep(String stepName) throws Exception {
 		if (inStep == true) {
@@ -118,13 +153,12 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 		}
 		// report.step(stepName);
 		report.startLevel(stepName, EnumReportLevel.CurrentPlace);
-		System.out.println("Step: "+stepName);
+		System.out.println("Step: " + stepName);
 		inStep = true;
 	}
-	
-	
-	public void printMessage(String message){
-		
+
+	public void printMessage(String message) {
+
 		System.out.println(message);
 	}
 
@@ -153,10 +187,10 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 		// }
 		// }
 
-		if (method.isAnnotationPresent(TestCaseParams.class)) {
-			TestCaseParams tc = method.getAnnotation(TestCaseParams.class);
-			testCaseId = tc.testCaseID();
-		}
+		// if (method.isAnnotationPresent(TestCaseParams.class)) {
+		// TestCaseParams tc = method.getAnnotation(TestCaseParams.class);
+		// testCaseId = tc.testCaseID();
+		// }
 
 		return testCaseId;
 	}
