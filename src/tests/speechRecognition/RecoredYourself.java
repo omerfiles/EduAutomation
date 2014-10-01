@@ -10,6 +10,8 @@ import org.openqa.selenium.JavascriptExecutor;
 
 import com.gargoylesoftware.htmlunit.javascript.background.JavaScriptExecutor;
 
+import Enums.AutoParams;
+import Interfaces.TestCaseParams;
 import Objects.Course;
 import Objects.Recording;
 import pageObjects.EdoHomePage;
@@ -27,20 +29,18 @@ public class RecoredYourself extends EdusoftWebTest {
 	}
 
 	@Test
+	@TestCaseParams(testCaseID = { "14534", "13544" })
 	public void testRecordPanel1() throws Exception {
-		testRecordYourselfIntegrated(13, 1, 1, 0);
+		testRecordYourselfIntegrated(13, 1, 1, 16000);
 	}
 
 	@Test
 	public void testRecordPanel2() throws Exception {
-		testRecordYourselfIntegrated(15, 6, 3, 8000.0F);
+		testRecordYourselfIntegrated(15, 6, 3, 16000);
 	}
 
 	// 4
-	@Test
-	public void testSentenceLevel1() throws Exception {
 
-	}
 
 	// 5
 	@Test
@@ -51,78 +51,79 @@ public class RecoredYourself extends EdusoftWebTest {
 	// 1
 	@Test
 	public void testSentenceLevel3() throws Exception {
-		testRecordYourselfIntegrated(16, 1, 8, 0);
+		testRecordYourselfIntegrated(16, 1, 8, 88200);
 	}
 
 	// 3
 	// 8,42432,3,whatDoYouDoSarah2.wav
 	@Test
 	public void testSentenceLevel4() throws Exception {
-		testRecordYourselfIntegrated(16, 1, 9, 0);
+		testRecordYourselfIntegrated(16, 1, 9, 88200);
 	}
 
 	// 2
 	@Test
 	public void testSentenceLevel5() throws Exception {
-		testRecordYourselfIntegrated(16, 1, 11, 0);
+		testRecordYourselfIntegrated(16, 1, 11, 88200);
 	}
-//	<sentence score="5" duration_score="6" words_count="6">
-//	<word score="5"/>
-//	<word score="3"/>
-//	<word score="3"/>
-//	<word score="6"/>
-//	<word score="4"/>
-//	<word score="6"/>
-//	@Test
-//	public void testSoJeff1()throws Exception{
-//		testRecordYourselfIntegrated(17, 1, 18, 0);
-//	}
-//	
-////	<sentence score="4" duration_score="2" words_count="6">
-////	<word score="5"/>
-////	<word score="4"/>
-////	<word score="1"/>
-////	<word score="3"/>
-////	<word score="2"/>
-////	<word score="5"/>
-////	utter-16kHz-6c04da98bccda148.raw
-//	@Test
-//	public void testSoJeff2()throws Exception{
-//		testRecordYourselfIntegrated(17, 1, 19, 0);
-//	}
-//	
-//	@Test
-//	public void testSoJeff3()throws Exception{
-//		testRecordYourselfIntegrated(17, 1, 20, 0);
-//	}
-//	@Test
-//	public void testSoJeff4()throws Exception{
-//		testRecordYourselfIntegrated(17, 1, 21, 0);
-//	}
-//	@Test
-//	public void testSoJeff5()throws Exception{
-//		testRecordYourselfIntegrated(17, 1, 22, 0);
-//	}
-//	@Test
-//	public void testSoJeff6()throws Exception{
-//		testRecordYourselfIntegrated(17, 1, 23, 0);
-//	}
-//	@Test
-//	public void testSoJeff7()throws Exception{
-//		testRecordYourselfIntegrated(17, 1, 24, 0);
-//	}
-//	@Test
-//	public void testSoJeff8()throws Exception{
-//		testRecordYourselfIntegrated(17, 1, 25, 0);
-//	}
-//	@Test
-//	public void testSoJeff9()throws Exception{
-//		testRecordYourselfIntegrated(17, 1, 26, 0);
-//	}
-//	@Test
-//	public void testSoJeff10()throws Exception{
-//		testRecordYourselfIntegrated(17, 1, 27, 0);
-//	}
+
+	// <sentence score="5" duration_score="6" words_count="6">
+	// <word score="5"/>
+	// <word score="3"/>
+	// <word score="3"/>
+	// <word score="6"/>
+	// <word score="4"/>
+	// <word score="6"/>
+	// @Test
+	// public void testSoJeff1()throws Exception{
+	// testRecordYourselfIntegrated(17, 1, 18, 0);
+	// }
+	//
+	// // <sentence score="4" duration_score="2" words_count="6">
+	// // <word score="5"/>
+	// // <word score="4"/>
+	// // <word score="1"/>
+	// // <word score="3"/>
+	// // <word score="2"/>
+	// // <word score="5"/>
+	// // utter-16kHz-6c04da98bccda148.raw
+	// @Test
+	// public void testSoJeff2()throws Exception{
+	// testRecordYourselfIntegrated(17, 1, 19, 0);
+	// }
+	//
+	// @Test
+	// public void testSoJeff3()throws Exception{
+	// testRecordYourselfIntegrated(17, 1, 20, 0);
+	// }
+	// @Test
+	// public void testSoJeff4()throws Exception{
+	// testRecordYourselfIntegrated(17, 1, 21, 0);
+	// }
+	// @Test
+	// public void testSoJeff5()throws Exception{
+	// testRecordYourselfIntegrated(17, 1, 22, 0);
+	// }
+	// @Test
+	// public void testSoJeff6()throws Exception{
+	// testRecordYourselfIntegrated(17, 1, 23, 0);
+	// }
+	// @Test
+	// public void testSoJeff7()throws Exception{
+	// testRecordYourselfIntegrated(17, 1, 24, 0);
+	// }
+	// @Test
+	// public void testSoJeff8()throws Exception{
+	// testRecordYourselfIntegrated(17, 1, 25, 0);
+	// }
+	// @Test
+	// public void testSoJeff9()throws Exception{
+	// testRecordYourselfIntegrated(17, 1, 26, 0);
+	// }
+	// @Test
+	// public void testSoJeff10()throws Exception{
+	// testRecordYourselfIntegrated(17, 1, 27, 0);
+	// }
 
 	@Test
 	public void testLongSpeech() throws Exception {
@@ -206,7 +207,7 @@ public class RecoredYourself extends EdusoftWebTest {
 		startStep("Click on recored yourself");
 		edoHomePage.clickOnSeeScript();
 		sleep(3);
-		
+
 		edoHomePage.selectTextFromContainer(scriptSection);
 		RecordPanel recordPanel = edoHomePage.clickOnRecordYourself();
 		sleep(3);
@@ -219,7 +220,7 @@ public class RecoredYourself extends EdusoftWebTest {
 		recordPanel.clickOnRecordButton();
 		String status = recordPanel.getRecordPanelStatus();
 		testResultService.assertEquals("SPEAK", status);
-		sleep(2);
+//		sleep(2);
 		// recordPanel.waitForSpeakStatus();
 		audioService.sendSoundToVirtualMic(recording.getFiles().get(0),
 				sampleRate);
@@ -228,32 +229,34 @@ public class RecoredYourself extends EdusoftWebTest {
 		sleep(timeoutBeforeRecording);
 		recordPanel.waitForRecordingToEnd(1);
 		webDriver.printScreen("After recording ended");
-		// audioService.sendSoundToVirtualMic(new File(
-		// "files/audioFiles/TheBeatMe16000_16.wav"), 16000.0F);
-		int debugSentenceLevel = recordPanel.getSentenceLevel();
 
-		expectedSentenceLevel = recording.getSL().get(0);
-
-		System.out.println("Sentence level is: " + expectedSentenceLevel);
-		String[] debugWordLevels = textService.splitStringToArray(recordPanel
-				.getWordsScoring("wl"));
-		expectedWordLevels = recording.getWL().get(0);
-		System.out.println("Word level is: " + expectedWordLevels.toString());
-		boolean SLMatch= testResultService
-				.assertEquals(String.valueOf(expectedSentenceLevel),
-						String.valueOf(debugSentenceLevel),
-						"Exptected sentence level and actual sentence level are not the same");
-		startStep("Check word level and sentence level");
-		recordPanel.checkWordsLevels(words, debugWordLevels, textService);
-		if(SLMatch==true){
-			recordPanel.checckSentenceLevelLightBulbs(expectedSentenceLevel);
-			recordPanel.checkSentenceScoreRatingText(expectedSentenceLevel);
-			recordPanel.checkSentenceScoreText(expectedSentenceLevel);
-		}
 		
-		recordPanel.checkThatWlIsCloseToExpectedWL(expectedWordLevels,
-				textService.splitStringToArray(recordPanel
-						.getWordsScoring("wl")));
+		compareDebugSLAndWLtoExpected(recordPanel, recording, words);
+		
+//		int debugSentenceLevel = recordPanel.getDebugSentenceLevel();
+//
+//		expectedSentenceLevel = recording.getSL().get(0);
+//
+//		report.startLevel("Sentence level is: " + expectedSentenceLevel);
+//		String[] debugWordLevels = textService.splitStringToArray(recordPanel
+//				.getWordsScoring("wl"));
+//		expectedWordLevels = recording.getWL().get(0);
+//		report.startLevel("Word level is: " + expectedWordLevels.toString());
+//		boolean SLMatch = testResultService
+//				.assertEquals(String.valueOf(expectedSentenceLevel),
+//						String.valueOf(debugSentenceLevel),
+//						"Exptected sentence level and actual sentence level are not the same");
+//		startStep("Check word level and sentence level");
+//		recordPanel.checkWordsLevels(words, debugWordLevels, textService);
+//		if (SLMatch == true) {
+//			recordPanel.checckSentenceLevelLightBulbs(expectedSentenceLevel);
+//			recordPanel.checkSentenceScoreRatingText(expectedSentenceLevel);
+//			recordPanel.checkSentenceScoreText(expectedSentenceLevel);
+//		}
+//
+//		recordPanel.checkThatWlIsCloseToExpectedWL(expectedWordLevels,
+//				textService.splitStringToArray(recordPanel
+//						.getWordsScoring("wl")));
 
 	}
 
@@ -303,8 +306,8 @@ public class RecoredYourself extends EdusoftWebTest {
 		recordPanel.waitForRecordingToEnd(1);
 		// audioService.sendSoundToVirtualMic(new File(
 		// "files/audioFiles/TheBeatMe16000_16.wav"), 16000.0F);
-		 sentenceLevel = recordPanel.getSentenceLevel();
-//		sentenceLevel = recording.getSL().get(0);
+		sentenceLevel = recordPanel.getDebugSentenceLevel();
+		// sentenceLevel = recording.getSL().get(0);
 		System.out.println("Sentence level is: " + sentenceLevel);
 		wordLevels = textService.splitStringToArray(recordPanel
 				.getWordsScoring("wl"));
@@ -374,7 +377,7 @@ public class RecoredYourself extends EdusoftWebTest {
 
 			if (SRDebug == true) {
 				recordPanel.clickOnRecordAndStop(10);
-				sentenceLevel = recordPanel.getSentenceLevel();
+				sentenceLevel = recordPanel.getDebugSentenceLevel();
 				sentenceLevels.add(sentenceLevel);
 				wordLevels = textService.splitStringToArray(recordPanel
 						.getWordsScoring("wl"));
@@ -470,7 +473,7 @@ public class RecoredYourself extends EdusoftWebTest {
 			String[] wordsScoring = textService.splitStringToArray(recordPanel
 					.getWordsScoring("wl"));
 			wordsScoreList.add(wordsScoring);
-			int sentenceLevel = recordPanel.getSentenceLevel();
+			int sentenceLevel = recordPanel.getDebugSentenceLevel();
 			sentenceLevels.add(sentenceLevel);
 			recordPanel.checkAddedRecordingToList(sentenceLevel, i);
 			startStep("Check SL according to word levels");
@@ -504,7 +507,7 @@ public class RecoredYourself extends EdusoftWebTest {
 		textService.printStringArray(wordsScoring);
 		wordsScoreList.add(wordsScoring);
 
-		int sentenceLevel = recordPanel.getSentenceLevel();
+		int sentenceLevel = recordPanel.getDebugSentenceLevel();
 		sentenceLevels.remove(0);
 		sentenceLevels.add(sentenceLevel);
 		sleep(3);
@@ -563,7 +566,7 @@ public class RecoredYourself extends EdusoftWebTest {
 		String[] wordsScoring = textService.splitStringToArray(recordPanel
 				.getWordsScoring("wl"));
 		wordsScoreList.add(wordsScoring);
-		int sentenceLevel = recordPanel.getSentenceLevel();
+		int sentenceLevel = recordPanel.getDebugSentenceLevel();
 		sentenceLevels.add(sentenceLevel);
 		recordPanel.checkSentenceScoreRatingText(sentenceLevel);
 		recordPanel.checckSentenceLevelLightBulbs(sentenceLevel);
@@ -619,7 +622,7 @@ public class RecoredYourself extends EdusoftWebTest {
 		String[] wordsScoring = textService.splitStringToArray(recordPanel
 				.getWordsScoring("wl"));
 
-		int sentenceLevel = recordPanel.getSentenceLevel();
+		int sentenceLevel = recordPanel.getDebugSentenceLevel();
 		sentenceLevels.add(sentenceLevel);
 		recordPanel.checkSentenceScoreRatingText(sentenceLevel);
 		recordPanel.checckSentenceLevelLightBulbs(sentenceLevel);
@@ -635,6 +638,63 @@ public class RecoredYourself extends EdusoftWebTest {
 		wordLevels = wordLevels / WL.length;
 		wordLevels = Math.ceil(wordLevels);
 
+	}
+	
+	
+	public boolean isSRDebugTrue()throws Exception{
+		String srdebug = configuration.getAutomationParam(
+				AutoParams.srdebug.toString(), "srdebug");
+		try {
+			if(srdebug.equals("true")==false){
+				System.out.println("srdebug is not true. exiting method. debug SL and WL will not be tested");
+				return false;
+			}
+			else{
+				System.out.println("srdebug is true");
+				return true;
+			}
+		} catch (NullPointerException e) {
+			// TODO Auto-generated catch block
+			System.out.println("srdebug was null. debug SL and WL will not be tested");
+			return false;
+		}
+	}
+
+	public void compareDebugSLAndWLtoExpected(RecordPanel recordPanel,Recording recording,String[]words) throws Exception {
+		report.startLevel("checking if srdebug is true");
+		boolean srdebug=isSRDebugTrue();
+		if(srdebug==false){
+			report.startLevel("srdebug is not true. exiting method");
+		}
+		else{
+			report.startLevel("Starting to compare SL");
+			
+			int debugSentenceLevel = recordPanel.getDebugSentenceLevel();
+
+			int expectedSentenceLevel = recording.getSL().get(0);
+
+			report.startLevel("Sentence level is: " + expectedSentenceLevel);
+			String[] debugWordLevels = textService.splitStringToArray(recordPanel
+					.getWordsScoring("wl"));
+		String[]	expectedWordLevels = recording.getWL().get(0);
+			report.startLevel("Word level is: " + expectedWordLevels.toString());
+			boolean SLMatch = testResultService
+					.assertEquals(String.valueOf(expectedSentenceLevel),
+							String.valueOf(debugSentenceLevel),
+							"Exptected sentence level and actual sentence level are not the same");
+			startStep("Check word level and sentence level");
+			recordPanel.checkWordsLevels(words, debugWordLevels, textService);
+			if (SLMatch == true) {
+				recordPanel.checckSentenceLevelLightBulbs(expectedSentenceLevel);
+				recordPanel.checkSentenceScoreRatingText(expectedSentenceLevel);
+				recordPanel.checkSentenceScoreText(expectedSentenceLevel);
+			}
+
+			recordPanel.checkThatWlIsCloseToExpectedWL(expectedWordLevels,
+					textService.splitStringToArray(recordPanel
+							.getWordsScoring("wl")));
+			
+		}
 	}
 
 	@After

@@ -135,7 +135,7 @@ public class InteractSection extends SRpage {
 		webDriver
 				.waitForElement("//div[@class='recordingPanelWrapper']//div["
 						+ speaker + "][contains(@class,'hl')]", ByTypes.xpath,
-						true, 20);
+						20, true,"speaker element highlighted");
 	}
 
 	public void checkThatStartButtonIsDisabled() throws Exception {
@@ -360,7 +360,7 @@ public class InteractSection extends SRpage {
 	}
 
 	public void clickOnListenToAllButton() throws Exception {
-		webDriver.waitForElement("Listen to all", ByTypes.linkText).click();
+		webDriver.waitForElement("Hear all", ByTypes.linkText).click();
 
 	}
 

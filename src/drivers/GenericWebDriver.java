@@ -73,9 +73,13 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	@Autowired
 	private services.Configuration configuration;
 
+	@Autowired
+	private services.Reporter reporter;
+
 	TestResultService testResultService;
 
 	protected String logsFolder;
+	private boolean failureAdded;
 
 	abstract public void init(String remoteUrl, String folderName)
 			throws Exception;
@@ -131,24 +135,21 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	public void openUrl(String url) throws Exception, TimeoutException {
 
 		try {
-			report.report("URL is: " + url);
-			report.addLink("link to url", url);
 			webDriver.get(url);
-
-		} catch (Exception e) {
-			System.out.println("Closed unexpected alert");
+		} catch (UnhandledAlertException e) {
+			System.out.println(e.toString());
 			closeAlertByAccept();
+		}
+		catch (Exception e) {
+			System.out.println(e.toString());
 
 		}
 
 	}
 
 	public void navigate(String url) throws Exception {
-		report.startLevel("Navigating to: " + url,
-				Reporter.EnumReportLevel.CurrentPlace);
-		webDriver.navigate().to(url);
 
-		report.stopLevel();
+		webDriver.navigate().to(url);
 	}
 
 	// public void maximize() throws Exception {
@@ -180,7 +181,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	public WebElement waitForElement(String idValue, ByTypes byType,
 			int timeout, boolean isElementMandatory, String message, int sleepMS)
 			throws Exception {
-		report.startLevel("waiting for element " + idValue + " by trpe "
+		System.out.println("waiting for element " + idValue + " by trpe "
 				+ byType + " for " + timeout + " seconds");
 		WebElement element = null;
 
@@ -229,32 +230,37 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 			if (isElementMandatory == true) {
 				Assert.fail("Exception when waiting for element:" + idValue
-						+ ".| " + e.toString());
+						+ ".| " + e.toString() + " Description: " + message);
+				failureAdded = true;
 			}
 
 		} catch (TimeoutException e) {
 			if (isElementMandatory == true) {
 				testResultService.addFailTest("Element " + idValue
 						+ " was not found after the specified timeout: "
-						+ timeout);
+						+ timeout + " Description of element:" + message);
+				failureAdded = true;
 			}
 		}
 
 		catch (Exception e) {
-			System.out.println("Unknown exception was found:" + e.toString());
+			System.out.println("Unknown exception was found:" + e.toString()
+					+ " while watining for element with description: "
+					+ message);
 		}
 
 		finally {
 			if (isElementMandatory == true && element == null) {
-				if (message != null) {
-					report.report(message);
+				// if (message != null) {
+				// // System.out.println(message);
+				// }
+				if (failureAdded == false) {
+					testResultService.addFailTest("Element: " + idValue
+							+ " not found. Description:" + message);
 				}
-				testResultService.addFailTest("Element: " + idValue
-						+ " not found");
-				Assert.fail("Element: " + idValue + " not found");
+				Assert.fail("Element: " + idValue + " not found " + message);
 
 			}
-			report.stopLevel();
 			return element;
 		}
 	}
@@ -330,8 +336,6 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	public void assertTextBy(String idValue, String byType, String text)
 			throws Exception {
-		report.startLevel("Asserting " + text + " in " + idValue,
-				Reporter.EnumReportLevel.CurrentPlace);
 		String current = null;
 		WebElement element = null;
 		try {
@@ -346,20 +350,18 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 				element = webDriver.findElement(By.id(idValue));
 			}
 			current = element.getText();
-			report.report("text to compare was: " + current);
+			System.out.println("text to compare was: " + current);
 			// Assert.assertEquals(text, current);
 			testResultService.assertEquals(text, current);
 			// Assert.assertTrue("Check text failed. Actual text was: " +
 			// current + ". Text to compare was: " + text,
 			// current.equals(text));
-			report.report("Asserting " + text + " in " + idValue);
 		} catch (Exception e) {
 			// Assert.fail("Text assertion failed. Xpath was: " + idValue
 			// + " . Text to assert was: " + text + ". Actual text was: "
 			// + current);
 		}
 
-		report.stopLevel();
 	}
 
 	public void quitBrowser() throws Exception {
@@ -367,14 +369,13 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		if (initialized == true) {
 			try {
 
-				report.report("Closing browser: " + this.getBrowserName());
 				// deleteCookiesAndCache();
 
 				webDriver.quit();
 
 			} catch (Exception e) {
-				report.report("Closing " + this.getBrowserName() + "failed. "
-						+ e.toString());
+				System.out.println("Closing " + this.getBrowserName()
+						+ "failed. " + e.toString());
 			}
 		}
 
@@ -383,13 +384,12 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	public void closeBrowser() throws Exception {
 		try {
 
-			report.report("Closing browser: " + this.getBrowserName());
 			deleteCookiesAndCache();
 
 			webDriver.close();
 
 		} catch (Exception e) {
-			report.report("Closing " + this.getBrowserName() + "failed. "
+			System.out.println("Closing " + this.getBrowserName() + "failed. "
 					+ e.toString());
 		}
 	}
@@ -450,7 +450,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 					.frameToBeAvailableAndSwitchToIt(frameName));
 		} catch (TimeoutException e) {
 			// Assert.fail("Frame waw not found");
-			// testResultService.addFailTest("Frame was not found", true);
+			testResultService.addFailTest("Frame was not found", true);
 		} finally {
 
 		}
@@ -471,9 +471,6 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	public void getFrameNames() throws Exception {
 		webDriver.switchTo().frame(1);
-		// List<WebElement> framesList=
-		// webDriver.findElements(By.xpath("//iframe[@class='FB_UI_Dialog']"));
-		report.report("Before the loop");
 		WebDriverWait wait = new WebDriverWait(webDriver, timeout, 1000);
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By
 				.id("feedform_user_message")));
@@ -552,7 +549,8 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			}
 
 		} catch (Exception e) {
-			report.report("Exceptin found during checkElementNotExist");
+			System.out.println("Exceptin found during checkElementNotExist "
+					+ e.toString());
 		} finally {
 
 			testResultService.assertTrue("Element with xpath " + xpath
@@ -615,7 +613,8 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 				text = alert.getText();
 			}
 		} catch (Exception e) {
-			report.report("Could not get alert text. might have timed out");
+			System.out
+					.println("Could not get alert text. might have timed out");
 		}
 		return text;
 	}
@@ -673,9 +672,8 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			System.out.println(path);
 
 		} catch (Exception e) {
-			report.report("Taking the screenshot failed: " + e.toString());
+			System.out.println("Taking the screenshot failed: " + e.toString());
 		}
-		report.addLink("Screenshot", path);
 
 		return path;
 
@@ -899,24 +897,25 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		builder.moveToElement(element).perform();
 
 	}
-	
-	public void executeJsScript(String script)throws Exception{
-//		ScriptEngineManager factory = new ScriptEngineManager();
-//		 // create a JavaScript engine
-//		 ScriptEngine engine = factory.getEngineByName("JavaScript");
-//		 engine.eval(script);
-		 // evaluate JavaScript code from String
-		((JavascriptExecutor)webDriver).executeScript(script);
-		
+
+	public void executeJsScript(String script) throws Exception {
+		// ScriptEngineManager factory = new ScriptEngineManager();
+		// // create a JavaScript engine
+		// ScriptEngine engine = factory.getEngineByName("JavaScript");
+		// engine.eval(script);
+		// evaluate JavaScript code from String
+		((JavascriptExecutor) webDriver).executeScript(script);
+
 	}
-	
-	public void waitForJSFunctionToEnd(String function){
+
+	public void waitForJSFunctionToEnd(String function) {
 		String script = "var callback = arguments[arguments.length - 1];"
-			    + "callback("+function+"());";
+				+ "callback(" + function + "());";
 
 		try {
-			webDriver.manage().timeouts().setScriptTimeout(15, TimeUnit.SECONDS);
-				((JavascriptExecutor)webDriver).executeAsyncScript(script);
+			webDriver.manage().timeouts()
+					.setScriptTimeout(15, TimeUnit.SECONDS);
+			((JavascriptExecutor) webDriver).executeAsyncScript(script);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

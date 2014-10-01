@@ -8,8 +8,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.METHOD, ElementType.FIELD })
 public @interface TestCaseParams {
-	String testCaseID();
-	boolean isRun();
-	String[] ignoreBrowsers();
+	String[] testCaseID();
+
 
 }

@@ -28,8 +28,7 @@ public class ChromeWebDriver extends GenericWebDriver {
 		logsFolder = folderName;
 		try {
 
-			report.startLevel("Initializing ChromeWebDriver",
-					Reporter.EnumReportLevel.CurrentPlace);
+			System.out.println("Initializing ChromeWebDriver");
 
 			DesiredCapabilities capabilities = DesiredCapabilities.chrome();
 			if (enableConsoleLog == true) {
@@ -48,7 +47,7 @@ public class ChromeWebDriver extends GenericWebDriver {
 			webDriver = new RemoteWebDriver(new URL(remoteUrl + "/wd/hub"),
 					capabilities);
 
-			report.stopLevel();
+		
 		} catch (Exception e) {
 			logger.error("Cannot register node or start the remote driver! ", e);
 		}

@@ -56,12 +56,12 @@ public class TestResultService extends SystemObjectImpl {
 
 	public void printAllFailures() {
 		System.out.println("Failures are:");
-		report.report("Failures are:");
+	
 
 		for (int i = 0; i < results.size(); i++) {
 			System.out.println("Failure " + i + ": "
 					+ results.get(i).toString());
-			report.report("Failure " + i + ": " + results.get(i).toString());
+			
 		}
 	}
 

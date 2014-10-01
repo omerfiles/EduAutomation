@@ -32,6 +32,7 @@
 	<bean id="InstitutionService" class="services.InstitutionService"></bean>
 	<bean id="AudioService" class="services.AudioService"></bean>
 	<bean id="TestResultService" class="services.TestResultService"></bean>
+	<bean id="Reporter" class="services.Reporter"></bean>
 
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource"

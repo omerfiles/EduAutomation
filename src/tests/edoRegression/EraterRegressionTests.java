@@ -14,6 +14,7 @@ import org.junit.Test;
 import pageObjects.EdoHomePage;
 import pageObjects.tms.TmsHomePage;
 import tests.misc.EdusoftWebTest;
+import Interfaces.TestCaseParams;
 import Objects.Course;
 import Objects.Student;
 import Objects.Teacher;
@@ -36,8 +37,8 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		String userId = dbService.getUserIdByUserName(
 				configuration.getStudentUserName(),
 				autoInstitution.getInstitutionId());
-		eraterService.deleteStudentAssignments(userId);
-		report.stopLevel();
+//		eraterService.deleteStudentAssignments(userId);
+	
 		report.startLevel("Set institution to 'Teacher first' settings",
 				Reporter.EnumReportLevel.CurrentPlace);
 		eraterService.setEraterTeacherLast();
@@ -67,6 +68,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 	
 	//Test case id:15621
 	@Test
+	@TestCaseParams(testCaseID = "15621")
 	public void testSubmitTextAsStudentAndCheckFeedbackAsTeacherAndSendAgain()
 			throws Exception {
 		setTestCaseId("15621");
@@ -168,6 +170,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 	}
 	//
 	@Test
+	@TestCaseParams(testCaseID = "")
 	public void testSaveAssignmentAndSend() throws Exception {
 
 		startStep("Create a student for the test");
@@ -212,6 +215,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 	}
 	//Test case: 13569,13572,13573
 	@Test
+	@TestCaseParams(testCaseID = "")
 	public void testAddTeacherCommentToStudentAssignment() throws Exception {
 		startStep("Create a student for the test");
 		String StudentUserName = "student" + dbService.sig(6);
@@ -459,6 +463,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 	
 	//Test case id:13268,13265
 	@Test
+	@TestCaseParams(testCaseID ={"13268","13265"})
 	public void testRemoveCommentAsTeacher() throws Exception {
 		startStep("Create a student for the test");
 		String StudentUserName = "student" + dbService.sig(6);
@@ -584,10 +589,10 @@ public class EraterRegressionTests extends EdusoftWebTest {
 
 	@After
 	public void tearDown() throws Exception {
-		report.report("Delete writings");
-		for (int i = 0; i < writingIdForDelete.size(); i++) {
-			eraterService.deleteWritngFromDb(writingIdForDelete.get(i));
-		}
+//		report.report("Delete writings");
+//		for (int i = 0; i < writingIdForDelete.size(); i++) {
+//			eraterService.deleteWritngFromDb(writingIdForDelete.get(i));
+//		}
 		super.tearDown();
 
 	}

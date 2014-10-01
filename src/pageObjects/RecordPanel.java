@@ -223,7 +223,7 @@ public class RecordPanel extends SRpage {
 		return words;
 	}
 
-	public int getSentenceLevel() throws Exception {
+	public int getDebugSentenceLevel() throws Exception {
 		int level = 0;
 		try {
 			level = Integer.valueOf(webDriver.waitForElement("sl", ByTypes.id)
@@ -369,9 +369,9 @@ public class RecordPanel extends SRpage {
 	public String getRecordPanelStatus() throws Exception {
 		String text = null;
 		WebElement element = webDriver.waitForElement(
-				"//div[@id='divRStatus']", ByTypes.xpath, true, 30);
+				"//div[@id='divRStatus']", ByTypes.xpath, 30, true,"Record panel status");
 		text = element.getText();
-		System.out.println("SPEAK status found." + System.currentTimeMillis());
+		
 		return text;
 
 	}

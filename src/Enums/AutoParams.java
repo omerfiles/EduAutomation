@@ -4,7 +4,8 @@ public enum AutoParams {
 	remoteMachine("remote.machine"),
 	machine("machine"),
 	sutUrl("sut.url"),
-	envFile("envFile")
+	envFile("envFile"),
+	srdebug("srdebug")
 	
 	;
 	
