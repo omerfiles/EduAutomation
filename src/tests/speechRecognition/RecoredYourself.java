@@ -427,7 +427,7 @@ public class RecoredYourself extends EdusoftWebTest {
 		startStep("Init test data");
 		Course course = pageHelper.initCouse(8);
 		Recording recording = pageHelper.getRecordings().get(5);
-		float sampleRate = 0;
+		float sampleRate = 88200;
 		String[] words = new String[] { "Hi", "I'm", "Tom", "Smith" };
 		int numOfRecordingsInTest = 8;
 		List<String[]> wordsScoreList = new ArrayList<String[]>();
