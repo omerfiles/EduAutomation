@@ -214,7 +214,7 @@ public class Configuration {
 		}
 	}
 
-	private void setProperty(String newKey, String value) {
+	public void setProperty(String newKey, String value) {
 		properties.setProperty(newKey, value);
 	}
 
@@ -299,10 +299,14 @@ public class Configuration {
 			System.out.println("got from global properties: " + value);
 			return value;
 		} else {
-			System.out.println("value not found");
-			org.junit.Assert.fail("Auto param value not found. Check properties file or maven CMD param");
+			System.out.println("value "+paramName+" not found");
+//			org.junit.Assert.fail("Auto param value not found. Check properties file or maven CMD param");
 		}
 
 		return value;
+	}
+	
+	public void savePropertiesToFile(){
+		
 	}
 }
