@@ -35,18 +35,16 @@ public class SRpage extends GenericPage {
 		System.out.println("Checking WL of word: "+word+". Expected WL is: "+expectedWordLevel);
 		boolean found = false;
 		SRWordLevel wordLevel = null;
-		if (expectedWordLevel <= 2) {
+		if (expectedWordLevel <= 3) {
 			wordLevel = SRWordLevel.failed;
-		} else if (expectedWordLevel > 2 && expectedWordLevel <= 4) {
-			wordLevel = SRWordLevel.pass;
-		} else if (expectedWordLevel > 4 && expectedWordLevel <= 6) {
+		} else if (expectedWordLevel >=4) {
 			wordLevel = SRWordLevel.success;
 		}
 		webDriver.waitForElement(
 				"//div[@id='txtOriginal']//span[@class='"
 						+ wordLevel.toString() + "'][contains(text(),"
 						+ textService.resolveAprostophes(word) + ")]",
-				ByTypes.xpath);
+				ByTypes.xpath,webDriver.getTimeout(),false,"Word level color (class) did not matched");
 
 	}
 	public void checkWordsLevels(String[] words, String[] wordsScores,
