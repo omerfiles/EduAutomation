@@ -92,8 +92,10 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 			LogEntries logEntries = webDriver.getConsoleLogEntries();
 			List<String[]> logList = textService
 					.getListFromLogEntries(logEntries,logFilter);
-			textService.writeArrayistToCSVFile("files/consoleOutput/consoleLog"+dbService.sig()+".csv",
+			String consoleLogPath="files/consoleOutput/consoleLog"+dbService.sig()+".csv";
+			textService.writeArrayistToCSVFile(consoleLogPath,
 					logList);
+			System.out.println("Console log can be found in: "+consoleLogPath);
 
 		}
 

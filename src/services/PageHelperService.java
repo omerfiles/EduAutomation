@@ -100,7 +100,7 @@ public class PageHelperService extends SystemObjectImpl {
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver,
 				testResultService);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
-
+		//TODO - check if there is DB access
 		setUserLoginToNull(dbService.getUserIdByUserName(student.getUserName(),
 				autoInstitution.getInstitutionId()));
 		EdoHomePage edoHomePage = edoLoginPage.login(student);

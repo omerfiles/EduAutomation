@@ -23,8 +23,8 @@ public class TmsLoginPage extends LoginPage {
 	
 	
 	public TmsHomePage Login(UserObject userObject)throws Exception{
-		webDriver.waitForElement("userName",ByTypes.name).sendKeys(userObject.getUserName());
-		webDriver.waitForElement("password", ByTypes.name).sendKeys(userObject.getPassword());
+		webDriver.waitForElement("userName",ByTypes.name,"user name text fields in TMS login").sendKeys(userObject.getUserName());
+		webDriver.waitForElement("password", ByTypes.name,"password text field in TMS login").sendKeys(userObject.getPassword());
 		webDriver.waitForElement("//input[@value='Login']",ByTypes.xpath).click();
 		return new TmsHomePage(webDriver,testResultService);
 		

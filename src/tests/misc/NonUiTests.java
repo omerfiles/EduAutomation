@@ -25,7 +25,7 @@ public class NonUiTests extends EdusoftBasicTest {
 	public void testAudio() throws Exception {
 		
 		AudioService audioService=new AudioService();
-		audioService.sendSoundToVirtualMic(new File("files/audioFiles/utter-16kHz-5f21180c75852b4b.wav"),0);
+		audioService.sendSoundToVirtualMic(new File("files/audioFiles/A1SHHA_3.wav"),16000);
 		//8000 for recordings with SRI tool
 //		System.out.println("Do not run");
 	}

@@ -139,8 +139,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		} catch (UnhandledAlertException e) {
 			System.out.println(e.toString());
 			closeAlertByAccept();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			System.out.println(e.toString());
 
 		}
@@ -920,6 +919,20 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public boolean waitUntilElementClickable(String  xpath, int timeout) {
+		WebDriverWait wait = new WebDriverWait(webDriver, timeout);
+		WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(xpath)));
+		
+		if(element==null){
+			testResultService.addFailTest("Element was not clickable after "+ timeout);
+			return false;
+		}
+		else{
+			return true;
+		}
+		
 	}
 
 }

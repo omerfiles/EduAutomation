@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import Enums.ByTypes;
 import Objects.Course;
+import pageObjects.edo.edoPlacementTestPage;
 import pageObjects.tms.TmsHomePage;
 import services.TestResultService;
 import services.TextService;
@@ -718,8 +719,8 @@ public class EdoHomePage extends GenericPage {
 			throws Exception {
 		webDriver.waitForElement("//span[@id='0_0']//span", ByTypes.xpath)
 				.click();
-		String actualText = webDriver.waitForElement("//div[@id='comments']//div[2]",
-				ByTypes.xpath).getText();
+		String actualText = webDriver.waitForElement(
+				"//div[@id='comments']//div[2]", ByTypes.xpath).getText();
 		boolean commentOK = testResultService.assertEquals(commentText,
 				actualText, "Teacher comment text not found or do not match");
 		if (commentOK == false) {
@@ -797,9 +798,9 @@ public class EdoHomePage extends GenericPage {
 
 	public RecordPanel clickOnRecordYourself() throws Exception {
 		webDriver.waitForElementAndClick("open_srp", ByTypes.id);
-//		webDriver.waitForJSFunctionToEnd("pause(duration, func, isDebug);");
-//		webDriver.executeJsScript("debug=true;");
-//		webDriver.executeJsScript("alert(debug)");
+		// webDriver.waitForJSFunctionToEnd("pause(duration, func, isDebug);");
+		// webDriver.executeJsScript("debug=true;");
+		// webDriver.executeJsScript("alert(debug)");
 		return new RecordPanel(webDriver, testResultService);
 
 	}
@@ -839,16 +840,29 @@ public class EdoHomePage extends GenericPage {
 
 	}
 
-	public void clickOnTextAreaAndCheckThatCommentIsNotDislayed() throws Exception {
-		clickOnTextArea(20,20);
+	public void clickOnTextAreaAndCheckThatCommentIsNotDislayed()
+			throws Exception {
+		clickOnTextArea(20, 20);
 		Thread.sleep(2000);
-		webDriver.checkElementNotExist("//div[@id='comments']//div[@class='commentTitle']");
-		
+		webDriver
+				.checkElementNotExist("//div[@id='comments']//div[@class='commentTitle']");
+
 	}
+
 	public void clickOnTextArea(int x, int y) throws Exception {
 		WebElement assayText = webDriver.waitForElement(
 				"//div[@id='essayText']//div[1]//div", ByTypes.xpath);
 		webDriver.clickOnElementWithOffset(assayText, x, y);
 
+	}
+
+	public edoPlacementTestPage clickOnPLTTests() throws Exception {
+		webDriver
+				.waitForElement(
+						"//table[@id='eduobj_PlTest']//tbody//tr[1]//td",
+						ByTypes.xpath).click();
+		Thread.sleep(500);;
+		webDriver.switchToNewWindow();
+		return new edoPlacementTestPage(webDriver, testResultService);
 	}
 }

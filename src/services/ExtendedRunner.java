@@ -1,49 +1,36 @@
 package services;
 
-import java.beans.Statement;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.internal.runners.InitializationError;
-import org.junit.internal.runners.JUnit4ClassRunner;
-import org.junit.runner.Description;
-import org.junit.runner.JUnitCore;
-import org.junit.runners.BlockJUnit4ClassRunner;
-import org.junit.runners.model.FrameworkMethod;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-
-import Interfaces.TestCaseParams;
-import junit.framework.JSystemJUnit4ClassRunner;
-
-public class ExtendedRunner extends BlockJUnit4ClassRunner {
+public class ExtendedRunner extends SpringJUnit4ClassRunner {
 
 	public ExtendedRunner(Class<?> klass)
-			throws org.junit.runners.model.InitializationError {
+			throws org.junit.runners.model.InitializationError, InitializationError {
 		super(klass);
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	protected org.junit.runners.model.Statement methodBlock(
-			FrameworkMethod method) {
-		// TODO Auto-generated method stub
-
-		final TestCaseParams customAnnotation = method
-				.getAnnotation(TestCaseParams.class);
-		if (customAnnotation != null) {
-			for (int i = 0; i < customAnnotation.testCaseID().length; i++) {
-				System.out.println("Test case id is:"
-						+ customAnnotation.testCaseID()[i]);
-			}
-		}
-		else
-		{
-			System.out.println("Test case id is missing");
-		}
-
-		return super.methodBlock(method);
-	}
+//	@Override
+//	protected org.junit.runners.model.Statement methodBlock(
+//			FrameworkMethod method) {
+//		// TODO Auto-generated method stub
+//
+//		final TestCaseParams customAnnotation = method
+//				.getAnnotation(TestCaseParams.class);
+//		if (customAnnotation != null) {
+//			for (int i = 0; i < customAnnotation.testCaseID().length; i++) {
+//				System.out.println("Test case id is:"
+//						+ customAnnotation.testCaseID()[i]);
+//			}
+//		}
+//		else
+//		{
+//			System.out.println("Test case id is missing");
+//		}
+//
+//		return super.methodBlock(method);
+//	}
 
 	// @Override
 	// protected List<FrameworkMethod> computeTestMethods() {

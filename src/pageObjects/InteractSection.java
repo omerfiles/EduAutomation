@@ -132,10 +132,9 @@ public class InteractSection extends SRpage {
 
 	public void checkThatSpeakerTextIsHighlighted(int speaker) throws Exception {
 
-		webDriver
-				.waitForElement("//div[@class='recordingPanelWrapper']//div["
-						+ speaker + "][contains(@class,'hl')]", ByTypes.xpath,
-						20, true,"speaker element highlighted");
+		webDriver.waitForElement("//div[@class='recordingPanelWrapper']//div["
+				+ speaker + "][contains(@class,'hl')]", ByTypes.xpath, 20,
+				true, "speaker element highlighted");
 	}
 
 	public void checkThatStartButtonIsDisabled() throws Exception {
@@ -288,11 +287,9 @@ public class InteractSection extends SRpage {
 			TextService textService, String xpath) throws Exception {
 		boolean found = false;
 		SRWordLevel wordLevel = null;
-		if (expectedWordLevel <= 2) {
+		if (expectedWordLevel <= 3) {
 			wordLevel = SRWordLevel.failed;
-		} else if (expectedWordLevel > 2 && expectedWordLevel <= 4) {
-			wordLevel = SRWordLevel.pass;
-		} else if (expectedWordLevel > 4 && expectedWordLevel <= 6) {
+		} else if (expectedWordLevel >= 4) {
 			wordLevel = SRWordLevel.success;
 		}
 		// webDriver.waitForElement("//div[@class='recordingPanelWrapper']//div["+
@@ -361,6 +358,27 @@ public class InteractSection extends SRpage {
 
 	public void clickOnListenToAllButton() throws Exception {
 		webDriver.waitForElement("Hear all", ByTypes.linkText).click();
+
+	}
+
+	public RecordPanel clickOnRepairButton(int sentenceNumber) throws Exception {
+		WebElement element = webDriver.waitForElement(
+				"//div[@class='speakingInteractPanelsWrapper']//div//div["
+						+ sentenceNumber + "]//div//div[2]//div//a",
+				ByTypes.xpath);
+		element.click();
+
+		return new RecordPanel(webDriver, testResultService);
+
+	}
+
+	public void waitForHearAllButtomToBecomeEnabled() throws Exception {
+		//
+		// webDriver.waitUntilElementEnabled(webDriver.waitForElement(
+		// "//div[@class='speakingInteractButtonWrapper']//div[2]",
+		// ByTypes.xpath), 20);
+		webDriver.waitUntilElementClickable(
+				"//div[@class='speakingInteractButtonWrapper']//div[2]", 20);
 
 	}
 

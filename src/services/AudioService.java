@@ -41,6 +41,8 @@ public class AudioService extends SystemObjectImpl {
 
 	@Autowired
 	TextService textService;
+	
+	@Autowired services.Reporter reporter;
 
 	long recoredTime = 6000;
 	List<Recording> recordings;
@@ -61,8 +63,8 @@ public class AudioService extends SystemObjectImpl {
 			e.printStackTrace();
 
 		}
-		report.startLevel("Starting to play file: " + soundFile.getPath()
-				+ " to virtual microphone", EnumReportLevel.CurrentPlace);
+//		reporter.startLevel("Starting to play file: " + soundFile.getPath()
+//				+ " to virtual microphone", EnumReportLevel.CurrentPlace);
 		System.out.println("Playing file: "+soundFile.getPath().toString());
 		// audioFormat = audioStream.getFormat();
 		if (sampleRate == 0) {

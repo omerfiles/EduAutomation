@@ -14,9 +14,10 @@ import Objects.Course;
 import Objects.Recording;
 import pageObjects.EdoHomePage;
 import pageObjects.InteractSection;
+import pageObjects.RecordPanel;
 import tests.misc.EdusoftWebTest;
 
-public class SpeechRecognitonInteract1 extends EdusoftWebTest {
+public class SpeechRecognitonInteract1 extends SpeechRecognitionBasicTest {
 
 	@Before
 	public void setup() throws Exception {
@@ -55,13 +56,13 @@ public class SpeechRecognitonInteract1 extends EdusoftWebTest {
 		// interactSection.checkInstructionText(interactSection.instructionText0);
 
 		sleep(1);
-		
+
 		sleep(1);
 		interactSection.hoverOnSpeaker(2);
 		interactSection.checkThatSpeakerTextIsHighlighted(2);
 		interactSection.selectRightSpeaker();
 		interactSection.checkInstructionText(interactSection.instructionText8);
-	
+
 		interactSection.checkInstructionText(interactSection.instructionText1);
 		sleep(1);
 
@@ -143,6 +144,7 @@ public class SpeechRecognitonInteract1 extends EdusoftWebTest {
 	}
 
 	@Test
+	
 	public void testInteractWithFinalView() throws Exception {
 		startStep("Init test data");
 		Course course = pageHelper.initCouse(8);
@@ -166,22 +168,22 @@ public class SpeechRecognitonInteract1 extends EdusoftWebTest {
 				testResultService);
 
 		startStep("Select right speaker");
-
+		sleep(3);
 		// interactSection.approveFlash();
-		// interactSection.checkInstructionText(interactSection.instructionText0);
+		interactSection.checkInstructionText(interactSection.instructionText0);
 
 		sleep(1);
 		interactSection.selectRightSpeaker();
-		sleep(1);
-		interactSection.checkThatSpeakerTextIsHighlighted(2);
+		sleep(2);
+		// interactSection.hoverOnSpeaker(2);
+		// interactSection.checkThatSpeakerTextIsHighlighted(2);
+		Thread.sleep(500);
 		interactSection.checkInstructionText(interactSection.instructionText8);
 		sleep(2);
-		
-		interactSection.checkInstructionText(interactSection.instructionText1);
-		sleep(1);
 
 		startStep("Check of start button is enabled and click it");
 		interactSection.clickTheStartButton();
+		sleep(2);
 		interactSection.checkIfInteract1StatusChanged(1,
 				InteractStatus.speaker, 2);
 		interactSection.checkInstructionText(interactSection.instructionText3);
@@ -203,8 +205,7 @@ public class SpeechRecognitonInteract1 extends EdusoftWebTest {
 		// words = interactSection.getCurrentSpeakerText(2, textService);
 		String[] str = interactSection.getCurrentSpeakerText(2, textService);
 		speakerText.add(str);
-		audioService
-				.sendSoundToVirtualMic(recording.getFiles().get(0), 8000.0F);
+		audioService.sendSoundToVirtualMic(recording.getFiles().get(0), 16000);
 		// interactSection.waitUntilRecordingEnds(4, 2);
 
 		interactSection
@@ -218,8 +219,8 @@ public class SpeechRecognitonInteract1 extends EdusoftWebTest {
 		wordLevels.add(WL);
 		System.out.println("Got words levels." + System.currentTimeMillis());
 		textService.printStringArray(speakerText.get(0));
-		interactSection.checkInteract1WordsLevels(speakerText.get(0),
-				wordLevels.get(0), textService, 2);
+		// interactSection.checkInteract1WordsLevels(speakerText.get(0),
+		// wordLevels.get(0), textService, 2);
 
 		startStep("Wait for next recording");
 		interactSection.checkInstructionText(interactSection.instructionText9);
@@ -233,38 +234,63 @@ public class SpeechRecognitonInteract1 extends EdusoftWebTest {
 		interactSection.checkIfInteract1StatusChanged(2,
 				InteractStatus.recorder, 20);
 		interactSection.checkInstructionText(interactSection.instructionText5);
-		audioService.sendSoundToVirtualMic(recording.getFiles().get(1), 0);
+		audioService.sendSoundToVirtualMic(recording.getFiles().get(1), 88200);
 		sleep(1);
 		interactSection
 				.waitForInstructionToEnd(interactSection.instructionText5);
 		// interactSection.waitUntilRecordingEnds(5, 2);
 		interactSection.checkInstructionText(interactSection.instructionText10);
 		startStep("Check the 2nd recording");
-		// words = interactSection.getCurrentSpeakerText(2, textService);
+		words = interactSection.getCurrentSpeakerText(2, textService);
 		str = interactSection.getCurrentSpeakerText(2, textService);
 		speakerText.add(str);
 		wordLevels.add(textService.splitStringToArray(interactSection
 				.getWordsScoring("debugScore")));
 		System.out.println("Got words levels." + System.currentTimeMillis());
 		textService.printStringArray(speakerText.get(1));
-		interactSection.checkInteract1WordsLevels(speakerText.get(1),
-				wordLevels.get(1), textService, 2);
+		// interactSection.checkInteract1WordsLevels(speakerText.get(1),
+		// wordLevels.get(1), textService, 2);
 		sleep(1);
 		interactSection.clickOnSeeFeedback();
 		startStep("Starting to check final view");
 
 		startStep("Check that all sentences are displayed");
-		
-		
 
 		startStep("Check Listen to all button");
 		interactSection.clickOnListenToAllButton();
-
-		startStep("Check recoreded text's word levels");
-		interactSection.checkFinalViewWordLevels(speakerText.get(0),wordLevels.get(0),textService,2);
-		interactSection.checkFinalViewWordLevels(speakerText.get(1),wordLevels.get(1),textService,4);
+		
 		
 
+		startStep("Check recoreded text's word levels");
+		interactSection.checkFinalViewWordLevels(speakerText.get(0),
+				wordLevels.get(0), textService, 2);
+		interactSection.checkFinalViewWordLevels(speakerText.get(1),
+				wordLevels.get(1), textService, 4);
+		report.startLevel("Opening recored panel and check current recording");
+		sleep(30);
+//		interactSection.waitForHearAllButtomToBecomeEnabled();
+		RecordPanel recordPanel = interactSection.clickOnRepairButton(2);
+		sleep(3);
+		edoHomePage.switchToFrameByClassName("cboxIframe");
+		recordPanel.checkSentenceScoreRatingText(5);
+		recordPanel.checkWordsLevels(speakerText.get(1), wordLevels.get(1), textService);
+		
+		
+		report.startLevel("Add new recording");
+		recordPanel.clickOnRecordButton();
+		String status = recordPanel.getRecordPanelStatus();
+		testResultService.assertEquals("SPEAK", status);
+		
+		audioService.sendSoundToVirtualMic(recording.getFiles().get(0),
+				16000);
+
+		startStep("Check that recording ended");
+		sleep(2);
+		recordPanel.waitForRecordingToEnd(1);
+		webDriver.printScreen("After recording ended");
+
+		
+		compareDebugSLAndWLtoExpected(recordPanel, recording, words);
 	}
 
 	@After

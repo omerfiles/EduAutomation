@@ -388,13 +388,13 @@ public class RecordPanel extends SRpage {
 		for (int i = 0; i < expectedWL.length; i++) {
 			int expWL = Integer.valueOf(expectedWL[i]);
 			int actWL = Integer.valueOf(actualWL[i]);
-			System.out.println("Diffrence is: " + Math.abs(expWL - actWL));
+			System.out.println("Diffrence is: " + (expWL - actWL));
 			if (Math.abs(expWL - actWL) > 1) {
 				System.out
 						.println("Diffrence between expected WL and actual WL was bigger then 1");
 				testResultService
 						.addFailTest("difference between expected WL and actual WL was:"
-								+ Math.abs(expWL - actWL));
+								+(expWL - actWL));
 			}
 		}
 

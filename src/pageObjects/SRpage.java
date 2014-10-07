@@ -62,10 +62,16 @@ public class SRpage extends GenericPage {
 	}
 	
 	public String getWordsScoring(String elementId) throws Exception {
-		String str = webDriver.waitForElement(elementId, ByTypes.id).getAttribute(
-				"value");
-		System.out.println("word scoring is:" + str);
-		str = str.replace(",", "");
+		String str = null;
+		try {
+			str = webDriver.waitForElement(elementId, ByTypes.id).getAttribute(
+					"value");
+			System.out.println("word scoring is:" + str);
+			str = str.replace(",", "");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return str;
 
 	}

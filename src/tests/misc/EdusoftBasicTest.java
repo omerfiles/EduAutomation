@@ -3,14 +3,20 @@ package tests.misc;
 import java.lang.reflect.Method;
 
 import jsystem.framework.report.Reporter.EnumReportLevel;
+import junit.framework.SystemTestCase4;
 import junit.framework.SystemTestCaseImpl;
+import junit.framework.TestCase;
+
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
+import org.junit.runner.RunWith;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import services.Configuration;
 import services.DbService;
 import services.EraterService;
+import services.ExtendedRunner;
 import services.InstitutionService;
 import services.NetService;
 import services.TestResultService;
@@ -19,7 +25,7 @@ import Objects.AutoInstitution;
 import drivers.GenericWebDriver;
 
 //@RunWith(ExtendedRunner.class)
-public class EdusoftBasicTest extends SystemTestCaseImpl {
+public class EdusoftBasicTest extends SystemTestCase4 {
 
 	protected GenericWebDriver webDriver;
 
@@ -102,9 +108,9 @@ public class EdusoftBasicTest extends SystemTestCaseImpl {
 		if (printResults == true && testHasFailedResult) {
 			testResultService.printAllFailures();
 		}
-		// if (testResultService.hasFailedResults() && run().errorCount()==0) {
-		// // Assert.fail("Test failed due to several errors");
-		// }
+		 if (testResultService.hasFailedResults() && isPass==true) {
+		  Assert.fail("Test failed due to several errors");
+		 }
 		//
 //		System.out.println("Test passed: " + testPassed());
 //		if (testPassed() && testHasFailedResult) {
@@ -112,7 +118,7 @@ public class EdusoftBasicTest extends SystemTestCaseImpl {
 //			Assert.fail("Test failed due to some errors");
 //		}
 		 if (this.isPass == false) {
-		 report.startLevel("Test failed", EnumReportLevel.MainFrame);
+			 report.startLevel("Test failed", EnumReportLevel.MainFrame);
 		 }
 	}
 
