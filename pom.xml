@@ -189,7 +189,7 @@
 			<systemPath>${project.basedir}/lib/java2html.jar</systemPath>
 			<scope>system</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>sqljdbc</groupId>
 			<artifactId>microsoft.sql</artifactId>
@@ -206,6 +206,13 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
 			<version>3.1.4.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>JsystemAnt</groupId>
+			<artifactId>org.jsystem</artifactId>
+			<version>1.00</version>
+			<systemPath>${project.basedir}/lib/jsystemAnt.jar</systemPath>
+			<scope>system</scope>
 		</dependency>
 
 		<dependency>
