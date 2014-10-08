@@ -46,7 +46,7 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 	protected AutoInstitution autoInstitution;
 
 	private boolean printResults = true;
-	// public services.Reporter report=new services.Reporter();
+//	 public services.Reporter report=new services.Reporter();
 
 	private boolean hasFailures;
 

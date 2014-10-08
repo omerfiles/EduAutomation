@@ -11,8 +11,8 @@ import org.junit.Assert;
 import jsystem.framework.report.Reporter.EnumReportLevel;
 import tests.misc.EdusoftBasicTest;
 
-public class ContentCompareTest extends EdusoftBasicTest {
-	
+public class ContentCompareBasicTest extends EdusoftBasicTest {
+
 	protected static final String SPEAKING_FOLDER = "\\\\frontqa3\\EDO_HTML_SR\\Runtime\\Content\\speaking";
 	protected static final String LISTENING_FOLDER = "\\\\frontqa3\\EDO_HTML_SR\\Runtime\\Content\\listening";
 	protected static final String GRAMMER_FOLDER = "\\\\frontq_a3\\EDO_HTML_SR\\Runtime\\Content\\grammar";
@@ -26,19 +26,18 @@ public class ContentCompareTest extends EdusoftBasicTest {
 	protected final String grammerFilesPath = "\\\\NEWSTORAGE\\Sendhere\\_EDOHTML\\SR_grammars\\OnlyExcel\\UnitedBaseEDO\\speakingBaseEDO.grammar";
 	// private final String grammerFilesPath="C:\\automation\\testFile.txt";
 
-protected	List<String[]> results = new ArrayList<>();
-	
+	protected List<String[]> results = new ArrayList<>();
+
 	public void compareAllGrammers(String testFolder, String csvFile,
 			String grammarFile) throws Exception {
 		startStep("Iterate on all Speakeing folders");
-		
-		
+
 		// testFolder = testFolder;
 		int passed = 0;
 		int failed = 0;
 		// \\frontqa3\EDO_HTML_SR\Runtime\Content\speaking
 		List<String> folders = getSubFolders(testFolder, "files/csvFIles/"
-				+ csvFile);
+				+ csvFile, true);
 
 		startStep("For all folder, search for js file, get its contend and compare texts to grammer file according the grammer id");
 		String filePath = null;
@@ -169,11 +168,18 @@ protected	List<String[]> results = new ArrayList<>();
 		textService.writeArrayistToCSVFile(csvFilepath, results);
 		System.out.println("csv file path:" + "file:///" + csvFilepath);
 	}
+
 	public List<String> getSubFolders(String path) throws Exception {
-		return getSubFolders(path, null);
+		return getSubFolders(path, true);
 	}
-	public List<String> getSubFolders(String path, String csvFilePath)
+
+	public List<String> getSubFolders(String path, boolean isGrammarTest)
 			throws Exception {
+		return getSubFolders(path, null, isGrammarTest);
+	}
+
+	public List<String> getSubFolders(String path, String csvFilePath,
+			boolean isGrammarTest) throws Exception {
 		List<String> folders = null;
 
 		List<String> grammarsFromExcel = null;
@@ -185,17 +191,26 @@ protected	List<String[]> results = new ArrayList<>();
 			String[] names = file.list();
 			if (names == null) {
 				System.out.println("Folder is empty");
-				Assert.fail("Test faolder is empty");
+				Assert.fail("Test folder is empty");
 			}
 			folders = new ArrayList<String>();
 
 			for (String name : names) {
 
-				if (new File(path + "\\" + name).isDirectory()
-						&& grammarsFromExcel.contains(name.toUpperCase())) {
-					System.out.println(name);
-					if (name.length() <= 6) {
-						folders.add(name);
+				if (isGrammarTest == true) {
+					if (new File(path + "\\" + name).isDirectory()
+							&& grammarsFromExcel.contains(name.toUpperCase())) {
+						System.out.println(name);
+						if (name.length() <= 6) {
+							folders.add(name);
+						}
+					}
+				} else {
+					if (new File(path + "\\" + name).isDirectory()) {
+						System.out.println(name);
+						if (name.length() <= 6) {
+							folders.add(name);
+						}
 					}
 				}
 			}
@@ -210,6 +225,7 @@ protected	List<String[]> results = new ArrayList<>();
 		return folders;
 
 	}
+
 	public String getGrammerTextFromGrammerFiles(String grammerID,
 			String grammarFilePath) throws IOException {
 		String text = null;
@@ -234,7 +250,5 @@ protected	List<String[]> results = new ArrayList<>();
 		}
 		return text;
 	}
-
-	
 
 }

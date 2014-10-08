@@ -182,6 +182,7 @@ public class SpeechRecognitonInteract1 extends SpeechRecognitionBasicTest {
 		sleep(2);
 
 		startStep("Check of start button is enabled and click it");
+		webDriver.printScreen("Bofore start button click");
 		interactSection.clickTheStartButton();
 		sleep(2);
 		interactSection.checkIfInteract1StatusChanged(1,

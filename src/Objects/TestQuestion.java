@@ -12,7 +12,7 @@ public class TestQuestion extends BasicObject {
 
 	public TestQuestion(String[] correctAnswers, String[] answersDestinations,
 			String[] incoreectAnswers, int[] blankAnswers,
-			boolean booleanAnswer, TestQuestionType questionType) {
+			 TestQuestionType questionType) {
 		super();
 		this.correctAnswers = correctAnswers;
 		this.answersDestinations = answersDestinations;

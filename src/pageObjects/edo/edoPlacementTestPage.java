@@ -9,6 +9,7 @@ import Enums.PLTStartLevel;
 import Enums.PLTStartLevel;
 import Enums.TestQuestionType;
 import Objects.PLTCycle;
+import Objects.PLTTest;
 import Objects.TestQuestion;
 import drivers.GenericWebDriver;
 import pageObjects.GenericPage;
@@ -23,11 +24,12 @@ public class edoPlacementTestPage extends TestQuestionPage {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void answerMultiCheckBoxQuestion(TestQuestion question) throws Exception {
-		for(int i=0;i<question.getCorrectAnswers().length;i++){
+	public void answerMultiCheckBoxQuestion(TestQuestion question)
+			throws Exception {
+		for (int i = 0; i < question.getCorrectAnswers().length; i++) {
 			webDriver.waitForElement(
 					"//span[@class='multiTextInline'][contains(text(),'"
-							+ question.getCorrectAnswers()[i] + "')]//",
+							+ question.getCorrectAnswers()[i] + "')]",
 					ByTypes.xpath).click();
 		}
 
@@ -53,13 +55,14 @@ public class edoPlacementTestPage extends TestQuestionPage {
 
 	}
 
-	public void answerDragQuestionSingle(TestQuestion question)
+	public void answerDragAndDropQuestion(TestQuestion question)
 			throws Exception {
 		String[] answerSourceLocations = question.getCorrectAnswers();
 		String[] answerDestinationLocations = question.getAnswersDestinations();
 		for (int i = 0; i < answerSourceLocations.length; i++) {
 			WebElement from = webDriver.waitForElement(
-					"//div[@data-id='" + answerSourceLocations[i] + "']",
+					"//div[contains(text(),'" + question.getCorrectAnswers()[i]
+							+ "')]",
 					ByTypes.xpath,
 					"element of answer number text "
 							+ answerSourceLocations[i].toString());
@@ -93,41 +96,60 @@ public class edoPlacementTestPage extends TestQuestionPage {
 
 		webDriver.waitForElement(
 				"//span[@class='multiTextInline'][contains(text(),'"
-						+ question.getCorrectAnswers()[0] + "')]//",
+						+ question.getCorrectAnswers()[0] + "')]",
 				ByTypes.xpath).click();
 
 	}
 
-	public void selectAnswersFromComboxBox(TestQuestion question) throws Exception {
+	public void answerComboBoxQuestion(TestQuestion question) throws Exception {
+
+		for (int i = 0; i < question.getCorrectAnswers().length; i++) {
+			webDriver.waitForElement("//div[@class='fitb']//span[" + i + "]",
+					ByTypes.xpath).click();
+			Thread.sleep(500);
+			webDriver.waitForElement(
+					"//div[@class='optionsWrapper']//table//tbody//tr[contains(text(),'"
+							+ question.getCorrectAnswers()[i] + "')]",
+					ByTypes.xpath).click();
+
+		}
 
 	}
 
-//	public void answerQuestion(TestQuestion question) {
-//		// Check question type
-//		switch (question.getQuestionType()) {
-//		case Basic:
-//		case Advance:
-//		case Intermediate:
-//		case IamNotSure:
-//
-//		}
-//		;
-//	}
+	public void answerTrueFalseQuestion(TestQuestion question) throws Exception {
+
+	}
+
+	// public void answerQuestion(TestQuestion question) {
+	// // Check question type
+	// switch (question.getQuestionType()) {
+	// case Basic:
+	// case Advance:
+	// case Intermediate:
+	// case IamNotSure:
+	//
+	// }
+	// ;
+	// }
 
 	public void selectStartLevel(PLTStartLevel level) throws Exception {
 		switch (level) {
 		case Basic:
 			webDriver.waitForElement("rbBasic", ByTypes.id,
 					"Basic level button").click();
+			break;
 		case Advance:
-			webDriver.waitForElement("rbIntermediate", ByTypes.id,
-					"Intermediate level button").click();
-		case Intermediate:
 			webDriver.waitForElement("rbAdvanced", ByTypes.id,
+					"Intermediate level button").click();
+			break;
+		case Intermediate:
+			webDriver.waitForElement("rbIntermediate", ByTypes.id,
 					"Advance level button").click();
+			break;
 		case IamNotSure:
 			webDriver.waitForElement("rbImNotSure", ByTypes.id,
 					"Im not sure button").click();
+			break;
 
 		}
 		;
@@ -135,8 +157,7 @@ public class edoPlacementTestPage extends TestQuestionPage {
 
 	}
 
-	public void performTest(PLTCycle firstCycle, PLTCycle secondsCycle)
-			throws Exception {
+	public void performTest(PLTTest pltTest) throws Exception {
 		// Fill the test questions according to the questions arrayList filled
 		// from CSV file
 
@@ -145,6 +166,8 @@ public class edoPlacementTestPage extends TestQuestionPage {
 
 		// Cycle 1 has 17-20 questions (17 for basic/inter./advances and 20 for
 		// "Im not sure"
+		PLTCycle firstCycle = pltTest.getCycles().get(0);
+		PLTCycle SecondCycle = pltTest.getCycles().get(1);
 
 		try {
 			for (int i = 0; i < firstCycle.getNumberOfQuestions(); i++) {
@@ -152,21 +175,28 @@ public class edoPlacementTestPage extends TestQuestionPage {
 				TestQuestionType questionType = question.getQuestionType();
 				switch (questionType) {
 				case DragAndDropMultiple:
-					
+					answerDragAndDropQuestion(question);
+					break;
 				case RadioMultiple:
 					answerMultiCheckBoxQuestion(question);
-					;
+					break;
+
 				case RadioSingle:
-					;
+					answerCheckboxQuestion(question);
+					break;
+
 				case DragAndDropSingle:
-					answerDragQuestionSingle(firstCycle.getCycleQuestions()
-							.get(i));
-					;
-				case TrueFalse:
-					;
+					answerDragAndDropQuestion(question);
+					break;
+
+				case comboBox:
+					answerComboBoxQuestion(question);
+
 				}
+				clickOnNextButton();
 
 			}
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -177,7 +207,11 @@ public class edoPlacementTestPage extends TestQuestionPage {
 	@Override
 	public void dragAnswer(TestQuestion question) throws Exception {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	public void clickOnGoOn() throws Exception {
+		webDriver.waitForElement("DoAgain", ByTypes.id).click();
 	}
 
 }

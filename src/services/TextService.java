@@ -176,6 +176,24 @@ public class TextService extends SystemObjectImpl {
 		return result;
 	}
 
+	public int[] splitStringToIntArray(String str, String ignorChars) {
+		String[] result = null;
+		try {
+			// System.out.println("Splitting string: " + str + " to array."
+			// + System.currentTimeMillis());
+			result = str.split("(" + ignorChars + ")");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+
+			e.printStackTrace();
+		}
+		int[] intArr = new int[result.length];
+		for (int i = 0; i < result.length; i++) {
+			intArr[i] = Integer.parseInt(result[i]);
+		}
+		return intArr;
+	}
+
 	public String[] splitStringToArray(String str) {
 		return splitStringToArray(str, "?!^");
 	}
@@ -352,8 +370,7 @@ public class TextService extends SystemObjectImpl {
 			String filter) {
 		List<String[]> strList = new ArrayList<String[]>();
 		for (LogEntry entry : logEntries) {
-			
-			
+
 			String[] str = new String[] { entry.getMessage(),
 					String.valueOf(entry.getTimestamp()),
 					entry.getLevel().toString() };

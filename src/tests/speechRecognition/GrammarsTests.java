@@ -15,10 +15,10 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
-import tests.BasicTests.ContentCompareTest;
+import tests.BasicTests.ContentCompareBasicTest;
 import tests.misc.EdusoftWebTest;
 
-public class GrammarsTests extends ContentCompareTest {
+public class GrammarsTests extends ContentCompareBasicTest {
 
 
 

@@ -46,10 +46,18 @@ public class PLTCycle extends BasicObject {
 		this.cycleType = cycleType;
 	}
 
+	public PLTCycle() {
+		// TODO Auto-generated constructor stub
+	}
+
 	private PLTCycleType cycleType;
 	
 	public int getNumberOfQuestions()throws Exception{
 		return cycleQuestions.size();
+	}
+	
+	public void setQuestions(List<TestQuestion>questions){
+		this.cycleQuestions.addAll(questions);
 	}
 
 }

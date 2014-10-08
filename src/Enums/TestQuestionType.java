@@ -1,5 +1,5 @@
 package Enums;
 
 public enum TestQuestionType {
-	DragAndDropSingle, DragAndDropMultiple, TrueFalse, RadioSingle, RadioMultiple
+	DragAndDropSingle, DragAndDropMultiple, TrueFalse, RadioSingle, RadioMultiple,comboBox
 }
