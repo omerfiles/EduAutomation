@@ -83,7 +83,7 @@ public class TmsHomePage extends GenericPage {
 		// webDriver.clickOnElement(td);
 
 		webDriver.waitForElement(
-				"//td//div[contains(text(),'" + courseName + "')]",
+				"//td//div[contains(text(),'" + studentName + "')]",
 				ByTypes.xpath).click();
 		;
 		webDriver.switchToMainWindow(mainFrame);

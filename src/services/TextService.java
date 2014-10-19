@@ -265,9 +265,13 @@ public class TextService extends SystemObjectImpl {
 	}
 
 	public String printStringArray(String[] str) {
+		return printStringArray(str, "|");
+	}
+
+	public String printStringArray(String[] str, String seperator) {
 		String output = "";
 		for (int i = 0; i < str.length; i++) {
-			output = output + "|" + str[i];
+			output = output + seperator + str[i];
 		}
 		System.out.println("Strings are:" + output);
 		report.report("String are:" + output);

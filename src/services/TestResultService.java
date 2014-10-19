@@ -106,4 +106,17 @@ public class TestResultService extends SystemObjectImpl {
 
 	}
 
+	public boolean assertEquals(int expected, int acutal,String message) {
+		if (expected!=acutal) {
+
+			addFailTest("Expected int was: " + expected
+					+ " but actual int was: " + acutal + " " + message);
+			
+			// throw new ComparisonFailure("Assert failed", expected, actual);
+			return false;
+		}
+		return true;
+		
+	}
+
 }
