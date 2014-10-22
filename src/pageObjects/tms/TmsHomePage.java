@@ -187,6 +187,7 @@ public class TmsHomePage extends GenericPage {
 						+ className + "')]", ByTypes.xpath).click();
 		webDriver.waitForElement("//input[@value='  GO  ']", ByTypes.xpath)
 				.click();
+		Thread.sleep(3000);
 		webDriver.switchToFrame("mainFrame");
 
 		return this;
@@ -208,9 +209,9 @@ public class TmsHomePage extends GenericPage {
 	public TmsHomePage enterStudentDetails(String studentName) throws Exception {
 		webDriver.switchToTopMostFrame();
 		webDriver.switchToFrame("mainFrame");
-		webDriver.waitForElement("FirstName", ByTypes.id).sendKeys(studentName);
-		webDriver.waitForElement("LastName", ByTypes.id).sendKeys(studentName);
-		webDriver.waitForElement("UserName", ByTypes.id).sendKeys(studentName);
+		webDriver.waitForElement("FirstName", ByTypes.name).sendKeys(studentName);
+		webDriver.waitForElement("LastName", ByTypes.name).sendKeys(studentName);
+		webDriver.waitForElement("UserName", ByTypes.name).sendKeys(studentName);
 		webDriver.waitForElement("//input[@value='Add']", ByTypes.xpath)
 				.click();
 		return this;
