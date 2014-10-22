@@ -188,7 +188,7 @@ public class TmsHomePage extends GenericPage {
 		webDriver.waitForElement("//input[@value='  GO  ']", ByTypes.xpath)
 				.click();
 		Thread.sleep(3000);
-		webDriver.switchToFrame("mainFrame");
+//		webDriver.switchToFrame("mainFrame");
 
 		return this;
 
@@ -225,7 +225,7 @@ public class TmsHomePage extends GenericPage {
 				ByTypes.xpath).click();
 		webDriver.switchToNewWindow();
 
-		Thread.sleep(1000);
+		Thread.sleep(3000);
 		// webDriver.switchToParentFrame();
 		String mainPopupWin = webDriver.switchToFrame("FormFrame");
 		System.out.println(webDriver.getUrl());

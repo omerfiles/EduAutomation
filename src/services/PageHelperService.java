@@ -356,7 +356,7 @@ public class PageHelperService extends SystemObjectImpl {
 		String institutionId = configuration.getProperty("institution.id");
 		String instituteName = dbService.getInstituteNameById(institutionId);
 		tmsHomePage.selectInstitute(instituteName, institutionId, false);
-		Thread.sleep(1000);
+		Thread.sleep(3000);
 		tmsHomePage.selectClass(configuration.getProperty("classname"));
 
 		report.stopLevel();
