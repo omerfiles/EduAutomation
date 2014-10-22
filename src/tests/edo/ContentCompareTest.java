@@ -108,10 +108,10 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 								String[] str = new String[] {
 										newContentFolders.get(i),
 										String.valueOf(j),
-										"Failed",
-										"Words are not the same: word in new content is: "
+										"Failed","Word mismatch",
+										"word in new content is: "
 												+ newWord
-												+ " while word in current content is: "
+												+ "; while word in current content is: "
 												+ currentWord };
 								wordsMisMatch++;
 								testResults.add(str);
@@ -123,15 +123,15 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 							String[] str = new String[] {
 									newContentFolders.get(i),
 									String.valueOf(j),
-									"Failed",
+									"Failed","Different number of words in sub-segment",
 									"Number of words in new content sub-segment("
 											+ newSegmentWords.length
 											+ ") is not the same as number of words in current text("
 											+ currentSegmentWords.length
-											+ ").: "
+											+ ").Text in new content is: "
 											+ textService.printStringArray(
 													newSegmentWords, " ")
-											+ " while text in current segment is: "
+											+ "; while text in current segment is: "
 											+ textService.printStringArray(
 													currentSegmentWords, " ") };
 							numberOfWordsInSubSegmentsNotTheSame++;
@@ -145,10 +145,10 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 					String[] str = new String[] {
 							newContentFolders.get(i),
 							null,
-							"Failed",
-							"Number of segments is not the same. Number of segments in new content is: "
+							"Failed","Different number of segments in file",
+							"Number of segments in new content is: "
 									+ newContentsegments.length
-									+ " while number of segment in current content is: "
+									+ "; while number of segment in current content is: "
 									+ currentContentsegments.length };
 					numberOfSegmentsNotTheSame++;
 					testResults.add(str);
@@ -169,11 +169,11 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 				+ newContentFolders.size() });
 		testResults.add(new String[] { "Passed sub-segments:"
 				+ passedTests });
-		testResults.add(new String[] { "Segments with diffrent number of words:"
+		testResults.add(new String[] { "Files with diffrent number of segments:"
 				+ numberOfSegmentsNotTheSame });
 		testResults.add(new String[] { "Sub-segment with diffrent number of words:"
 				+ numberOfWordsInSubSegmentsNotTheSame });
-		testResults.add(new String[] { "Words missmatch:"
+		testResults.add(new String[] { "Words mismatch:"
 				+ wordsMisMatch });
 		
 		

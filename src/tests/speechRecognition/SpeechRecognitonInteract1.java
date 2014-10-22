@@ -187,7 +187,7 @@ public class SpeechRecognitonInteract1 extends SpeechRecognitionBasicTest {
 		sleep(2);
 		interactSection.checkIfInteract1StatusChanged(1,
 				InteractStatus.speaker, 2);
-		interactSection.checkInstructionText(interactSection.instructionText3);
+		interactSection.checkInstructionText(interactSection.instructionText4);
 
 		startStep("Wait for 3 seconds and start sending sound to the mic");
 
@@ -220,14 +220,14 @@ public class SpeechRecognitonInteract1 extends SpeechRecognitionBasicTest {
 		wordLevels.add(WL);
 		System.out.println("Got words levels." + System.currentTimeMillis());
 		textService.printStringArray(speakerText.get(0));
-		// interactSection.checkInteract1WordsLevels(speakerText.get(0),
-		// wordLevels.get(0), textService, 2);
+		 interactSection.checkInteract1WordsLevels(speakerText.get(0),
+		 wordLevels.get(0), textService, 2);
 
 		startStep("Wait for next recording");
 		interactSection.checkInstructionText(interactSection.instructionText9);
 		interactSection.checkIfInteract1StatusChanged(1,
 				InteractStatus.speaker, 5);
-		interactSection.checkInstructionText(interactSection.instructionText3);
+		interactSection.checkInstructionText(interactSection.instructionText4);
 		interactSection.checkIfInteract1StatusChanged(2,
 				InteractStatus.counter, 5);
 		interactSection.checkInstructionText(interactSection.instructionText4);
@@ -271,9 +271,10 @@ public class SpeechRecognitonInteract1 extends SpeechRecognitionBasicTest {
 		sleep(30);
 //		interactSection.waitForHearAllButtomToBecomeEnabled();
 		RecordPanel recordPanel = interactSection.clickOnRepairButton(2);
-		sleep(3);
+		sleep(5);
 		edoHomePage.switchToFrameByClassName("cboxIframe");
-		recordPanel.checkSentenceScoreRatingText(5);
+		sleep(5);
+		recordPanel.checkSentenceScoreRatingText(recording.getSL().get(0),"srPanelWrapper");
 		recordPanel.checkWordsLevels(speakerText.get(1), wordLevels.get(1), textService);
 		
 		

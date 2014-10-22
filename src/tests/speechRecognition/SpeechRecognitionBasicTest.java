@@ -119,6 +119,8 @@ public class SpeechRecognitionBasicTest  extends EdusoftWebTest{
 			startStep("Check word level and sentence level");
 			recordPanel.checkWordsLevels(words, debugWordLevels, textService);
 			if (SLMatch == true) {
+				
+				System.out.println("**************Checking SL");
 				recordPanel.checckSentenceLevelLightBulbs(expectedSentenceLevel);
 				recordPanel.checkSentenceScoreRatingText(expectedSentenceLevel);
 				recordPanel.checkSentenceScoreText(expectedSentenceLevel);

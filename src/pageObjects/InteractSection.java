@@ -230,6 +230,7 @@ public class InteractSection extends SRpage {
 	public void checkFinalViewWordLevels(String[] words, String[] wordLevels,
 			TextService textService, int sentenceNumber) throws Exception {
 		for (int i = 0; i < words.length; i++) {
+			words[i] = 	words[i].replaceAll("[-.!,?]", "");
 			checkFinalViewWordLevel(words[i], Integer.valueOf(wordLevels[i]),
 					textService, sentenceNumber);
 		}

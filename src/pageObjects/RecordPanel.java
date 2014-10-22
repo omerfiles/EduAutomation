@@ -146,11 +146,16 @@ public class RecordPanel extends SRpage {
 	}
 
 	public void checkSentenceScoreRatingText(int ratingIndex) throws Exception {
+		checkSentenceScoreRatingText(ratingIndex, "srPanelScoreWrapper");
+	}
+
+	public void checkSentenceScoreRatingText(int ratingIndex, String className)
+			throws Exception {
 		report.report("Checking sentence score rating. Expected rating: "
 				+ ratingIndex);
 		webDriver.printScreen("checkSentenceScoreRatingText");
 		webDriver.waitForElement(
-				"//div[@class='srPanelScoreWrapper']//div[2]//span[@class='scoreSquares"
+				"//div[@class='"+className+"']//div[2]//span[@class='scoreSquares"
 						+ ratingIndex + "']", ByTypes.xpath);
 		String ratingText = null;
 		String ratingFeedbackText = null;
@@ -369,9 +374,10 @@ public class RecordPanel extends SRpage {
 	public String getRecordPanelStatus() throws Exception {
 		String text = null;
 		WebElement element = webDriver.waitForElement(
-				"//div[@id='divRStatus']", ByTypes.xpath, 30, true,"Record panel status");
+				"//div[@id='divRStatus']", ByTypes.xpath, 30, true,
+				"Record panel status");
 		text = element.getText();
-		
+
 		return text;
 
 	}
@@ -394,7 +400,7 @@ public class RecordPanel extends SRpage {
 						.println("Diffrence between expected WL and actual WL was bigger then 1");
 				testResultService
 						.addFailTest("difference between expected WL and actual WL was:"
-								+(expWL - actWL));
+								+ (expWL - actWL));
 			}
 		}
 
