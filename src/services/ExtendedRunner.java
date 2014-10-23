@@ -3,6 +3,7 @@ package services;
 import org.junit.internal.runners.InitializationError;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+
 public class ExtendedRunner extends SpringJUnit4ClassRunner {
 
 	public ExtendedRunner(Class<?> klass)
