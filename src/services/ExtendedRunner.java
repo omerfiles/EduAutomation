@@ -1,16 +1,25 @@
 package services;
 
-import org.junit.internal.runners.InitializationError;
+import java.lang.reflect.Method;
+
+
+
+import org.junit.runners.model.InitializationError;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 
 public class ExtendedRunner extends SpringJUnit4ClassRunner {
 
-	public ExtendedRunner(Class<?> klass)
-			throws org.junit.runners.model.InitializationError, InitializationError {
-		super(klass);
+	
+
+	public ExtendedRunner(Class<?> clazz) throws InitializationError {
+		super(clazz);
 		// TODO Auto-generated constructor stub
 	}
+
+
+
+	
 
 //	@Override
 //	protected org.junit.runners.model.Statement methodBlock(
@@ -78,5 +87,7 @@ public class ExtendedRunner extends SpringJUnit4ClassRunner {
 	// System.out.println(testCaseId);
 	// return super.methodDescription(method);
 }
+
+
 
 // }
