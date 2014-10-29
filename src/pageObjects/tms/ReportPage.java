@@ -31,10 +31,10 @@ public class ReportPage extends GenericPage {
 						"//table[@id='tblLicUsageSummeryReportGrid']//tbody//tr[2]//td[2]",
 						ByTypes.xpath).getText();
 		return packageNameFromSammary;
-		
+
 	}
 
-	public String getSammaryClassName() throws Exception{
+	public String getSammaryClassName() throws Exception {
 		String classNameFromSammary = webDriver
 				.waitForElement(
 						"//table[@id='tblLicUsageSummeryReportGrid']//tbody//tr[2]//td[1]",
@@ -42,6 +42,13 @@ public class ReportPage extends GenericPage {
 		return classNameFromSammary;
 	}
 
-	
+	public String getStduentNameFromLicenseReport(int index) throws Exception {
+		index = index + 1;
+		String text = webDriver.waitForElement(
+				"//table[@id='tblLicUsageDetailsReportGrid']//tbody//tr["
+						+ index + "]//td[1]", ByTypes.xpath).getText();
+		return text;
+
+	}
 
 }

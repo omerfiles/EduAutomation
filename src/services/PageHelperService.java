@@ -27,6 +27,7 @@ import Objects.CourseUnit;
 import Objects.Recording;
 import Objects.SchoolAdmin;
 import Objects.Student;
+import Objects.Supervisor;
 import Objects.Teacher;
 import Objects.UnitComponent;
 import Objects.UserObject;
@@ -57,6 +58,7 @@ public class PageHelperService extends SystemObjectImpl {
 	private AutoInstitution autoInstitution;
 	private Student student;
 	private Teacher teacher;
+	private Supervisor supervisor;
 	
 	private String sutUrl;
 
@@ -73,6 +75,7 @@ public class PageHelperService extends SystemObjectImpl {
 		recordings = loadRecordings();
 		student = new Student();
 		teacher = new Teacher();
+		supervisor=new Supervisor();
 
 		// check if student parameter is in maven command line
 		if (System.getProperty("student") != null) {
@@ -122,6 +125,20 @@ public class PageHelperService extends SystemObjectImpl {
 		edoHomePage.waitForPageToLoad();
 
 		return edoHomePage;
+	}
+	
+	public EdoHomePage loginAsSupervisor()throws Exception{
+		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver,
+				testResultService);
+		edoLoginPage.OpenPage(getSutAndSubDomain());
+		supervisor.setPassword(configuration.getProperty("supervisor.password"));
+		setUserLoginToNull(dbService.getUserIdByUserName(supervisor.getUserName(),
+				autoInstitution.getInstitutionId()));
+		EdoHomePage edoHomePage = edoLoginPage.login(supervisor);
+		edoHomePage.waitForPageToLoad();
+		
+		return edoHomePage;
+		
 	}
 
 	public TmsHomePage loginToTmsAsAdmin() throws Exception {

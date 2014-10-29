@@ -31,7 +31,7 @@ public class RecoredYourself extends SpeechRecognitionBasicTest {
 	}
 
 	@Test
-	@TestCaseParams(testCaseID = { "14534", "13544" })
+//	@TestCaseParams(testCaseID = { "14534", "13544" })
 	public void testRecordPanel1() throws Exception {
 		testRecordYourselfIntegrated(13, 1, 1, 16000);
 	}

@@ -592,6 +592,11 @@ public class DbService extends SystemObjectImpl {
 		
 	}
 
+	public int getUsedLicensesPerClass(String className) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	// s}
 
 }

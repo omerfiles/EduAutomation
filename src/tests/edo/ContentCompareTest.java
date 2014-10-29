@@ -52,11 +52,11 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 	public void deleteUpdatedContant() throws Exception {
 		List<String[]> filesToDelete = new ArrayList<String[]>();
 		// get list of updated files from D:\Content\Explore\English
-		String baseFolder = "D:\\Content\\Explore";
+		String baseFolder = "D:\\Content\\GrammarExplore_b4_OmerTool";
 		String baseFolderPath = "D:\\Content\\Explore\\English";
 		List<String> changedFiles = getFilesInFolder(baseFolderPath, 6);
 		// loop on every language folder in D:\Content\Explore except english
-		List<String> langFolders = getSubFoldersSimple("D:\\Content\\Explore");
+		List<String> langFolders = getSubFoldersSimple(baseFolder);
 		langFolders.remove("English");
 		langFolders.remove("English old");
 		langFolders.remove("English_b4_OmerTools");

@@ -989,5 +989,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	public void setReporter(services.Reporter reporter) {
 		this.reporter = reporter;
 	}
+	public void setTestResultService(TestResultService testResultService) {
+		this.testResultService=testResultService;
+		
+	}
 
 }

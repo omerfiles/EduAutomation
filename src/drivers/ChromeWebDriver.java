@@ -16,6 +16,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 
 import services.DbService;
+import services.TestResultService;
 
 public class ChromeWebDriver extends GenericWebDriver {
 
@@ -74,4 +75,6 @@ public class ChromeWebDriver extends GenericWebDriver {
 			logger.error("Cannot register node or start the remote driver! ", e);
 		}
 	}
+
+	
 }
