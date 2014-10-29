@@ -14,6 +14,7 @@ import org.openqa.selenium.support.ThreadGuard;
 import pageObjects.EdoHomePage;
 import pageObjects.RecordPanel;
 import services.AudioService;
+import Enums.AutoParams;
 import Enums.ByTypes;
 import drivers.ChromeWebDriver;
 import drivers.ThreadedWebDriver;
@@ -33,14 +34,18 @@ public class SRLoadTest extends EdusoftWebTest {
 
 		for (int i = 0; i < numberOfInstances; i++) {
 			ChromeWebDriver driver = new ChromeWebDriver();
-			driver.init(configuration.getProperty("remote.machine"), null);
+			driver.init(
+					configuration.getAutomationParam(
+							AutoParams.remoteMachine.toString(), "machine"),
+					null);
 			driver.setReporter(report);
 			driver.setTestResultService(testResultService);
 			webDriverList.add(driver);
 		}
 
 		for (int i = 0; i < numberOfInstances; i++) {
-			webDriverList.get(i).openUrl("http://edonov14.prod.com/automation.aspx");
+			webDriverList.get(i).openUrl(
+					"http://edonov14.prod.com/automation.aspx");
 			webDriverList
 					.get(i)
 					.addValuesToCookie(
@@ -69,17 +74,16 @@ public class SRLoadTest extends EdusoftWebTest {
 		// click on all record buttons
 		for (int i = 0; i < numberOfInstances; i++) {
 			recordPanels.get(i).clickOnRecordButton();
-			
+
 		}
 
 		// play the file
-		audioService.sendSoundToVirtualMic(
-				new File("files/audioFiles/TheBeatMe16000_16.wav"), 16000.0F);
-		
+		audioService.sendSoundToVirtualMic(new File(
+				"files/audioFiles/TheBeatMe16000_16.wav"), 16000.0F);
+
 		System.out.println("Playing ended");
 	}
 
-	
 	public void webdriverThreadGuard() throws Exception {
 		// ChromeWebDriver webDriver=new ChromeWebDriver();
 		// webDriver.init(configuration.getProperty("remote.machine"), null);
