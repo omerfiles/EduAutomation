@@ -15,6 +15,7 @@ import drivers.GenericWebDriver;
 import pageObjects.GenericPage;
 import pageObjects.TestQuestionPage;
 import services.TestResultService;
+import services.TextService;
 
 public class edoPlacementTestPage extends TestQuestionPage {
 
@@ -60,14 +61,14 @@ public class edoPlacementTestPage extends TestQuestionPage {
 		String[] answerSourceLocations = question.getCorrectAnswers();
 		String[] answerDestinationLocations = question.getAnswersDestinations();
 		for (int i = 0; i < answerSourceLocations.length; i++) {
+			int index = i + 1;
 			WebElement from = webDriver.waitForElement(
-					"//div[contains(text(),'" + question.getCorrectAnswers()[i]
-							+ "')]",
+					"//div[text()=" + question.getCorrectAnswers()[i] + "]",
 					ByTypes.xpath,
 					"element of answer number text "
 							+ answerSourceLocations[i].toString());
-			WebElement to = webDriver.waitForElement("//span[@data-id='"
-					+ answerDestinationLocations[i] + "']", ByTypes.xpath);
+			WebElement to = webDriver.waitForElement("//span[@data-id='1_"
+					+ index + "']", ByTypes.xpath);
 			webDriver.dragAndDropElement(from, to);
 		}
 	}
@@ -95,8 +96,8 @@ public class edoPlacementTestPage extends TestQuestionPage {
 	public void answerCheckboxQuestion(TestQuestion question) throws Exception {
 
 		webDriver.waitForElement(
-				"//span[@class='multiTextInline'][contains(text(),'"
-						+ question.getCorrectAnswers()[0] + "')]",
+				"//span[@class='multiTextInline'][contains(text(),"
+						+ question.getCorrectAnswers()[0] + ")]",
 				ByTypes.xpath).click();
 
 	}
@@ -158,6 +159,7 @@ public class edoPlacementTestPage extends TestQuestionPage {
 	}
 
 	public void performTest(PLTTest pltTest) throws Exception {
+		TextService textService = new TextService();
 		// Fill the test questions according to the questions arrayList filled
 		// from CSV file
 
@@ -173,6 +175,16 @@ public class edoPlacementTestPage extends TestQuestionPage {
 			for (int i = 0; i < firstCycle.getNumberOfQuestions(); i++) {
 				TestQuestion question = firstCycle.getCycleQuestions().get(i);
 				TestQuestionType questionType = question.getQuestionType();
+
+				// convert ~ to ,
+				String[] answers = new String[question.getCorrectAnswers().length];
+				for (int j = 0; j < question.getCorrectAnswers().length; j++) {
+					answers[j] = question.getCorrectAnswers()[j].replace("~",
+							",");
+					answers[j] = textService.resolveAprostophes(answers[j]);
+				}
+				question.setCorrectAnswers(answers);
+
 				switch (questionType) {
 				case DragAndDropMultiple:
 					answerDragAndDropQuestion(question);

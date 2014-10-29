@@ -170,17 +170,52 @@ public class ContentCompareBasicTest extends EdusoftBasicTest {
 	}
 
 	public List<String> getSubFolders(String path) throws Exception {
-		return getSubFolders(path, true);
+		return getSubFolders(path, true, false);
 	}
 
-	public List<String> getSubFolders(String path, boolean isGrammarTest)
-			throws Exception {
-		return getSubFolders(path, null, isGrammarTest);
+	public List<String> getSubFolders(String path, boolean isGrammarTest,
+			boolean useCodesList) throws Exception {
+		return getSubFolders(path, null, isGrammarTest, useCodesList);
+	}
+	
+	public List<String> getSubFoldersSimple(String path){
+		File folder=new File(path);
+		File[] listOfFiles = folder.listFiles();
+		List<String>folders=new ArrayList<String>();
+		for(int i=0;i<listOfFiles.length;i++){
+			if(listOfFiles[i].isDirectory()){
+				String str=listOfFiles[i].getName();
+				folders.add(str);
+				System.out.println(str);
+			}
+		}
+		System.out.println(folders.size());
+		return folders;
 	}
 
 	public List<String> getSubFolders(String path, String csvFilePath,
 			boolean isGrammarTest) throws Exception {
+
+		return getSubFolders(path, csvFilePath, isGrammarTest, false);
+
+	}
+
+	public List<String> getSubFolders(String path, String csvFilePath,
+			boolean isGrammarTest, boolean useCodesList) throws Exception {
 		List<String> folders = null;
+		List<String[]> codesList = null;
+		if (useCodesList) {
+			String codeListCsv = "files/csvFiles/codesList.csv";
+			codesList = textService.getStr2dimArrFromCsv(codeListCsv);
+			for (int i = 0; i < codesList.size(); i++) {
+				// System.out.println(codesList.get(i)[0].length());
+				if (codesList.get(i)[0].length() == 7) {
+
+					codesList.get(i)[0] = codesList.get(i)[0].substring(0, 6);
+					System.out.println(codesList.get(i)[0]);
+				}
+			}
+		}
 
 		List<String> grammarsFromExcel = null;
 		if (csvFilePath != null) {
@@ -207,12 +242,24 @@ public class ContentCompareBasicTest extends EdusoftBasicTest {
 					}
 				} else {
 					if (new File(path + "\\" + name).isDirectory()) {
-						System.out.println(name);
+
 						if (name.length() <= 6) {
-							folders.add(name);
+							if (useCodesList) {
+								// check if content code appear in CSV file
+								for (int j = 0; j < codesList.size(); j++) {
+									if (codesList.get(j)[0].equals(name)) {
+										folders.add(name);
+										System.out.println("Folder match:"
+												+ name);
+									}
+								}
+
+							}
+
 						}
 					}
 				}
+
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -224,6 +271,26 @@ public class ContentCompareBasicTest extends EdusoftBasicTest {
 		}
 		return folders;
 
+	}
+	
+	public List<String> getFilesInFolder(String folderPath,int charNum)throws IOException{
+		File folder=new File(folderPath);
+		File[] listOfFiles = folder.listFiles();
+		List<String>files=new ArrayList<String>();
+		for(int i=0;i<listOfFiles.length;i++){
+			if(listOfFiles[i].isFile()){
+				String str=listOfFiles[i].getName();
+				if(charNum>0){
+					str=str.substring(0, charNum);
+				}
+				files.add(str);
+				System.out.println(str);
+			}
+		}
+		System.out.println(files.size());
+		return files;
+		
+		
 	}
 
 	public String getGrammerTextFromGrammerFiles(String grammerID,
@@ -250,5 +317,7 @@ public class ContentCompareBasicTest extends EdusoftBasicTest {
 		}
 		return text;
 	}
+	
+
 
 }

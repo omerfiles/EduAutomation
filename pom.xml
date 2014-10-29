@@ -239,7 +239,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
-			<version>2.5</version>
+			<version>4.1.1.RELEASE</version>
 		</dependency>
 
 
@@ -576,7 +576,7 @@
 							<testClassesDirectory>${project.basedir}/target/classes/</testClassesDirectory>
 							<includes>
 								<include>**/RecoredYourself.java</include>
-							
+
 
 							</includes>
 

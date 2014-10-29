@@ -5,6 +5,8 @@ import Enums.TestQuestionType;
 public class TestQuestion extends BasicObject {
 
 	String[] correctAnswers;
+	
+
 	String[]answersDestinations;
 	String[] incoreectAnswers;
 	int[]blankAnswers;
@@ -53,6 +55,9 @@ public class TestQuestion extends BasicObject {
 
 	public void setQuestionType(TestQuestionType questionType) {
 		this.questionType = questionType;
+	}
+	public void setCorrectAnswers(String[] correctAnswers) {
+		this.correctAnswers = correctAnswers;
 	}
 
 	

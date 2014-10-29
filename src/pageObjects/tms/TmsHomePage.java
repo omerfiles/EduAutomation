@@ -140,14 +140,23 @@ public class TmsHomePage extends GenericPage {
 
 	}
 
+	public TmsHomePage selectInstitute(String instituteName, String id,
+			boolean switchFrame) throws Exception {
+		return selectInstitute(instituteName, id, true, switchFrame);
+	}
+
 	public TmsHomePage selectInstitute(String instituteName, String id)
 			throws Exception {
-		return selectInstitute(instituteName, id, true);
+		return selectInstitute(instituteName, id, true, true);
 	}
 
 	public TmsHomePage selectInstitute(String instituteName, String id,
-			boolean clickGo) throws Exception {
-		String mainWin = webDriver.switchToFrame("FormFrame");
+			boolean clickGo, boolean switchToFormFrame) throws Exception {
+		String mainWin = null;
+		if (switchToFormFrame) {
+			mainWin = webDriver.switchToFrame("FormFrame");
+		}
+
 		webDriver.waitForElementAndClick("SelectSchool", ByTypes.id);
 		Thread.sleep(1000);
 		webDriver.waitForElement(
@@ -157,7 +166,9 @@ public class TmsHomePage extends GenericPage {
 			webDriver.waitForElement("//input[@value='  GO  ']", ByTypes.xpath)
 					.click();
 		}
-		webDriver.switchToMainWindow(mainWin);
+		if (switchToFormFrame) {
+			webDriver.switchToMainWindow(mainWin);
+		}
 		return this;
 	}
 
@@ -177,18 +188,28 @@ public class TmsHomePage extends GenericPage {
 	}
 
 	public TmsHomePage selectClass(String className) throws Exception {
+		return selectClass(className, true,true);
+	}
 
-		swithchToMainFrame();
-		String mainWin = webDriver.switchToFrame("FormFrame");
+	public TmsHomePage selectClass(String className, boolean switchFrame,boolean clickGo)
+			throws Exception {
+
+		if (switchFrame) {
+			swithchToMainFrame();
+			String mainWin = webDriver.switchToFrame("FormFrame");
+		}
 		webDriver.waitForElementAndClick("SelectClass", ByTypes.id);
 		Thread.sleep(1000);
 		webDriver.waitForElement(
 				"//select[@id='SelectClass']//option[contains(text(),'"
 						+ className + "')]", ByTypes.xpath).click();
+		if(clickGo){
 		webDriver.waitForElement("//input[@value='  GO  ']", ByTypes.xpath)
 				.click();
 		Thread.sleep(3000);
-//		webDriver.switchToFrame("mainFrame");
+		}
+		
+		// webDriver.switchToFrame("mainFrame");
 
 		return this;
 
@@ -209,9 +230,12 @@ public class TmsHomePage extends GenericPage {
 	public TmsHomePage enterStudentDetails(String studentName) throws Exception {
 		webDriver.switchToTopMostFrame();
 		webDriver.switchToFrame("mainFrame");
-		webDriver.waitForElement("FirstName", ByTypes.name).sendKeys(studentName);
-		webDriver.waitForElement("LastName", ByTypes.name).sendKeys(studentName);
-		webDriver.waitForElement("UserName", ByTypes.name).sendKeys(studentName);
+		webDriver.waitForElement("FirstName", ByTypes.name).sendKeys(
+				studentName);
+		webDriver.waitForElement("LastName", ByTypes.name)
+				.sendKeys(studentName);
+		webDriver.waitForElement("UserName", ByTypes.name)
+				.sendKeys(studentName);
 		webDriver.waitForElement("//input[@value='Add']", ByTypes.xpath)
 				.click();
 		return this;
@@ -705,11 +729,46 @@ public class TmsHomePage extends GenericPage {
 	public void swithchToCboxFrame() throws Exception {
 		webDriver.switchToFrame(webDriver.waitForElement(
 				"//iframe[@class='cboxIframe']", ByTypes.xpath));
-		
+
 	}
 
-	public void clickOnRemoveCommentButton()throws Exception {
-		webDriver.waitForElement("butRemove", ByTypes.id).click();;
+	public void clickOnRemoveCommentButton() throws Exception {
+		webDriver.waitForElement("butRemove", ByTypes.id).click();
+		;
+
+	}
+
+	public void clickOnCourseReports() throws Exception {
+		webDriver.waitForElement("Course Reports", ByTypes.linkText).click();
+
+	}
+
+	public void selectCourseReport(String reportName) throws Exception {
+		String mainWin = webDriver.switchToFrame("FormFrame");
+		webDriver.waitForElementAndClick("SelectReport", ByTypes.id);
+		Thread.sleep(1000);
+		webDriver.waitForElement(
+				"//select[@id='SelectReport']//option[contains(text(),'"
+						+ reportName + "')]", ByTypes.xpath).click();
+
+	}
+
+	public void selectPackageByName(String packageName) throws Exception {
+		webDriver.waitForElementAndClick("SelectInstPackage", ByTypes.id);
+		Thread.sleep(1000);
+		webDriver.waitForElement(
+				"//select[@id='SelectInstPackage']//option[contains(text(),'"
+						+ packageName + "')]", ByTypes.xpath).click();
+
+	}
+	public void clickOnGo()throws  Exception{
+		webDriver.waitForElement("//input[@value='  GO  ']", ByTypes.xpath)
+		.click();
+	}
+
+	public void switchToReportFrame() throws Exception {
+		swithchToMainFrame();
+		webDriver.switchToFrame("licenseUsageReport");
 		
 	}
 

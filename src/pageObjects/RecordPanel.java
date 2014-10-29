@@ -92,9 +92,9 @@ public class RecordPanel extends SRpage {
 		// approve popup using Java robot
 
 		webDriver.sleep(1000);
-		if (webDriver.getSutUrl().contains("develop")) {
-			allowMicFirefox();
-		}
+//		if (webDriver.getSutUrl().contains("develop")) {
+//			allowMicFirefox();
+//		}
 		// **************************
 
 		// webDriver.closeAlertByAccept();
@@ -424,6 +424,11 @@ public class RecordPanel extends SRpage {
 				"//div[@class='scoreExpWrapper']", ByTypes.xpath).getText();
 		testResultService.assertEquals("Speech too long", text,
 				"Message about long speech is not displayed");
+	}
+
+	public void setWebDriver(GenericWebDriver webdriver) {
+		this.webDriver=webdriver;
+		
 	}
 
 }

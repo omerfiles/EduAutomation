@@ -1,5 +1,6 @@
 package drivers;
 
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.logging.Level;
@@ -12,6 +13,7 @@ import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.UnreachableBrowserException;
 
 import services.DbService;
 
@@ -24,13 +26,13 @@ public class ChromeWebDriver extends GenericWebDriver {
 		setInitialized(true);
 		dbService = new DbService();
 		// setRemoteMachine(remoteUrl);
-
+		DesiredCapabilities capabilities = DesiredCapabilities.chrome();
 		logsFolder = folderName;
 		try {
 
 			System.out.println("Initializing ChromeWebDriver");
 
-			DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+			
 			if (enableConsoleLog == true) {
 				LoggingPreferences logPrefs = new LoggingPreferences();
 				logPrefs.enable(LogType.BROWSER, Level.ALL);
@@ -47,10 +49,29 @@ public class ChromeWebDriver extends GenericWebDriver {
 			webDriver = new RemoteWebDriver(new URL(remoteUrl + "/wd/hub"),
 					capabilities);
 
-		
-		} catch (Exception e) {
+		} catch (UnreachableBrowserException e) {
+			System.out.println("Browser unreachable");
+			// try to start selenium grid node
+			try {
+				Process proc = Runtime
+						.getRuntime()
+						.exec("java -jar seleniumFiles/selenium-server-standalone-2.43.0.jar -Dwebdriver.chrome.driver='seleniumFiles/chromedriver.exe' -Dwebdriver.ie.driver='seleniumFiles/IEDriverServer.exe'  -role node  -hub http://10.1.0.56:4444/grid/register");
+				// Then retreive the process output
+				InputStream in = proc.getInputStream();
+				InputStream err = proc.getErrorStream();
+				
+				webDriver = new RemoteWebDriver(new URL(remoteUrl + "/wd/hub"),
+						capabilities);
+				
+//				webDriver = new RemoteWebDriver(new URL(remoteUrl + "/wd/hub"),
+//						capabilities);
+			} catch (Exception ex) {
+				System.out.println(e.toString());
+			}
+		}
+
+		catch (Exception e) {
 			logger.error("Cannot register node or start the remote driver! ", e);
 		}
 	}
-
 }

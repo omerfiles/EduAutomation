@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import org.junit.Assert;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoAlertPresentException;
@@ -31,6 +32,7 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.logging.LogEntries;
@@ -70,10 +72,11 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	protected DbService dbService;
 	protected String remoteMachine;
 	protected boolean enableConsoleLog = false;
+	
 	@Autowired
 	private services.Configuration configuration;
 
-	@Autowired
+
 	private services.Reporter reporter;
 
 	TestResultService testResultService;
@@ -180,7 +183,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	public WebElement waitForElement(String idValue, ByTypes byType,
 			int timeout, boolean isElementMandatory, String message, int sleepMS)
 			throws Exception {
-		System.out.println("waiting for element " + idValue + " by trpe "
+//		System.out.println("waiting for element " + idValue + " by trpe "
+//				+ byType + " for " + timeout + " seconds");
+		reporter.startLevel("waiting for element " + idValue + " by type "
 				+ byType + " for " + timeout + " seconds");
 		WebElement element = null;
 
@@ -449,6 +454,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 					.frameToBeAvailableAndSwitchToIt(frameName));
 		} catch (TimeoutException e) {
 			// Assert.fail("Frame waw not found");
+			System.out.println(e.toString());
 			testResultService.addFailTest("Frame was not found", true);
 		} finally {
 
@@ -846,7 +852,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 				session.toExternalForm());
 
 		org.apache.http.HttpResponse response = client.execute(host, req);
-
+		
 		JSONObject object = new JSONObject(EntityUtils.toString(response
 				.getEntity()));
 
@@ -921,18 +927,67 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		}
 	}
 
-	public boolean waitUntilElementClickable(String  xpath, int timeout) {
+	public boolean waitUntilElementClickable(String xpath, int timeout) {
 		WebDriverWait wait = new WebDriverWait(webDriver, timeout);
-		WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(xpath)));
-		
-		if(element==null){
-			testResultService.addFailTest("Element was not clickable after "+ timeout);
+		WebElement element = wait.until(ExpectedConditions
+				.elementToBeClickable(By.xpath(xpath)));
+
+		if (element == null) {
+			testResultService.addFailTest("Element was not clickable after "
+					+ timeout);
 			return false;
-		}
-		else{
+		} else {
 			return true;
 		}
-		
+
+	}
+
+	public boolean checNodeIsON(String nodeIp) throws Exception {
+		System.out
+				.println("Check the HUB usability - before test suite starts");
+		String gridHub = "localhost";
+		HtmlUnitDriver hubConsoleHtmlDriver = new HtmlUnitDriver();
+		String hubStatusUrl = "http://" + gridHub + ":4444/grid/console";
+		hubConsoleHtmlDriver.get(hubStatusUrl);
+		String remoteProxyNodeXpath = "//p[@class='proxyid']";
+		boolean nodeIsOn = false;
+
+		try {
+			List<WebElement> elements = hubConsoleHtmlDriver.findElements(By
+					.xpath(remoteProxyNodeXpath));
+			for(int i=0;i<elements.size();i++){
+				String nodeDetails=elements.get(i).getText();
+				if(nodeDetails.contains(nodeIp)){
+					nodeIsOn=true;
+					break;
+				}
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("Node is not running");
+		}
+		return nodeIsOn;
+
+	}
+	
+	public void addValuesToCookie(String cookieName,String value){
+		try {
+			Cookie cookie=new Cookie(cookieName, value);
+			webDriver.manage().addCookie(cookie);
+			System.out.println("Cookie added");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public RemoteWebDriver getWebDriver() {
+		return webDriver;
+	}
+
+	public void setReporter(services.Reporter reporter) {
+		this.reporter = reporter;
 	}
 
 }

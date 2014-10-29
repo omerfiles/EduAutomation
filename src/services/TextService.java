@@ -26,6 +26,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.commons.io.FileUtils;
 import org.htmlcleaner.CleanerProperties;
 import org.htmlcleaner.DomSerializer;
 import org.htmlcleaner.HtmlCleaner;
@@ -365,6 +366,7 @@ public class TextService extends SystemObjectImpl {
 		writer.writeAll(list);
 		writer.close();
 	}
+	
 
 	public List<String[]> getListFromLogEntries(LogEntries logEntries) {
 		return getListFromLogEntries(logEntries, null);
@@ -383,5 +385,11 @@ public class TextService extends SystemObjectImpl {
 			}
 		}
 		return strList;
+	}
+
+	public void copyFileToFolder(String sourcePath, String destinationPath)
+			throws IOException {
+		FileUtils.copyFileToDirectory(new File(sourcePath), new File(
+				destinationPath));
 	}
 }

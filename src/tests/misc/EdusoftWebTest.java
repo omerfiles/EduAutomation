@@ -27,7 +27,7 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 
 	String browser = null;
 	private boolean enableLoggin = false;
-	private String logFilter=null;
+	private String logFilter = null;
 
 	@Override
 	public void setup() throws Exception {
@@ -52,8 +52,7 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 		// // name from
 		// properties file
 		// }
-	
-	
+
 		browser = configuration.getAutomationParam("browser", "browserCMD");
 
 		if (browser.equals(Browsers.chrome.toString())) {
@@ -70,6 +69,11 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 			testResultService
 					.addFailTest("No webdriver found. Please check properties file or pom for webdriver name");
 		}
+		webDriver.setReporter(report);
+
+		// if
+		// (webDriver.checNodeIsON(configuration.getProperty("remote.machine")))
+		// {
 		if (enableLoggin == true) {
 			webDriver.setEnableConsoleLog(true);
 		}
@@ -79,6 +83,10 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 		} catch (Exception e) {
 			Assert.fail("openening Webdriver failed. Check that selenium node/grid are running and also check configurations");
 		}
+		// } else {
+		// Assert.fail("Selenium grid node is off");
+		// }
+
 		pageHelper = (PageHelperService) ctx.getBean("PageHelperService");
 		pageHelper.init(webDriver, autoInstitution, testResultService);
 		audioService = (AudioService) ctx.getBean("AudioService");
@@ -90,12 +98,13 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 
 		if (enableLoggin == true && browser.equals(Browsers.chrome.toString())) {
 			LogEntries logEntries = webDriver.getConsoleLogEntries();
-			List<String[]> logList = textService
-					.getListFromLogEntries(logEntries,logFilter);
-			String consoleLogPath="files/consoleOutput/consoleLog"+dbService.sig()+".csv";
-			textService.writeArrayistToCSVFile(consoleLogPath,
-					logList);
-			System.out.println("Console log can be found in: "+consoleLogPath);
+			List<String[]> logList = textService.getListFromLogEntries(
+					logEntries, logFilter);
+			String consoleLogPath = "files/consoleOutput/consoleLog"
+					+ dbService.sig() + ".csv";
+			textService.writeArrayistToCSVFile(consoleLogPath, logList);
+			System.out
+					.println("Console log can be found in: " + consoleLogPath);
 
 		}
 
@@ -103,8 +112,7 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 		try {
 			if (testResultService.hasFailedResults()) {
 
-				webDriver
-						.printScreen("FailCause_", null);
+				webDriver.printScreen("FailCause_", null);
 			}
 
 			// if (pageHelper.isLogoutNeeded()) {
