@@ -609,8 +609,10 @@
 								<teacher>${teacher}</teacher>
 								<machine>${machine}</machine>
 								<envFile>${envFileCMD}</envFile>
+								<slaveName>${slaveNameCMD}</slaveName>
 							</properties>
 							<systemProperties>
+							
 								<property>
 									<name>browser</name>
 									<value>firefox</value>
@@ -646,7 +648,7 @@
 			</build>
 
 		</profile>
-		
+
 
 		<profile>
 			<activation>
@@ -831,7 +833,7 @@
 			</build>
 
 		</profile>
-		
+
 
 	</profiles>
 </project>

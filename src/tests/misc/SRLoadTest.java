@@ -21,7 +21,7 @@ import drivers.ThreadedWebDriver;
 
 public class SRLoadTest extends EdusoftWebTest {
 
-	int numberOfInstances = 7;
+	int numberOfInstances = 1;
 	List<ChromeWebDriver> webDriverList = new ArrayList<ChromeWebDriver>();
 	List<RecordPanel> recordPanels = new ArrayList<RecordPanel>();
 
@@ -30,7 +30,11 @@ public class SRLoadTest extends EdusoftWebTest {
 	@Test
 	public void testMultipleBrowserInstances() throws Exception {
 
-		AudioService audioService = new AudioService();
+	String slaveName=	configuration.getAutomationParam(null,"slaveNameCMD");
+	System.out.println("Slave name is:"+slaveName);	
+	
+	netService.updateSlaveStatus(slaveName, "not ready");
+	AudioService audioService = new AudioService();
 
 		for (int i = 0; i < numberOfInstances; i++) {
 			ChromeWebDriver driver = new ChromeWebDriver();
@@ -70,7 +74,9 @@ public class SRLoadTest extends EdusoftWebTest {
 			edoHomePage.switchToFrameByClassName("cboxIframe");
 
 		}
-
+		
+		netService.updateSlaveStatus(slaveName, "ready");
+		netService.checkAllSlaveStatus();
 		// click on all record buttons
 		for (int i = 0; i < numberOfInstances; i++) {
 			recordPanels.get(i).clickOnRecordButton();

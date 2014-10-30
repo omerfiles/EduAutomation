@@ -5,7 +5,8 @@ public enum AutoParams {
 	machine("machine"),
 	sutUrl("sut.url"),
 	envFile("envFile"),
-	srdebug("srdebug")
+	srdebug("srdebug"),
+	slaveName("slaveName")
 	
 	;
 	

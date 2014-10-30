@@ -1,10 +1,17 @@
 package services;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.sql.SQLXML;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,6 +37,8 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+
+import com.google.common.primitives.Chars;
 
 import jsystem.framework.system.SystemObjectImpl;
 import junit.framework.Assert;
@@ -126,9 +135,11 @@ public class NetService extends SystemObjectImpl {
 		return arrList;
 	}
 
-	public NodeList getNodesFromXml(String expression,Document document) throws Exception {
-		XPath xPath =  XPathFactory.newInstance().newXPath();
-		NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(document, XPathConstants.NODESET);
+	public NodeList getNodesFromXml(String expression, Document document)
+			throws Exception {
+		XPath xPath = XPathFactory.newInstance().newXPath();
+		NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(
+				document, XPathConstants.NODESET);
 		return nodeList;
 
 	}
@@ -221,7 +232,68 @@ public class NetService extends SystemObjectImpl {
 		sentHttpRequest(request, "POST");
 
 	}
-	
-	
 
+	public void updateSlaveStatus(String slaveName, String text)
+			throws IOException, UnsupportedEncodingException {
+		String statusFolder = "\\\\10.1.0.66\\slavesStatus\\";
+		// if file does not exist, create file
+		File file = new File(statusFolder + slaveName + ".txt");
+		if (file.exists()) {
+			System.out.println("file exist");
+			PrintWriter writer = new PrintWriter(statusFolder + slaveName
+					+ ".txt", "UTF-8");
+		
+			writer.print(text);
+			writer.close();
+		} else {
+			System.out.println("file dose not exist. creating file");
+			PrintWriter writer = new PrintWriter(statusFolder + slaveName
+					+ ".txt", "UTF-8");
+			writer.print(text);
+			writer.close();
+		}
+		// if file exist, update status
+
+	}
+
+	public boolean checkAllSlaveStatus() throws Exception {
+		// read all files from \\\\10.1.0.66\\slavesStatus\\ and check that all
+		// has "true" in them
+		TextService textService = new TextService();
+		boolean status = false;
+		File folder = new File("\\\\10.1.0.66\\slavesStatus\\");
+		File[] listOfFiles = folder.listFiles();
+		boolean[] slavesStatus = new boolean[listOfFiles.length];
+		while (checkBooleanArr(slavesStatus) == false) {
+			for (int i = 0; i < listOfFiles.length; i++) {
+				// read status from file
+				String text = textService.getTextFromFile(
+						listOfFiles[i].getAbsolutePath(),
+						Charset.defaultCharset());
+//				System.out.println("Text is: "+text);
+				if (text.equals("ready")) {
+					System.out
+							.println("Slave: " + listOfFiles[i] + " is ready");
+					slavesStatus[i] = true;
+				} else {
+					System.out
+							.println("slave "+listOfFiles[i]+" not ready. Sleeping for 5 seconds");
+					Thread.sleep(5000);
+					slavesStatus[i] = false;
+				}
+			}
+		}
+		System.out.println("All servers are ready");
+		return true;
+	}
+
+	boolean checkBooleanArr(boolean[] arr) {
+		boolean arrStatus = true;
+		for (int i = 0; i < arr.length; i++) {
+			if (arr[i] == false) {
+				arrStatus = false;
+			}
+		}
+		return arrStatus;
+	}
 }

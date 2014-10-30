@@ -277,35 +277,40 @@ public class Configuration {
 
 	public String getAutomationParam(String paramName, String mavenCmdParam) {
 		String value = null;
-
+		System.out.println("Maven cmd param:"+mavenCmdParam);
 		// check in maven command line
-		value = System.getProperty(mavenCmdParam);
-		// check in properties file
-		if (value != null) {
-//			System.out.println("got param from maven cmd: " + value);
-			return value;
-		}
-		// check in properties file
-		value = getProperty(paramName);
-		if (value != null) {
+		try {
+			value = System.getProperty(mavenCmdParam);
+			// check in properties file
+			if (value != null) {
+			System.out.println("got param from maven cmd: " + value);
+				return value;
+			}
+			// check in properties file
+			value = getProperty(paramName);
+			if (value != null) {
 //			System.out.println("got param from properties file: " + value);
 //			reporter.startLevel("got param from properties file: " + value);
-			return value;
-		}
-		// check in pom profile
-		value = System.getProperty(paramName);
-		if (value != null) {
+				return value;
+			}
+			// check in pom profile
+			value = System.getProperty(paramName);
+			if (value != null) {
 //			System.out.println("got param from pom profile: " + value);
-			return value;
-		}
-		// check in global properties
-		value = globalProperties.getProperty(paramName);
-		if (value != null) {
+				return value;
+			}
+			// check in global properties
+			value = globalProperties.getProperty(paramName);
+			if (value != null) {
 //			System.out.println("got from global properties: " + value);
-			return value;
-		} else {
+				return value;
+			} else {
 //			System.out.println("value "+paramName+" not found");
 //			org.junit.Assert.fail("Auto param value not found. Check properties file or maven CMD param");
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 		return value;
