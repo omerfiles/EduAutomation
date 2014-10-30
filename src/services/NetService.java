@@ -1,15 +1,19 @@
 package services;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.sql.SQLXML;
@@ -24,6 +28,13 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
+
+import jcifs.smb.NtlmAuthenticator;
+import jcifs.smb.NtlmPasswordAuthentication;
+import jcifs.smb.SmbException;
+import jcifs.smb.SmbFile;
+import jcifs.smb.SmbFileInputStream;
+import jcifs.smb.SmbFileOutputStream;
 
 import org.hamcrest.core.IsInstanceOf;
 import org.json.JSONArray;
@@ -235,23 +246,32 @@ public class NetService extends SystemObjectImpl {
 
 	public void updateSlaveStatus(String slaveName, String text)
 			throws IOException, UnsupportedEncodingException {
-		String statusFolder = "\\\\10.1.0.66\\slavesStatus\\";
+		// String statusFolder = "\\\\10.1.0.66\\slavesStatus\\";
+		String smbFolder = "smb://10.1.0.66/slavesStatus/" + slaveName + ".txt";
+		// NtlmPasswordAuthentication auth = new NtlmPasswordAuthentication("",
+		// "automation", "tamar2010");
+		NtlmPasswordAuthentication auth = getAuth();
+		SmbFile smbFile = new SmbFile(smbFolder, auth);
+
+		SmbFileOutputStream outputStream = new SmbFileOutputStream(smbFile);
+		outputStream.write(text.getBytes());
+
 		// if file does not exist, create file
-		File file = new File(statusFolder + slaveName + ".txt");
-		if (file.exists()) {
-			System.out.println("file exist");
-			PrintWriter writer = new PrintWriter(statusFolder + slaveName
-					+ ".txt", "UTF-8");
-		
-			writer.print(text);
-			writer.close();
-		} else {
-			System.out.println("file dose not exist. creating file");
-			PrintWriter writer = new PrintWriter(statusFolder + slaveName
-					+ ".txt", "UTF-8");
-			writer.print(text);
-			writer.close();
-		}
+		// File file = new File(statusFolder + slaveName + ".txt");
+		// if (file.exists()) {
+		// System.out.println("file exist");
+		// PrintWriter writer = new PrintWriter(statusFolder + slaveName
+		// + ".txt", "UTF-8");
+		//
+		// writer.print(text);
+		// writer.close();
+		// } else {
+		// System.out.println("file dose not exist. creating file");
+		// PrintWriter writer = new PrintWriter(statusFolder + slaveName
+		// + ".txt", "UTF-8");
+		// writer.print(text);
+		// writer.close();
+		// }
 		// if file exist, update status
 
 	}
@@ -261,30 +281,69 @@ public class NetService extends SystemObjectImpl {
 		// has "true" in them
 		TextService textService = new TextService();
 		boolean status = false;
-		File folder = new File("\\\\10.1.0.66\\slavesStatus\\");
-		File[] listOfFiles = folder.listFiles();
+		// File folder = new File("\\\\10.1.0.66\\slavesStatus\\");
+		String path = "smb://10.1.0.66/slavesStatus/";
+		String[] listOfFiles;
+		StringBuilder builder = null;
+		NtlmPasswordAuthentication auto = getAuth();
+		SmbFile smbFile = new SmbFile(path, auto);
+		listOfFiles = smbFile.list();
 		boolean[] slavesStatus = new boolean[listOfFiles.length];
 		while (checkBooleanArr(slavesStatus) == false) {
 			for (int i = 0; i < listOfFiles.length; i++) {
 				// read status from file
-				String text = textService.getTextFromFile(
-						listOfFiles[i].getAbsolutePath(),
-						Charset.defaultCharset());
-//				System.out.println("Text is: "+text);
+				// String text = textService.getTextFromFile(
+				// listOfFiles[i].getAbsolutePath(),
+				// Charset.defaultCharset());
+				// System.out.println("Text is: "+text);
+				// SmbFileInputStream fileInputStream=new
+				// SmbFileInputStream(path+listOfFiles[i]);
+
+				// String text=fileInputStream.toString();
+
+				try {
+					builder = new StringBuilder();
+					SmbFile file = new SmbFile(path + listOfFiles[i], auto);
+					builder = readFileContent(file, builder);
+				} catch (Exception e) {
+
+				}
+				String text = builder.toString();
+
+				System.out.println("Text is:" + text);
 				if (text.equals("ready")) {
 					System.out
 							.println("Slave: " + listOfFiles[i] + " is ready");
 					slavesStatus[i] = true;
 				} else {
-					System.out
-							.println("slave "+listOfFiles[i]+" not ready. Sleeping for 5 seconds");
+					System.out.println("slave " + listOfFiles[i]
+							+ " not ready. Sleeping for 5 seconds");
 					Thread.sleep(5000);
 					slavesStatus[i] = false;
 				}
 			}
 		}
+
 		System.out.println("All servers are ready");
 		return true;
+	}
+
+	private StringBuilder readFileContent(SmbFile file, StringBuilder builder)
+			throws IOException {
+		BufferedReader reader = null;
+		reader = new BufferedReader(new InputStreamReader(
+				new SmbFileInputStream(file)));
+		String lineReader = null;
+		try {
+			while ((lineReader = reader.readLine()) != null) {
+				builder.append(lineReader);
+			}
+		} catch (Exception e) {
+
+		} finally {
+			reader.close();
+		}
+		return builder;
 	}
 
 	boolean checkBooleanArr(boolean[] arr) {
@@ -295,5 +354,11 @@ public class NetService extends SystemObjectImpl {
 			}
 		}
 		return arrStatus;
+	}
+
+	private NtlmPasswordAuthentication getAuth() {
+		NtlmPasswordAuthentication auth = new NtlmPasswordAuthentication("",
+				"automation", "tamar2010");
+		return auth;
 	}
 }
