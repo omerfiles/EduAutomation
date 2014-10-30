@@ -21,7 +21,7 @@ import drivers.ThreadedWebDriver;
 
 public class SRLoadTest extends EdusoftWebTest {
 
-	int numberOfInstances = 1;
+	int numberOfInstances = 5;
 	List<ChromeWebDriver> webDriverList = new ArrayList<ChromeWebDriver>();
 	List<RecordPanel> recordPanels = new ArrayList<RecordPanel>();
 
@@ -88,6 +88,7 @@ public class SRLoadTest extends EdusoftWebTest {
 				"files/audioFiles/TheBeatMe16000_16.wav"), 16000.0F);
 
 		System.out.println("Playing ended");
+		netService.updateSlaveStatus(slaveName, "not ready");
 	}
 
 	public void webdriverThreadGuard() throws Exception {
