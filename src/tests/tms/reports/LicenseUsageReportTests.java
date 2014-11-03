@@ -83,6 +83,7 @@ public class LicenseUsageReportTests extends EdusoftWebTest {
 			report.startLevel("Select institution");
 			tmsHomePage.selectInstitute(autoInstitution.getInstitutionName(),
 					autoInstitution.getInstitutionId(), false, false);
+			sleep(1);
 		}
 		if(userType==UserType.Supervisor){
 			report.startLevel("Select teacher");
