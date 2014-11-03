@@ -6,6 +6,7 @@ import java.util.Arrays;
 import jsystem.framework.report.Reporter;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.Platform;
@@ -65,7 +66,12 @@ public class FirefoxWebDriver extends GenericWebDriver {
 	@Override
 	public void waitForElementAndClick(String idValue, ByTypes byType)
 			throws Exception {
-		waitForElement(idValue, byType, this.timeout, true).click();
+		try {
+			waitForElement(idValue, byType, this.timeout, true).click();
+		} catch (InvalidElementStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override

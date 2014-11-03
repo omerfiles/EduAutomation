@@ -22,6 +22,7 @@ import org.junit.Assert;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
+import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoAlertPresentException;
@@ -41,6 +42,7 @@ import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,10 +74,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	protected DbService dbService;
 	protected String remoteMachine;
 	protected boolean enableConsoleLog = false;
-	
+
 	@Autowired
 	private services.Configuration configuration;
-
 
 	private services.Reporter reporter;
 
@@ -183,8 +184,8 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	public WebElement waitForElement(String idValue, ByTypes byType,
 			int timeout, boolean isElementMandatory, String message, int sleepMS)
 			throws Exception {
-//		System.out.println("waiting for element " + idValue + " by trpe "
-//				+ byType + " for " + timeout + " seconds");
+		// System.out.println("waiting for element " + idValue + " by trpe "
+		// + byType + " for " + timeout + " seconds");
 		reporter.startLevel("waiting for element " + idValue + " by type "
 				+ byType + " for " + timeout + " seconds");
 		WebElement element = null;
@@ -245,6 +246,11 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 						+ timeout + " Description of element:" + message);
 				failureAdded = true;
 			}
+		} catch (InvalidElementStateException e) {
+			testResultService.addFailTest("Element " + idValue
+					+ " was in ivalid state " + " Description of element:"
+					+ message);
+			failureAdded = true;
 		}
 
 		catch (Exception e) {
@@ -852,7 +858,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 				session.toExternalForm());
 
 		org.apache.http.HttpResponse response = client.execute(host, req);
-		
+
 		JSONObject object = new JSONObject(EntityUtils.toString(response
 				.getEntity()));
 
@@ -955,10 +961,10 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		try {
 			List<WebElement> elements = hubConsoleHtmlDriver.findElements(By
 					.xpath(remoteProxyNodeXpath));
-			for(int i=0;i<elements.size();i++){
-				String nodeDetails=elements.get(i).getText();
-				if(nodeDetails.contains(nodeIp)){
-					nodeIsOn=true;
+			for (int i = 0; i < elements.size(); i++) {
+				String nodeDetails = elements.get(i).getText();
+				if (nodeDetails.contains(nodeIp)) {
+					nodeIsOn = true;
 					break;
 				}
 			}
@@ -970,10 +976,10 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		return nodeIsOn;
 
 	}
-	
-	public void addValuesToCookie(String cookieName,String value){
+
+	public void addValuesToCookie(String cookieName, String value) {
 		try {
-			Cookie cookie=new Cookie(cookieName, value);
+			Cookie cookie = new Cookie(cookieName, value);
 			webDriver.manage().addCookie(cookie);
 			System.out.println("Cookie added");
 		} catch (Exception e) {
@@ -989,9 +995,40 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	public void setReporter(services.Reporter reporter) {
 		this.reporter = reporter;
 	}
+
 	public void setTestResultService(TestResultService testResultService) {
-		this.testResultService=testResultService;
-		
+		this.testResultService = testResultService;
+
+	}
+
+	public void selectElementFromComboBox(String comboboxName,
+			String optionValue) throws Exception {
+		boolean selected=false;
+		{
+			try {
+				//TODO - add webdriver wait
+				Select select = new Select(webDriver.findElement(By
+						.id(comboboxName)));
+				List<WebElement> options = select.getOptions();
+				for (int i = 0; i < options.size(); i++) {
+					if (options.get(i).getText().contains(optionValue)) {
+						select.selectByIndex(i);
+						System.out.println("option "+optionValue+" selected");
+						selected=true;
+						break;
+						
+					}
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				printScreen("problem selecting from combo box");
+				testResultService.addFailTest("problem selecting from combo box");
+				e.printStackTrace();
+			}
+			System.out.println("Selected "+comboboxName+": "+selected);
+		}
+		// TODO Auto-generated method stub
+
 	}
 
 }

@@ -59,6 +59,7 @@ public class PageHelperService extends SystemObjectImpl {
 	private Student student;
 	private Teacher teacher;
 	private Supervisor supervisor;
+	private UserObject schoolAdmin;
 	
 	private String sutUrl;
 
@@ -76,6 +77,7 @@ public class PageHelperService extends SystemObjectImpl {
 		student = new Student();
 		teacher = new Teacher();
 		supervisor=new Supervisor();
+		schoolAdmin=new UserObject();
 
 		// check if student parameter is in maven command line
 		if (System.getProperty("student") != null) {
@@ -91,6 +93,9 @@ public class PageHelperService extends SystemObjectImpl {
 			teacher.setUserName(configuration.getProperty("teacher.username"));
 		}
 		teacher.setPassword(configuration.getProperty("teacher.password"));
+		
+		supervisor.setUserName(configuration.getProperty("supervisor.user"));
+		schoolAdmin.setUserName(configuration.getProperty("shcoolAdmin.user"));
 
 	}
 	public EdoHomePage loginAsStudent(Student student) throws Exception {
@@ -131,10 +136,24 @@ public class PageHelperService extends SystemObjectImpl {
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver,
 				testResultService);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
-		supervisor.setPassword(configuration.getProperty("supervisor.password"));
+		supervisor.setPassword(configuration.getProperty("supervisor.pass"));
 		setUserLoginToNull(dbService.getUserIdByUserName(supervisor.getUserName(),
 				autoInstitution.getInstitutionId()));
 		EdoHomePage edoHomePage = edoLoginPage.login(supervisor);
+		edoHomePage.waitForPageToLoad();
+		
+		return edoHomePage;
+		
+	}
+	
+	public EdoHomePage loginAsSchoolAdmin()throws Exception{
+		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver,
+				testResultService);
+		edoLoginPage.OpenPage(getSutAndSubDomain());
+		schoolAdmin.setPassword(configuration.getProperty("shcoolAdmin.pass"));
+		setUserLoginToNull(dbService.getUserIdByUserName(schoolAdmin.getUserName(),
+				autoInstitution.getInstitutionId()));
+		EdoHomePage edoHomePage = edoLoginPage.login(schoolAdmin);
 		edoHomePage.waitForPageToLoad();
 		
 		return edoHomePage;
