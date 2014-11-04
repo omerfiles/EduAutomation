@@ -92,9 +92,9 @@ public class RecordPanel extends SRpage {
 		// approve popup using Java robot
 
 		webDriver.sleep(1000);
-//		if (webDriver.getSutUrl().contains("develop")) {
-//			allowMicFirefox();
-//		}
+		// if (webDriver.getSutUrl().contains("develop")) {
+		// allowMicFirefox();
+		// }
 		// **************************
 
 		// webDriver.closeAlertByAccept();
@@ -154,9 +154,9 @@ public class RecordPanel extends SRpage {
 		report.report("Checking sentence score rating. Expected rating: "
 				+ ratingIndex);
 		webDriver.printScreen("checkSentenceScoreRatingText");
-		webDriver.waitForElement(
-				"//div[@class='"+className+"']//div[2]//span[@class='scoreSquares"
-						+ ratingIndex + "']", ByTypes.xpath);
+		webDriver.waitForElement("//div[@class='" + className
+				+ "']//div[2]//span[@class='scoreSquares" + ratingIndex + "']",
+				ByTypes.xpath);
 		String ratingText = null;
 		String ratingFeedbackText = null;
 		switch (ratingIndex) {
@@ -374,9 +374,11 @@ public class RecordPanel extends SRpage {
 	public String getRecordPanelStatus() throws Exception {
 		String text = null;
 		WebElement element = webDriver.waitForElement(
-				"//div[@id='divRStatus']", ByTypes.xpath, 30, true,
+				"//div[@id='divRStatus']", ByTypes.xpath, 30, false,
 				"Record panel status");
+		if(element!=null){
 		text = element.getText();
+		}
 
 		return text;
 
@@ -427,8 +429,16 @@ public class RecordPanel extends SRpage {
 	}
 
 	public void setWebDriver(GenericWebDriver webdriver) {
-		this.webDriver=webdriver;
-		
+		this.webDriver = webdriver;
+
+	}
+
+	public void checkErrorMessageDoesNotExist() throws Exception {
+		webDriver
+				.checkElementNotExist(
+						"//div[@class='scoreExpWrapper'][text()='Your recording cannot be processed. Please try again.']",
+						"Error message found");
+
 	}
 
 }

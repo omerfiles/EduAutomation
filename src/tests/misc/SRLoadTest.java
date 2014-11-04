@@ -19,9 +19,9 @@ import Enums.ByTypes;
 import drivers.ChromeWebDriver;
 import drivers.ThreadedWebDriver;
 
-public class SRLoadTest extends EdusoftWebTest {
+public class SRLoadTest extends EdusoftBasicTest {
 
-	int numberOfInstances = 5;
+	int numberOfInstances = 10;
 	List<ChromeWebDriver> webDriverList = new ArrayList<ChromeWebDriver>();
 	List<RecordPanel> recordPanels = new ArrayList<RecordPanel>();
 
@@ -32,6 +32,9 @@ public class SRLoadTest extends EdusoftWebTest {
 
 	String slaveName=	configuration.getAutomationParam(null,"slaveNameCMD");
 	System.out.println("Slave name is:"+slaveName);	
+	if(slaveName==null){
+		slaveName="devMachine";
+	}
 	
 	netService.updateSlaveStatus(slaveName, "not ready");
 	AudioService audioService = new AudioService();
@@ -72,6 +75,9 @@ public class SRLoadTest extends EdusoftWebTest {
 			recordPanels.add(recordPanel);
 			sleep(4);
 			edoHomePage.switchToFrameByClassName("cboxIframe");
+			//Wait for speak
+			
+		
 
 		}
 		
@@ -80,13 +86,19 @@ public class SRLoadTest extends EdusoftWebTest {
 		// click on all record buttons
 		for (int i = 0; i < numberOfInstances; i++) {
 			recordPanels.get(i).clickOnRecordButton();
+			sleep(2);
+			String status = recordPanels.get(i).getRecordPanelStatus();
+			testResultService.assertEquals("SPEAK", status);
+			
 
 		}
 
 		// play the file
 		audioService.sendSoundToVirtualMic(new File(
 				"files/audioFiles/TheBeatMe16000_16.wav"), 16000.0F);
-
+		for (int i = 0; i < numberOfInstances; i++) {
+			recordPanels.get(i).checkErrorMessageDoesNotExist();
+		}
 		System.out.println("Playing ended");
 		netService.updateSlaveStatus(slaveName, "not ready");
 	}

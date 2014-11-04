@@ -621,11 +621,11 @@
 
 								<property>
 									<name>browser</name>
-									<value>firefox</value>
+									<value>chrome</value>
 								</property>
 								<property>
 									<name>remote.machine</name>
-									<value>http://10.1.0.66:5555</value>
+									<value>http://localhost:5555</value>
 								</property>
 								<property>
 									<name>institutionId</name>
@@ -633,7 +633,7 @@
 								</property>
 								<property>
 									<name>envFile</name>
-									<value>qa.properties</value>
+									<value>nov14.properties</value>
 								</property>
 
 							</systemProperties>
