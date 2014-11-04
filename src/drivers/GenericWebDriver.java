@@ -1007,6 +1007,8 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		{
 			try {
 				//TODO - add webdriver wait
+				WebDriverWait wait = new WebDriverWait(webDriver, timeout, 1000);
+				wait.until(ExpectedConditions.elementToBeClickable(By.id(comboboxName)));
 				Select select = new Select(webDriver.findElement(By
 						.id(comboboxName)));
 				List<WebElement> options = select.getOptions();
@@ -1022,7 +1024,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				printScreen("problem selecting from combo box");
-				testResultService.addFailTest("problem selecting from combo box");
+				testResultService.addFailTest("problem selecting from combo box",true);
 				e.printStackTrace();
 			}
 			System.out.println("Selected "+comboboxName+": "+selected);

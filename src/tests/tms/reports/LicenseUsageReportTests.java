@@ -100,7 +100,7 @@ public class LicenseUsageReportTests extends EdusoftWebTest {
 		sleep(2);
 		tmsHomePage.clickOnGo();
 		sleep(5);
-		webDriver.printScreen();
+//		webDriver.printScreen();
 		tmsHomePage.switchToReportFrame();
 
 		ReportPage reportPage = new ReportPage(webDriver, testResultService);
@@ -115,7 +115,7 @@ public class LicenseUsageReportTests extends EdusoftWebTest {
 
 		report.startLevel("Check for specific student details");
 		String studentFirstAndLastName = reportPage
-				.getStduentNameFromLicenseReport(1);
+				.getStduentNameFromLicenseReport(studentFirstName);
 		testResultService.assertEquals(studentFirstName + " "
 				+ studentFirstName, studentFirstAndLastName,
 				"Student name not found");

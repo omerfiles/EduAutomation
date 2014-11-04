@@ -110,9 +110,9 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 		if (printResults == true && testHasFailedResult) {
 			testResultService.printAllFailures();
 		}
-//		 if (testResultService.hasFailedResults() && isPass==true) {
-//		  Assert.fail("Test failed due to several errors");
-//		 }
+		 if (testResultService.hasFailedResults() && isPass==true) {
+		  Assert.fail("Test failed due to several errors");
+		 }
 		//
 //		System.out.println("Test passed: " + testPassed());
 //		if (testPassed() && testHasFailedResult) {

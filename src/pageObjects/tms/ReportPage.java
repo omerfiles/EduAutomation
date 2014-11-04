@@ -42,11 +42,15 @@ public class ReportPage extends GenericPage {
 		return classNameFromSammary;
 	}
 
-	public String getStduentNameFromLicenseReport(int index) throws Exception {
-		index = index + 1;
+	public String getStduentNameFromLicenseReport(String studentName)
+			throws Exception {
+//		index = index + 1;
+		// String text = webDriver.waitForElement(
+		// "//table[@id='tblLicUsageDetailsReportGrid']//tbody//tr["+ index +
+		// "]//td[1]", ByTypes.xpath).getText();
 		String text = webDriver.waitForElement(
-				"//table[@id='tblLicUsageDetailsReportGrid']//tbody//tr["
-						+ index + "]//td[1]", ByTypes.xpath).getText();
+				"//td[contains(.,'" + studentName + "')]", ByTypes.xpath)
+				.getText();
 		return text;
 
 	}
