@@ -21,7 +21,7 @@ import drivers.ThreadedWebDriver;
 
 public class SRLoadTest extends EdusoftBasicTest {
 
-	int numberOfInstances = 1;
+	int numberOfInstances = 8;
 	List<ChromeWebDriver> webDriverList = new ArrayList<ChromeWebDriver>();
 	List<RecordPanel> recordPanels = new ArrayList<RecordPanel>();
 
