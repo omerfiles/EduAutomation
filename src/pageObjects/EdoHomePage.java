@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import Enums.ByTypes;
+import Enums.SubComponentName;
 import Objects.Course;
 import pageObjects.edo.edoPlacementTestPage;
 import pageObjects.tms.TmsHomePage;
@@ -48,12 +49,12 @@ public class EdoHomePage extends GenericPage {
 		// webDriver.waitForElement("//table[@id='navTable']//tbody//tr//td//a[text()='My Courses']",
 		// ByTypes.xpath).click();
 		String url = null;
-		if (webDriver.getSutUrl().contains("develop")) {
-			url = webDriver.getSutUrl() + "/Runtime/myPage.aspx";
-		} else {
-			url = webDriver.getSutUrl() + webDriver.getIntitutionName()
-					+ "/Runtime/myPage.aspx";
-		}
+		// if (webDriver.getSutUrl().contains("develop")) {
+		url = webDriver.getSutUrl() + "Runtime/myPage.aspx";
+		// } else {
+		// url = webDriver.getSutUrl() + webDriver.getIntitutionName()
+		// + "/Runtime/myPage.aspx";
+		// }
 		webDriver.openUrl(url);
 		return this;
 	}
@@ -861,8 +862,38 @@ public class EdoHomePage extends GenericPage {
 				.waitForElement(
 						"//table[@id='eduobj_PlTest']//tbody//tr[1]//td",
 						ByTypes.xpath).click();
-		Thread.sleep(500);;
+		Thread.sleep(500);
+		;
 		webDriver.switchToNewWindow();
 		return new edoPlacementTestPage(webDriver, testResultService);
+	}
+
+	public void navigateToCourseUnitComponent(Course course,
+			SubComponentName subComponentName) throws Exception {
+		clickOnCourses();
+		clickOnCourseByName(course.getName());
+		// waitForCourseDetailsToBeDisplayed(course.getName());
+		String courseUnit = course.getCourseUnits().get(0).getName();
+		clickOnCourseUnit(courseUnit);
+		String unitComponent = course.getCourseUnits().get(0)
+				.getUnitComponent().get(0).getName();
+		clickOntUnitComponent(unitComponent, subComponentName.toString());
+	}
+
+	public void dragClassificationAnswerByText(String answer, int row,
+			int column) throws Exception {
+		webDriver.dragAndDropElement(webDriver.waitForElement(
+				"//div[@class='emptyBank']//div[text()='" + answer + "']",
+				ByTypes.xpath), webDriver.waitForElement(
+				"//table[@class='textTable']//tr[@id='" + row + "']//td["
+						+ column + "]", ByTypes.xpath));
+
+	}
+
+	public void checkDragAndDropCorrectAnswer(String answer) throws Exception {
+		webDriver.waitForElement(
+				"//div[@class='emptyBank']//div[contains(@class,'vCheck')][text()='"
+						+ answer + "']", ByTypes.xpath);
+
 	}
 }
