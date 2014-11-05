@@ -76,7 +76,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		String StudentUserName = "student" + dbService.sig(6);
 		pageHelper.addStudent(StudentUserName);
 		startStep("Login to Edo");
-		int courseId = 12;
+		int courseId = 2;
 		String textFile = "files/assayFiles/text24.txt";
 		report.report("using file: " + textFile);
 		Student student = new Student();
