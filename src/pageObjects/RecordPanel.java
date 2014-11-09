@@ -376,8 +376,8 @@ public class RecordPanel extends SRpage {
 		WebElement element = webDriver.waitForElement(
 				"//div[@id='divRStatus']", ByTypes.xpath, 30, false,
 				"Record panel status");
-		if(element!=null){
-		text = element.getText();
+		if (element != null) {
+			text = element.getText();
 		}
 
 		return text;
@@ -438,6 +438,14 @@ public class RecordPanel extends SRpage {
 				.checkElementNotExist(
 						"//div[@class='scoreExpWrapper'][text()='Your recording cannot be processed. Please try again.']",
 						"Error message found");
+
+	}
+
+	public void checkRecordButtonIsEnabled() throws Exception {
+
+		
+		testResultService.assertEquals(true,
+				webDriver.waitForElement("btnRecord", ByTypes.id).isEnabled());
 
 	}
 

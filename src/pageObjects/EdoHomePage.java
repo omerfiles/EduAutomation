@@ -880,7 +880,7 @@ public class EdoHomePage extends GenericPage {
 		clickOntUnitComponent(unitComponent, subComponentName.toString());
 	}
 
-	public void dragClassificationAnswerByText(String answer, int row,
+	public void dragClassificationAnswerByTextFromBank(String answer, int row,
 			int column) throws Exception {
 		webDriver.dragAndDropElement(webDriver.waitForElement(
 				"//div[@class='emptyBank']//div[text()='" + answer + "']",
@@ -894,6 +894,97 @@ public class EdoHomePage extends GenericPage {
 		webDriver.waitForElement(
 				"//div[@class='emptyBank']//div[contains(@class,'vCheck')][text()='"
 						+ answer + "']", ByTypes.xpath);
+
+	}
+
+	public void checkDragAndDropCorrectAnswerCloze(String answer)
+			throws Exception {
+		webDriver
+				.waitForElement(
+						"//div[@id='TTpTablePlaceHolder']//div//div[contains(@class,'vCheck')][text()='"
+								+ answer + "']", ByTypes.xpath);
+
+	}
+
+	public void checkDragElementLocation(String text, String answerId, int row,
+			int col) throws Exception {
+		webDriver.waitForElement("//table[@class='textTable']//tr[@id='" + row
+				+ "']//td[" + col + "][@ans=" + answerId + "]", ByTypes.xpath);
+
+	}
+
+	public void checkDragElementIsBackToBank(String text) throws Exception {
+		webDriver.waitForElement("//div[@class='emptyBank']//div[text()='"
+				+ text + "']", ByTypes.xpath);
+
+	}
+
+	public void checkDragElementIsBackToBankCloze(String text) throws Exception {
+		// wordBankTile
+		webDriver
+				.waitForElement(
+						"//div[contains(@class,'wordBankTile')][text()='"
+								+ text + "']", ByTypes.xpath);
+
+	}
+
+	public void clickOnSeeAnswer() throws Exception {
+		webDriver.waitForElement("SeeAnswer", ByTypes.id).click();
+
+	}
+
+	public void dragClassificationAnswerByTextFromExistingAnswer(String text,
+			int rowSource, int colSource, int rowDest, int colDest)
+			throws Exception {
+		WebElement from = webDriver.waitForElement(
+				"//div[@class='emptyBank']//div[text()='" + text + "']",
+				ByTypes.xpath);
+
+		// TODO - change source element to
+		// //div[@class='emptyBank']//div[text()='" + text + "']"
+		WebElement to = webDriver.waitForElement(
+				"//table[@class='textTable']//tr[@id='" + rowDest + "']//td["
+						+ colDest + "]", ByTypes.xpath);
+
+		webDriver.dragAndDropElement(from, to);
+
+	}
+
+	public void checkDragElementIsPlaced(String text) throws Exception {
+		webDriver.waitForElement(
+				"//div[contains(@class,'wordBankTilePlaced')][text()='" + text
+						+ "']", ByTypes.xpath);
+
+	}
+
+	public void dragClassificationAnswerToBank(String text) throws Exception {
+		WebElement from = webDriver.waitForElement(
+				"//div[contains(@class,'draggable')][text()='" + text + "']",
+				ByTypes.xpath);
+
+		WebElement to = webDriver.waitForElement(
+				"//div[@class='emptyBank']//div[text()='" + text + "']",
+				ByTypes.xpath);
+		webDriver.dragAndDropElement(from, to);
+
+	}
+
+	public void dragAnserToElementByXpath(String text, String xpath,
+			String placeHolderContent) throws Exception {
+		xpath = xpath.format(xpath, placeHolderContent);
+		WebElement from = webDriver.waitForElement(
+				"//div[@id='TTpTablePlaceHolder']//div//div[text()='" + text
+						+ "']", ByTypes.xpath);
+		WebElement to = webDriver.waitForElement(xpath, ByTypes.xpath);
+
+		webDriver.dragAndDropElement(from, to);
+
+	}
+
+	public void checkDragElementLocationCloze(String answerIndex,
+			String answerId) throws Exception {
+		webDriver.waitForElement("//div[@class='TextDiv']//span[" + answerIndex
+				+ "][@ans='" + answerId + "']", ByTypes.xpath);
 
 	}
 }

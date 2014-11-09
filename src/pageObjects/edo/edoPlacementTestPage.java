@@ -19,6 +19,8 @@ import services.TextService;
 
 public class edoPlacementTestPage extends TestQuestionPage {
 
+	TextService textService = new TextService();
+
 	public edoPlacementTestPage(GenericWebDriver webDriver,
 			TestResultService testResultService) {
 		super(webDriver, testResultService);
@@ -95,22 +97,25 @@ public class edoPlacementTestPage extends TestQuestionPage {
 	@Override
 	public void answerCheckboxQuestion(TestQuestion question) throws Exception {
 
-		webDriver.waitForElement(
-				"//span[@class='multiTextInline'][contains(text(),"
-						+ question.getCorrectAnswers()[0] + ")]",
-				ByTypes.xpath).click();
+		webDriver
+				.waitForElement(
+						"//span[@class='multiTextInline'][contains(text(),"
+								+ question.getCorrectAnswers()[0] + ")]",
+						ByTypes.xpath).click();
 
 	}
 
 	public void answerComboBoxQuestion(TestQuestion question) throws Exception {
-
+		int index = 0;
 		for (int i = 0; i < question.getCorrectAnswers().length; i++) {
-			webDriver.waitForElement("//div[@class='fitb']//span[" + i + "]",
-					ByTypes.xpath).click();
-			Thread.sleep(500);
+			index = i + 1;
 			webDriver.waitForElement(
-					"//div[@class='optionsWrapper']//table//tbody//tr[contains(text(),'"
-							+ question.getCorrectAnswers()[i] + "')]",
+					"//div[@class='fitb']//span[" + index + "]//div[2]",
+					ByTypes.xpath).click();
+			Thread.sleep(1000);
+			webDriver.waitForElement(
+					"//div[@class='optionsWrapper']//table//tbody//tr//td[contains(text(),"
+							+ question.getCorrectAnswers()[i] + ")]",
 					ByTypes.xpath).click();
 
 		}
@@ -172,47 +177,22 @@ public class edoPlacementTestPage extends TestQuestionPage {
 		PLTCycle SecondCycle = pltTest.getCycles().get(1);
 
 		try {
-			for (int i = 0; i < firstCycle.getNumberOfQuestions(); i++) {
-				TestQuestion question = firstCycle.getCycleQuestions().get(i);
-				TestQuestionType questionType = question.getQuestionType();
+			answerCycleQuestions(firstCycle);
 
-				// convert ~ to ,
-				String[] answers = new String[question.getCorrectAnswers().length];
-				for (int j = 0; j < question.getCorrectAnswers().length; j++) {
-					answers[j] = question.getCorrectAnswers()[j].replace("~",
-							",");
-					answers[j] = textService.resolveAprostophes(answers[j]);
-				}
-				question.setCorrectAnswers(answers);
+			// report.startLevel("End of cycle 1");
+			clickOnGoOnButton();
 
-				switch (questionType) {
-				case DragAndDropMultiple:
-					answerDragAndDropQuestion(question);
-					break;
-				case RadioMultiple:
-					answerMultiCheckBoxQuestion(question);
-					break;
-
-				case RadioSingle:
-					answerCheckboxQuestion(question);
-					break;
-
-				case DragAndDropSingle:
-					answerDragAndDropQuestion(question);
-					break;
-
-				case comboBox:
-					answerComboBoxQuestion(question);
-
-				}
-				clickOnNextButton();
-
-			}
-
+			// Start of cycle 2
+			answerCycleQuestions(SecondCycle);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+	}
+
+	private void clickOnGoOnButton() throws Exception {
+		webDriver.waitForElement("DoAgain", ByTypes.id).click();
 
 	}
 
@@ -224,6 +204,44 @@ public class edoPlacementTestPage extends TestQuestionPage {
 
 	public void clickOnGoOn() throws Exception {
 		webDriver.waitForElement("DoAgain", ByTypes.id).click();
+	}
+
+	public void answerCycleQuestions(PLTCycle pltCycle) throws Exception {
+		for (int i = 0; i < pltCycle.getNumberOfQuestions(); i++) {
+			TestQuestion question = pltCycle.getCycleQuestions().get(i);
+			TestQuestionType questionType = question.getQuestionType();
+
+			// convert ~ to ,
+			String[] answers = new String[question.getCorrectAnswers().length];
+			for (int j = 0; j < question.getCorrectAnswers().length; j++) {
+				answers[j] = question.getCorrectAnswers()[j].replace("~", ",");
+				answers[j] = textService.resolveAprostophes(answers[j]);
+			}
+			question.setCorrectAnswers(answers);
+
+			switch (questionType) {
+			case DragAndDropMultiple:
+				answerDragAndDropQuestion(question);
+				break;
+			case RadioMultiple:
+				answerMultiCheckBoxQuestion(question);
+				break;
+
+			case RadioSingle:
+				answerCheckboxQuestion(question);
+				break;
+
+			case DragAndDropSingle:
+				answerDragAndDropQuestion(question);
+				break;
+
+			case comboBox:
+				answerComboBoxQuestion(question);
+
+			}
+			clickOnNextButton();
+
+		}
 	}
 
 }

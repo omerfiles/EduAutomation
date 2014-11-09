@@ -22,6 +22,7 @@ public class EdoPLTTests extends EdusoftWebTest {
 	@Before
 	public void setup() throws Exception {
 		super.setup();
+		setEnableLoggin(true);
 	}
 
 	@Test

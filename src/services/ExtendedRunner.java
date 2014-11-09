@@ -1,15 +1,34 @@
 package services;
 
-import org.junit.internal.runners.InitializationError;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-public class ExtendedRunner extends SpringJUnit4ClassRunner {
+import java.lang.annotation.Annotation;
+
+import org.junit.runners.BlockJUnit4ClassRunner;
+import org.junit.runners.model.FrameworkMethod;
+import org.junit.runners.model.Statement;
+
+import Interfaces.TestCaseParams;
+;
+
+public class ExtendedRunner extends BlockJUnit4ClassRunner {
 
 	public ExtendedRunner(Class<?> klass)
-			throws org.junit.runners.model.InitializationError, InitializationError {
+			throws org.junit.runners.model.InitializationError {
 		super(klass);
 		// TODO Auto-generated constructor stub
 	}
+
+	@Override
+	protected Statement methodBlock(FrameworkMethod method) {
+		// TODO Auto-generated method stub
+		TestCaseParams params=	method.getAnnotation(TestCaseParams.class);
+		if(params!=null){
+		System.out.println("Test case id is:"+ params.testCaseID()[0]);
+		}
+		return super.methodBlock(method);
+	}
+	
+	
 
 //	@Override
 //	protected org.junit.runners.model.Statement methodBlock(

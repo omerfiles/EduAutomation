@@ -26,7 +26,7 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 	public AudioService audioService;
 
 	String browser = null;
-	private boolean enableLoggin = false;
+	
 	private String logFilter = null;
 
 	@Override
@@ -149,9 +149,7 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 		return enableLoggin;
 	}
 
-	public void setEnableLoggin(boolean enableLoggin) {
-		this.enableLoggin = enableLoggin;
-	}
+	
 
 	public String getLogFilter() {
 		return logFilter;

@@ -7,6 +7,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ThreadGuard;
@@ -21,23 +22,32 @@ import drivers.ThreadedWebDriver;
 
 public class SRLoadTest extends EdusoftBasicTest {
 
-	int numberOfInstances = 8;
+	int numberOfInstances = 1;
 	List<ChromeWebDriver> webDriverList = new ArrayList<ChromeWebDriver>();
 	List<RecordPanel> recordPanels = new ArrayList<RecordPanel>();
 
 	ThreadGuard threadGuard = new ThreadGuard();
+	String slaveName = null;
+
+	@Before
+	public void setup() throws Exception {
+		super.setup();
+		setEnableLoggin(true);
+		slaveName = configuration.getAutomationParam(null, "slaveNameCMD");
+	}
 
 	@Test
 	public void testMultipleBrowserInstances() throws Exception {
 
-	String slaveName=	configuration.getAutomationParam(null,"slaveNameCMD");
-	System.out.println("Slave name is:"+slaveName);	
-	if(slaveName==null){
-		slaveName="devMachine";
-	}
-	
-	netService.updateSlaveStatus(slaveName, "not ready");
-	AudioService audioService = new AudioService();
+//		String slaveName = configuration.getAutomationParam(null,
+//				"slaveNameCMD");
+		System.out.println("Slave name is:" + slaveName);
+		if (slaveName == null) {
+			slaveName = "devMachine";
+		}
+
+		netService.updateSlaveStatus(slaveName, "not ready");
+		AudioService audioService = new AudioService();
 
 		for (int i = 0; i < numberOfInstances; i++) {
 			ChromeWebDriver driver = new ChromeWebDriver();
@@ -51,18 +61,31 @@ public class SRLoadTest extends EdusoftBasicTest {
 		}
 
 		for (int i = 0; i < numberOfInstances; i++) {
-			webDriverList.get(i).openUrl(
-					"http://edonov14.prod.com/automation.aspx");
+//			 webDriverList.get(i).openUrl(
+//			 "http://edonov14.prod.com/automation.aspx");
+//			 webDriverList
+//			 .get(i)
+//			 .addValuesToCookie(
+//			 "Student",
+//			 "^StudentID*3000025000321^Language*spa^LangSupLevel*3^Courses*0^FName*TMS^LName*Domain^SID*53638^CMode*L^UserType*da^Type*2^LCE*");
+//			
+//				webDriverList
+//				.get(i)
+//				.openUrl(
+//						"http://edonov14.prod.com/Runtime/ViewComponents.aspx?id=3000025000321&courseId=8&unitId=78&componentId=284&skill=Speaking&componentName=How%20Awful!&componentType=1&level=component");
+	
+			///*****beta site
+			webDriverList.get(i).openUrl("http://edobeta.engdis.com/qa.aspx");
 			webDriverList
 					.get(i)
 					.addValuesToCookie(
 							"Student",
-							"^StudentID*3000025000321^Language*spa^LangSupLevel*3^Courses*0^FName*TMS^LName*Domain^SID*53638^CMode*L^UserType*da^Type*2^LCE*");
+							"^StudentID*52308170000004^Level*1^PLTLanguage*English^Language*heb^LangSupLevel*1^Courses*1^FName*st2^LName*st2^Teacher*Default^HasTeacher*1^NumberOfSubmissions*2^Rights*1|1|0|0|1|1|0|1|1|0|^SID*36360^CMode*G^UserType*s^Type*1^LCE*^RCD*1^GBVer*2");
 
 			webDriverList
 					.get(i)
 					.openUrl(
-							"http://edonov14.prod.com/Runtime/ViewComponents.aspx?id=3000025000321&courseId=8&unitId=78&componentId=284&skill=Speaking&componentName=How%20Awful!&componentType=1&level=component");
+							"http://edobeta.engdis.com/Runtime/ViewComponents.aspx?id=3000025000321&courseId=3&unitId=33&componentId=63&skill=Speaking&componentName=Maxi%27s%20Room&componentType=1&level=component");
 			EdoHomePage edoHomePage = new EdoHomePage(webDriverList.get(i),
 					testResultService);
 
@@ -75,21 +98,19 @@ public class SRLoadTest extends EdusoftBasicTest {
 			recordPanels.add(recordPanel);
 			sleep(4);
 			edoHomePage.switchToFrameByClassName("cboxIframe");
-			//Wait for speak
-			
-		
+			// Wait for speak
 
 		}
-		
+
 		netService.updateSlaveStatus(slaveName, "ready");
 		netService.checkAllSlaveStatus();
 		// click on all record buttons
 		for (int i = 0; i < numberOfInstances; i++) {
+			recordPanels.get(i).checkRecordButtonIsEnabled();
 			recordPanels.get(i).clickOnRecordButton();
-			sleep(2);
+			sleep(4);
 			String status = recordPanels.get(i).getRecordPanelStatus();
 			testResultService.assertEquals("SPEAK", status);
-			
 
 		}
 
@@ -132,6 +153,7 @@ public class SRLoadTest extends EdusoftBasicTest {
 		for (int i = 0; i < numberOfInstances; i++) {
 			webDriverList.get(i).quitBrowser();
 		}
+		netService.updateSlaveStatus(slaveName, "not ready");
 	}
 
 }

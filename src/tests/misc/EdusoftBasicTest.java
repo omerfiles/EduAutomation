@@ -1,6 +1,7 @@
 package tests.misc;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 import jsystem.framework.report.Reporter.EnumReportLevel;
 import junit.framework.SystemTestCase4;
@@ -11,6 +12,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.runner.RunWith;
+import org.openqa.selenium.logging.LogEntries;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -22,12 +24,13 @@ import services.InstitutionService;
 import services.NetService;
 import services.TestResultService;
 import services.TextService;
+import Enums.Browsers;
 import Objects.AutoInstitution;
 import drivers.GenericWebDriver;
 
-//@RunWith(ExtendedRunner.class)
+@RunWith(ExtendedRunner.class)
 //@ContextConfiguration(locations={ "applicationContext-test.xml"})
-public class EdusoftBasicTest extends SystemTestCase4 {
+public class EdusoftBasicTest extends TestCase {
 
 	protected GenericWebDriver webDriver;
 
@@ -41,6 +44,7 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 	protected services.Reporter report;
 	// protected static AudioService audioService;
 	public ClassPathXmlApplicationContext ctx;
+	protected boolean enableLoggin = false;
 
 	protected boolean inStep = false;
 	protected String testCaseId = null;
@@ -103,6 +107,8 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 	public void tearDown() throws Exception {
 		// report.startLevel("Test case id is: " + this.testCaseId,
 		// EnumReportLevel.MainFrame);
+		
+		
 
 		textService.writeArrayistToCSVFile(System.getProperty("user.dir")
 				+ "/log//current//TestLog.csv", report.getReportLogs());
@@ -110,15 +116,15 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 		if (printResults == true && testHasFailedResult) {
 			testResultService.printAllFailures();
 		}
-		 if (testResultService.hasFailedResults() && isPass==true) {
-		  Assert.fail("Test failed due to several errors");
-		 }
+//		 if (testResultService.hasFailedResults() && ==true) {
+//		  Assert.fail("Test failed due to several errors");
+//		 }
 		//
 //		System.out.println("Test passed: " + testPassed());
-//		if (testPassed() && testHasFailedResult) {
-//			System.out.println("Test failed due to some errors");
-//			Assert.fail("Test failed due to some errors");
-//		}
+		if (testHasFailedResult) {
+			System.out.println("Test failed due to some errors");
+			Assert.fail("Test failed due to some errors");
+		}
 //		 if (this.isPass == false) {
 //			 report.startLevel("Test failed", EnumReportLevel.MainFrame);
 //		 }
@@ -129,12 +135,12 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 	//
 	// }
 
-//	public boolean testPassed() {
-//		if (run().errorCount() == 0) {
-//			return true;
-//		} else
-//			return false;
-//	}
+	public boolean testPassed() {
+		if (run().errorCount() == 0) {
+			return true;
+		} else
+			return false;
+	}
 
 	public void startStep(String stepName) throws Exception {
 		if (inStep == true) {
@@ -199,5 +205,10 @@ public class EdusoftBasicTest extends SystemTestCase4 {
 	public void setTestCaseId(String testCaseId) {
 		this.testCaseId = testCaseId;
 	}
+	public void setEnableLoggin(boolean enableLoggin) {
+		this.enableLoggin = enableLoggin;
+	}
+	
+	
 
 }
