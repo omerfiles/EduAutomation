@@ -100,7 +100,7 @@ public class DragAndDropTests extends EdusoftWebTest {
 
 		report.startLevel("Login and navigate to unit component");
 		EdoHomePage edoHomePage = pageHelper.loginAsStudent();
-
+		sleep(4);
 		edoHomePage.navigateToCourseUnitComponent(course,
 				SubComponentName.Practice);
 
@@ -163,7 +163,7 @@ public class DragAndDropTests extends EdusoftWebTest {
 				"She started sending the workers out to homes and offices." };// 6
 		report.startLevel("Login and navigate to unit component");
 		EdoHomePage edoHomePage = pageHelper.loginAsStudent();
-
+		sleep(4);
 		edoHomePage.navigateToCourseUnitComponent(course,
 				SubComponentName.Practice);
 
@@ -212,7 +212,7 @@ public class DragAndDropTests extends EdusoftWebTest {
 
 		report.startLevel("Login and navigate to unit component");
 		EdoHomePage edoHomePage = pageHelper.loginAsStudent();
-		
+		sleep(4);
 		edoHomePage.navigateToCourseUnitComponent(course,
 				SubComponentName.Practice);
 
@@ -241,7 +241,7 @@ public class DragAndDropTests extends EdusoftWebTest {
 		Course course = pageHelper.getCourses().get(22);
 		report.startLevel("Login and navigate to unit component");
 		EdoHomePage edoHomePage = pageHelper.loginAsStudent();
-
+		sleep(4);
 		edoHomePage.navigateToCourseUnitComponent(course,
 				SubComponentName.Practice);
 
@@ -306,7 +306,7 @@ public class DragAndDropTests extends EdusoftWebTest {
 				"meat", "dessert" };
 		report.startLevel("Login and navigate to unit component");
 		EdoHomePage edoHomePage = pageHelper.loginAsStudent();
-
+		sleep(4);
 		edoHomePage.navigateToCourseUnitComponent(course,
 				SubComponentName.Practice);
 
