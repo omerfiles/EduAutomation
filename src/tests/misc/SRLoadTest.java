@@ -17,6 +17,7 @@ import pageObjects.RecordPanel;
 import services.AudioService;
 import Enums.AutoParams;
 import Enums.ByTypes;
+import Objects.Recording;
 import drivers.ChromeWebDriver;
 import drivers.ThreadedWebDriver;
 
@@ -80,18 +81,18 @@ public class SRLoadTest extends EdusoftBasicTest {
 					.get(i)
 					.addValuesToCookie(
 							"Student",
-							"^StudentID*52308170000004^Level*1^PLTLanguage*English^Language*heb^LangSupLevel*1^Courses*1^FName*st2^LName*st2^Teacher*Default^HasTeacher*1^NumberOfSubmissions*2^Rights*1|1|0|0|1|1|0|1|1|0|^SID*36360^CMode*G^UserType*s^Type*1^LCE*^RCD*1^GBVer*2");
+							"^StudentID*3000025000321^Language*eng^LangSupLevel*3^Courses*0^FName*TMS^LName*Domain^SID*30887^CMode*L^UserType*da^Type*1^LCE*");
 
 			webDriverList
 					.get(i)
 					.openUrl(
-							"http://edobeta.engdis.com/Runtime/ViewComponents.aspx?id=3000025000321&courseId=3&unitId=33&componentId=63&skill=Speaking&componentName=Maxi%27s%20Room&componentType=1&level=component");
+							"http://edonov14.prod.com/Runtime/ViewComponents.aspx?id=3000025000321&courseId=8&unitId=78&componentId=284&skill=Speaking&componentName=How%20Awful!&componentType=1&level=component");
 			EdoHomePage edoHomePage = new EdoHomePage(webDriverList.get(i),
 					testResultService);
 
 			edoHomePage.clickOnSeeScript();
 			sleep(2);
-			edoHomePage.selectTextFromContainer(1);
+			edoHomePage.selectTextFromContainer(2);
 
 			RecordPanel recordPanel = edoHomePage.clickOnRecordYourself();
 			recordPanel.setWebDriver(webDriverList.get(i));
@@ -126,7 +127,8 @@ public class SRLoadTest extends EdusoftBasicTest {
 
 		// play the file
 		audioService.sendSoundToVirtualMic(new File(
-				"files/audioFiles/800$.wav"), 16000.0F);
+				"files/audioFiles/225059.wav"), 16000.0F);
+		
 		for (int i = 0; i < numberOfInstances; i++) {
 			recordPanels.get(i).checkErrorMessageDoesNotExist();
 		}
