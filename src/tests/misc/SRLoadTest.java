@@ -81,18 +81,18 @@ public class SRLoadTest extends EdusoftBasicTest {
 					.get(i)
 					.addValuesToCookie(
 							"Student",
-							"^StudentID*3000025000321^Language*eng^LangSupLevel*3^Courses*0^FName*TMS^LName*Domain^SID*30887^CMode*L^UserType*da^Type*1^LCE*");
+							"^StudentID*3000025000321^Language*eng^LangSupLevel*3^Courses*0^FName*TMS^LName*Domain^SID*58846^CMode*L^UserType*da^Type*1^LCE*");
 
 			webDriverList
 					.get(i)
 					.openUrl(
-							"http://edonov14.prod.com/Runtime/ViewComponents.aspx?id=3000025000321&courseId=8&unitId=78&componentId=284&skill=Speaking&componentName=How%20Awful!&componentType=1&level=component");
+							"http://edobeta.engdis.com/Runtime/ViewComponents.aspx?id=3000025000321&courseId=20191&unitId=22213&componentId=292&skill=Speaking&componentName=Expensive%20Boutique&componentType=1&level=component");
 			EdoHomePage edoHomePage = new EdoHomePage(webDriverList.get(i),
 					testResultService);
 
 			edoHomePage.clickOnSeeScript();
 			sleep(2);
-			edoHomePage.selectTextFromContainer(2);
+			edoHomePage.selectTextFromContainer(6);
 
 			RecordPanel recordPanel = edoHomePage.clickOnRecordYourself();
 			recordPanel.setWebDriver(webDriverList.get(i));
@@ -127,7 +127,7 @@ public class SRLoadTest extends EdusoftBasicTest {
 
 		// play the file
 		audioService.sendSoundToVirtualMic(new File(
-				"files/audioFiles/225059.wav"), 16000.0F);
+				"files/audioFiles/800$.wav"), 16000.0F);
 		
 		for (int i = 0; i < numberOfInstances; i++) {
 			recordPanels.get(i).checkErrorMessageDoesNotExist();
