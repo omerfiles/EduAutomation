@@ -126,7 +126,7 @@ public class SRLoadTest extends EdusoftBasicTest {
 
 		// play the file
 		audioService.sendSoundToVirtualMic(new File(
-				"files/audioFiles/TheBeatMe16000_16.wav"), 16000.0F);
+				"files/audioFiles/800$.wav"), 16000.0F);
 		for (int i = 0; i < numberOfInstances; i++) {
 			recordPanels.get(i).checkErrorMessageDoesNotExist();
 		}
