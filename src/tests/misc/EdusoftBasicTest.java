@@ -11,6 +11,9 @@ import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.logging.LogEntries;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -29,7 +32,7 @@ import Objects.AutoInstitution;
 import drivers.GenericWebDriver;
 
 @RunWith(ExtendedRunner.class)
-//@ContextConfiguration(locations={ "applicationContext-test.xml"})
+// @ContextConfiguration(locations={ "applicationContext-test.xml"})
 public class EdusoftBasicTest extends TestCase {
 
 	protected GenericWebDriver webDriver;
@@ -48,13 +51,48 @@ public class EdusoftBasicTest extends TestCase {
 
 	protected boolean inStep = false;
 	protected String testCaseId = null;
+	public String testStatus = null;
+	boolean testHasFailedResult;
 
 	protected AutoInstitution autoInstitution;
 
 	private boolean printResults = true;
-//	 public services.Reporter report=new services.Reporter();
+	// public services.Reporter report=new services.Reporter();
 
 	private boolean hasFailures;
+
+	@Rule
+	public TestWatcher watcher = new TestWatcher() {
+
+		@Override
+		protected void succeeded(Description description) {
+			// TODO Auto-generated method stub
+			testStatus = "passed";
+			testHasFailedResult = testResultService.hasFailedResults();
+			if (testHasFailedResult == true) {
+				fail();
+				if (printResults == true) {
+					testResultService.printAllFailures();
+				}
+			}
+
+			System.out.println(testHasFailedResult);
+			super.succeeded(description);
+		}
+
+		@Override
+		protected void failed(Throwable e, Description description) {
+			// TODO Auto-generated method stub
+			testStatus = "failed";
+			if (testHasFailedResult == true && printResults == true) {
+
+				testResultService.printAllFailures();
+
+			}
+			super.failed(e, description);
+		}
+
+	};
 
 	// public static Reporter report = ListenerstManager.getInstance();
 
@@ -107,8 +145,6 @@ public class EdusoftBasicTest extends TestCase {
 	public void tearDown() throws Exception {
 		// report.startLevel("Test case id is: " + this.testCaseId,
 		// EnumReportLevel.MainFrame);
-		
-		
 
 		textService.writeArrayistToCSVFile(System.getProperty("user.dir")
 				+ "/log//current//TestLog.csv", report.getReportLogs());
@@ -116,31 +152,25 @@ public class EdusoftBasicTest extends TestCase {
 		if (printResults == true && testHasFailedResult) {
 			testResultService.printAllFailures();
 		}
-//		 if (testResultService.hasFailedResults() && ==true) {
-//		  Assert.fail("Test failed due to several errors");
-//		 }
+		// if (testResultService.hasFailedResults() && ==true) {
+		// Assert.fail("Test failed due to several errors");
+		// }
 		//
-//		System.out.println("Test passed: " + testPassed());
+		// System.out.println("Test passed: " + testPassed());
+		System.out.println("test passed?: " + testStatus);
 		if (testHasFailedResult) {
 			System.out.println("Test failed due to some errors");
-			Assert.fail("Test failed due to some errors");
+			// Assert.fail("Test failed due to some errors");
 		}
-//		 if (this.isPass == false) {
-//			 report.startLevel("Test failed", EnumReportLevel.MainFrame);
-//		 }
+		// if (this.isPass == false) {
+		// report.startLevel("Test failed", EnumReportLevel.MainFrame);
+		// }
 	}
 
 	// @AfterClass
 	// public static void afterClass(){
 	//
 	// }
-
-	public boolean testPassed() {
-		if (run().errorCount() == 0) {
-			return true;
-		} else
-			return false;
-	}
 
 	public void startStep(String stepName) throws Exception {
 		if (inStep == true) {
@@ -205,10 +235,9 @@ public class EdusoftBasicTest extends TestCase {
 	public void setTestCaseId(String testCaseId) {
 		this.testCaseId = testCaseId;
 	}
+
 	public void setEnableLoggin(boolean enableLoggin) {
 		this.enableLoggin = enableLoggin;
 	}
-	
-	
 
 }
