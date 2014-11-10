@@ -45,7 +45,6 @@ public class PageHelperService extends SystemObjectImpl {
 	@Autowired
 	DbService dbService;
 
-
 	TestResultService testResultService;
 
 	// @Autowired
@@ -60,24 +59,25 @@ public class PageHelperService extends SystemObjectImpl {
 	private Teacher teacher;
 	private Supervisor supervisor;
 	private UserObject schoolAdmin;
-	
+
 	private String sutUrl;
 
 	public PageHelperService() {
 
 	}
 
-	public void init(GenericWebDriver webDriver, AutoInstitution autoInstitution,TestResultService testResultService)
+	public void init(GenericWebDriver webDriver,
+			AutoInstitution autoInstitution, TestResultService testResultService)
 			throws Exception {
-		this.testResultService=testResultService;
+		this.testResultService = testResultService;
 		this.webDriver = webDriver;
 		this.autoInstitution = autoInstitution;
 		courses = loadCoursedDetailsFromCsv();
 		recordings = loadRecordings();
 		student = new Student();
 		teacher = new Teacher();
-		supervisor=new Supervisor();
-		schoolAdmin=new UserObject();
+		supervisor = new Supervisor();
+		schoolAdmin = new UserObject();
 
 		// check if student parameter is in maven command line
 		if (System.getProperty("student") != null) {
@@ -93,13 +93,14 @@ public class PageHelperService extends SystemObjectImpl {
 			teacher.setUserName(configuration.getProperty("teacher.username"));
 		}
 		teacher.setPassword(configuration.getProperty("teacher.password"));
-		
+
 		supervisor.setUserName(configuration.getProperty("supervisor.user"));
 		schoolAdmin.setUserName(configuration.getProperty("shcoolAdmin.user"));
 
 	}
+
 	public EdoHomePage loginAsStudent(Student student) throws Exception {
-		this.student=student;
+		this.student = student;
 		return loginAsStudent();
 	}
 
@@ -108,13 +109,14 @@ public class PageHelperService extends SystemObjectImpl {
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver,
 				testResultService);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
-		//TODO - check if there is DB access
+		// TODO - check if there is DB access
 		setUserLoginToNull(dbService.getUserIdByUserName(student.getUserName(),
 				autoInstitution.getInstitutionId()));
 		EdoHomePage edoHomePage = edoLoginPage.login(student);
 		// edoHomePage.waitForPageToLoad();
 		edoLogoutNeeded = true;
 		webDriver.closeAlertByAccept();
+		Thread.sleep(2000);
 		return edoHomePage;
 	}
 
@@ -131,33 +133,33 @@ public class PageHelperService extends SystemObjectImpl {
 
 		return edoHomePage;
 	}
-	
-	public EdoHomePage loginAsSupervisor()throws Exception{
+
+	public EdoHomePage loginAsSupervisor() throws Exception {
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver,
 				testResultService);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
 		supervisor.setPassword(configuration.getProperty("supervisor.pass"));
-		setUserLoginToNull(dbService.getUserIdByUserName(supervisor.getUserName(),
-				autoInstitution.getInstitutionId()));
+		setUserLoginToNull(dbService.getUserIdByUserName(
+				supervisor.getUserName(), autoInstitution.getInstitutionId()));
 		EdoHomePage edoHomePage = edoLoginPage.login(supervisor);
 		edoHomePage.waitForPageToLoad();
-		
+
 		return edoHomePage;
-		
+
 	}
-	
-	public EdoHomePage loginAsSchoolAdmin()throws Exception{
+
+	public EdoHomePage loginAsSchoolAdmin() throws Exception {
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver,
 				testResultService);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
 		schoolAdmin.setPassword(configuration.getProperty("shcoolAdmin.pass"));
-		setUserLoginToNull(dbService.getUserIdByUserName(schoolAdmin.getUserName(),
-				autoInstitution.getInstitutionId()));
+		setUserLoginToNull(dbService.getUserIdByUserName(
+				schoolAdmin.getUserName(), autoInstitution.getInstitutionId()));
 		EdoHomePage edoHomePage = edoLoginPage.login(schoolAdmin);
 		edoHomePage.waitForPageToLoad();
-		
+
 		return edoHomePage;
-		
+
 	}
 
 	public TmsHomePage loginToTmsAsAdmin() throws Exception {
@@ -175,9 +177,10 @@ public class PageHelperService extends SystemObjectImpl {
 	}
 
 	public String getSutAndSubDomain() {
-		String str= configuration.getAutomationParam(AutoParams.sutUrl.toString(), AutoParams.sutUrl.toString()) + "//"
-				+ configuration.getProperty("institutaion.subdomain");
-				
+		String str = configuration.getAutomationParam(
+				AutoParams.sutUrl.toString(), AutoParams.sutUrl.toString())
+				+ "//" + configuration.getProperty("institutaion.subdomain");
+
 		return str;
 
 	}
@@ -357,24 +360,25 @@ public class PageHelperService extends SystemObjectImpl {
 	public Teacher getTeacher() {
 		return teacher;
 	}
-	
-	public void calculateSLbyWL(String[]WL,String SL){
-		Double wordLevels=0.0;
-		for(int i=0;i<WL.length;i++){
-			wordLevels+=Integer.valueOf(WL[i]);
+
+	public void calculateSLbyWL(String[] WL, String SL) {
+		Double wordLevels = 0.0;
+		for (int i = 0; i < WL.length; i++) {
+			wordLevels += Integer.valueOf(WL[i]);
 		}
-		wordLevels=wordLevels/WL.length;
-		wordLevels=Math.ceil(wordLevels);
-		int wl=wordLevels.intValue();
-		System.out.println("Rounded avg: "+wl);
-		
-//		System.out.println("testResultService:"+testResultService.toString());
-		testResultService.assertEquals(String.valueOf(wl), SL,"Sentence level do not match");
-		
+		wordLevels = wordLevels / WL.length;
+		wordLevels = Math.ceil(wordLevels);
+		int wl = wordLevels.intValue();
+		System.out.println("Rounded avg: " + wl);
+
+		// System.out.println("testResultService:"+testResultService.toString());
+		testResultService.assertEquals(String.valueOf(wl), SL,
+				"Sentence level do not match");
+
 	}
-	
-	public void addStudent(String studentName)throws Exception{
-//		String studentName = "student" + dbService.sig(6);
+
+	public void addStudent(String studentName) throws Exception {
+		// String studentName = "student" + dbService.sig(6);
 		String studentPassword = "12345";
 		TmsLoginPage tmsLoginPage = new TmsLoginPage(webDriver,
 				testResultService);
@@ -391,7 +395,7 @@ public class PageHelperService extends SystemObjectImpl {
 		tmsHomePage.clickOnStudents();
 		String institutionId = configuration.getProperty("institution.id");
 		String instituteName = dbService.getInstituteNameById(institutionId);
-		tmsHomePage.selectInstitute(instituteName, institutionId, false,true);
+		tmsHomePage.selectInstitute(instituteName, institutionId, false, true);
 		Thread.sleep(3000);
 		tmsHomePage.selectClass(configuration.getProperty("classname"));
 
@@ -399,7 +403,6 @@ public class PageHelperService extends SystemObjectImpl {
 
 		report.startLevel("Enter new student details",
 				EnumReportLevel.CurrentPlace);
-
 
 		tmsHomePage.enterStudentDetails(studentName);
 		String userId = dbService.getUserIdByUserName(studentName,

@@ -987,4 +987,50 @@ public class EdoHomePage extends GenericPage {
 				+ "][@ans='" + answerId + "']", ByTypes.xpath);
 
 	}
+
+	public void dragClassificationAnswerToBankCloze(String text)
+			throws Exception {
+		WebElement from = webDriver.waitForElement(
+				"//div[@id='TTpTablePlaceHolder']//div//div[text()='" + text
+						+ "']", ByTypes.xpath);
+
+		WebElement to = webDriver.waitForElement(
+				"//div[@id='TTpTablePlaceHolder']//div[1]", ByTypes.xpath);
+		// TODO Auto-generated method stub
+		webDriver.dragAndDropElement(from, to);
+
+	}
+
+	public void checkDragElementLocationPicture(String index, String answerId)
+			throws Exception {
+		webDriver.waitForElement("//div[@id='ListPlaceHolder']//div["+index+"][@ans='"+answerId+"']", ByTypes.xpath);
+
+	}
+
+	public void dragSeqSentence(String text, int index) throws Exception {
+		WebElement from = webDriver.waitForElement("//div[text()='" + text
+				+ "']", ByTypes.xpath);
+		WebElement to = webDriver.waitForElement(
+				"//table[@class='textTable']//tr[" + index + "]//div[2]",
+				ByTypes.xpath);
+
+		webDriver.dragAndDropElement(from, to);
+
+	}
+
+	public void checkSeqSentenceCorrectAnswer(String text, int index)
+			throws Exception {
+		webDriver.waitForElement("//table[@class='textTable']//tbody//tr["
+				+ index + "]//td//div[2]//div//div[text()='" + text
+				+ "'][contains(@class,'vCheck')]", ByTypes.xpath);
+
+	}
+
+	public void checkSeqSentenceInCorrectAnswer(String text, int index)
+			throws Exception {
+		webDriver.waitForElement("//table[@class='textTable']//tbody//tr["
+				+ index + "]//td//div[2]//div//div[text()='" + text
+				+ "'][contains(@class,'xCheck')]", ByTypes.xpath);
+
+	}
 }

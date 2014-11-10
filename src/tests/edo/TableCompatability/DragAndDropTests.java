@@ -2,6 +2,7 @@ package tests.edo.TableCompatability;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import pageObjects.EdoHomePage;
@@ -30,7 +31,7 @@ public class DragAndDropTests extends EdusoftWebTest {
 
 		report.startLevel("Login and navigate to unit component");
 		EdoHomePage edoHomePage = pageHelper.loginAsStudent();
-
+		sleep(4);
 		edoHomePage.navigateToCourseUnitComponent(course,
 				SubComponentName.Practice);
 
@@ -152,7 +153,14 @@ public class DragAndDropTests extends EdusoftWebTest {
 		// Basic 2 Interesting People 46 Reading 132 Do It! Practice Sequence
 		// Sentence 2 b2radip002 23043
 		Course course = pageHelper.getCourses().get(20);
-		String[] words = null;
+		String[] words = new String[] {
+				"She hired some workers.",// 4
+				"She decided that she wanted to tell others what to do.",// 2
+				"She started the Clean-House Agency by putting an ad in a newspaper.",// 3
+				"She taught the workers how to clean.",// 5
+				"Her mother was always telling her what to do.",// 1
+				"She decided to write cookbooks as a new business.",// 7
+				"She started sending the workers out to homes and offices." };// 6
 		report.startLevel("Login and navigate to unit component");
 		EdoHomePage edoHomePage = pageHelper.loginAsStudent();
 
@@ -161,25 +169,50 @@ public class DragAndDropTests extends EdusoftWebTest {
 
 		edoHomePage.ClickComponentStage("1");
 
+		report.startLevel("Arrange all answers");
+		edoHomePage.dragSeqSentence(words[0], 4);
+		edoHomePage.dragSeqSentence(words[1], 2);
+		edoHomePage.dragSeqSentence(words[2], 3);
+		edoHomePage.dragSeqSentence(words[3], 5);
+		edoHomePage.dragSeqSentence(words[4], 1);
+		edoHomePage.dragSeqSentence(words[5], 7);
+		edoHomePage.dragSeqSentence(words[6], 6);
+
 		report.startLevel("Check answer");
 		edoHomePage.clickOnCheckAnswers();
-		for (int i = 0; i < words.length; i++) {
-			edoHomePage.checkDragAndDropCorrectAnswer(words[i]);
-		}
+		int index = 0;
+
+		edoHomePage.checkSeqSentenceCorrectAnswer(words[0], 4);
+		edoHomePage.checkSeqSentenceCorrectAnswer(words[1], 2);
+		edoHomePage.checkSeqSentenceCorrectAnswer(words[2], 3);
+		edoHomePage.checkSeqSentenceCorrectAnswer(words[3], 5);
+		edoHomePage.checkSeqSentenceCorrectAnswer(words[4], 1);
+		edoHomePage.checkSeqSentenceCorrectAnswer(words[5], 7);
+		edoHomePage.checkSeqSentenceCorrectAnswer(words[6], 6);
+		
+		report.startLevel("Check wrong answer");
+		edoHomePage.clickOnClearAnswer();
+		edoHomePage.dragSeqSentence(words[1], 4);
+		edoHomePage.clickOnCheckAnswers();
+		edoHomePage.checkSeqSentenceInCorrectAnswer(words[1], 4);
+		
+		
+		
+		
 
 	}
 
-	@Test
+	@Ignore
 	@TestCaseParams(testCaseID = { "16587" })
 	public void testDragAndDropSequenceimagetemplates() throws Exception {
 		// 4 Basic 2 Buying And Selling 41 Reading 106 Wrong Color Practice
 		// Sequence Image 4 b2rswcp004 22777
-		String []words=null;
+		String[] words = null;
 		Course course = pageHelper.getCourses().get(21);
 
 		report.startLevel("Login and navigate to unit component");
 		EdoHomePage edoHomePage = pageHelper.loginAsStudent();
-
+		
 		edoHomePage.navigateToCourseUnitComponent(course,
 				SubComponentName.Practice);
 
@@ -187,10 +220,10 @@ public class DragAndDropTests extends EdusoftWebTest {
 
 		report.startLevel("Check answer");
 		edoHomePage.clickOnCheckAnswers();
-		
-		for (int i = 0; i < words.length; i++) {
-			edoHomePage.checkDragAndDropCorrectAnswer(words[i]);
-		}
+
+		// for (int i = 0; i < words.length; i++) {
+		// edoHomePage.checkDragAndDropCorrectAnswer(words[i]);
+		// }
 	}
 
 	@Test
@@ -230,21 +263,21 @@ public class DragAndDropTests extends EdusoftWebTest {
 		for (int i = 0; i < words.length; i++) {
 			edoHomePage.checkDragAndDropCorrectAnswerCloze(words[i]);
 		}
-		
+
 		report.startLevel("Clear answers");
 		edoHomePage.clickOnClearAnswer();
-		
+
 		report.startLevel("Check that all element are back in the bank");
 		for (int i = 0; i < words.length; i++) {
 			edoHomePage.checkDragElementIsBackToBankCloze(words[i]);
 		}
-		
+
 		report.startLevel("Drop and replace from bank");
-		
+
 		edoHomePage.dragAnserToElementByXpath(words[4], xpath, "6");
 		edoHomePage.dragAnserToElementByXpath(words[6], xpath, "6");
 		edoHomePage.checkDragElementLocationCloze("6", "70");
-		
+
 		report.startLevel("click on see answers and check that all correct answers are displayed");
 		edoHomePage.clickOnSeeAnswer();
 		edoHomePage.checkDragElementLocationCloze("1", "62");
@@ -254,13 +287,12 @@ public class DragAndDropTests extends EdusoftWebTest {
 		edoHomePage.checkDragElementLocationCloze("5", "81");
 		edoHomePage.checkDragElementLocationCloze("6", "54");
 		edoHomePage.checkDragElementLocationCloze("7", "70");
-		
+
 		report.startLevel("Drag element to the bank");
 		edoHomePage.clickOnClearAnswer();
 		edoHomePage.dragAnserToElementByXpath(words[4], xpath, "6");
-		
-		
-		
+		edoHomePage.dragClassificationAnswerToBankCloze(words[4]);
+		edoHomePage.checkDragElementIsBackToBankCloze(words[4]);
 
 	}
 
@@ -270,36 +302,58 @@ public class DragAndDropTests extends EdusoftWebTest {
 		// Basic 2 Healthy Eating 42 Listening 110 Food Practice Match Text To
 		// Picture 1 b2lrfop01 57356
 		Course course = pageHelper.getCourses().get(23);
-
+		String[] words = new String[] { "a cucumber", "a lettuce", "a plate",
+				"meat", "dessert" };
 		report.startLevel("Login and navigate to unit component");
 		EdoHomePage edoHomePage = pageHelper.loginAsStudent();
 
 		edoHomePage.navigateToCourseUnitComponent(course,
 				SubComponentName.Practice);
 
-		edoHomePage.ClickComponentStage("2");
+		report.startLevel("Drag all ansers");
+		String xpath = "//div[@id='ListPlaceHolder']//div[%s]//div";
+		edoHomePage.dragAnserToElementByXpath(words[0], xpath, "2");
+		edoHomePage.dragAnserToElementByXpath(words[1], xpath, "1");
+		edoHomePage.dragAnserToElementByXpath(words[2], xpath, "3");
+		edoHomePage.dragAnserToElementByXpath(words[3], xpath, "5");
+		edoHomePage.dragAnserToElementByXpath(words[4], xpath, "4");
 
 		report.startLevel("Check answer");
 		edoHomePage.clickOnCheckAnswers();
-		String[] words = null;
+
 		for (int i = 0; i < words.length; i++) {
-			edoHomePage.checkDragAndDropCorrectAnswer(words[i]);
+			edoHomePage.checkDragAndDropCorrectAnswerCloze(words[i]);
 		}
-	}
 
-	public void replaceItemWithSelectedItem() {
+		report.startLevel("Clear answers");
+		edoHomePage.clickOnClearAnswer();
 
-	}
+		report.startLevel("Check that all element are back in the bank");
+		for (int i = 0; i < words.length; i++) {
+			edoHomePage.checkDragElementIsBackToBankCloze(words[i]);
+		}
 
-	public void replaceItemWithOuterItem() {
+		report.startLevel("Drop and replace from bank");
+		edoHomePage.clickOnClearAnswer();
+		edoHomePage.dragAnserToElementByXpath(words[4], xpath, "2");
+		sleep(3);
+//		edoHomePage.checkDragElementLocationPicture("2", words[4]);
+		edoHomePage.dragAnserToElementByXpath(words[3], xpath, "2");
+		edoHomePage.checkDragElementLocationPicture("2", "70");
 
-	}
-
-	public void removeItem() {
-
-	}
-
-	public void replaceLocation() {
+		report.startLevel("click on see answers and check that all correct answers are displayed");
+		edoHomePage.clickOnSeeAnswer();
+		edoHomePage.checkDragElementLocationPicture("1", "91");
+		edoHomePage.checkDragElementLocationPicture("2", "83");
+		edoHomePage.checkDragElementLocationPicture("3", "68");
+		edoHomePage.checkDragElementLocationPicture("4", "43");
+		edoHomePage.checkDragElementLocationPicture("5", "70");
+	
+		report.startLevel("Drag element to the bank");
+		edoHomePage.clickOnClearAnswer();
+		edoHomePage.dragAnserToElementByXpath(words[4], xpath, "5");
+		edoHomePage.dragClassificationAnswerToBankCloze(words[4]);
+		edoHomePage.checkDragElementIsBackToBankCloze(words[4]);
 
 	}
 
