@@ -450,7 +450,7 @@ public class RecordPanel extends SRpage {
 
 	}
 
-	public void waitForSpeakStatusAndClickTheRecordButton() throws Exception {
+	public void clickTheRecordButtonAndClickRecordAndStop() throws Exception {
 		String status ="";
 		int timeout=60;
 		int elapsedTime=0;
@@ -459,6 +459,7 @@ public class RecordPanel extends SRpage {
 			Thread.sleep(2000);
 			 status = getRecordPanelStatus();
 			if(status!=null&& status.equals("SPEAK")){
+				clickOnRecordButton();
 				break;
 			}
 			else{

@@ -22,7 +22,7 @@ import drivers.ThreadedWebDriver;
 
 public class SRLoadTest extends EdusoftBasicTest {
 
-	int numberOfInstances = 1;
+	int numberOfInstances = 3;
 	List<ChromeWebDriver> webDriverList = new ArrayList<ChromeWebDriver>();
 	List<RecordPanel> recordPanels = new ArrayList<RecordPanel>();
 
@@ -102,12 +102,11 @@ public class SRLoadTest extends EdusoftBasicTest {
 
 		}
 
-		netService.updateSlaveStatus(slaveName, "ready");
-		netService.checkAllSlaveStatus();
-		// click on all record buttons
+		
+		// wait for all webDrivers to be ready
 		for (int i = 0; i < numberOfInstances; i++) {
 			
-			recordPanels.get(i).waitForSpeakStatusAndClickTheRecordButton();
+			recordPanels.get(i).clickTheRecordButtonAndClickRecordAndStop();
 //			recordPanels.get(i).checkRecordButtonIsEnabled();
 //			webDriverList.get(i).printScreen(
 //					"Before clicking the record button");
@@ -117,6 +116,12 @@ public class SRLoadTest extends EdusoftBasicTest {
 //			testResultService.assertEquals("SPEAK", status,
 //					"Waiting for SPEAK status");
 
+		}
+		netService.updateSlaveStatus(slaveName, "ready");
+		netService.checkAllSlaveStatus();
+		//click the record button 
+		for (int i = 0; i < numberOfInstances; i++) {
+			recordPanels.get(i).clickOnRecordButton();
 		}
 
 		// play the file

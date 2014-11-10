@@ -4,10 +4,10 @@ C:\Users\omers\workspace\AutomationInfra\src\Enums\SRWordLevel.java
 C:\Users\omers\workspace\AutomationInfra\src\drivers\GenericWebDriver.java
 C:\Users\omers\workspace\AutomationInfra\src\tests\BasicTests\ContentCompareBasicTest.java
 C:\Users\omers\workspace\AutomationInfra\src\pageObjects\edo\edoPlacementTestPage.java
-C:\Users\omers\workspace\AutomationInfra\src\tests\misc\JunitBasicTest.java
 C:\Users\omers\workspace\AutomationInfra\src\tests\Erater\EraterAddRemoveFeedbackComments.java
 C:\Users\omers\workspace\AutomationInfra\src\pageObjects\tms\StudentRecordingsPage.java
 C:\Users\omers\workspace\AutomationInfra\src\Enums\AutoParams.java
+C:\Users\omers\workspace\AutomationInfra\src\tests\misc\JunitBasicTest.java
 C:\Users\omers\workspace\AutomationInfra\src\Enums\TestRunnerType.java
 C:\Users\omers\workspace\AutomationInfra\src\pageObjects\SRpage.java
 C:\Users\omers\workspace\AutomationInfra\src\tests\edoRegression\SkillsTests.java
@@ -15,8 +15,8 @@ C:\Users\omers\workspace\AutomationInfra\src\pageObjects\GenericPage.java
 C:\Users\omers\workspace\AutomationInfra\src\Enums\Browsers.java
 C:\Users\omers\workspace\AutomationInfra\src\tests\edoRegression\EraterRegressionTests.java
 C:\Users\omers\workspace\AutomationInfra\src\tests\misc\NonUiTests.java
-C:\Users\omers\workspace\AutomationInfra\src\Objects\Recording.java
 C:\Users\omers\workspace\AutomationInfra\src\tests\misc\PoCTest.java
+C:\Users\omers\workspace\AutomationInfra\src\Objects\Recording.java
 C:\Users\omers\workspace\AutomationInfra\src\Objects\MailMessage.java
 C:\Users\omers\workspace\AutomationInfra\src\pageObjects\EdoLoginPage.java
 C:\Users\omers\workspace\AutomationInfra\src\tests\misc\POC.java
@@ -31,6 +31,7 @@ C:\Users\omers\workspace\AutomationInfra\src\services\JsonParseService.java
 C:\Users\omers\workspace\AutomationInfra\src\drivers\IEWebDriver.java
 C:\Users\omers\workspace\AutomationInfra\src\tests\toeic\toeicBaseTest.java
 C:\Users\omers\workspace\AutomationInfra\src\tests\speechRecognition\SpeechRecognitionBasicTest.java
+C:\Users\omers\workspace\AutomationInfra\src\tests\edo\TableCompatability\DragAndDropTests.java
 C:\Users\omers\workspace\AutomationInfra\src\services\DbService.java
 C:\Users\omers\workspace\AutomationInfra\src\tests\misc\testClassForMaven.java
 C:\Users\omers\workspace\AutomationInfra\src\pageObjects\EdoCompenentPage.java
@@ -57,6 +58,7 @@ C:\Users\omers\workspace\AutomationInfra\src\Enums\InteractStatus.java
 C:\Users\omers\workspace\AutomationInfra\src\services\PageHelperService.java
 C:\Users\omers\workspace\AutomationInfra\src\Interfaces\TestCaseId.java
 C:\Users\omers\workspace\AutomationInfra\src\Objects\Teacher.java
+C:\Users\omers\workspace\AutomationInfra\src\Enums\Skill.java
 C:\Users\omers\workspace\AutomationInfra\src\Objects\Supervisor.java
 C:\Users\omers\workspace\AutomationInfra\src\pageObjects\toeic\toeicStartPage.java
 C:\Users\omers\workspace\AutomationInfra\src\pageObjects\TestQuestionPage.java
@@ -68,6 +70,7 @@ C:\Users\omers\workspace\AutomationInfra\src\Objects\TestQuestion.java
 C:\Users\omers\workspace\AutomationInfra\src\Enums\ByTypes.java
 C:\Users\omers\workspace\AutomationInfra\src\services\MyTestRunner.java
 C:\Users\omers\workspace\AutomationInfra\src\tests\misc\EdusoftSpringBasicTest.java
+C:\Users\omers\workspace\AutomationInfra\src\drivers\AndroidWebDriver.java
 C:\Users\omers\workspace\AutomationInfra\src\drivers\FirefoxWebDriver.java
 C:\Users\omers\workspace\AutomationInfra\src\Objects\FailedTest.java
 C:\Users\omers\workspace\AutomationInfra\src\Objects\BasicObject.java
@@ -84,17 +87,18 @@ C:\Users\omers\workspace\AutomationInfra\src\Enums\Tables.java
 C:\Users\omers\workspace\AutomationInfra\src\tests\edoRegression\GrammerTests.java
 C:\Users\omers\workspace\AutomationInfra\src\pageObjects\tms\ReportPage.java
 C:\Users\omers\workspace\AutomationInfra\src\tests\misc\EdusoftBasicTest.java
+C:\Users\omers\workspace\AutomationInfra\src\Enums\SubComponentName.java
 C:\Users\omers\workspace\AutomationInfra\src\services\TestResultService.java
 C:\Users\omers\workspace\AutomationInfra\src\Enums\UserType.java
 C:\Users\omers\workspace\AutomationInfra\src\services\InstitutionService.java
 C:\Users\omers\workspace\AutomationInfra\src\Enums\PLTStartLevel.java
 C:\Users\omers\workspace\AutomationInfra\src\pageObjects\InteractSection.java
-C:\Users\omers\workspace\AutomationInfra\src\pageObjects\RecordPanel.java
 C:\Users\omers\workspace\AutomationInfra\src\services\TestListener.java
+C:\Users\omers\workspace\AutomationInfra\src\pageObjects\RecordPanel.java
 C:\Users\omers\workspace\AutomationInfra\src\tests\speechRecognition\GrammarsTests.java
 C:\Users\omers\workspace\AutomationInfra\src\services\Reporter.java
-C:\Users\omers\workspace\AutomationInfra\src\tests\UnitTests\WebDriverUnitTests.java
 C:\Users\omers\workspace\AutomationInfra\src\Objects\Course.java
+C:\Users\omers\workspace\AutomationInfra\src\tests\UnitTests\WebDriverUnitTests.java
 C:\Users\omers\workspace\AutomationInfra\src\Objects\InstClass.java
 C:\Users\omers\workspace\AutomationInfra\src\Objects\UnitComponent.java
 C:\Users\omers\workspace\AutomationInfra\src\tests\speechRecognition\CientSide.java
