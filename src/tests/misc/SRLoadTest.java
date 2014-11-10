@@ -39,8 +39,8 @@ public class SRLoadTest extends EdusoftBasicTest {
 	@Test
 	public void testMultipleBrowserInstances() throws Exception {
 
-//		String slaveName = configuration.getAutomationParam(null,
-//				"slaveNameCMD");
+		// String slaveName = configuration.getAutomationParam(null,
+		// "slaveNameCMD");
 		System.out.println("Slave name is:" + slaveName);
 		if (slaveName == null) {
 			slaveName = "devMachine";
@@ -61,20 +61,20 @@ public class SRLoadTest extends EdusoftBasicTest {
 		}
 
 		for (int i = 0; i < numberOfInstances; i++) {
-//			 webDriverList.get(i).openUrl(
-//			 "http://edonov14.prod.com/automation.aspx");
-//			 webDriverList
-//			 .get(i)
-//			 .addValuesToCookie(
-//			 "Student",
-//			 "^StudentID*3000025000321^Language*spa^LangSupLevel*3^Courses*0^FName*TMS^LName*Domain^SID*53638^CMode*L^UserType*da^Type*2^LCE*");
-//			
-//				webDriverList
-//				.get(i)
-//				.openUrl(
-//						"http://edonov14.prod.com/Runtime/ViewComponents.aspx?id=3000025000321&courseId=8&unitId=78&componentId=284&skill=Speaking&componentName=How%20Awful!&componentType=1&level=component");
-	
-			///*****beta site
+			// webDriverList.get(i).openUrl(
+			// "http://edonov14.prod.com/automation.aspx");
+			// webDriverList
+			// .get(i)
+			// .addValuesToCookie(
+			// "Student",
+			// "^StudentID*3000025000321^Language*spa^LangSupLevel*3^Courses*0^FName*TMS^LName*Domain^SID*53638^CMode*L^UserType*da^Type*2^LCE*");
+			//
+			// webDriverList
+			// .get(i)
+			// .openUrl(
+			// "http://edonov14.prod.com/Runtime/ViewComponents.aspx?id=3000025000321&courseId=8&unitId=78&componentId=284&skill=Speaking&componentName=How%20Awful!&componentType=1&level=component");
+
+			// /*****beta site
 			webDriverList.get(i).openUrl("http://edobeta.engdis.com/qa.aspx");
 			webDriverList
 					.get(i)
@@ -106,11 +106,16 @@ public class SRLoadTest extends EdusoftBasicTest {
 		netService.checkAllSlaveStatus();
 		// click on all record buttons
 		for (int i = 0; i < numberOfInstances; i++) {
-			recordPanels.get(i).checkRecordButtonIsEnabled();
-			recordPanels.get(i).clickOnRecordButton();
-			sleep(4);
-			String status = recordPanels.get(i).getRecordPanelStatus();
-			testResultService.assertEquals("SPEAK", status);
+			
+			recordPanels.get(i).waitForSpeakStatusAndClickTheRecordButton();
+//			recordPanels.get(i).checkRecordButtonIsEnabled();
+//			webDriverList.get(i).printScreen(
+//					"Before clicking the record button");
+//			recordPanels.get(i).clickOnRecordButton();
+//			sleep(4);
+//			String status = recordPanels.get(i).getRecordPanelStatus();
+//			testResultService.assertEquals("SPEAK", status,
+//					"Waiting for SPEAK status");
 
 		}
 

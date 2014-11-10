@@ -443,10 +443,33 @@ public class RecordPanel extends SRpage {
 
 	public void checkRecordButtonIsEnabled() throws Exception {
 
-		
-		testResultService.assertEquals(true,
-				webDriver.waitForElement("btnRecord", ByTypes.id).isEnabled());
+		// testResultService.assertEquals(true,
+		// webDriver.waitForElement("btnRecord", ByTypes.id).isEnabled());
 
+		webDriver.checkElementEnabledAndClickable("//div[@id='btnRecord']");
+
+	}
+
+	public void waitForSpeakStatusAndClickTheRecordButton() throws Exception {
+		String status ="";
+		int timeout=60;
+		int elapsedTime=0;
+		while(elapsedTime<timeout){
+			clickOnRecordButton();
+			Thread.sleep(2000);
+			 status = getRecordPanelStatus();
+			if(status!=null&& status.equals("SPEAK")){
+				break;
+			}
+			else{
+				elapsedTime=elapsedTime+5;
+				Thread.sleep(3000);
+				System.out.println("Waiting for speak status for 3 seconds");
+			}
+			
+		}
+		
+		
 	}
 
 }

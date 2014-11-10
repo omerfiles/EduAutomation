@@ -64,6 +64,7 @@ public class EdusoftBasicTest extends TestCase {
 	@Rule
 	public TestWatcher watcher = new TestWatcher() {
 
+	
 		@Override
 		protected void succeeded(Description description) {
 			// TODO Auto-generated method stub
