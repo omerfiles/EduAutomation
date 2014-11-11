@@ -54,6 +54,7 @@ import Enums.ByTypes;
 import Enums.TestRunnerType;
 import services.DbService;
 import services.TestResultService;
+import services.TextService;
 import jsystem.framework.report.Reporter;
 import junit.framework.SystemTestCaseImpl;
 
@@ -73,10 +74,13 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	// private Config configuration;
 	protected DbService dbService;
 	protected String remoteMachine;
-	protected boolean enableConsoleLog = false;
+	protected boolean enableConsoleLog ;
 
 	@Autowired
 	private services.Configuration configuration;
+	
+	
+	private TextService textService;
 
 	private services.Reporter reporter;
 
@@ -112,9 +116,10 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		// if (remoteMachine == null) {
 		// Assert.fail("Remote machine value is null");
 		// }
-		if (enableConsoleLog == true) {
-			enableConsoleLog = true;
-		}
+//		if (enableConsoleLog == true) {
+//			enableConsoleLog = true;
+//		}
+		textService=new TextService();
 		remoteMachine = configuration.getAutomationParam(
 				AutoParams.remoteMachine.toString(), "machine");
 		setSutUrl(configuration.getAutomationParam(
@@ -1031,6 +1036,23 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		}
 		// TODO Auto-generated method stub
 
+	}
+	
+	public void printConsoleLogs(String logFilter, boolean useFllter) throws Exception{
+		try {
+			textService=new TextService();
+			LogEntries logEntries = getConsoleLogEntries();
+			List<String[]> logList = textService.getListFromLogEntries(
+					logEntries, logFilter,useFllter);
+			String consoleLogPath = "files/consoleOutput/consoleLog"
+					+ dbService.sig() + ".csv";
+			textService.writeArrayistToCSVFile(consoleLogPath, logList);
+			System.out
+					.println("Console log can be found in: " + consoleLogPath);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -366,21 +366,21 @@ public class TextService extends SystemObjectImpl {
 		writer.writeAll(list);
 		writer.close();
 	}
-	
 
 	public List<String[]> getListFromLogEntries(LogEntries logEntries) {
-		return getListFromLogEntries(logEntries, null);
+		return getListFromLogEntries(logEntries, null,true);
 	}
 
 	public List<String[]> getListFromLogEntries(LogEntries logEntries,
-			String filter) {
+			String filter, boolean useFilter) {
 		List<String[]> strList = new ArrayList<String[]>();
 		for (LogEntry entry : logEntries) {
 
 			String[] str = new String[] { entry.getMessage(),
 					String.valueOf(entry.getTimestamp()),
 					entry.getLevel().toString() };
-			if (filter != null && entry.getMessage().contains(filter)) {
+			if (filter != null && entry.getMessage().contains(filter)
+					|| useFilter == false && filter != null) {
 				strList.add(str);
 			}
 		}

@@ -99,7 +99,7 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 		if (enableLoggin == true && browser.equals(Browsers.chrome.toString())) {
 			LogEntries logEntries = webDriver.getConsoleLogEntries();
 			List<String[]> logList = textService.getListFromLogEntries(
-					logEntries, logFilter);
+					logEntries, logFilter,true);
 			String consoleLogPath = "files/consoleOutput/consoleLog"
 					+ dbService.sig() + ".csv";
 			textService.writeArrayistToCSVFile(consoleLogPath, logList);
