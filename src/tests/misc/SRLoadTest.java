@@ -23,7 +23,7 @@ import drivers.ThreadedWebDriver;
 
 public class SRLoadTest extends EdusoftWebTest {
 
-	int numberOfInstances = 3;
+	int numberOfInstances = 6;
 	String env="internal";//internal,external
 	List<ChromeWebDriver> webDriverList = new ArrayList<ChromeWebDriver>();
 	List<RecordPanel> recordPanels = new ArrayList<RecordPanel>();
@@ -34,8 +34,8 @@ public class SRLoadTest extends EdusoftWebTest {
 	@Before
 	public void setup() throws Exception {
 		super.setup();
-		setEnableLoggin(true);
-		setLogFilter("Incomming message");
+//		setEnableLoggin(true);
+//		setLogFilter("Incomming message");
 		slaveName = configuration.getAutomationParam(null, "slaveNameCMD");
 	}
 
@@ -54,12 +54,14 @@ public class SRLoadTest extends EdusoftWebTest {
 
 		for (int i = 0; i < numberOfInstances; i++) {
 			ChromeWebDriver driver = new ChromeWebDriver();
+			
+			driver.setReporter(report);
+			driver.setTestResultService(testResultService);
+			driver.setEnableConsoleLog(true);
 			driver.init(
 					configuration.getAutomationParam(
 							AutoParams.remoteMachine.toString(), "machine"),
 					null);
-			driver.setReporter(report);
-			driver.setTestResultService(testResultService);
 			webDriverList.add(driver);
 		}
 
@@ -202,6 +204,7 @@ public class SRLoadTest extends EdusoftWebTest {
 	@After
 	public void tearDown() throws Exception {
 		for (int i = 0; i < numberOfInstances; i++) {
+			webDriverList.get(i).printConsoleLogs("",false);
 			webDriverList.get(i).quitBrowser();
 		}
 		netService.updateSlaveStatus(slaveName, "not ready");
