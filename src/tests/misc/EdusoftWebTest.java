@@ -27,7 +27,7 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 
 	String browser = null;
 	
-	private String logFilter = null;
+	
 
 	@Override
 	public void setup() throws Exception {
@@ -155,7 +155,5 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 		return logFilter;
 	}
 
-	public void setLogFilter(String logFilter) {
-		this.logFilter = logFilter;
-	}
+	
 }

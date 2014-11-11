@@ -48,6 +48,8 @@ public class EdusoftBasicTest extends TestCase {
 	// protected static AudioService audioService;
 	public ClassPathXmlApplicationContext ctx;
 	protected boolean enableLoggin = false;
+	
+	protected String logFilter = null;
 
 	protected boolean inStep = false;
 	protected String testCaseId = null;
@@ -239,6 +241,9 @@ public class EdusoftBasicTest extends TestCase {
 
 	public void setEnableLoggin(boolean enableLoggin) {
 		this.enableLoggin = enableLoggin;
+	}
+	public void setLogFilter(String logFilter) {
+		this.logFilter = logFilter;
 	}
 
 }

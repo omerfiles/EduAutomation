@@ -21,9 +21,10 @@ import Objects.Recording;
 import drivers.ChromeWebDriver;
 import drivers.ThreadedWebDriver;
 
-public class SRLoadTest extends EdusoftBasicTest {
+public class SRLoadTest extends EdusoftWebTest {
 
 	int numberOfInstances = 3;
+	String env="internal";//internal,external
 	List<ChromeWebDriver> webDriverList = new ArrayList<ChromeWebDriver>();
 	List<RecordPanel> recordPanels = new ArrayList<RecordPanel>();
 
@@ -34,6 +35,7 @@ public class SRLoadTest extends EdusoftBasicTest {
 	public void setup() throws Exception {
 		super.setup();
 		setEnableLoggin(true);
+		setLogFilter("Incomming message");
 		slaveName = configuration.getAutomationParam(null, "slaveNameCMD");
 	}
 
@@ -62,6 +64,9 @@ public class SRLoadTest extends EdusoftBasicTest {
 		}
 
 		for (int i = 0; i < numberOfInstances; i++) {
+			
+			
+			
 			// webDriverList.get(i).openUrl(
 			// "http://edonov14.prod.com/automation.aspx");
 			// webDriverList
@@ -75,24 +80,44 @@ public class SRLoadTest extends EdusoftBasicTest {
 			// .openUrl(
 			// "http://edonov14.prod.com/Runtime/ViewComponents.aspx?id=3000025000321&courseId=8&unitId=78&componentId=284&skill=Speaking&componentName=How%20Awful!&componentType=1&level=component");
 
-			// /*****beta site
-			webDriverList.get(i).openUrl("http://edobeta.engdis.com/qa.aspx");
-			webDriverList
-					.get(i)
-					.addValuesToCookie(
-							"Student",
-							"^StudentID*3000025000321^Language*eng^LangSupLevel*3^Courses*0^FName*TMS^LName*Domain^SID*58846^CMode*L^UserType*da^Type*1^LCE*");
+			if(env.equals("internal")){
+				
+				 webDriverList.get(i).openUrl(
+				 "http://edonov14.prod.com/automation.aspx");
+				 webDriverList
+				 .get(i)
+				 .addValuesToCookie(
+				 "Student",
+				 "^StudentID*3000025000321^Language*spa^LangSupLevel*3^Courses*0^FName*TMS^LName*Domain^SID*37537^CMode*L^UserType*da^Type*2^LCE*");
+				
+				 webDriverList
+				 .get(i)
+				 .openUrl(
+				 "http://edonov14.prod.com/Runtime/ViewComponents.aspx?id=3000025000321&courseId=8&unitId=78&componentId=284&skill=Speaking&componentName=How%20Awful!&componentType=1&level=component");
 
-			webDriverList
-					.get(i)
-					.openUrl(
-							"http://edobeta.engdis.com/Runtime/ViewComponents.aspx?id=3000025000321&courseId=20191&unitId=22213&componentId=292&skill=Speaking&componentName=Expensive%20Boutique&componentType=1&level=component");
-			EdoHomePage edoHomePage = new EdoHomePage(webDriverList.get(i),
+			}
+			else if(env.equals("external")){
+				webDriverList.get(i).openUrl("http://edobeta.engdis.com/qa.aspx");
+				webDriverList
+						.get(i)
+						.addValuesToCookie(
+								"Student",
+								"^StudentID*3000025000321^Language*eng^LangSupLevel*3^Courses*0^FName*TMS^LName*Domain^SID*58846^CMode*L^UserType*da^Type*1^LCE*");
+
+				webDriverList
+						.get(i)
+						.openUrl(
+								"http://edobeta.engdis.com/Runtime/ViewComponents.aspx?id=3000025000321&courseId=20191&unitId=22213&componentId=292&skill=Speaking&componentName=Expensive%20Boutique&componentType=1&level=component");
+			
+			}
+			
+			// /*****beta site
+				EdoHomePage edoHomePage = new EdoHomePage(webDriverList.get(i),
 					testResultService);
 
 			edoHomePage.clickOnSeeScript();
 			sleep(2);
-			edoHomePage.selectTextFromContainer(6);
+			edoHomePage.selectTextFromContainer(3);
 
 			RecordPanel recordPanel = edoHomePage.clickOnRecordYourself();
 			recordPanel.setWebDriver(webDriverList.get(i));
@@ -127,12 +152,26 @@ public class SRLoadTest extends EdusoftBasicTest {
 
 		// play the file
 		audioService.sendSoundToVirtualMic(new File(
-				"files/audioFiles/800$.wav"), 16000.0F);
+				"files/audioFiles/A1SHHA_3.wav"), 16000);
 		
 		for (int i = 0; i < numberOfInstances; i++) {
 			recordPanels.get(i).checkErrorMessageDoesNotExist();
+			
+			String actualSentenceFeedbackText = webDriverList.get(i).waitForElement(
+					"//div[@class='scoreExpWrapper']", ByTypes.xpath).getText();
+			System.out.println("Feedback: "+actualSentenceFeedbackText);
+			if(actualSentenceFeedbackText.equals("Try Again")){
+				testResultService.addFailTest("Bad feedback");
+			}
+			else if(actualSentenceFeedbackText.equals(null)){
+				testResultService.addFailTest("no feedback");
+			}
 		}
 		System.out.println("Playing ended");
+		
+		//check feedback
+		
+
 		netService.updateSlaveStatus(slaveName, "not ready");
 	}
 
@@ -166,6 +205,7 @@ public class SRLoadTest extends EdusoftBasicTest {
 			webDriverList.get(i).quitBrowser();
 		}
 		netService.updateSlaveStatus(slaveName, "not ready");
+		super.tearDown();
 	}
 
 }
