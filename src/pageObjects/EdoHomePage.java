@@ -3,6 +3,7 @@ package pageObjects;
 import java.nio.charset.Charset;
 
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -322,7 +323,12 @@ public class EdoHomePage extends GenericPage {
 					System.out.println("trying to close popup");
 					webDriver.closeAlertByAccept();
 					break;
-				} catch (Exception j) {
+				} 
+				catch(NoSuchWindowException no){
+					System.out.println("Catched NoSuchWindowException");
+				}
+				
+				catch (Exception j) {
 					System.out.println("Catched exception jjjjj");
 				}
 

@@ -168,7 +168,7 @@ public class DragAndDropTests extends EdusoftWebTest {
 				SubComponentName.Practice);
 
 		edoHomePage.ClickComponentStage("1");
-
+		sleep(3);
 		report.startLevel("Arrange all answers");
 		edoHomePage.dragSeqSentence(words[0], 4);
 		edoHomePage.dragSeqSentence(words[1], 2);
@@ -189,16 +189,12 @@ public class DragAndDropTests extends EdusoftWebTest {
 		edoHomePage.checkSeqSentenceCorrectAnswer(words[4], 1);
 		edoHomePage.checkSeqSentenceCorrectAnswer(words[5], 7);
 		edoHomePage.checkSeqSentenceCorrectAnswer(words[6], 6);
-		
+
 		report.startLevel("Check wrong answer");
 		edoHomePage.clickOnClearAnswer();
 		edoHomePage.dragSeqSentence(words[1], 4);
 		edoHomePage.clickOnCheckAnswers();
 		edoHomePage.checkSeqSentenceInCorrectAnswer(words[1], 4);
-		
-		
-		
-		
 
 	}
 
@@ -337,7 +333,7 @@ public class DragAndDropTests extends EdusoftWebTest {
 		edoHomePage.clickOnClearAnswer();
 		edoHomePage.dragAnserToElementByXpath(words[4], xpath, "2");
 		sleep(3);
-//		edoHomePage.checkDragElementLocationPicture("2", words[4]);
+		// edoHomePage.checkDragElementLocationPicture("2", words[4]);
 		edoHomePage.dragAnserToElementByXpath(words[3], xpath, "2");
 		edoHomePage.checkDragElementLocationPicture("2", "70");
 
@@ -348,7 +344,7 @@ public class DragAndDropTests extends EdusoftWebTest {
 		edoHomePage.checkDragElementLocationPicture("3", "68");
 		edoHomePage.checkDragElementLocationPicture("4", "43");
 		edoHomePage.checkDragElementLocationPicture("5", "70");
-	
+
 		report.startLevel("Drag element to the bank");
 		edoHomePage.clickOnClearAnswer();
 		edoHomePage.dragAnserToElementByXpath(words[4], xpath, "5");
