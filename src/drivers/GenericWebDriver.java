@@ -415,8 +415,14 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	public void deleteCookiesAndRefresh() throws Exception {
 
-		webDriver.manage().deleteAllCookies();
-		webDriver.navigate().refresh();
+		try {
+			webDriver.manage().deleteAllCookies();
+			webDriver.navigate().refresh();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("Failed when trying to delete cookies and refresh");
+			e.printStackTrace();
+		}
 	}
 
 	public void deleteCookiesAndCache() throws Exception {
@@ -460,7 +466,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		String currentWindow = null;
 		try {
 			currentWindow = webDriver.getWindowHandle();
-			WebDriverWait wait = new WebDriverWait(webDriver, 10);
+			WebDriverWait wait = new WebDriverWait(webDriver, timeout);
 			wait.until(ExpectedConditions
 					.frameToBeAvailableAndSwitchToIt(frameName));
 		} catch (TimeoutException e) {
@@ -558,7 +564,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			throws Exception {
 		boolean elementFound = false;
 		try {
-			WebElement element = waitForElement(xpath, ByTypes.xpath, false, 10);
+			WebElement element = waitForElement(xpath, ByTypes.xpath, false, timeout);
 			if (element != null) {
 				elementFound = true;
 				printScreen(message);
@@ -586,7 +592,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	public void switchToAlert() {
 		try {
-			WebDriverWait wait = new WebDriverWait(webDriver, 20, 1000);
+			WebDriverWait wait = new WebDriverWait(webDriver, timeout, 1000);
 
 			if (wait.until(ExpectedConditions.alertIsPresent()) != null) {
 				webDriver.switchTo().alert();
@@ -600,7 +606,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	public void closeAlertByAccept() {
 		try {
 			System.out.println("Closing alert");
-			WebDriverWait wait = new WebDriverWait(webDriver, 10, 1000);
+			WebDriverWait wait = new WebDriverWait(webDriver, timeout, 1000);
 			if (wait.until(ExpectedConditions.alertIsPresent()) != null) {
 				webDriver.switchTo().alert().accept();
 			}
@@ -613,7 +619,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	}
 
 	public void closeAlertByDismiss() {
-		WebDriverWait wait = new WebDriverWait(webDriver, 20, 1000);
+		WebDriverWait wait = new WebDriverWait(webDriver, timeout, 1000);
 
 		if (wait.until(ExpectedConditions.alertIsPresent()) != null) {
 			webDriver.switchTo().alert().dismiss();

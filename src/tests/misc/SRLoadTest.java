@@ -17,6 +17,7 @@ import pageObjects.RecordPanel;
 import services.AudioService;
 import Enums.AutoParams;
 import Enums.ByTypes;
+import Interfaces.TestCaseParams;
 import Objects.Recording;
 import drivers.ChromeWebDriver;
 import drivers.ThreadedWebDriver;
@@ -40,6 +41,7 @@ public class SRLoadTest extends EdusoftWebTest {
 	}
 
 	@Test
+	@TestCaseParams(testCaseID = { "2222" })
 	public void testMultipleBrowserInstances() throws Exception {
 
 		// String slaveName = configuration.getAutomationParam(null,

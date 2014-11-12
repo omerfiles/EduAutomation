@@ -77,8 +77,8 @@ public class DbService extends SystemObjectImpl {
 
 	public String getValue(String query, String columnName) throws Exception {
 		String str = null;
-		report.startLevel("Getting results set from db for query: " + query,
-				EnumReportLevel.CurrentPlace);
+//		report.startLevel("Getting results set from db for query: " + query,
+//				EnumReportLevel.CurrentPlace);
 		report.report("Query was:" + query);
 		// String result = (String) jdbcTemplate.queryForObject(query,
 		// String.class);
@@ -107,8 +107,8 @@ public class DbService extends SystemObjectImpl {
 
 	public SqlRowSet getValueRS(String query, String[] columnName,
 			int NumOfRowsExpected, int timeout) throws Exception {
-		report.startLevel("Getting results set from db",
-				EnumReportLevel.CurrentPlace);
+//		report.startLevel("Getting results set from db",
+//				EnumReportLevel.CurrentPlace);
 		report.report("Query was:" + query);
 		SqlRowSet sqlRowSet = null;
 		// ResultSet rs=null;
@@ -144,8 +144,8 @@ public class DbService extends SystemObjectImpl {
 
 	public String[] getValue(String query, String[] columnName,
 			int NumOfRowsExpected, int timeout) throws Exception {
-		report.startLevel("Getting results set from db",
-				EnumReportLevel.CurrentPlace);
+//		report.startLevel("Getting results set from db",
+//				EnumReportLevel.CurrentPlace);
 		report.report("Query was:" + query);
 		System.out.println("query = " + query);
 		System.out.println("jdbcTemplate = " + jdbcTemplate);
@@ -223,8 +223,8 @@ public class DbService extends SystemObjectImpl {
 			throws Exception {
 		String query = "select ";
 		try {
-			report.startLevel("Starting to build sql query",
-					Reporter.EnumReportLevel.CurrentPlace);
+//			report.startLevel("Starting to build sql query",
+//					Reporter.EnumReportLevel.CurrentPlace);
 			if (whereParam.length != whereValue.length
 					|| whereParam.length == 0) {
 				fail("Query params are missing or incorrect");
@@ -267,8 +267,8 @@ public class DbService extends SystemObjectImpl {
 			throws Exception {
 		String query = "select ";
 		try {
-			report.startLevel("Starting to build sql query",
-					Reporter.EnumReportLevel.CurrentPlace);
+//			report.startLevel("Starting to build sql query",
+//					Reporter.EnumReportLevel.CurrentPlace);
 			if (whereParam.length != whereValue.length
 					|| whereParam.length == 0) {
 				fail("Query params are missing or incorrect");

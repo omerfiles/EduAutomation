@@ -38,8 +38,8 @@ public class FirefoxWebDriver extends GenericWebDriver {
 			if (remoteUrl == null) {
 				// remoteUrl = configuration.getProperty("remote.machine");
 			}
-			report.startLevel("Initializing FirefoxWebDriver",
-					Reporter.EnumReportLevel.CurrentPlace);
+//			report.startLevel("Initializing FirefoxWebDriver",
+//					Reporter.EnumReportLevel.CurrentPlace);
 			ProfilesIni profile = new ProfilesIni();
 			System.out.println("setting firefix profile to allow media");
 //			FirefoxProfile firefoxProfile = profile.getProfile("automation");

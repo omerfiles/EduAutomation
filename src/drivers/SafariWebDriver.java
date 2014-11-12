@@ -22,8 +22,8 @@ public class SafariWebDriver extends GenericWebDriver {
 				if (remoteUrl == null) {
 					// remoteUrl = configuration.getProperty("remote.machine");
 				}
-				report.startLevel("Initializing SafariWebDriver",
-						Reporter.EnumReportLevel.CurrentPlace);
+//				report.startLevel("Initializing SafariWebDriver",
+//						Reporter.EnumReportLevel.CurrentPlace);
 
 //				 DesiredCapabilities capabilities = new DesiredCapabilities("firefox", "29.0.1", Platform.WINDOWS);
 				webDriver = new RemoteWebDriver(new URL(remoteUrl + "/wd/hub"),

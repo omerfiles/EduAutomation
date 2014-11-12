@@ -390,9 +390,10 @@ public class PageHelperService extends SystemObjectImpl {
 		tmsHomePage.waitForPageToLoad();
 		report.stopLevel();
 
-		report.startLevel("Go to students section and select the institute",
-				EnumReportLevel.CurrentPlace);
+		// report.startLevel("Go to students section and select the institute",
+		// EnumReportLevel.CurrentPlace);
 		tmsHomePage.clickOnStudents();
+		Thread.sleep(2000);
 		String institutionId = configuration.getProperty("institution.id");
 		String instituteName = dbService.getInstituteNameById(institutionId);
 		tmsHomePage.selectInstitute(instituteName, institutionId, false, true);
@@ -401,8 +402,8 @@ public class PageHelperService extends SystemObjectImpl {
 
 		report.stopLevel();
 
-		report.startLevel("Enter new student details",
-				EnumReportLevel.CurrentPlace);
+		// report.startLevel("Enter new student details",
+		// EnumReportLevel.CurrentPlace);
 
 		tmsHomePage.enterStudentDetails(studentName);
 		String userId = dbService.getUserIdByUserName(studentName,

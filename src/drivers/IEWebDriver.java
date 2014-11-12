@@ -36,8 +36,8 @@ public class IEWebDriver extends GenericWebDriver {
 			if (remoteUrl == null) {
 				// remoteUrl = configuration.getProperty("remote.machine");
 			}
-			report.startLevel("Initializing IEWebDriver",
-					Reporter.EnumReportLevel.CurrentPlace);
+//			report.startLevel("Initializing IEWebDriver",
+//					Reporter.EnumReportLevel.CurrentPlace);
 
 			DesiredCapabilities capabilities = DesiredCapabilities
 					.internetExplorer();

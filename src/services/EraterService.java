@@ -158,15 +158,15 @@ public class EraterService extends SystemObjectImpl {
 			report.report("RAW JSON: " + jsonStr);
 			jsonList = netService.getListFromJson(jsonStr, "sections",
 					"details", new String[] { "feedback", "length", "offset" });
-			report.startLevel("Printing json list",
-					EnumReportLevel.CurrentPlace);
+//			report.startLevel("Printing json list",
+//					EnumReportLevel.CurrentPlace);
 			printArrayList(jsonList);
 			report.stopLevel();
 			// jsonList = sortArrayList(jsonList);
 			xmlList = removeHiddenCodesAndConvertToFeedbackCodes(xmlList);
 			// xmlList = sortArrayList(xmlList);
 
-			report.startLevel("Printing xml list", EnumReportLevel.CurrentPlace);
+//			report.startLevel("Printing xml list", EnumReportLevel.CurrentPlace);
 			printArrayList(xmlList);
 			report.stopLevel();
 
