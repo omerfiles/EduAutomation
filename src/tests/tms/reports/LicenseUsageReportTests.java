@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import Enums.ByTypes;
 import Enums.UserType;
+import Interfaces.TestCaseParams;
 import pageObjects.EdoHomePage;
 import pageObjects.tms.ReportPage;
 import pageObjects.tms.TmsHomePage;
@@ -19,18 +20,22 @@ public class LicenseUsageReportTests extends EdusoftWebTest {
 	
 	
 	@Test
+	@TestCaseParams(testCaseID = { "16157" })
 	public void testLicenseUsageReportAsSchoolAdmin() throws Exception{
 		testLicenseUsageReportAsTMSDomain_16168(UserType.SchoolAdmin);
 	}
 	@Test
+	@TestCaseParams(testCaseID = { "16156" })
 	public void testLicenseUsageReportAsTeacher() throws Exception{
 		testLicenseUsageReportAsTMSDomain_16168(UserType.Teahcer);
 	}
 	@Test
+	@TestCaseParams(testCaseID = { "16169" })
 	public void testLicenseUsageReportAsSuperVisor() throws Exception{
 		testLicenseUsageReportAsTMSDomain_16168(UserType.Supervisor);
 	}
 	@Test
+	@TestCaseParams(testCaseID = { "16168" })
 	public void testLicenseUsageReportAsTMSadmin() throws Exception{
 		testLicenseUsageReportAsTMSDomain_16168(UserType.TMSAdmin);
 	}
