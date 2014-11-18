@@ -298,7 +298,7 @@ public class DragAndDropTests extends EdusoftWebTest {
 		// Basic 2 Healthy Eating 42 Listening 110 Food Practice Match Text To
 		// Picture 1 b2lrfop01 57356
 		Course course = pageHelper.getCourses().get(23);
-		String[] words = new String[] { "a cucumber", "a lettuce", "a plate",
+		String[] words = new String[] { "a cucumber", "lettuce", "a plate",
 				"meat", "dessert" };
 		report.startLevel("Login and navigate to unit component");
 		EdoHomePage edoHomePage = pageHelper.loginAsStudent();
