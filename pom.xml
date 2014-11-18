@@ -69,10 +69,9 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<scope>test</scope>
-
+			<version>4.12-beta-2</version>
 		</dependency>
+
 		<dependency>
 			<groupId>jcifs</groupId>
 			<artifactId>jcifs</artifactId>
@@ -84,6 +83,13 @@
 			<artifactId>selenium-java</artifactId>
 			<version>2.43.1</version>
 		</dependency>
+		<dependency>
+			<groupId>io.appium</groupId>
+			<artifactId>java-client</artifactId>
+			<version>2.0.0</version>
+		</dependency>
+
+
 		<dependency>
 			<groupId>commons-discovery</groupId>
 			<artifactId>commons-discovery</artifactId>

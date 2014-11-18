@@ -1,6 +1,7 @@
 package tests.edo;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.file.FileSystem;
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javassist.runtime.Cflow;
+
 import org.junit.Test;
 
 import tests.BasicTests.ContentCompareBasicTest;
@@ -22,15 +25,27 @@ import tests.BasicTests.ContentCompareBasicTest;
 public class ContentCompareTest extends ContentCompareBasicTest {
 
 	private String oldContentBaseFolder = "\\\\frontqa3\\EDO_HTML_QA\\Runtime\\Content\\";
-	private String newContentBaseFolder = "\\\\frontdev2003\\EDOPedagogical\\EDO\\Runtime\\Content\\";
+	List<String[]> testResults = new ArrayList<String[]>();// folder
+	// id,segment
+	// id,status,explanation
+	// private String changedFileInCFL1 =
+	// "\\\\NEWSTORAGE\\Sendhere\\omers\\contentFiles\\";
+	private String CFL1BaseFolder = "\\\\NEWSTORAGE\\Sendhere\\omers\\contentFiles\\";
+	// private String newContentBaseFolder =
+	// "\\\\frontdev2003\\EDOPedagogical\\EDO\\Runtime\\Content\\";
+	// 17.11.2014 test
+	private String newContentBaseFolder = "\\\\storage\\storage\\MARKETING\\Production\\EDO Facelift\\updated Package\\Runtime\\Content\\";
 	private int numberOfSegmentsNotTheSame;
 	private int wordsMisMatch;
 	private int numberOfWordsInSubSegmentsNotTheSame;
 	private int passedTests;
 
+	boolean copyFolder = false;
+	boolean CFL1diff = false;
+
 	@Test
 	public void testFolderReading() throws Exception {
-		compareOldAndNewContent("reading", false);
+		compareOldAndNewContent("reading", true);
 	}
 
 	@Test
@@ -48,7 +63,6 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 		compareOldAndNewContent("grammar", true);
 	}
 
-	@Test
 	public void deleteUpdatedContant() throws Exception {
 		List<String[]> filesToDelete = new ArrayList<String[]>();
 		// get list of updated files from D:\Content\Explore\English
@@ -89,9 +103,15 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 		// get old content subfolders into arrayList
 		oldContentBaseFolder = oldContentBaseFolder + contentFolder;
 		newContentBaseFolder = newContentBaseFolder + contentFolder;
+		CFL1BaseFolder = CFL1BaseFolder + contentFolder;
 
 		List<String> oldContentFolders = getSubFolders(oldContentBaseFolder,
 				false, true);
+
+		List<String> cfl1ContentFolders = getSubFolders(CFL1BaseFolder, false,
+				true);
+
+		// List<String> cfl1ContentFolders =null;
 		// get new content subfolsers into arrayList
 		List<String> newContentFolders = getSubFolders(newContentBaseFolder,
 				false, true);
@@ -99,12 +119,9 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 		int foldersPassed = 0;
 		int foldersFailed = 0;
 
-		List<String[]> testResults = new ArrayList<String[]>();// folder
-																// id,segment
-																// id,status,explanation
-
 		for (int i = 0; i < newContentFolders.size(); i++) {
-			boolean copyFolder = false;
+			CFL1diff=false;
+			boolean fileExistInCFL1 = false;
 			try {
 
 				report.startLevel("Checking folder: "
@@ -113,9 +130,35 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 						+ newContentFolders.get(i) + "\\"
 						+ newContentFolders.get(i) + ".js";
 
-				String currentContenetfilePath = oldContentBaseFolder + "\\"
-						+ newContentFolders.get(i) + "\\"
-						+ newContentFolders.get(i) + ".js";
+				String oldContenetfilePath = oldContentBaseFolder + "\\"
+						+ oldContentFolders.get(i) + "\\"
+						+ oldContentFolders.get(i) + ".js";
+
+				String cfl1ContentFilePath = null;
+
+				// check if file exist in CFL content folders:
+				// \\NEWSTORAGE\Sendhere\omers\contentFiles
+				String[] cfl1Contentsegments = null;
+				if (textService.checkIfFileExist(CFL1BaseFolder + "\\"
+						+ newContentFolders.get(i) + ".js") == true) {
+
+					System.out.println("File " + newContentFolders.get(i)
+							+ " found in CFL1");
+					fileExistInCFL1 = true;
+					cfl1ContentFilePath = CFL1BaseFolder + "\\"
+							+ newContentFolders.get(i) + ".js";
+
+					String fileContent = textService.getTextFromFile(
+							cfl1ContentFilePath, Charset.defaultCharset());
+
+					cfl1Contentsegments = textService
+							.getHtmlElementFromHtmlFile(
+									"//span[@class='segment']", fileContent);
+
+					cfl1Contentsegments = textService
+							.trimLowerCaseAndRemoveChars(cfl1Contentsegments);
+				}
+				// if exist, compare CFL1 and CFL2
 
 				boolean fileExist = textService
 						.checkIfFileExist(newContenetfilePath);
@@ -123,7 +166,7 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 						newContenetfilePath, Charset.defaultCharset());
 
 				String currentFileContent = textService.getTextFromFile(
-						currentContenetfilePath, Charset.defaultCharset());
+						oldContenetfilePath, Charset.defaultCharset());
 
 				String[] newContentsegments = textService
 						.getHtmlElementFromHtmlFile("//span[@class='segment']",
@@ -137,6 +180,15 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 				currentContentsegments = textService
 						.trimLowerCaseAndRemoveChars(currentContentsegments);
 
+				if (fileExistInCFL1) {
+					compareSegments(cfl1Contentsegments, newContentsegments,
+							newContentFolders, cfl1ContentFolders, i);
+					if (CFL1diff == true) {
+						
+						continue;
+					}
+					// copy file to CFL1 folder
+				}
 				// check number of segments
 				if (testResultService.assertEquals(newContentsegments.length,
 						currentContentsegments.length,
@@ -174,6 +226,14 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 								String[] str = new String[] {
 										newContentFolders.get(i),
 										String.valueOf(j), "Passed" };
+
+								textService.copyFileToFolder(
+										newContentBaseFolder + "\\"
+												+ newContentFolders.get(i)
+												+ "\\"
+												+ newContentFolders.get(i)
+												+ ".js", "files/temp/noChange");
+
 								passedTests++;
 								testResults.add(str);
 							} else {
@@ -237,6 +297,7 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 				// TODO Auto-generated catch block
 				System.out.println("Problem found while checking folder: "
 						+ newContentFolders.get(i));
+				System.out.println(e.toString());
 				testResultService
 						.addFailTest("Problem found while checking folder: "
 								+ newContentFolders.get(i) + " " + e.toString());
@@ -246,7 +307,7 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 				textService.copyFileToFolder(
 						newContentBaseFolder + "\\" + newContentFolders.get(i)
 								+ "\\" + newContentFolders.get(i) + ".js",
-						"files/temp");
+						"files/temp/ChangedFromOrig");
 			}
 
 		}
@@ -265,4 +326,110 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 				+ folderName + ".csv", testResults);
 	}
 
+	public void compareSegments(String[] segmentOld, String[] segmentNew,
+			List<String> newContentFolders, List<String> oldContentFolders,
+			int i) throws IOException {
+		if (testResultService.assertEquals(segmentNew.length,
+				segmentOld.length, "Length of segments is not the same")) {
+			// compare content of segments
+			for (int j = 0; j < segmentNew[j].length(); j++) {
+				// split segment into array
+				String[] newSegmentWords = textService.splitStringToArray(
+						segmentNew[j], "\\s+");
+				String[] currentSegmentWords = textService.splitStringToArray(
+						segmentOld[j], "\\s+");
+
+				if (testResultService.assertEquals(newSegmentWords.length,
+						currentSegmentWords.length,
+						"Number of words in segment text mismatch. ")) {
+					// compare text of sub-segments
+					boolean wordsMatch = true;
+					String newWord = null;
+					String currentWord = null;
+					for (int k = 0; k < currentSegmentWords.length; k++) {
+
+						if (!currentSegmentWords[k].equals(newSegmentWords[k])) {
+							wordsMatch = false;
+							newWord = newSegmentWords[k];
+							currentWord = currentSegmentWords[k];
+						}
+
+					}
+					if (wordsMatch == true) {
+						// add folder and sub segment to results list
+						String[] str = new String[] { newContentFolders.get(i),
+								String.valueOf(j), "Passed" };
+						passedTests++;
+						// copy to noChangeFolder
+						testResults.add(str);
+					} else {
+						String[] str = new String[] {
+								newContentFolders.get(i),
+								String.valueOf(j),
+								"Failed",
+								"CFL1",
+								"Word mismatch ",
+								"word in new content is: "
+										+ newWord
+										+ "; while word in current content is: "
+										+ currentWord };
+						wordsMisMatch++;
+						testResults.add(str);
+						copyFolder = true;
+						CFL1diff = true;
+					}
+
+				} else {
+					// add folder name, and sub segment number to test
+					// results
+					String[] str = new String[] {
+							newContentFolders.get(i),
+							String.valueOf(j),
+							"Failed",
+							"Different number of words in sub-segment ",
+							"CFL1",
+							"Number of words in new content sub-segment("
+									+ newSegmentWords.length
+									+ ") is not the same as number of words in current text("
+									+ currentSegmentWords.length
+									+ ").Text in new content is: "
+									+ textService.printStringArray(
+											newSegmentWords, " ")
+									+ "; while text in current segment is: "
+									+ textService.printStringArray(
+											currentSegmentWords, " ") };
+					numberOfWordsInSubSegmentsNotTheSame++;
+					testResults.add(str);
+					copyFolder = true;
+					CFL1diff = true;
+
+				}
+				;
+
+			}
+		} else {
+			String[] str = new String[] {
+					newContentFolders.get(i),
+					null,
+					"Failed",
+					"Different number of segments in file ",
+					"CFL1",
+					"Number of segments in new content is: "
+							+ segmentNew.length
+							+ "; while number of segment in current content is: "
+							+ segmentOld.length };
+			numberOfSegmentsNotTheSame++;
+			testResults.add(str);
+			copyFolder = true;
+			CFL1diff = true;
+
+		}
+
+		if (copyFolder) {
+			textService.copyFileToFolder(
+					newContentBaseFolder + "\\" + newContentFolders.get(i)
+							+ "\\" + newContentFolders.get(i) + ".js",
+					"files/temp/ChangedFromCFL1");
+		}
+	}
 }

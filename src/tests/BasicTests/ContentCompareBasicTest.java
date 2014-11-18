@@ -29,7 +29,7 @@ public class ContentCompareBasicTest extends EdusoftBasicTest {
 	protected List<String[]> results = new ArrayList<>();
 
 	public void compareAllGrammers(String testFolder, String csvFile,
-			String grammarFile) throws Exception {
+			String grammarFileCFL2) throws Exception {
 		startStep("Iterate on all Speakeing folders");
 
 		// testFolder = testFolder;
@@ -77,7 +77,7 @@ public class ContentCompareBasicTest extends EdusoftBasicTest {
 					int index = j + 1;
 					String grammerText = getGrammerTextFromGrammerFiles("."
 							+ folders.get(i).toUpperCase() + "_" + index,
-							grammarFile);
+							grammarFileCFL2);
 					if (grammerText == null) {
 						report.report("Grammer text not found in grammer file:"
 								+ folders.get(i).toUpperCase() + "_" + index);

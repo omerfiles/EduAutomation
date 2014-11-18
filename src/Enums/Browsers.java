@@ -1,6 +1,6 @@
 package Enums;
 
 public enum Browsers {
-	chrome,IE,firefox,safari;
+	chrome,IE,firefox,safari,android;
 
 }

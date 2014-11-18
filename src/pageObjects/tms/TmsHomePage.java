@@ -255,6 +255,7 @@ public class TmsHomePage extends GenericPage {
 		String mainWin = webDriver.switchToFrame("tableFrame");
 		webDriver.waitForElement("//*[@id='info" + userId + "']/a/img",
 				ByTypes.xpath).click();
+		Thread.sleep(3000);
 		webDriver.switchToNewWindow();
 
 		Thread.sleep(3000);

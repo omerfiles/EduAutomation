@@ -168,10 +168,11 @@ public class DragAndDropTests extends EdusoftWebTest {
 				SubComponentName.Practice);
 
 		edoHomePage.ClickComponentStage("1");
-		sleep(3);
+		sleep(5);
+		webDriver.printScreen("Before dragging");
 		report.startLevel("Arrange all answers");
-		edoHomePage.dragSeqSentence(words[0], 4);
 		edoHomePage.dragSeqSentence(words[1], 2);
+		edoHomePage.dragSeqSentence(words[0], 4);
 		edoHomePage.dragSeqSentence(words[2], 3);
 		edoHomePage.dragSeqSentence(words[3], 5);
 		edoHomePage.dragSeqSentence(words[4], 1);
@@ -181,7 +182,7 @@ public class DragAndDropTests extends EdusoftWebTest {
 		report.startLevel("Check answer");
 		edoHomePage.clickOnCheckAnswers();
 		int index = 0;
-
+		sleep(1);
 		edoHomePage.checkSeqSentenceCorrectAnswer(words[0], 4);
 		edoHomePage.checkSeqSentenceCorrectAnswer(words[1], 2);
 		edoHomePage.checkSeqSentenceCorrectAnswer(words[2], 3);

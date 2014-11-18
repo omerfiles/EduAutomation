@@ -334,9 +334,10 @@ public class TextService extends SystemObjectImpl {
 	public boolean checkIfFileExist(String path) {
 		File file = new File(path);
 		if (!file.exists()) {
-			report.report("File: " + path + " was not found");
+			System.out.println("File: " + path + " was not found");
 			return false;
 		} else
+			System.out.println("File exist");
 			return true;
 
 	}
