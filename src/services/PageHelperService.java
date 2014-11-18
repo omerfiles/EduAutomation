@@ -95,6 +95,7 @@ public class PageHelperService extends SystemObjectImpl {
 		teacher.setPassword(configuration.getProperty("teacher.password"));
 
 		supervisor.setUserName(configuration.getProperty("supervisor.user"));
+		System.out.println("School admin from properties file is: "+configuration.getProperty("shcoolAdmin.user"));
 		schoolAdmin.setUserName(configuration.getProperty("shcoolAdmin.user"));
 
 	}
