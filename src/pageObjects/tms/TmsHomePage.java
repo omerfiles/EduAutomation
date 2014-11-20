@@ -800,4 +800,9 @@ public class TmsHomePage extends GenericPage {
 		
 	}
 
+	public void clickOnLicenses() throws Exception {
+		webDriver.waitForElement("Licenses", ByTypes.linkText).click();
+		
+	}
+
 }

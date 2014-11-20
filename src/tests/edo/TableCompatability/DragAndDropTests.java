@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import pageObjects.DragAndDropSection;
 import pageObjects.EdoHomePage;
 import Enums.SubComponentName;
 import Interfaces.TestCaseParams;
@@ -37,54 +38,64 @@ public class DragAndDropTests extends EdusoftWebTest {
 
 		edoHomePage.ClickComponentStage("2");
 		sleep(3);
+		DragAndDropSection dragAndDropSection = new DragAndDropSection(
+				webDriver, testResultService);
 		report.startLevel("Start to drag and drop - fill all correct answers");
-		edoHomePage.dragClassificationAnswerByTextFromBank("warm", 1, 1);
-		edoHomePage.dragClassificationAnswerByTextFromBank("clean", 2, 1);
-		edoHomePage.dragClassificationAnswerByTextFromBank("heat", 3, 1);
-		edoHomePage.dragClassificationAnswerByTextFromBank("cozy", 4, 1);
-		edoHomePage
-				.dragClassificationAnswerByTextFromBank("broken parts", 5, 1);
-		edoHomePage.dragClassificationAnswerByTextFromBank("inspect", 6, 1);
+		dragAndDropSection.dragClassificationAnswerByTextFromBank("warm", 1, 1);
+		dragAndDropSection
+				.dragClassificationAnswerByTextFromBank("clean", 2, 1);
+		dragAndDropSection.dragClassificationAnswerByTextFromBank("heat", 3, 1);
+		dragAndDropSection.dragClassificationAnswerByTextFromBank("cozy", 4, 1);
+		dragAndDropSection.dragClassificationAnswerByTextFromBank(
+				"broken parts", 5, 1);
+		dragAndDropSection.dragClassificationAnswerByTextFromBank("inspect", 6,
+				1);
 
-		edoHomePage.dragClassificationAnswerByTextFromBank("water marks", 1, 2);
-		edoHomePage.dragClassificationAnswerByTextFromBank("ceiling", 2, 2);
-		edoHomePage.dragClassificationAnswerByTextFromBank("check", 3, 2);
-		edoHomePage.dragClassificationAnswerByTextFromBank("leaks", 4, 2);
-		edoHomePage.dragClassificationAnswerByTextFromBank("snow", 5, 2);
-		edoHomePage.dragClassificationAnswerByTextFromBank("rain", 6, 2);
+		dragAndDropSection.dragClassificationAnswerByTextFromBank(
+				"water marks", 1, 2);
+		dragAndDropSection.dragClassificationAnswerByTextFromBank("ceiling", 2,
+				2);
+		dragAndDropSection
+				.dragClassificationAnswerByTextFromBank("check", 3, 2);
+		dragAndDropSection
+				.dragClassificationAnswerByTextFromBank("leaks", 4, 2);
+		dragAndDropSection.dragClassificationAnswerByTextFromBank("snow", 5, 2);
+		dragAndDropSection.dragClassificationAnswerByTextFromBank("rain", 6, 2);
 
 		edoHomePage.clickOnCheckAnswers();
 
 		for (int i = 0; i < words.length; i++) {
-			edoHomePage.checkDragAndDropCorrectAnswer(words[i]);
+			dragAndDropSection.checkDragAndDropCorrectAnswer(words[i]);
 		}
 
 		edoHomePage.clickOnClearAnswer();
 
 		report.startLevel("Drop and replace from bank");
-		edoHomePage.dragClassificationAnswerByTextFromBank("rain", 6, 2);
-		edoHomePage.dragClassificationAnswerByTextFromBank("leaks", 6, 2);
-		edoHomePage.checkDragElementLocation("leaks", "34", 6, 2);
-		edoHomePage.checkDragElementIsBackToBank("rain");
+		dragAndDropSection.dragClassificationAnswerByTextFromBank("rain", 6, 2);
+		dragAndDropSection
+				.dragClassificationAnswerByTextFromBank("leaks", 6, 2);
+		dragAndDropSection.checkDragElementLocation("leaks", "34", 6, 2);
+		dragAndDropSection.checkDragElementIsBackToBank("rain");
 
 		report.startLevel("Drop and replace between used elements");
-		edoHomePage.dragClassificationAnswerByTextFromBank("rain", 5, 2);
+		dragAndDropSection.dragClassificationAnswerByTextFromBank("rain", 5, 2);
 
-		edoHomePage.dragClassificationAnswerByTextFromExistingAnswer("rain", 6,
-				2, 6, 2);
-		edoHomePage.checkDragElementLocation("rain", "41", 6, 2);
-		edoHomePage.checkDragElementIsBackToBank("leaks");
+		dragAndDropSection.dragClassificationAnswerByTextFromExistingAnswer(
+				"rain", 6, 2, 6, 2);
+		dragAndDropSection.checkDragElementLocation("rain", "41", 6, 2);
+		dragAndDropSection.checkDragElementIsBackToBank("leaks");
 		report.startLevel("click on see answers");
 		edoHomePage.clickOnSeeAnswer();
 		for (int i = 0; i < words.length; i++) {
-			edoHomePage.checkDragElementIsPlaced(words[i]);
+			dragAndDropSection.checkDragElementIsPlaced(words[i]);
 		}
 
 		// TODO drag element to bank
 		edoHomePage.clickOnClearAnswer();
-		edoHomePage.dragClassificationAnswerByTextFromBank("check", 3, 2);
-		edoHomePage.dragClassificationAnswerToBank("check");
-		edoHomePage.checkDragElementIsBackToBank("check");
+		dragAndDropSection
+				.dragClassificationAnswerByTextFromBank("check", 3, 2);
+		dragAndDropSection.dragClassificationAnswerToBank("check");
+		dragAndDropSection.checkDragElementIsBackToBank("check");
 
 		report.startLevel("End of test");
 	}
@@ -106,43 +117,55 @@ public class DragAndDropTests extends EdusoftWebTest {
 
 		edoHomePage.ClickComponentStage("1");
 
+		DragAndDropSection dragAndDropSection = new DragAndDropSection(
+				webDriver, testResultService);
+
 		report.startLevel("Fill all answers");
-		edoHomePage.dragClassificationAnswerByTextFromBank(words[0], 1, 2);
-		edoHomePage.dragClassificationAnswerByTextFromBank(words[1], 2, 2);
-		edoHomePage.dragClassificationAnswerByTextFromBank(words[2], 3, 2);
-		edoHomePage.dragClassificationAnswerByTextFromBank(words[3], 4, 2);
-		edoHomePage.dragClassificationAnswerByTextFromBank(words[4], 5, 2);
+		dragAndDropSection.dragClassificationAnswerByTextFromBank(words[0], 1,
+				2);
+		dragAndDropSection.dragClassificationAnswerByTextFromBank(words[1], 2,
+				2);
+		dragAndDropSection.dragClassificationAnswerByTextFromBank(words[2], 3,
+				2);
+		dragAndDropSection.dragClassificationAnswerByTextFromBank(words[3], 4,
+				2);
+		dragAndDropSection.dragClassificationAnswerByTextFromBank(words[4], 5,
+				2);
 
 		report.startLevel("check answers");
 		edoHomePage.clickOnCheckAnswers();
 		for (int i = 0; i < words.length; i++) {
-			edoHomePage.checkDragAndDropCorrectAnswer(words[i]);
+			dragAndDropSection.checkDragAndDropCorrectAnswer(words[i]);
 		}
 
 		report.startLevel("clear answers");
 		edoHomePage.clickOnClearAnswer();
 
 		for (int i = 0; i < words.length; i++) {
-			edoHomePage.checkDragElementIsBackToBank(words[i]);
+			dragAndDropSection.checkDragElementIsBackToBank(words[i]);
 		}
 
 		report.startLevel("Drop and replace from bank");
-		edoHomePage.dragClassificationAnswerByTextFromBank(words[0], 1, 2);
-		edoHomePage.dragClassificationAnswerByTextFromBank(words[1], 1, 2);
-		edoHomePage.checkDragElementIsBackToBank(words[0]);
+		dragAndDropSection.dragClassificationAnswerByTextFromBank(words[0], 1,
+				2);
+		dragAndDropSection.dragClassificationAnswerByTextFromBank(words[1], 1,
+				2);
+		dragAndDropSection.checkDragElementIsBackToBank(words[0]);
 		report.startLevel("Drop and replace between used elements");
 		edoHomePage.clickOnClearAnswer();
-		edoHomePage.dragClassificationAnswerByTextFromBank(words[0], 1, 2);
-		edoHomePage.dragClassificationAnswerByTextFromBank(words[1], 2, 2);
+		dragAndDropSection.dragClassificationAnswerByTextFromBank(words[0], 1,
+				2);
+		dragAndDropSection.dragClassificationAnswerByTextFromBank(words[1], 2,
+				2);
 
-		edoHomePage.dragClassificationAnswerByTextFromExistingAnswer(words[0],
-				6, 2, 2, 2);
-		edoHomePage.checkDragElementIsBackToBank(words[1]);
+		dragAndDropSection.dragClassificationAnswerByTextFromExistingAnswer(
+				words[0], 6, 2, 2, 2);
+		dragAndDropSection.checkDragElementIsBackToBank(words[1]);
 
 		report.startLevel("click on see answers");
 		edoHomePage.clickOnSeeAnswer();
 		for (int i = 0; i < words.length; i++) {
-			edoHomePage.checkDragElementIsPlaced(words[i]);
+			dragAndDropSection.checkDragElementIsPlaced(words[i]);
 		}
 
 	}
@@ -163,6 +186,9 @@ public class DragAndDropTests extends EdusoftWebTest {
 				"She started sending the workers out to homes and offices." };// 6
 		report.startLevel("Login and navigate to unit component");
 		EdoHomePage edoHomePage = pageHelper.loginAsStudent();
+
+		DragAndDropSection dragAndDropSection = new DragAndDropSection(
+				webDriver, testResultService);
 		sleep(4);
 		edoHomePage.navigateToCourseUnitComponent(course,
 				SubComponentName.Practice);
@@ -171,41 +197,41 @@ public class DragAndDropTests extends EdusoftWebTest {
 		sleep(5);
 		webDriver.printScreen("Before dragging");
 		report.startLevel("Arrange all answers");
-		edoHomePage.dragSeqSentence(words[1], 2);
-		edoHomePage.dragSeqSentence(words[0], 4);
-		edoHomePage.dragSeqSentence(words[2], 3);
-		edoHomePage.dragSeqSentence(words[3], 5);
-		edoHomePage.dragSeqSentence(words[4], 1);
-		edoHomePage.dragSeqSentence(words[5], 7);
-		edoHomePage.dragSeqSentence(words[6], 6);
+		dragAndDropSection.dragSeqSentence(words[1], 2);
+		dragAndDropSection.dragSeqSentence(words[0], 4);
+		dragAndDropSection.dragSeqSentence(words[2], 3);
+		dragAndDropSection.dragSeqSentence(words[3], 5);
+		dragAndDropSection.dragSeqSentence(words[4], 1);
+		dragAndDropSection.dragSeqSentence(words[5], 7);
+		dragAndDropSection.dragSeqSentence(words[6], 6);
 
 		report.startLevel("Check answer");
 		edoHomePage.clickOnCheckAnswers();
 		int index = 0;
-		sleep(1);
-		edoHomePage.checkSeqSentenceCorrectAnswer(words[0], 4);
-		edoHomePage.checkSeqSentenceCorrectAnswer(words[1], 2);
-		edoHomePage.checkSeqSentenceCorrectAnswer(words[2], 3);
-		edoHomePage.checkSeqSentenceCorrectAnswer(words[3], 5);
-		edoHomePage.checkSeqSentenceCorrectAnswer(words[4], 1);
-		edoHomePage.checkSeqSentenceCorrectAnswer(words[5], 7);
-		edoHomePage.checkSeqSentenceCorrectAnswer(words[6], 6);
+		sleep(3);
+		dragAndDropSection.checkSeqSentenceCorrectAnswer(words[0], 4);
+		dragAndDropSection.checkSeqSentenceCorrectAnswer(words[1], 2);
+		dragAndDropSection.checkSeqSentenceCorrectAnswer(words[2], 3);
+		dragAndDropSection.checkSeqSentenceCorrectAnswer(words[3], 5);
+		dragAndDropSection.checkSeqSentenceCorrectAnswer(words[4], 1);
+		dragAndDropSection.checkSeqSentenceCorrectAnswer(words[5], 7);
+		dragAndDropSection.checkSeqSentenceCorrectAnswer(words[6], 6);
 
 		report.startLevel("Check wrong answer");
-		edoHomePage.clickOnClearAnswer();
-		edoHomePage.dragSeqSentence(words[1], 4);
-		edoHomePage.clickOnCheckAnswers();
-		edoHomePage.checkSeqSentenceInCorrectAnswer(words[1], 4);
+		dragAndDropSection.clickOnClearAnswer();
+		dragAndDropSection.dragSeqSentence(words[1], 4);
+		dragAndDropSection.clickOnCheckAnswers();
+		dragAndDropSection.checkSeqSentenceInCorrectAnswer(words[1], 4);
 
 	}
 
-	@Ignore
+	@Test
 	@TestCaseParams(testCaseID = { "16587" })
 	public void testDragAndDropSequenceimagetemplates() throws Exception {
 		// 4 Basic 2 Buying And Selling 41 Reading 106 Wrong Color Practice
 		// Sequence Image 4 b2rswcp004 22777
-		String[] words = null;
-		Course course = pageHelper.getCourses().get(21);
+		String[] ids = new String[] { "44", "75", "49", "65", "67", "98" };
+		Course course = pageHelper.getCourses().get(24);
 
 		report.startLevel("Login and navigate to unit component");
 		EdoHomePage edoHomePage = pageHelper.loginAsStudent();
@@ -213,14 +239,28 @@ public class DragAndDropTests extends EdusoftWebTest {
 		edoHomePage.navigateToCourseUnitComponent(course,
 				SubComponentName.Practice);
 
-		edoHomePage.ClickComponentStage("2");
+		edoHomePage.ClickComponentStage("3");
+		sleep(3);
+		DragAndDropSection dragAndDropSection = new DragAndDropSection(
+				webDriver, testResultService);
+
+		dragAndDropSection.dragImageToPlace(ids[0], 1, 1);
+		dragAndDropSection.dragImageToPlace(ids[1], 1, 2);
+		dragAndDropSection.dragImageToPlace(ids[2], 1, 3);
+		dragAndDropSection.dragImageToPlace(ids[3], 2, 1);
+		dragAndDropSection.dragImageToPlace(ids[4], 2, 2);
+		dragAndDropSection.dragImageToPlace(ids[5], 2, 3);
 
 		report.startLevel("Check answer");
 		edoHomePage.clickOnCheckAnswers();
 
-		// for (int i = 0; i < words.length; i++) {
-		// edoHomePage.checkDragAndDropCorrectAnswer(words[i]);
-		// }
+		dragAndDropSection.checkDraggedImageCorrectAnswer(ids[0], 1, 1);
+		dragAndDropSection.checkDraggedImageCorrectAnswer(ids[1], 1, 2);
+		dragAndDropSection.checkDraggedImageCorrectAnswer(ids[2], 1, 3);
+		dragAndDropSection.checkDraggedImageCorrectAnswer(ids[3], 2, 1);
+		dragAndDropSection.checkDraggedImageCorrectAnswer(ids[4], 2, 2);
+		dragAndDropSection.checkDraggedImageCorrectAnswer(ids[5], 2, 3);
+
 	}
 
 	@Test
@@ -244,21 +284,24 @@ public class DragAndDropTests extends EdusoftWebTest {
 
 		edoHomePage.ClickComponentStage("2");
 
+		DragAndDropSection dragAndDropSection = new DragAndDropSection(
+				webDriver, testResultService);
+
 		report.startLevel("Arrange answers in the correct order");
 		String xpath = "//div[@class='TextDiv']//span[%s]";
 
-		edoHomePage.dragAnserToElementByXpath(words[0], xpath, "1");
-		edoHomePage.dragAnserToElementByXpath(words[2], xpath, "2");
-		edoHomePage.dragAnserToElementByXpath(words[3], xpath, "3");
-		edoHomePage.dragAnserToElementByXpath(words[1], xpath, "4");
-		edoHomePage.dragAnserToElementByXpath(words[5], xpath, "5");
-		edoHomePage.dragAnserToElementByXpath(words[4], xpath, "6");
-		edoHomePage.dragAnserToElementByXpath(words[6], xpath, "7");
+		dragAndDropSection.dragAnserToElementByXpath(words[0], xpath, "1");
+		dragAndDropSection.dragAnserToElementByXpath(words[2], xpath, "2");
+		dragAndDropSection.dragAnserToElementByXpath(words[3], xpath, "3");
+		dragAndDropSection.dragAnserToElementByXpath(words[1], xpath, "4");
+		dragAndDropSection.dragAnserToElementByXpath(words[5], xpath, "5");
+		dragAndDropSection.dragAnserToElementByXpath(words[4], xpath, "6");
+		dragAndDropSection.dragAnserToElementByXpath(words[6], xpath, "7");
 
 		report.startLevel("Check answer");
 		edoHomePage.clickOnCheckAnswers();
 		for (int i = 0; i < words.length; i++) {
-			edoHomePage.checkDragAndDropCorrectAnswerCloze(words[i]);
+			dragAndDropSection.checkDragAndDropCorrectAnswerCloze(words[i]);
 		}
 
 		report.startLevel("Clear answers");
@@ -266,30 +309,30 @@ public class DragAndDropTests extends EdusoftWebTest {
 
 		report.startLevel("Check that all element are back in the bank");
 		for (int i = 0; i < words.length; i++) {
-			edoHomePage.checkDragElementIsBackToBankCloze(words[i]);
+			dragAndDropSection.checkDragElementIsBackToBankCloze(words[i]);
 		}
 
 		report.startLevel("Drop and replace from bank");
 
-		edoHomePage.dragAnserToElementByXpath(words[4], xpath, "6");
-		edoHomePage.dragAnserToElementByXpath(words[6], xpath, "6");
-		edoHomePage.checkDragElementLocationCloze("6", "70");
+		dragAndDropSection.dragAnserToElementByXpath(words[4], xpath, "6");
+		dragAndDropSection.dragAnserToElementByXpath(words[6], xpath, "6");
+		dragAndDropSection.checkDragElementLocationCloze("6", "70");
 
 		report.startLevel("click on see answers and check that all correct answers are displayed");
 		edoHomePage.clickOnSeeAnswer();
-		edoHomePage.checkDragElementLocationCloze("1", "62");
-		edoHomePage.checkDragElementLocationCloze("2", "89");
-		edoHomePage.checkDragElementLocationCloze("3", "79");
-		edoHomePage.checkDragElementLocationCloze("4", "66");
-		edoHomePage.checkDragElementLocationCloze("5", "81");
-		edoHomePage.checkDragElementLocationCloze("6", "54");
-		edoHomePage.checkDragElementLocationCloze("7", "70");
+		dragAndDropSection.checkDragElementLocationCloze("1", "62");
+		dragAndDropSection.checkDragElementLocationCloze("2", "89");
+		dragAndDropSection.checkDragElementLocationCloze("3", "79");
+		dragAndDropSection.checkDragElementLocationCloze("4", "66");
+		dragAndDropSection.checkDragElementLocationCloze("5", "81");
+		dragAndDropSection.checkDragElementLocationCloze("6", "54");
+		dragAndDropSection.checkDragElementLocationCloze("7", "70");
 
 		report.startLevel("Drag element to the bank");
 		edoHomePage.clickOnClearAnswer();
-		edoHomePage.dragAnserToElementByXpath(words[4], xpath, "6");
-		edoHomePage.dragClassificationAnswerToBankCloze(words[4]);
-		edoHomePage.checkDragElementIsBackToBankCloze(words[4]);
+		dragAndDropSection.dragAnserToElementByXpath(words[4], xpath, "6");
+		dragAndDropSection.dragClassificationAnswerToBankCloze(words[4]);
+		dragAndDropSection.checkDragElementIsBackToBankCloze(words[4]);
 
 	}
 
@@ -302,24 +345,28 @@ public class DragAndDropTests extends EdusoftWebTest {
 		String[] words = new String[] { "a cucumber", "lettuce", "a plate",
 				"meat", "dessert" };
 		report.startLevel("Login and navigate to unit component");
-		EdoHomePage edoHomePage = pageHelper.loginAsStudent();
+		EdoHomePage edoHomePage =  pageHelper
+				.loginAsStudent();
 		sleep(4);
 		edoHomePage.navigateToCourseUnitComponent(course,
 				SubComponentName.Practice);
 
+		DragAndDropSection dragAndDropSection = new DragAndDropSection(
+				webDriver, testResultService);
+
 		report.startLevel("Drag all ansers");
 		String xpath = "//div[@id='ListPlaceHolder']//div[%s]//div";
-		edoHomePage.dragAnserToElementByXpath(words[0], xpath, "2");
-		edoHomePage.dragAnserToElementByXpath(words[1], xpath, "1");
-		edoHomePage.dragAnserToElementByXpath(words[2], xpath, "3");
-		edoHomePage.dragAnserToElementByXpath(words[3], xpath, "5");
-		edoHomePage.dragAnserToElementByXpath(words[4], xpath, "4");
+		dragAndDropSection.dragAnserToElementByXpath(words[0], xpath, "2");
+		dragAndDropSection.dragAnserToElementByXpath(words[1], xpath, "1");
+		dragAndDropSection.dragAnserToElementByXpath(words[2], xpath, "3");
+		dragAndDropSection.dragAnserToElementByXpath(words[3], xpath, "5");
+		dragAndDropSection.dragAnserToElementByXpath(words[4], xpath, "4");
 
 		report.startLevel("Check answer");
 		edoHomePage.clickOnCheckAnswers();
 
 		for (int i = 0; i < words.length; i++) {
-			edoHomePage.checkDragAndDropCorrectAnswerCloze(words[i]);
+			dragAndDropSection.checkDragAndDropCorrectAnswerCloze(words[i]);
 		}
 
 		report.startLevel("Clear answers");
@@ -327,30 +374,101 @@ public class DragAndDropTests extends EdusoftWebTest {
 
 		report.startLevel("Check that all element are back in the bank");
 		for (int i = 0; i < words.length; i++) {
-			edoHomePage.checkDragElementIsBackToBankCloze(words[i]);
+			dragAndDropSection.checkDragElementIsBackToBankCloze(words[i]);
 		}
 
 		report.startLevel("Drop and replace from bank");
 		edoHomePage.clickOnClearAnswer();
-		edoHomePage.dragAnserToElementByXpath(words[4], xpath, "2");
+		dragAndDropSection.dragAnserToElementByXpath(words[4], xpath, "2");
 		sleep(3);
 		// edoHomePage.checkDragElementLocationPicture("2", words[4]);
-		edoHomePage.dragAnserToElementByXpath(words[3], xpath, "2");
-		edoHomePage.checkDragElementLocationPicture("2", "70");
+		dragAndDropSection.dragAnserToElementByXpath(words[3], xpath, "2");
+		dragAndDropSection.checkDragElementLocationPicture("2", "70");
 
 		report.startLevel("click on see answers and check that all correct answers are displayed");
 		edoHomePage.clickOnSeeAnswer();
-		edoHomePage.checkDragElementLocationPicture("1", "91");
-		edoHomePage.checkDragElementLocationPicture("2", "83");
-		edoHomePage.checkDragElementLocationPicture("3", "68");
-		edoHomePage.checkDragElementLocationPicture("4", "43");
-		edoHomePage.checkDragElementLocationPicture("5", "70");
+		dragAndDropSection.checkDragElementLocationPicture("1", "91");
+		dragAndDropSection.checkDragElementLocationPicture("2", "83");
+		dragAndDropSection.checkDragElementLocationPicture("3", "68");
+		dragAndDropSection.checkDragElementLocationPicture("4", "43");
+		dragAndDropSection.checkDragElementLocationPicture("5", "70");
 
 		report.startLevel("Drag element to the bank");
 		edoHomePage.clickOnClearAnswer();
-		edoHomePage.dragAnserToElementByXpath(words[4], xpath, "5");
-		edoHomePage.dragClassificationAnswerToBankCloze(words[4]);
-		edoHomePage.checkDragElementIsBackToBankCloze(words[4]);
+		dragAndDropSection.dragAnserToElementByXpath(words[4], xpath, "5");
+		dragAndDropSection.dragClassificationAnswerToBankCloze(words[4]);
+		dragAndDropSection.checkDragElementIsBackToBankCloze(words[4]);
+
+	}
+
+	@Test
+	@TestCaseParams(testCaseID = { "17124" })
+	public void testDragAndDrop3Columns() throws Exception {
+		// Basic 3>>Eating Out>>Pearl's Party Service - 1
+		Course course = pageHelper.getCourses().get(25);
+		String[] words = new String[] { "fresh rolls", "grilled fish",
+				"chicken", "strawberries and whipped cream", "salad",
+				"chocolate nut cake" };
+		report.startLevel("Login and navigate to unit component");
+		EdoHomePage edoHomePage = pageHelper.loginAsStudent();
+		sleep(4);
+		edoHomePage.navigateToCourseUnitComponent(course,
+				SubComponentName.Practice);
+
+		DragAndDropSection dragAndDropSection = new DragAndDropSection(
+				webDriver, testResultService);
+
+		dragAndDropSection.dragClassificationAnswerByTextFromBank(words[0], 1,
+				1);
+		dragAndDropSection.dragClassificationAnswerByTextFromBank(words[1], 1,
+				2);
+		dragAndDropSection.dragClassificationAnswerByTextFromBank(words[2], 2,
+				2);
+		dragAndDropSection.dragClassificationAnswerByTextFromBank(words[3], 1,
+				3);
+		dragAndDropSection.dragClassificationAnswerByTextFromBank(words[4], 2,
+				1);
+		dragAndDropSection.dragClassificationAnswerByTextFromBank(words[5], 2,
+				3);
+
+		report.startLevel("Check answer");
+		edoHomePage.clickOnCheckAnswers();
+
+		for (int i = 0; i < words.length; i++) {
+			dragAndDropSection.checkDragAndDropCorrectAnswer(words[i]);
+		}
+		edoHomePage.clickOnClearAnswer();
+		for (int i = 0; i < words.length; i++) {
+			dragAndDropSection.checkDragElementIsBackToBank(words[i]);
+		}
+
+		edoHomePage.clickOnClearAnswer();
+		
+		report.startLevel("Drop and replace from bank");
+		dragAndDropSection.dragClassificationAnswerByTextFromBank(words[0], 1,
+				1);
+		dragAndDropSection.dragClassificationAnswerByTextFromBank(words[1], 1,
+				1);
+		
+		dragAndDropSection.checkDragElementLocationInTable( "61", "1", "1");
+	
+		report.startLevel("Drop and replace between used elements");
+		edoHomePage.clickOnClearAnswer();
+		dragAndDropSection.dragClassificationAnswerByTextFromBank(words[0], 1,
+				1);
+		dragAndDropSection.dragClassificationAnswerByTextFromBank(words[1], 1,
+				2);
+		
+		dragAndDropSection.dragClassificationAnswerByTextFromBank(words[0], 1, 1);
+		dragAndDropSection.checkDragElementLocationInTable( "58", "1", "1");
+		dragAndDropSection.checkDragElementIsBackToBank(words[1]);
+		report.startLevel("click on see answers");
+		edoHomePage.clickOnClearAnswer();
+		edoHomePage.clickOnSeeAnswer();
+
+		for (int i = 0; i < words.length; i++) {
+			dragAndDropSection.checkDragElementIsPlaced(words[i]);
+		}
 
 	}
 
