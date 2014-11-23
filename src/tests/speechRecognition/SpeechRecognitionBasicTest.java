@@ -3,6 +3,8 @@ package tests.speechRecognition;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Before;
+
 import pageObjects.EdoHomePage;
 import pageObjects.RecordPanel;
 import Enums.AutoParams;
@@ -11,6 +13,14 @@ import Objects.Recording;
 import tests.misc.EdusoftWebTest;
 
 public class SpeechRecognitionBasicTest  extends EdusoftWebTest{
+	
+	
+	@Before
+	public void setup() throws Exception
+	{
+		super.setup();
+		setEnableLoggin(true);
+	}
 	
 	public void testRecordYourselfIntegrated(int courseId, int scriptSection,
 			int recordingId, float sampleRate) throws Exception {

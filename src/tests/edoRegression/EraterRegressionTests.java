@@ -91,6 +91,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		sleep(3);
 		edoHomePage.clickOnCourses();
 		edoHomePage.clickOnCourseByName(courseName);
+		sleep(3);
 		edoHomePage.waitForCourseDetailsToBeDisplayed(courseName);
 		String courseUnit = courses.get(courseId).getCourseUnits().get(0)
 				.getName();

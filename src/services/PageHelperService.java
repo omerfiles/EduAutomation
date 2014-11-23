@@ -80,11 +80,13 @@ public class PageHelperService extends SystemObjectImpl {
 		schoolAdmin = new UserObject();
 
 		// check if student parameter is in maven command line
-		if (System.getProperty("student") != null) {
-			student.setUserName(System.getProperty("student"));
-		} else {
-			student.setUserName(configuration.getProperty("student.user.name"));
-		}
+		student.setUserName(configuration.getAutomationParam("student",
+				"studentCMD"));
+		// if (System.getProperty("student") != null) {
+		// student.setUserName(System.getProperty("student"));
+		// } else {
+		// student.setUserName(configuration.getProperty("student.user.name"));
+		// }
 		student.setPassword(configuration.getProperty("student.user.password"));
 
 		if (System.getProperty("teacher") != null) {
@@ -95,7 +97,8 @@ public class PageHelperService extends SystemObjectImpl {
 		teacher.setPassword(configuration.getProperty("teacher.password"));
 
 		supervisor.setUserName(configuration.getProperty("supervisor.user"));
-		System.out.println("School admin from properties file is: "+configuration.getProperty("shcoolAdmin.user"));
+		System.out.println("School admin from properties file is: "
+				+ configuration.getProperty("shcoolAdmin.user"));
 		schoolAdmin.setUserName(configuration.getProperty("shcoolAdmin.user"));
 
 	}
@@ -380,36 +383,57 @@ public class PageHelperService extends SystemObjectImpl {
 
 	public void addStudent(String studentName) throws Exception {
 		// String studentName = "student" + dbService.sig(6);
-		String studentPassword = "12345";
-		TmsLoginPage tmsLoginPage = new TmsLoginPage(webDriver,
-				testResultService);
-		UserObject tmsAdmin = new UserObject();
-		tmsAdmin.setUserName(configuration.getProperty("tmsadmin.user"));
-		tmsAdmin.setPassword(configuration.getProperty("tmsadmin.password"));
-		tmsLoginPage.OpenPage(configuration.getProperty("tms.url"));
-		TmsHomePage tmsHomePage = tmsLoginPage.Login(tmsAdmin);
-		tmsHomePage.waitForPageToLoad();
-		report.stopLevel();
-
+		// String studentPassword = "12345";
+		// TmsLoginPage tmsLoginPage = new TmsLoginPage(webDriver,
+		// testResultService);
+		// UserObject tmsAdmin = new UserObject();
+		// tmsAdmin.setUserName(configuration.getProperty("tmsadmin.user"));
+		// tmsAdmin.setPassword(configuration.getProperty("tmsadmin.password"));
+		// tmsLoginPage.OpenPage(configuration.getProperty("tms.url"));
+		// TmsHomePage tmsHomePage = tmsLoginPage.Login(tmsAdmin);
+		// tmsHomePage.waitForPageToLoad();
+		// report.stopLevel();
+		//
+		// //
 		// report.startLevel("Go to students section and select the institute",
-		// EnumReportLevel.CurrentPlace);
-		tmsHomePage.clickOnStudents();
-		Thread.sleep(2000);
-		String institutionId = configuration.getProperty("institution.id");
-		String instituteName = dbService.getInstituteNameById(institutionId);
-		tmsHomePage.selectInstitute(instituteName, institutionId, false, true);
-		Thread.sleep(3000);
-		tmsHomePage.selectClass(configuration.getProperty("classname"));
+		// // EnumReportLevel.CurrentPlace);
+		// tmsHomePage.clickOnStudents();
+		// Thread.sleep(2000);
+		// String institutionId = configuration.getProperty("institution.id");
+		// String instituteName = dbService.getInstituteNameById(institutionId);
+		// tmsHomePage.selectInstitute(instituteName, institutionId, false,
+		// true);
+		// Thread.sleep(3000);
+		// tmsHomePage.selectClass(configuration.getProperty("classname"));
+		//
+		// report.stopLevel();
+		//
+		// // report.startLevel("Enter new student details",
+		// // EnumReportLevel.CurrentPlace);
+		//
+		// tmsHomePage.enterStudentDetails(studentName);
+		// String userId = dbService.getUserIdByUserName(studentName,
+		// autoInstitution.getInstitutionId());
+		// tmsHomePage.enterStudentPassword(userId, studentPassword);
 
-		report.stopLevel();
+		// ************Using API to create the user
 
-		// report.startLevel("Enter new student details",
-		// EnumReportLevel.CurrentPlace);
-
-		tmsHomePage.enterStudentDetails(studentName);
-		String userId = dbService.getUserIdByUserName(studentName,
-				autoInstitution.getInstitutionId());
-		tmsHomePage.enterStudentPassword(userId, studentPassword);
+		createUserUsingApi(configuration.getProperty("sut.url"), studentName,
+				"auto", "mation", "12345", autoInstitution.getInstitutionId(),
+				configuration.getProperty("classname"));
 	}
 
+	public void createUserUsingApi(String sut, String userName, String fname,
+			String lname, String pass, String instId, String className)
+			throws Exception {
+
+		String request = sut + "/api/template/InsertUser.aspx?InstId=" + instId
+				+ "&ClassName=" + className + "&UserName=" + userName
+				+ "&FirstName=" + fname + "&LastName=" + lname + "&Password="
+				+ pass + "&Email=test40@edusoft.co.il";
+
+		NetService netService = new NetService();
+		netService.sentHttpRequest(request);
+
+	}
 }

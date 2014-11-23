@@ -13,6 +13,7 @@ import services.AudioService;
 import services.PageHelperService;
 import Enums.AutoParams;
 import Enums.Browsers;
+import drivers.AndroidWebDriver;
 import drivers.ChromeWebDriver;
 import drivers.FirefoxWebDriver;
 import drivers.GenericWebDriver;
@@ -26,8 +27,6 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 	public AudioService audioService;
 
 	String browser = null;
-	
-	
 
 	@Override
 	public void setup() throws Exception {
@@ -63,6 +62,8 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 			webDriver = (IEWebDriver) ctx.getBean("IEWebDriver");
 		} else if (browser.equals(Browsers.firefox.toString())) {
 			webDriver = (FirefoxWebDriver) ctx.getBean("FirefoxWebDriver");
+		} else if (browser.equals(Browsers.android.toString())) {
+			webDriver = (AndroidWebDriver) ctx.getBean("AndroidWebDriver");
 		}
 		if (webDriver == null) {
 			// Assert.fail("No webdriver found. Please check properties file or pom for webdriver name");
@@ -79,8 +80,9 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 		}
 		webDriver.init(testResultService);
 		try {
-			webDriver.maximize();
+			// webDriver.maximize();
 		} catch (Exception e) {
+			System.out.println(e.toString());
 			Assert.fail("openening Webdriver failed. Check that selenium node/grid are running and also check configurations");
 		}
 		// } else {
@@ -96,10 +98,14 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 	@After
 	public void tearDown() throws Exception {
 
+		if (pageHelper.isLogoutNeeded()) {
+			pageHelper.logOut();
+		}
+
 		if (enableLoggin == true && browser.equals(Browsers.chrome.toString())) {
 			LogEntries logEntries = webDriver.getConsoleLogEntries();
 			List<String[]> logList = textService.getListFromLogEntries(
-					logEntries, logFilter,true);
+					logEntries, logFilter, true);
 			String consoleLogPath = "files/consoleOutput/consoleLog"
 					+ dbService.sig() + ".csv";
 			textService.writeArrayistToCSVFile(consoleLogPath, logList);
@@ -149,11 +155,8 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 		return enableLoggin;
 	}
 
-	
-
 	public String getLogFilter() {
 		return logFilter;
 	}
 
-	
 }

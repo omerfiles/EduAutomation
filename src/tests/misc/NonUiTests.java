@@ -63,6 +63,8 @@ public class NonUiTests extends EdusoftBasicTest {
 		
 		netService.checkAllSlaveStatus();
 	}
+	
+	
 
 	@After
 	public void tearDown() throws Exception {
