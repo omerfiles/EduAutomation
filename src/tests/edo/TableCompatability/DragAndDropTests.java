@@ -35,7 +35,7 @@ public class DragAndDropTests extends EdusoftWebTest {
 		sleep(4);
 		edoHomePage.navigateToCourseUnitComponent(course,
 				SubComponentName.Practice);
-
+		// Wait until everything is loaded
 		edoHomePage.ClickComponentStage("2");
 		sleep(3);
 		DragAndDropSection dragAndDropSection = new DragAndDropSection(
@@ -97,6 +97,11 @@ public class DragAndDropTests extends EdusoftWebTest {
 		dragAndDropSection.dragClassificationAnswerToBank("check");
 		dragAndDropSection.checkDragElementIsBackToBank("check");
 
+		edoHomePage.clickOnCourseByName(course.getName());
+		sleep(5);
+
+		pageHelper.logOut();
+		checkProgressInDb("57117");
 		report.startLevel("End of test");
 	}
 
@@ -168,6 +173,11 @@ public class DragAndDropTests extends EdusoftWebTest {
 			dragAndDropSection.checkDragElementIsPlaced(words[i]);
 		}
 
+		edoHomePage.clickOnCourseByName(course.getName());
+		sleep(5);
+
+		pageHelper.logOut();
+		checkProgressInDb("24387");
 	}
 
 	@Test
@@ -223,6 +233,12 @@ public class DragAndDropTests extends EdusoftWebTest {
 		dragAndDropSection.clickOnCheckAnswers();
 		dragAndDropSection.checkSeqSentenceInCorrectAnswer(words[1], 4);
 
+		edoHomePage.clickOnCourseByName(course.getName());
+		sleep(5);
+
+		pageHelper.logOut();
+		checkProgressInDb("23043");
+
 	}
 
 	@Test
@@ -260,6 +276,12 @@ public class DragAndDropTests extends EdusoftWebTest {
 		dragAndDropSection.checkDraggedImageCorrectAnswer(ids[3], 2, 1);
 		dragAndDropSection.checkDraggedImageCorrectAnswer(ids[4], 2, 2);
 		dragAndDropSection.checkDraggedImageCorrectAnswer(ids[5], 2, 3);
+		
+		edoHomePage.clickOnCourseByName(course.getName());
+		sleep(5);
+
+		pageHelper.logOut();
+		checkProgressInDb("22777");
 
 	}
 
@@ -334,6 +356,11 @@ public class DragAndDropTests extends EdusoftWebTest {
 		dragAndDropSection.dragClassificationAnswerToBankCloze(words[4]);
 		dragAndDropSection.checkDragElementIsBackToBankCloze(words[4]);
 
+		edoHomePage.clickOnCourseByName(course.getName());
+		sleep(5);
+
+		pageHelper.logOut();
+		checkProgressInDb("57206");
 	}
 
 	@Test
@@ -345,8 +372,7 @@ public class DragAndDropTests extends EdusoftWebTest {
 		String[] words = new String[] { "a cucumber", "lettuce", "a plate",
 				"meat", "dessert" };
 		report.startLevel("Login and navigate to unit component");
-		EdoHomePage edoHomePage =  pageHelper
-				.loginAsStudent();
+		EdoHomePage edoHomePage = pageHelper.loginAsStudent();
 		sleep(4);
 		edoHomePage.navigateToCourseUnitComponent(course,
 				SubComponentName.Practice);
@@ -398,6 +424,12 @@ public class DragAndDropTests extends EdusoftWebTest {
 		dragAndDropSection.dragAnserToElementByXpath(words[4], xpath, "5");
 		dragAndDropSection.dragClassificationAnswerToBankCloze(words[4]);
 		dragAndDropSection.checkDragElementIsBackToBankCloze(words[4]);
+		
+		edoHomePage.clickOnCourseByName(course.getName());
+		sleep(5);
+
+		pageHelper.logOut();
+		checkProgressInDb("57356");
 
 	}
 
@@ -443,24 +475,25 @@ public class DragAndDropTests extends EdusoftWebTest {
 		}
 
 		edoHomePage.clickOnClearAnswer();
-		
+
 		report.startLevel("Drop and replace from bank");
 		dragAndDropSection.dragClassificationAnswerByTextFromBank(words[0], 1,
 				1);
 		dragAndDropSection.dragClassificationAnswerByTextFromBank(words[1], 1,
 				1);
-		
-		dragAndDropSection.checkDragElementLocationInTable( "61", "1", "1");
-	
+
+		dragAndDropSection.checkDragElementLocationInTable("61", "1", "1");
+
 		report.startLevel("Drop and replace between used elements");
 		edoHomePage.clickOnClearAnswer();
 		dragAndDropSection.dragClassificationAnswerByTextFromBank(words[0], 1,
 				1);
 		dragAndDropSection.dragClassificationAnswerByTextFromBank(words[1], 1,
 				2);
-		
-		dragAndDropSection.dragClassificationAnswerByTextFromBank(words[0], 1, 1);
-		dragAndDropSection.checkDragElementLocationInTable( "58", "1", "1");
+
+		dragAndDropSection.dragClassificationAnswerByTextFromBank(words[0], 1,
+				1);
+		dragAndDropSection.checkDragElementLocationInTable("58", "1", "1");
 		dragAndDropSection.checkDragElementIsBackToBank(words[1]);
 		report.startLevel("click on see answers");
 		edoHomePage.clickOnClearAnswer();
@@ -469,11 +502,30 @@ public class DragAndDropTests extends EdusoftWebTest {
 		for (int i = 0; i < words.length; i++) {
 			dragAndDropSection.checkDragElementIsPlaced(words[i]);
 		}
+		
+		edoHomePage.clickOnCourseByName(course.getName());
+		sleep(5);
 
+		pageHelper.logOut();
+		checkProgressInDb("23406");
+
+	}
+
+	public void checkProgressInDb(String itemId) throws Exception {
+		String sql = "  select * from progress where UserId="
+				+ dbService.getUserIdByUserName(
+						autoInstitution.getStudentUserName(),
+						autoInstitution.getInstitutionId()) + " and itemId="
+				+ itemId
+				+ "  and LastUpdate>DATEADD(second, -40 ,CURRENT_TIMESTAMP)";
+		String result = dbService.getStringFromQuery(sql);
+		report.report("Sql result is: " + result);
+		testResultService.assertTrue("No progress found in DB", result != null);
 	}
 
 	@After
 	public void tearDown() throws Exception {
+
 		super.tearDown();
 	}
 

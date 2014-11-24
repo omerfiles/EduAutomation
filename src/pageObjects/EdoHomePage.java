@@ -104,6 +104,7 @@ public class EdoHomePage extends GenericPage {
 	public EdoHomePage clickOntUnitComponent(String componentName,
 			String componentType) throws Exception {
 		webDriver.waitForElement(componentName, ByTypes.linkText).click();
+	
 		webDriver.waitForElement(componentType, ByTypes.linkText).click();
 		return this;
 	}
@@ -373,7 +374,7 @@ public class EdoHomePage extends GenericPage {
 		clickOnCourses();
 		// String courseName = "Basic 3 2012";
 		clickOnCourseByName(course.getName());
-		waitForCourseDetailsToBeDisplayed(course.getName());
+//		waitForCourseDetailsToBeDisplayed(course.getName());
 		clickOnCourseUnit(course.getCourseUnits().get(0).getName());
 		clickOntUnitComponent(course.getCourseUnits().get(0).getUnitComponent()
 				.get(0).getName(), "Practice");
@@ -679,6 +680,8 @@ public class EdoHomePage extends GenericPage {
 	}
 
 	public EdoHomePage ClickComponentStage(String index) throws Exception {
+		
+		
 		webDriver.waitForElement(
 				"//ul[@class='ulTasks']//li[@ind='" + index + "']",
 				ByTypes.xpath).click();

@@ -74,12 +74,11 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	// private Config configuration;
 	protected DbService dbService;
 	protected String remoteMachine;
-	protected boolean enableConsoleLog ;
+	protected boolean enableConsoleLog;
 
 	@Autowired
 	private services.Configuration configuration;
-	
-	
+
 	private TextService textService;
 
 	private services.Reporter reporter;
@@ -116,16 +115,17 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		// if (remoteMachine == null) {
 		// Assert.fail("Remote machine value is null");
 		// }
-//		if (enableConsoleLog == true) {
-//			enableConsoleLog = true;
-//		}
-		textService=new TextService();
+		// if (enableConsoleLog == true) {
+		// enableConsoleLog = true;
+		// }
+		textService = new TextService();
 		remoteMachine = configuration.getAutomationParam(
 				AutoParams.remoteMachine.toString(), "machine");
 		setSutUrl(configuration.getAutomationParam(
 				AutoParams.sutUrl.toString(), "suturl"));
 		setSutSubDomain(configuration.getProperty("institution.name"));
 		setInstitutionName(configuration.getProperty("institution.name"));
+
 		init(remoteMachine, null);
 	}
 
@@ -420,7 +420,8 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			webDriver.navigate().refresh();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			System.out.println("Failed when trying to delete cookies and refresh");
+			System.out
+					.println("Failed when trying to delete cookies and refresh");
 			e.printStackTrace();
 		}
 	}
@@ -564,7 +565,8 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			throws Exception {
 		boolean elementFound = false;
 		try {
-			WebElement element = waitForElement(xpath, ByTypes.xpath, false, timeout);
+			WebElement element = waitForElement(xpath, ByTypes.xpath, false,
+					timeout);
 			if (element != null) {
 				elementFound = true;
 				printScreen(message);
@@ -1014,42 +1016,46 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	public void selectElementFromComboBox(String comboboxName,
 			String optionValue) throws Exception {
-		boolean selected=false;
+		boolean selected = false;
 		{
 			try {
-				//TODO - add webdriver wait
+				// TODO - add webdriver wait
 				WebDriverWait wait = new WebDriverWait(webDriver, timeout, 1000);
-				wait.until(ExpectedConditions.elementToBeClickable(By.id(comboboxName)));
+				wait.until(ExpectedConditions.elementToBeClickable(By
+						.id(comboboxName)));
 				Select select = new Select(webDriver.findElement(By
 						.id(comboboxName)));
 				List<WebElement> options = select.getOptions();
 				for (int i = 0; i < options.size(); i++) {
 					if (options.get(i).getText().contains(optionValue)) {
 						select.selectByIndex(i);
-						System.out.println("option "+optionValue+" selected");
-						selected=true;
+						System.out.println("option " + optionValue
+								+ " selected");
+						selected = true;
 						break;
-						
+
 					}
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				printScreen("problem selecting from combo box");
-				testResultService.addFailTest("problem selecting from combo box",true);
+				testResultService.addFailTest(
+						"problem selecting from combo box", true);
 				e.printStackTrace();
 			}
-			System.out.println("Selected "+comboboxName+": "+selected);
+			System.out.println("Selected " + comboboxName + ": " + selected);
 		}
 		// TODO Auto-generated method stub
 
 	}
-	
-	public void printConsoleLogs(String logFilter, boolean useFllter) throws Exception{
+
+	public void printConsoleLogs(String logFilter, boolean useFllter)
+			throws Exception {
 		try {
-			textService=new TextService();
+			textService = new TextService();
 			LogEntries logEntries = getConsoleLogEntries();
 			List<String[]> logList = textService.getListFromLogEntries(
-					logEntries, logFilter,useFllter);
+					logEntries, logFilter, useFllter);
 			String consoleLogPath = "files/consoleOutput/consoleLog"
 					+ dbService.sig() + ".csv";
 			textService.writeArrayistToCSVFile(consoleLogPath, logList);
@@ -1059,6 +1065,26 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public String getSelectedValueFromComboBox(String comboBoxId) {
+		WebDriverWait wait = new WebDriverWait(webDriver, timeout, 1000);
+		wait.until(ExpectedConditions.elementToBeClickable(By.id(comboBoxId)));
+		Select select = new Select(webDriver.findElement(By.id(comboBoxId)));
+
+		WebElement option = select.getFirstSelectedOption();
+
+		return option.getText();
+	}
+
+	public void setPageLoadTimeOut() {
+		webDriver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
+
+	}
+
+	public void setScriptLoadTimeOut() {
+		webDriver.manage().timeouts()
+				.setScriptTimeout(timeout, TimeUnit.SECONDS);
 	}
 
 }

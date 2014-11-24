@@ -38,16 +38,15 @@ public class FirefoxWebDriver extends GenericWebDriver {
 			if (remoteUrl == null) {
 				// remoteUrl = configuration.getProperty("remote.machine");
 			}
-//			report.startLevel("Initializing FirefoxWebDriver",
-//					Reporter.EnumReportLevel.CurrentPlace);
+			// report.startLevel("Initializing FirefoxWebDriver",
+			// Reporter.EnumReportLevel.CurrentPlace);
 			ProfilesIni profile = new ProfilesIni();
 			System.out.println("setting firefix profile to allow media");
-//			FirefoxProfile firefoxProfile = profile.getProfile("automation");
+			// FirefoxProfile firefoxProfile = profile.getProfile("automation");
 			FirefoxProfile firefoxProfile = new FirefoxProfile();
-			
+
 			firefoxProfile.setPreference("media.navigator.permission.disabled",
 					true);
-			
 
 			// FirefoxProfile.setPreference(
 			// "media.navigator.permission.disabled", true);
@@ -56,10 +55,12 @@ public class FirefoxWebDriver extends GenericWebDriver {
 			webDriver = new RemoteWebDriver(new URL(remoteUrl + "/wd/hub"),
 					capabilities);
 			// webDriver = new RemoteWebDriver( capabilities);
-
+			setPageLoadTimeOut();
+			setScriptLoadTimeOut();
 			report.stopLevel();
 		} catch (Exception e) {
-			logger.error("Cannot register node or start the remote driver! ", e.toString());
+			logger.error("Cannot register node or start the remote driver! ",
+					e.toString());
 		}
 	}
 

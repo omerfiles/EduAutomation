@@ -33,7 +33,6 @@ public class ChromeWebDriver extends GenericWebDriver {
 
 			System.out.println("Initializing ChromeWebDriver");
 
-			
 			if (enableConsoleLog == true) {
 				LoggingPreferences logPrefs = new LoggingPreferences();
 				logPrefs.enable(LogType.BROWSER, Level.ALL);
@@ -49,6 +48,8 @@ public class ChromeWebDriver extends GenericWebDriver {
 			capabilities.setCapability(ChromeOptions.CAPABILITY, options);
 			webDriver = new RemoteWebDriver(new URL(remoteUrl + "/wd/hub"),
 					capabilities);
+			setPageLoadTimeOut();
+			setScriptLoadTimeOut();
 
 		} catch (UnreachableBrowserException e) {
 			System.out.println("Browser unreachable");
@@ -60,12 +61,13 @@ public class ChromeWebDriver extends GenericWebDriver {
 				// Then retreive the process output
 				InputStream in = proc.getInputStream();
 				InputStream err = proc.getErrorStream();
-				
+
 				webDriver = new RemoteWebDriver(new URL(remoteUrl + "/wd/hub"),
 						capabilities);
-				
-//				webDriver = new RemoteWebDriver(new URL(remoteUrl + "/wd/hub"),
-//						capabilities);
+
+				// webDriver = new RemoteWebDriver(new URL(remoteUrl +
+				// "/wd/hub"),
+				// capabilities);
 			} catch (Exception ex) {
 				System.out.println(e.toString());
 			}
@@ -76,5 +78,4 @@ public class ChromeWebDriver extends GenericWebDriver {
 		}
 	}
 
-	
 }

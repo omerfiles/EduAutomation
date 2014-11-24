@@ -31,7 +31,7 @@ public class RecoredYourself extends SpeechRecognitionBasicTest {
 	}
 
 	@Test
-//	@TestCaseParams(testCaseID = { "14534", "13544" })
+	@TestCaseParams(testCaseID = { "14534", "13544" })
 	public void testRecordPanel1() throws Exception {
 		testRecordYourselfIntegrated(13, 1, 1, 16000);
 	}
@@ -394,15 +394,17 @@ public class RecoredYourself extends SpeechRecognitionBasicTest {
 
 			sleep(5);
 			webDriver.printScreen("After recording ended_" + i);
-			String[] wordsScoring = textService.splitStringToArray(recordPanel
-					.getWordsScoring("wl"));
-			wordsScoreList.add(wordsScoring);
-			int sentenceLevel = recordPanel.getDebugSentenceLevel();
-			sentenceLevels.add(sentenceLevel);
-			recordPanel.checkAddedRecordingToList(sentenceLevel, i);
-			startStep("Check SL according to word levels");
-			pageHelper.calculateSLbyWL(wordsScoring,
-					String.valueOf(sentenceLevel));
+			if (isSRDebugTrue()) {
+				String[] wordsScoring = textService
+						.splitStringToArray(recordPanel.getWordsScoring("wl"));
+				wordsScoreList.add(wordsScoring);
+				int sentenceLevel = recordPanel.getDebugSentenceLevel();
+				sentenceLevels.add(sentenceLevel);
+				recordPanel.checkAddedRecordingToList(sentenceLevel, i);
+				startStep("Check SL according to word levels");
+				pageHelper.calculateSLbyWL(wordsScoring,
+						String.valueOf(sentenceLevel));
+			}
 		}
 		startStep("try to add the 9th recording");
 		recordPanel.clickOnRecordButton();
