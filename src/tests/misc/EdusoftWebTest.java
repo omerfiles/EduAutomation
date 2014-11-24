@@ -62,9 +62,11 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 			webDriver = (IEWebDriver) ctx.getBean("IEWebDriver");
 		} else if (browser.equals(Browsers.firefox.toString())) {
 			webDriver = (FirefoxWebDriver) ctx.getBean("FirefoxWebDriver");
-		} else if (browser.equals(Browsers.android.toString())) {
-			webDriver = (AndroidWebDriver) ctx.getBean("AndroidWebDriver");
-		}
+		} 
+		
+//		else if (browser.equals(Browsers.android.toString())) {
+//			webDriver = (AndroidWebDriver) ctx.getBean("AndroidWebDriver");
+//		}
 		if (webDriver == null) {
 			// Assert.fail("No webdriver found. Please check properties file or pom for webdriver name");
 			testResultService
@@ -98,9 +100,9 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 	@After
 	public void tearDown() throws Exception {
 
-		if (pageHelper.isLogoutNeeded()) {
-			pageHelper.logOut();
-		}
+//		if (pageHelper.isLogoutNeeded()) {
+//			pageHelper.logOut();
+//		}
 
 		if (enableLoggin == true && browser.equals(Browsers.chrome.toString())) {
 			LogEntries logEntries = webDriver.getConsoleLogEntries();
