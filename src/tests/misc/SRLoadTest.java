@@ -24,8 +24,8 @@ import drivers.ThreadedWebDriver;
 
 public class SRLoadTest extends EdusoftWebTest {
 
-	int numberOfInstances = 6;
-	String env="internal";//internal,external
+	int numberOfInstances = 1;
+	String env="external";//internal,external
 	List<ChromeWebDriver> webDriverList = new ArrayList<ChromeWebDriver>();
 	List<RecordPanel> recordPanels = new ArrayList<RecordPanel>();
 
