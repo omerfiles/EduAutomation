@@ -247,7 +247,7 @@ public class NetService extends SystemObjectImpl {
 	public void updateSlaveStatus(String slaveName, String text)
 			throws IOException, UnsupportedEncodingException {
 		// String statusFolder = "\\\\10.1.0.66\\slavesStatus\\";
-		String smbFolder = "smb://10.1.0.66/slavesStatus/" + slaveName + ".txt";
+		String smbFolder = "smb://10.1.0.83/slavesStatus/" + slaveName + ".txt";
 		// NtlmPasswordAuthentication auth = new NtlmPasswordAuthentication("",
 		// "automation", "tamar2010");
 		NtlmPasswordAuthentication auth = getAuth();
@@ -282,7 +282,7 @@ public class NetService extends SystemObjectImpl {
 		TextService textService = new TextService();
 		boolean status = false;
 		// File folder = new File("\\\\10.1.0.66\\slavesStatus\\");
-		String path = "smb://10.1.0.66/slavesStatus/";
+		String path = "smb://10.1.0.83/slavesStatus/";
 		String[] listOfFiles;
 		StringBuilder builder = null;
 		NtlmPasswordAuthentication auto = getAuth();
