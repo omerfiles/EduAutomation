@@ -390,8 +390,13 @@ public class TextService extends SystemObjectImpl {
 
 	public void copyFileToFolder(String sourcePath, String destinationPath)
 			throws IOException {
-		FileUtils.copyFileToDirectory(new File(sourcePath), new File(
-				destinationPath));
+		try {
+			FileUtils.copyFileToDirectory(new File(sourcePath), new File(
+					destinationPath));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public String getTextForText(int chars) {

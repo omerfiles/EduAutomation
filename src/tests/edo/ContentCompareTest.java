@@ -31,10 +31,11 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 	// private String changedFileInCFL1 =
 	// "\\\\NEWSTORAGE\\Sendhere\\omers\\contentFiles\\";
 	private String CFL1BaseFolder = "\\\\NEWSTORAGE\\Sendhere\\omers\\contentFiles\\";
-	// private String newContentBaseFolder =
-	// "\\\\frontdev2003\\EDOPedagogical\\EDO\\Runtime\\Content\\";
-	// 17.11.2014 test
-	private String newContentBaseFolder = "\\\\storage\\storage\\MARKETING\\Production\\EDO Facelift\\updated Package\\Runtime\\Content\\";
+//	 private String newContentBaseFolder =
+//	 "\\\\frontdev2003\\EDOPedagogical\\EDO\\Runtime\\Content\\";
+//	// 17.11.2014 test
+//	private String newContentBaseFolder = "\\\\storage\\storage\\MARKETING\\Production\\EDO Facelift\\updated Package\\Runtime\\Content\\";
+	private String newContentBaseFolder="\\\\STORAGE\\storage\\MARKETING\\Production\\EDO Facelift\\Package 23-11\\Runtime\\Content\\";
 	private int numberOfSegmentsNotTheSame;
 	private int wordsMisMatch;
 	private int numberOfWordsInSubSegmentsNotTheSame;
@@ -109,7 +110,7 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 				false, true);
 
 		List<String> cfl1ContentFolders = getSubFolders(CFL1BaseFolder, false,
-				true);
+				false);
 
 		// List<String> cfl1ContentFolders =null;
 		// get new content subfolsers into arrayList
@@ -120,8 +121,8 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 		int foldersFailed = 0;
 
 		for (int i = 0; i < newContentFolders.size(); i++) {
-			CFL1diff=false;
-			boolean fileExistInCFL1 = false;
+//			CFL1diff=false;
+//			boolean fileExistInCFL1 = false;
 			try {
 
 				report.startLevel("Checking folder: "
@@ -134,30 +135,30 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 						+ oldContentFolders.get(i) + "\\"
 						+ oldContentFolders.get(i) + ".js";
 
-				String cfl1ContentFilePath = null;
+//				String cfl1ContentFilePath = null;
 
 				// check if file exist in CFL content folders:
 				// \\NEWSTORAGE\Sendhere\omers\contentFiles
-				String[] cfl1Contentsegments = null;
-				if (textService.checkIfFileExist(CFL1BaseFolder + "\\"
-						+ newContentFolders.get(i) + ".js") == true) {
-
-					System.out.println("File " + newContentFolders.get(i)
-							+ " found in CFL1");
-					fileExistInCFL1 = true;
-					cfl1ContentFilePath = CFL1BaseFolder + "\\"
-							+ newContentFolders.get(i) + ".js";
-
-					String fileContent = textService.getTextFromFile(
-							cfl1ContentFilePath, Charset.defaultCharset());
-
-					cfl1Contentsegments = textService
-							.getHtmlElementFromHtmlFile(
-									"//span[@class='segment']", fileContent);
-
-					cfl1Contentsegments = textService
-							.trimLowerCaseAndRemoveChars(cfl1Contentsegments);
-				}
+//				String[] cfl1Contentsegments = null;
+//				if (textService.checkIfFileExist(CFL1BaseFolder + "\\"
+//						+ newContentFolders.get(i) + ".js") == true) {
+//
+//					System.out.println("File " + newContentFolders.get(i)
+//							+ " found in CFL1");
+//					fileExistInCFL1 = true;
+//					cfl1ContentFilePath = CFL1BaseFolder + "\\"
+//							+ newContentFolders.get(i) + ".js";
+//
+//					String fileContent = textService.getTextFromFile(
+//							cfl1ContentFilePath, Charset.defaultCharset());
+//
+//					cfl1Contentsegments = textService
+//							.getHtmlElementFromHtmlFile(
+//									"//span[@class='segment']", fileContent);
+//
+//					cfl1Contentsegments = textService
+//							.trimLowerCaseAndRemoveChars(cfl1Contentsegments);
+//				}
 				// if exist, compare CFL1 and CFL2
 
 				boolean fileExist = textService
@@ -180,15 +181,15 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 				currentContentsegments = textService
 						.trimLowerCaseAndRemoveChars(currentContentsegments);
 
-				if (fileExistInCFL1) {
-					compareSegments(cfl1Contentsegments, newContentsegments,
-							newContentFolders, cfl1ContentFolders, i);
-					if (CFL1diff == true) {
-						
-						continue;
-					}
-					// copy file to CFL1 folder
-				}
+//				if (fileExistInCFL1) {
+//					compareSegments(cfl1Contentsegments, newContentsegments,
+//							newContentFolders, cfl1ContentFolders, i);
+//					if (CFL1diff == true) {
+//						
+//						continue;
+//					}
+//					// copy file to CFL1 folder
+//				}
 				// check number of segments
 				if (testResultService.assertEquals(newContentsegments.length,
 						currentContentsegments.length,

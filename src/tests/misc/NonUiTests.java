@@ -21,7 +21,7 @@ public class NonUiTests extends EdusoftBasicTest {
 		super.setup();
 	}
 
-	 @Test
+	@Test
 	public void testAudio() throws Exception {
 
 		AudioService audioService = new AudioService();
@@ -45,26 +45,22 @@ public class NonUiTests extends EdusoftBasicTest {
 
 	@Test
 	public void updateSlaveStatus() throws Exception, IOException {
-		String slaveName = configuration.getAutomationParam("slave",
-				"slaveNameCMD");
-		
-		 netService.updateSlaveStatus("slave5","not ready");
-		
-		
-//		 netService.updateSlaveStatus("slave5","ready");
-
-		// set slave status to false - beginning of test
-//		netService.updateSlaveStatus("testSlave1", "false");
-
-		// set slave status to true - middle of test
-//		netService.updateSlaveStatus(slaveName, "true");
-		
-		
-		
-		netService.checkAllSlaveStatus();
+		String text = textService.getTextForText(50);
+		System.out.println(text);
 	}
-	
-	
+
+	@Test
+	public void getLastProgress() throws Exception {
+		try {
+		String[]str=	dbService.getClassAndCourseWithLastProgress("autoTeacher",
+					autoInstitution.getInstitutionId());
+		System.out.println(str[0]);
+		System.out.println(str[1]);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	@After
 	public void tearDown() throws Exception {

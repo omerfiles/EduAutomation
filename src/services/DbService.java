@@ -25,6 +25,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Service;
 
+import com.thoughtworks.selenium.webdriven.commands.RunScript;
+
 import Objects.Institution;
 
 @Service
@@ -42,8 +44,8 @@ public class DbService extends SystemObjectImpl {
 	@Autowired
 	Configuration configuration;
 
-//	private String db_connect_string = configuration
-//			.getProperty("db.connection");
+	// private String db_connect_string = configuration
+	// .getProperty("db.connection");
 
 	// private String db_connect_string = null;
 
@@ -77,8 +79,8 @@ public class DbService extends SystemObjectImpl {
 
 	public String getValue(String query, String columnName) throws Exception {
 		String str = null;
-//		report.startLevel("Getting results set from db for query: " + query,
-//				EnumReportLevel.CurrentPlace);
+		// report.startLevel("Getting results set from db for query: " + query,
+		// EnumReportLevel.CurrentPlace);
 		report.report("Query was:" + query);
 		// String result = (String) jdbcTemplate.queryForObject(query,
 		// String.class);
@@ -107,8 +109,8 @@ public class DbService extends SystemObjectImpl {
 
 	public SqlRowSet getValueRS(String query, String[] columnName,
 			int NumOfRowsExpected, int timeout) throws Exception {
-//		report.startLevel("Getting results set from db",
-//				EnumReportLevel.CurrentPlace);
+		// report.startLevel("Getting results set from db",
+		// EnumReportLevel.CurrentPlace);
 		report.report("Query was:" + query);
 		SqlRowSet sqlRowSet = null;
 		// ResultSet rs=null;
@@ -144,8 +146,8 @@ public class DbService extends SystemObjectImpl {
 
 	public String[] getValue(String query, String[] columnName,
 			int NumOfRowsExpected, int timeout) throws Exception {
-//		report.startLevel("Getting results set from db",
-//				EnumReportLevel.CurrentPlace);
+		// report.startLevel("Getting results set from db",
+		// EnumReportLevel.CurrentPlace);
 		report.report("Query was:" + query);
 		System.out.println("query = " + query);
 		System.out.println("jdbcTemplate = " + jdbcTemplate);
@@ -223,8 +225,8 @@ public class DbService extends SystemObjectImpl {
 			throws Exception {
 		String query = "select ";
 		try {
-//			report.startLevel("Starting to build sql query",
-//					Reporter.EnumReportLevel.CurrentPlace);
+			// report.startLevel("Starting to build sql query",
+			// Reporter.EnumReportLevel.CurrentPlace);
 			if (whereParam.length != whereValue.length
 					|| whereParam.length == 0) {
 				fail("Query params are missing or incorrect");
@@ -267,8 +269,8 @@ public class DbService extends SystemObjectImpl {
 			throws Exception {
 		String query = "select ";
 		try {
-//			report.startLevel("Starting to build sql query",
-//					Reporter.EnumReportLevel.CurrentPlace);
+			// report.startLevel("Starting to build sql query",
+			// Reporter.EnumReportLevel.CurrentPlace);
 			if (whereParam.length != whereValue.length
 					|| whereParam.length == 0) {
 				fail("Query params are missing or incorrect");
@@ -367,6 +369,56 @@ public class DbService extends SystemObjectImpl {
 			}
 		}
 
+	}
+
+	public List<String[]> getStringListFromQuery(String sql, int intervals,
+			int columns) throws Exception {
+		List<String[]> list = new ArrayList<String[]>();
+		report.report("Query is: " + sql + ". Max db time out is: "
+				+ MAX_DB_TIMEOUT);
+		db_userid = configuration.getProperty("db.connection.username");
+		db_password = configuration.getProperty("db.connection.password");
+		System.out.println(sql);
+		ResultSet rs = null;
+		Statement statement = null;
+		String str = null;
+		int elapsedTimeInSec = 0;
+
+		try {
+			Class.forName(SQL_SERVER_DRIVER_CLASS);
+			conn = DriverManager.getConnection(getDbConnString(), db_userid,
+					db_password);
+			System.out.println("connected");
+			if (conn.isClosed() == true) {
+				System.out.println("connection is closed");
+			}
+			statement = conn.createStatement();
+
+			rs = statement.executeQuery(sql);
+			while (rs.next()) {
+
+				String[] strArr = new String[columns];
+				for (int i = 1; i <= columns; i++) {
+					strArr[i - 1] = rs.getString(i);
+				}
+				list.add(strArr);
+			}
+
+			conn.close();
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		} finally {
+
+			try {
+
+			} catch (Exception e) {
+			}
+			if (statement != null) {
+				statement.close();
+			}
+		}
+		return list;
 	}
 
 	public List<String> getArrayListFromQuery(String sql, int intervals)
@@ -586,10 +638,10 @@ public class DbService extends SystemObjectImpl {
 
 		return dayOfMonth;
 	}
-	
-	public String getDbConnString(){
+
+	public String getDbConnString() {
 		return configuration.getProperty("db.connection");
-		
+
 	}
 
 	public int getUsedLicensesPerClass(String className) {
@@ -597,6 +649,32 @@ public class DbService extends SystemObjectImpl {
 		return 0;
 	}
 
+	public String[] getClassAndCourseWithLastProgress(String teacherName,
+			String instId) throws Exception {
+
+		String[] output = new String[2];
+
+		String sql = "select Top(1) userId,CourseId from Progress where UserId in( select distinct  UserId from ClassUsers where ClassId in(select ClassId from dbo.TeacherClasses where UserPermissionsId=(select up.UserPermissionsId from dbo.UserPermissions as up, users as u where  up.userId=u.userId and u.userName='"
+				+ teacherName
+				+ "' and u.institutionId="
+				+ instId
+				+ ") ))order by LastUpdate desc";
+
+		List<String[]> results = getStringListFromQuery(sql, 5, 2);
+
+		String StudentId = results.get(0)[0];
+		String sqlForClassName = "select c.name from classUsers as cu , class as c where cu.ClassId=c.ClassId  and cu.userId="
+				+ StudentId;
+		output[0] = getStringFromQuery(sqlForClassName);
+
+		String sqlForCourseName = "select Name from course where CourseId="
+				+ results.get(0)[1];
+
+		output[1] = getStringFromQuery(sqlForCourseName);
+
+		return output;
+
+	}
 	// s}
 
 }

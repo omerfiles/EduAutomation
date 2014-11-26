@@ -11,6 +11,7 @@ import Enums.ByTypes;
 import Enums.SubComponentName;
 import Objects.Course;
 import pageObjects.edo.edoPlacementTestPage;
+import pageObjects.tms.DashboardPage;
 import pageObjects.tms.TmsHomePage;
 import services.TestResultService;
 import services.TextService;
@@ -104,7 +105,7 @@ public class EdoHomePage extends GenericPage {
 	public EdoHomePage clickOntUnitComponent(String componentName,
 			String componentType) throws Exception {
 		webDriver.waitForElement(componentName, ByTypes.linkText).click();
-	
+
 		webDriver.waitForElement(componentType, ByTypes.linkText).click();
 		return this;
 	}
@@ -324,11 +325,10 @@ public class EdoHomePage extends GenericPage {
 					System.out.println("trying to close popup");
 					webDriver.closeAlertByAccept();
 					break;
-				} 
-				catch(NoSuchWindowException no){
+				} catch (NoSuchWindowException no) {
 					System.out.println("Catched NoSuchWindowException");
 				}
-				
+
 				catch (Exception j) {
 					System.out.println("Catched exception jjjjj");
 				}
@@ -341,7 +341,12 @@ public class EdoHomePage extends GenericPage {
 		return this;
 	}
 
-	public TmsHomePage openTeachersCorner() throws Exception {
+	public GenericPage openTeachersCorner() throws Exception {
+		return openTeachersCorner(false);
+	}
+
+	public GenericPage openTeachersCorner(boolean showDashboard)
+			throws Exception {
 		webDriver.waitForElement("Teacher's Corner", ByTypes.linkText).click();
 		webDriver.sleep(2000);
 		webDriver.switchToNewWindow();
@@ -350,7 +355,11 @@ public class EdoHomePage extends GenericPage {
 		// webDriver.waitForElement("a5", ByTypes.id).click();
 		// webDriver.waitForElement("//a[@href='../Report/writingAssignments.aspx']",
 		// ByTypes.xpath.toString()).click();
-		return new TmsHomePage(webDriver, testResultService);
+		if (showDashboard) {
+			return new DashboardPage(webDriver, testResultService);
+		} else {
+			return new TmsHomePage(webDriver, testResultService);
+		}
 	}
 
 	public EdoHomePage addWritingAssignment(Course course, String textFile)
@@ -374,7 +383,7 @@ public class EdoHomePage extends GenericPage {
 		clickOnCourses();
 		// String courseName = "Basic 3 2012";
 		clickOnCourseByName(course.getName());
-//		waitForCourseDetailsToBeDisplayed(course.getName());
+		// waitForCourseDetailsToBeDisplayed(course.getName());
 		clickOnCourseUnit(course.getCourseUnits().get(0).getName());
 		clickOntUnitComponent(course.getCourseUnits().get(0).getUnitComponent()
 				.get(0).getName(), "Practice");
@@ -680,8 +689,7 @@ public class EdoHomePage extends GenericPage {
 	}
 
 	public EdoHomePage ClickComponentStage(String index) throws Exception {
-		
-		
+
 		webDriver.waitForElement(
 				"//ul[@class='ulTasks']//li[@ind='" + index + "']",
 				ByTypes.xpath).click();
@@ -889,12 +897,9 @@ public class EdoHomePage extends GenericPage {
 		clickOntUnitComponent(unitComponent, subComponentName.toString());
 	}
 
-	
-
 	public void clickOnSeeAnswer() throws Exception {
 		webDriver.waitForElement("SeeAnswer", ByTypes.id).click();
 
 	}
 
-	
 }

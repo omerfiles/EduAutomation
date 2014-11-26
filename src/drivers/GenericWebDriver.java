@@ -1078,7 +1078,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	}
 
 	public void setPageLoadTimeOut() {
-		webDriver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
+		webDriver.manage().timeouts().pageLoadTimeout(timeout+10, TimeUnit.SECONDS);
 
 	}
 

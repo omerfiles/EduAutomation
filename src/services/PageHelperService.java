@@ -419,7 +419,7 @@ public class PageHelperService extends SystemObjectImpl {
 		// ************Using API to create the user
 
 		createUserUsingApi(configuration.getProperty("sut.url"), studentName,
-				"auto", "mation", "12345", autoInstitution.getInstitutionId(),
+				studentName, studentName, "12345", autoInstitution.getInstitutionId(),
 				configuration.getProperty("classname"));
 	}
 

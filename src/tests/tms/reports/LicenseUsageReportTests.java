@@ -59,17 +59,17 @@ public class LicenseUsageReportTests extends EdusoftWebTest {
 		case Supervisor:
 			edoHomePage = pageHelper.loginAsSupervisor();
 			edoHomePage.waitForPageToLoad();
-			tmsHomePage = edoHomePage.openTeachersCorner();
+			tmsHomePage =(TmsHomePage) edoHomePage.openTeachersCorner();
 			break;
 		case Teahcer:
 			edoHomePage = pageHelper.loginAsTeacher();
 			edoHomePage.waitForPageToLoad();
-			tmsHomePage = edoHomePage.openTeachersCorner();
+			tmsHomePage =(TmsHomePage) edoHomePage.openTeachersCorner();
 			break;
 		case SchoolAdmin:
 			edoHomePage = pageHelper.loginAsSchoolAdmin();
 			edoHomePage.waitForPageToLoad();
-			tmsHomePage = edoHomePage.openTeachersCorner();
+			tmsHomePage =(TmsHomePage) edoHomePage.openTeachersCorner();
 			break;
 		}
 		

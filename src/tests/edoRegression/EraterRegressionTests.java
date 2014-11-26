@@ -76,7 +76,8 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		Student student = new Student();
 
 		EdoHomePage edoHomePage = null;
-		if (configuration.getProperty("dbaccess").equals("false")) {
+	
+		if (configuration.getAutomationParam("dbaccess","dbaccess").equals("false") ) {
 			edoHomePage = pageHelper.loginAsStudent();
 		} else {
 			startStep("Create a student for the test");
@@ -115,7 +116,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 
 		startStep("start checking the xml and json");
 
-		if (!configuration.getProperty("dbaccess").equals("false")) {
+		if (!configuration.getAutomationParam("dbaccess","dbaccess").equals("false")) {
 			String userId = dbService.getUserIdByUserName(
 					student.getUserName(), autoInstitution.getInstitutionId());
 			writingId = eraterService.getWritingIdByUserIdAndTextStart(userId,
@@ -144,7 +145,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		webDriver.deleteCookiesAndRefresh();
 		pageHelper.loginAsTeacher();
 		webDriver.closeAlertByAccept();
-		tmsHomePage = edoHomePage.openTeachersCorner();
+		tmsHomePage =(TmsHomePage) edoHomePage.openTeachersCorner();
 		newWritingId = eraterService.getWritingIdByUserIdAndTextStart(
 				student.getId(), newText);
 		eraterService.checkWritingIsProcessed(newWritingId);
@@ -300,7 +301,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		webDriver.deleteCookiesAndRefresh();
 		edoHomePage = pageHelper.loginAsTeacher();
 		edoHomePage.waitForPageToLoad();
-		tmsHomePage = edoHomePage.openTeachersCorner();
+		tmsHomePage =(TmsHomePage) edoHomePage.openTeachersCorner();
 		newWritingId = eraterService.getWritingIdByUserIdAndTextStart(
 				student.getId(), textStart);
 		eraterService.checkWritingIsProcessed(newWritingId);
@@ -551,7 +552,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		// edoHomePage = edoLoginPage.login(teacher);
 		edoHomePage = pageHelper.loginAsTeacher();
 		edoHomePage.waitForPageToLoad();
-		TmsHomePage tmsHomePage = edoHomePage.openTeachersCorner();
+		TmsHomePage tmsHomePage =(TmsHomePage) edoHomePage.openTeachersCorner();
 		String newWritingId = eraterService.getWritingIdByUserIdAndTextStart(
 				student.getId(), newText);
 		eraterService.checkWritingIsProcessed(newWritingId);

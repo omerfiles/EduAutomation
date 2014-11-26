@@ -313,6 +313,9 @@ public class Configuration {
 			e.printStackTrace();
 		}
 
+		if(value==null){
+			value="";
+		}
 		return value;
 	}
 	

@@ -177,14 +177,14 @@ public class ContentCompareBasicTest extends EdusoftBasicTest {
 			boolean useCodesList) throws Exception {
 		return getSubFolders(path, null, isGrammarTest, useCodesList);
 	}
-	
-	public List<String> getSubFoldersSimple(String path){
-		File folder=new File(path);
+
+	public List<String> getSubFoldersSimple(String path) {
+		File folder = new File(path);
 		File[] listOfFiles = folder.listFiles();
-		List<String>folders=new ArrayList<String>();
-		for(int i=0;i<listOfFiles.length;i++){
-			if(listOfFiles[i].isDirectory()){
-				String str=listOfFiles[i].getName();
+		List<String> folders = new ArrayList<String>();
+		for (int i = 0; i < listOfFiles.length; i++) {
+			if (listOfFiles[i].isDirectory()) {
+				String str = listOfFiles[i].getName();
 				folders.add(str);
 				System.out.println(str);
 			}
@@ -254,6 +254,9 @@ public class ContentCompareBasicTest extends EdusoftBasicTest {
 									}
 								}
 
+							} else {
+								folders.add(name);
+								System.out.println("Folder added:" + name);
 							}
 
 						}
@@ -272,16 +275,17 @@ public class ContentCompareBasicTest extends EdusoftBasicTest {
 		return folders;
 
 	}
-	
-	public List<String> getFilesInFolder(String folderPath,int charNum)throws IOException{
-		File folder=new File(folderPath);
+
+	public List<String> getFilesInFolder(String folderPath, int charNum)
+			throws IOException {
+		File folder = new File(folderPath);
 		File[] listOfFiles = folder.listFiles();
-		List<String>files=new ArrayList<String>();
-		for(int i=0;i<listOfFiles.length;i++){
-			if(listOfFiles[i].isFile()){
-				String str=listOfFiles[i].getName();
-				if(charNum>0){
-					str=str.substring(0, charNum);
+		List<String> files = new ArrayList<String>();
+		for (int i = 0; i < listOfFiles.length; i++) {
+			if (listOfFiles[i].isFile()) {
+				String str = listOfFiles[i].getName();
+				if (charNum > 0) {
+					str = str.substring(0, charNum);
 				}
 				files.add(str);
 				System.out.println(str);
@@ -289,8 +293,7 @@ public class ContentCompareBasicTest extends EdusoftBasicTest {
 		}
 		System.out.println(files.size());
 		return files;
-		
-		
+
 	}
 
 	public String getGrammerTextFromGrammerFiles(String grammerID,
@@ -317,7 +320,5 @@ public class ContentCompareBasicTest extends EdusoftBasicTest {
 		}
 		return text;
 	}
-	
-
 
 }
