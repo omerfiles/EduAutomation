@@ -190,7 +190,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		startStep("Create a student for the test");
 		String StudentUserName = "student" + dbService.sig(6);
 		pageHelper.addStudent(StudentUserName);
-		if (configuration.getProperty("dbaccess").equals("false")) {
+		if (configuration.getAutomationParam("dbaccess","dbaccess").equals("false")) {
 			edoHomePage = pageHelper.loginAsStudent();
 			student.setUserName(pageHelper.getStudent().getUserName());
 		} else {
@@ -227,7 +227,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		startStep("Check the assignment in the DB");
 		String userId = dbService.getUserIdByUserName(student.getUserName(),
 				autoInstitution.getInstitutionId());
-		if (!configuration.getProperty("dbaccess").equals("false")) {
+		if (!configuration.getAutomationParam("dbaccess","dbaccess").equals("false")) {
 			Assert.assertNotNull("validate writing id in DB",
 					eraterService.getWritingIdByUserId(userId));
 		}
