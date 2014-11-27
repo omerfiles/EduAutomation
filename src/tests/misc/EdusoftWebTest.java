@@ -31,7 +31,7 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 	@Override
 	public void setup() throws Exception {
 		super.setup();
-
+		enableLoggin = true;
 		// check if maven command line has a browser
 		// browser=System.getProperty("browserCMD");
 		// if(browser!=null){
@@ -62,11 +62,11 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 			webDriver = (IEWebDriver) ctx.getBean("IEWebDriver");
 		} else if (browser.equals(Browsers.firefox.toString())) {
 			webDriver = (FirefoxWebDriver) ctx.getBean("FirefoxWebDriver");
-		} 
-		
-//		else if (browser.equals(Browsers.android.toString())) {
-//			webDriver = (AndroidWebDriver) ctx.getBean("AndroidWebDriver");
-//		}
+		}
+
+		// else if (browser.equals(Browsers.android.toString())) {
+		// webDriver = (AndroidWebDriver) ctx.getBean("AndroidWebDriver");
+		// }
 		if (webDriver == null) {
 			// Assert.fail("No webdriver found. Please check properties file or pom for webdriver name");
 			testResultService
@@ -95,26 +95,32 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 		pageHelper.init(webDriver, autoInstitution, testResultService);
 		audioService = (AudioService) ctx.getBean("AudioService");
 
+		setEnableLoggin(true);
+
 	}
 
 	@After
 	public void tearDown() throws Exception {
 
-//		if (pageHelper.isLogoutNeeded()) {
-//			pageHelper.logOut();
+		// if (pageHelper.isLogoutNeeded()) {
+		// pageHelper.logOut();
+		// }
+
+//		if (enableLoggin == true && browser.equals(Browsers.chrome.toString())) {
+//			LogEntries logEntries = webDriver.getConsoleLogEntries();
+//			boolean useLogFilter=true;
+//			if(logFilter==null){
+//				useLogFilter=false;
+//			}
+//			List<String[]> logList = textService.getListFromLogEntries(
+//					logEntries, logFilter,useLogFilter);
+//			String consoleLogPath = "files/consoleOutput/consoleLog"
+//					+ dbService.sig() + ".csv";
+//			textService.writeArrayistToCSVFile(consoleLogPath, logList);
+//			System.out
+//					.println("Console log can be found in: " + consoleLogPath);
+//
 //		}
-
-		if (enableLoggin == true && browser.equals(Browsers.chrome.toString())) {
-			LogEntries logEntries = webDriver.getConsoleLogEntries();
-			List<String[]> logList = textService.getListFromLogEntries(
-					logEntries, logFilter, true);
-			String consoleLogPath = "files/consoleOutput/consoleLog"
-					+ dbService.sig() + ".csv";
-			textService.writeArrayistToCSVFile(consoleLogPath, logList);
-			System.out
-					.println("Console log can be found in: " + consoleLogPath);
-
-		}
 
 		System.out.println("Start of EdusoftWebTest teardown");
 		try {

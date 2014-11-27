@@ -16,9 +16,8 @@ import drivers.GenericWebDriver;
 @Service
 public class TestResultService extends SystemObjectImpl {
 
-
-
 	List<String> results = new ArrayList<String>();
+	List<String> consoleLogEntries = new ArrayList<String>();
 
 	public void addFailTest(String failCause, boolean terminateTest) {
 		results.add(failCause);
@@ -56,12 +55,11 @@ public class TestResultService extends SystemObjectImpl {
 
 	public void printAllFailures() {
 		System.out.println("Failures are:");
-	
 
 		for (int i = 0; i < results.size(); i++) {
 			System.out.println("Failure " + i + ": "
 					+ results.get(i).toString());
-			
+
 		}
 	}
 
@@ -100,23 +98,31 @@ public class TestResultService extends SystemObjectImpl {
 
 			// throw new ComparisonFailure("Assert failed", expected, actual);
 			result = false;
-			
+
 		}
 		return result;
 
 	}
 
-	public boolean assertEquals(int expected, int acutal,String message) {
-		if (expected!=acutal) {
+	public boolean assertEquals(int expected, int acutal, String message) {
+		if (expected != acutal) {
 
 			addFailTest("Expected int was: " + expected
 					+ " but actual int was: " + acutal + " " + message);
-			
+
 			// throw new ComparisonFailure("Assert failed", expected, actual);
 			return false;
 		}
 		return true;
-		
+
+	}
+
+	public List<String> getConsoleLogEntries() {
+		return consoleLogEntries;
+	}
+
+	public void setConsoleLogEntries(List<String> consoleLogEntries) {
+		this.consoleLogEntries = consoleLogEntries;
 	}
 
 }

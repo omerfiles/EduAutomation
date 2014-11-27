@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import Interfaces.TestCaseParams;
 import pageObjects.EdoHomePage;
 import pageObjects.tms.DashboardPage;
 import tests.misc.EdusoftWebTest;
@@ -32,22 +33,7 @@ public class BasicDashboardTest extends EdusoftWebTest {
 
 	}
 
-	@Test
-	public void loginAsTeacher() throws Exception {
-		EdoHomePage edoHomePage = pageHelper.loginAsTeacher();
+	
 
-		DashboardPage dashboardPage = (DashboardPage) edoHomePage
-				.openTeachersCorner(true);
-
-		getClassAndCourseWithLastProgress(autoInstitution.getTeacherUserName());
-
-		String selectedClass = dashboardPage.getSelectedClass();
-		testResultService.assertEquals(classWithLastProgress, selectedClass);
-		
-		String selectedCourse=dashboardPage.getSelectedCourse();
-		testResultService.assertEquals(courseWithLastProgress, selectedCourse);
-		
-
-	}
-
+	
 }

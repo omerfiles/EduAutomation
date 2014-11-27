@@ -14,7 +14,6 @@ import pageObjects.EdoHomePage;
 import pageObjects.GenericPage;
 import services.TestResultService;
 
-
 public class TmsHomePage extends GenericPage {
 
 	public TmsHomePage(GenericWebDriver webDriver,
@@ -159,12 +158,12 @@ public class TmsHomePage extends GenericPage {
 			mainWin = webDriver.switchToFrame("FormFrame");
 		}
 
-//		webDriver.waitForElementAndClick("SelectSchool", ByTypes.id);
-//		Thread.sleep(1000);
-//		webDriver.waitForElement(
-//				"//select[@id='SelectSchool']//option[@value='" + id + "#"
-//						+ instituteName + "']", ByTypes.xpath).click();
-		
+		// webDriver.waitForElementAndClick("SelectSchool", ByTypes.id);
+		// Thread.sleep(1000);
+		// webDriver.waitForElement(
+		// "//select[@id='SelectSchool']//option[@value='" + id + "#"
+		// + instituteName + "']", ByTypes.xpath).click();
+
 		webDriver.selectElementFromComboBox("SelectSchool", instituteName);
 		if (clickGo == true) {
 			webDriver.waitForElement("//input[@value='  GO  ']", ByTypes.xpath)
@@ -192,31 +191,31 @@ public class TmsHomePage extends GenericPage {
 	}
 
 	public TmsHomePage selectClass(String className) throws Exception {
-		return selectClass(className, true,true);
+		return selectClass(className, true, true);
 	}
 
-	public TmsHomePage selectClass(String className, boolean switchFrame,boolean clickGo)
-			throws Exception {
+	public TmsHomePage selectClass(String className, boolean switchFrame,
+			boolean clickGo) throws Exception {
 
 		if (switchFrame) {
 			swithchToMainFrame();
 			String mainWin = webDriver.switchToFrame("FormFrame");
 		}
-		
-		webDriver.selectElementFromComboBox("SelectClass",className);
-//		select.selectByIndex(1);
-		
-//		webDriver.waitForElement("SelectClass", ByTypes.id).click();
-//		Thread.sleep(6000);
-//		webDriver.waitForElement(
-//				"//select[@id='SelectClass']//option[contains(text(),'"
-//						+ className + "')]", ByTypes.xpath).click();
-		if(clickGo){
-		webDriver.waitForElement("//input[@value='  GO  ']", ByTypes.xpath)
-				.click();
-		Thread.sleep(3000);
+
+		webDriver.selectElementFromComboBox("SelectClass", className);
+		// select.selectByIndex(1);
+
+		// webDriver.waitForElement("SelectClass", ByTypes.id).click();
+		// Thread.sleep(6000);
+		// webDriver.waitForElement(
+		// "//select[@id='SelectClass']//option[contains(text(),'"
+		// + className + "')]", ByTypes.xpath).click();
+		if (clickGo) {
+			webDriver.waitForElement("//input[@value='  GO  ']", ByTypes.xpath)
+					.click();
+			Thread.sleep(3000);
 		}
-		
+
 		// webDriver.switchToFrame("mainFrame");
 
 		return this;
@@ -763,20 +762,22 @@ public class TmsHomePage extends GenericPage {
 	}
 
 	public void selectPackageByName(String packageName) throws Exception {
-//		webDriver.waitForElementAndClick("SelectInstPackage", ByTypes.id);
-//		Thread.sleep(2000);
-//		webDriver.waitForElement(
-//				"//select[@id='SelectInstPackage']//option[contains(text(),'"
-//						+ packageName + "')]", ByTypes.xpath).click();
-		
+		// webDriver.waitForElementAndClick("SelectInstPackage", ByTypes.id);
+		// Thread.sleep(2000);
+		// webDriver.waitForElement(
+		// "//select[@id='SelectInstPackage']//option[contains(text(),'"
+		// + packageName + "')]", ByTypes.xpath).click();
+
 		webDriver.selectElementFromComboBox("SelectInstPackage", packageName);
 		Thread.sleep(3000);
 
 	}
-	public void clickOnGo()throws  Exception{
+
+	public void clickOnGo() throws Exception {
 		try {
-			webDriver.waitForElement("Submit222223", ByTypes.name).sendKeys(Keys.ENTER);
-	
+			webDriver.waitForElement("Submit222223", ByTypes.name).sendKeys(
+					Keys.ENTER);
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -786,23 +787,40 @@ public class TmsHomePage extends GenericPage {
 	public void switchToReportFrame() throws Exception {
 		swithchToMainFrame();
 		webDriver.switchToFrame("licenseUsageReport");
-		
+
 	}
 
 	public void selectTeacher(String teacherName) throws Exception {
-//		webDriver.waitForElementAndClick("SelectTeacher", ByTypes.id);
-//		Thread.sleep(1000);
-//		webDriver.waitForElementAndClick(
-//				"//select[@id='SelectTeacher']//option[contains(text(),'"
-//						+ teacherName + "')]", ByTypes.xpath);
-		
+		// webDriver.waitForElementAndClick("SelectTeacher", ByTypes.id);
+		// Thread.sleep(1000);
+		// webDriver.waitForElementAndClick(
+		// "//select[@id='SelectTeacher']//option[contains(text(),'"
+		// + teacherName + "')]", ByTypes.xpath);
+
 		webDriver.selectElementFromComboBox("SelectTeacher", teacherName);
-		
+
 	}
 
 	public void clickOnLicenses() throws Exception {
 		webDriver.waitForElement("Licenses", ByTypes.linkText).click();
-		
+
+	}
+
+	public void selecStudent(String studentUserName) throws Exception {
+		webDriver
+				.selectElementFromComboBox("SelectUser", studentUserName, true);
+
+	}
+
+	public void deactivateStudent() throws Exception {
+		webDriver.waitForElement("//input[@type='radio'][@id='InActive']",
+				ByTypes.xpath).click();
+
+	}
+
+	public void clickOnSave() throws Exception {
+		webDriver.waitForElement("Save", ByTypes.linkText).click();
+
 	}
 
 }

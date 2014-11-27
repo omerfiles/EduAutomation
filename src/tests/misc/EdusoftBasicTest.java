@@ -2,6 +2,7 @@ package tests.misc;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import jsystem.framework.report.Reporter.EnumReportLevel;
 import junit.framework.SystemTestCase4;
@@ -12,7 +13,9 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
+import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
+import org.junit.rules.Timeout;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.logging.LogEntries;
@@ -48,8 +51,9 @@ public class EdusoftBasicTest extends TestCase {
 	// protected static AudioService audioService;
 	public ClassPathXmlApplicationContext ctx;
 	protected boolean enableLoggin = false;
-	
+
 	protected String logFilter = null;
+	private int testTimeoutInSeconds=3000;
 
 	protected boolean inStep = false;
 	protected String testCaseId = null;
@@ -66,7 +70,6 @@ public class EdusoftBasicTest extends TestCase {
 	@Rule
 	public TestWatcher watcher = new TestWatcher() {
 
-	
 		@Override
 		protected void succeeded(Description description) {
 			// TODO Auto-generated method stub
@@ -96,6 +99,14 @@ public class EdusoftBasicTest extends TestCase {
 		}
 
 	};
+	// junit <4.12
+	// @Rule
+	// public Timeout timeout=new Timeout(300000);//5 minutes timeout
+
+	@Rule
+	public final  TestRule testTimeOut = Timeout.builder()
+			.withTimeout(testTimeoutInSeconds, TimeUnit.SECONDS).withLookingForStuckThread(true)
+			.build();
 
 	// public static Reporter report = ListenerstManager.getInstance();
 
@@ -137,6 +148,7 @@ public class EdusoftBasicTest extends TestCase {
 
 		// System.out.println("Automation isntitution id is: "
 		// + autoInstitution.getInstitutionId());
+		
 	}
 
 	public void sleep(int seconds) throws Exception {
@@ -181,7 +193,7 @@ public class EdusoftBasicTest extends TestCase {
 		}
 		// report.step(stepName);
 		report.startLevel(stepName, EnumReportLevel.CurrentPlace);
-		System.out.println("Step: " + stepName);
+//		System.out.println("Step: " + stepName);
 		inStep = true;
 	}
 
@@ -242,8 +254,13 @@ public class EdusoftBasicTest extends TestCase {
 	public void setEnableLoggin(boolean enableLoggin) {
 		this.enableLoggin = enableLoggin;
 	}
+
 	public void setLogFilter(String logFilter) {
 		this.logFilter = logFilter;
+	}
+
+	public void setTestTimeoutInSeconds(int testTimeoutInSeconds) {
+		this.testTimeoutInSeconds = testTimeoutInSeconds;
 	}
 
 }

@@ -134,7 +134,7 @@ public class PageHelperService extends SystemObjectImpl {
 				autoInstitution.getInstitutionId()));
 		EdoHomePage edoHomePage = edoLoginPage.login(teacher);
 		edoHomePage.waitForPageToLoad();
-
+		webDriver.closeAlertByAccept();
 		return edoHomePage;
 	}
 
@@ -380,8 +380,11 @@ public class PageHelperService extends SystemObjectImpl {
 				"Sentence level do not match");
 
 	}
-
-	public void addStudent(String studentName) throws Exception {
+	public void addStudent(String studentName) throws Exception{
+		addStudent(studentName, configuration.getProperty("classname"));
+	}
+	
+	public void addStudent(String studentName,String className) throws Exception {
 		// String studentName = "student" + dbService.sig(6);
 		// String studentPassword = "12345";
 		// TmsLoginPage tmsLoginPage = new TmsLoginPage(webDriver,
@@ -420,7 +423,7 @@ public class PageHelperService extends SystemObjectImpl {
 
 		createUserUsingApi(configuration.getProperty("sut.url"), studentName,
 				studentName, studentName, "12345", autoInstitution.getInstitutionId(),
-				configuration.getProperty("classname"));
+				className);
 	}
 
 	public void createUserUsingApi(String sut, String userName, String fname,

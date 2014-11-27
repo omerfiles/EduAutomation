@@ -293,7 +293,7 @@ public class EdoHomePage extends GenericPage {
 	@Override
 	public GenericPage waitForPageToLoad() throws Exception {
 
-		int waitTimeOut = 60;
+		int waitTimeOut = 20;
 		int elapsedTime = 0;
 		while (elapsedTime < waitTimeOut) {
 			try {

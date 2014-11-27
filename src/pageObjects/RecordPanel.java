@@ -451,26 +451,30 @@ public class RecordPanel extends SRpage {
 	}
 
 	public void clickTheRecordButtonAndClickRecordAndStop() throws Exception {
-		String status ="";
-		int timeout=60;
-		int elapsedTime=0;
-		while(elapsedTime<timeout){
+		String status = "";
+		int timeout = 60;
+		int elapsedTime = 0;
+		while (elapsedTime < timeout) {
 			clickOnRecordButton();
 			Thread.sleep(2000);
-			 status = getRecordPanelStatus();
-			if(status!=null&& status.equals("SPEAK")){
+			status = getRecordPanelStatus();
+			if (status != null && status.equals("SPEAK")) {
 				clickOnRecordButton();
 				break;
-			}
-			else{
-				elapsedTime=elapsedTime+5;
+			} else {
+				elapsedTime = elapsedTime + 5;
 				Thread.sleep(3000);
 				System.out.println("Waiting for speak status for 3 seconds");
 			}
-			
+
 		}
-		
-		
+
+	}
+
+	public String getRecordPanelMessage() throws Exception {
+		String message = webDriver.waitForElement("divBaseInstr", ByTypes.id)
+				.getText();
+		return message;
 	}
 
 }

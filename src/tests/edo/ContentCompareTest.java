@@ -20,6 +20,8 @@ import javassist.runtime.Cflow;
 
 import org.junit.Test;
 
+import com.aqua.anttask.jsystem.OutErrSummaryJUnitResultFormatter;
+
 import tests.BasicTests.ContentCompareBasicTest;
 
 public class ContentCompareTest extends ContentCompareBasicTest {
@@ -119,10 +121,11 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 
 		int foldersPassed = 0;
 		int foldersFailed = 0;
-
+		outerloop:
 		for (int i = 0; i < newContentFolders.size(); i++) {
 //			CFL1diff=false;
 //			boolean fileExistInCFL1 = false;
+			boolean folderPassed=true;
 			try {
 
 				report.startLevel("Checking folder: "
@@ -132,8 +135,8 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 						+ newContentFolders.get(i) + ".js";
 
 				String oldContenetfilePath = oldContentBaseFolder + "\\"
-						+ oldContentFolders.get(i) + "\\"
-						+ oldContentFolders.get(i) + ".js";
+						+ newContentFolders.get(i) + "\\"
+						+ newContentFolders.get(i) + ".js";
 
 //				String cfl1ContentFilePath = null;
 
@@ -228,16 +231,12 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 										newContentFolders.get(i),
 										String.valueOf(j), "Passed" };
 
-								textService.copyFileToFolder(
-										newContentBaseFolder + "\\"
-												+ newContentFolders.get(i)
-												+ "\\"
-												+ newContentFolders.get(i)
-												+ ".js", "files/temp/noChange");
+								
 
 								passedTests++;
 								testResults.add(str);
 							} else {
+								folderPassed=false;
 								String[] str = new String[] {
 										newContentFolders.get(i),
 										String.valueOf(j),
@@ -249,13 +248,19 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 												+ currentWord };
 								wordsMisMatch++;
 								testResults.add(str);
-								copyFolder = true;
+								textService.copyFileToFolder(
+										newContentBaseFolder + "\\" + newContentFolders.get(i)
+												+ "\\" + newContentFolders.get(i) + ".js",
+										"files/temp/ChangedFromOrig");
+								continue;
 							}
 
 						} else {
+							folderPassed=false;
 							// add folder name, and sub segment number to test
 							// results
 							String[] str = new String[] {
+
 									newContentFolders.get(i),
 									String.valueOf(j),
 									"Failed",
@@ -272,13 +277,18 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 													currentSegmentWords, " ") };
 							numberOfWordsInSubSegmentsNotTheSame++;
 							testResults.add(str);
-							copyFolder = true;
+							textService.copyFileToFolder(
+									newContentBaseFolder + "\\" + newContentFolders.get(i)
+											+ "\\" + newContentFolders.get(i) + ".js",
+									"files/temp/ChangedFromOrig");
+							continue outerloop;
 
 						}
 						;
 
 					}
 				} else {
+					folderPassed=false;
 					String[] str = new String[] {
 							newContentFolders.get(i),
 							null,
@@ -290,7 +300,11 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 									+ currentContentsegments.length };
 					numberOfSegmentsNotTheSame++;
 					testResults.add(str);
-					copyFolder = true;
+					textService.copyFileToFolder(
+							newContentBaseFolder + "\\" + newContentFolders.get(i)
+									+ "\\" + newContentFolders.get(i) + ".js",
+							"files/temp/ChangedFromOrig");
+					continue outerloop;
 
 				}
 
@@ -304,11 +318,20 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 								+ newContentFolders.get(i) + " " + e.toString());
 			}
 
-			if (copyFolder) {
+//			if (copyFolder) {
+//				textService.copyFileToFolder(
+//						newContentBaseFolder + "\\" + newContentFolders.get(i)
+//								+ "\\" + newContentFolders.get(i) + ".js",
+//						"files/temp/ChangedFromOrig");
+//			}
+			
+			if(folderPassed==true){
 				textService.copyFileToFolder(
-						newContentBaseFolder + "\\" + newContentFolders.get(i)
-								+ "\\" + newContentFolders.get(i) + ".js",
-						"files/temp/ChangedFromOrig");
+						newContentBaseFolder + "\\"
+								+ newContentFolders.get(i)
+								+ "\\"
+								+ newContentFolders.get(i)
+								+ ".js", "files/temp/noChange");
 			}
 
 		}
@@ -426,11 +449,11 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 
 		}
 
-		if (copyFolder) {
-			textService.copyFileToFolder(
-					newContentBaseFolder + "\\" + newContentFolders.get(i)
-							+ "\\" + newContentFolders.get(i) + ".js",
-					"files/temp/ChangedFromCFL1");
-		}
+//		if (copyFolder) {
+//			textService.copyFileToFolder(
+//					newContentBaseFolder + "\\" + newContentFolders.get(i)
+//							+ "\\" + newContentFolders.get(i) + ".js",
+//					"files/temp/ChangedFromCFL1");
+//		}
 	}
 }

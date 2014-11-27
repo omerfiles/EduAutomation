@@ -3,10 +3,15 @@ package tests.misc;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
 
 import jsystem.framework.RunProperties;
 import jsystem.framework.scenario.RunningProperties;
 
+import org.htmlcleaner.XPatherException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -52,13 +57,35 @@ public class NonUiTests extends EdusoftBasicTest {
 	@Test
 	public void getLastProgress() throws Exception {
 		try {
-		String[]str=	dbService.getClassAndCourseWithLastProgress("autoTeacher",
-					autoInstitution.getInstitutionId());
-		System.out.println(str[0]);
-		System.out.println(str[1]);
+			String[] str = dbService.getClassAndCourseWithLastProgress(
+					"autoTeacher", autoInstitution.getInstitutionId());
+			System.out.println(str[0]);
+			System.out.println(str[1]);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testNumberOfSegments() throws Exception,
+			ParserConfigurationException, XPatherException {
+		String newfileContent = textService.getTextFromFile(
+				"D:\\i2srtr_new.js", Charset.defaultCharset());
+		
+		String oldfileContent = textService.getTextFromFile(
+				"D:\\i2srtr_old.js", Charset.defaultCharset());
+		String[] arr = textService.getHtmlElementFromHtmlFile(
+				"//span[@class='segment']", newfileContent);
+		String[] arr2 = textService.getHtmlElementFromHtmlFile(
+				"//span[@class='segment']", oldfileContent);
+		
+		for (int i = 0; i < arr.length; i++) {
+			System.out.println("segment "+i+" "+ arr[i]);
+		}
+		
+		for (int i = 0; i < arr.length; i++) {
+			System.out.println("segment "+i+" "+ arr2[i]);
 		}
 	}
 

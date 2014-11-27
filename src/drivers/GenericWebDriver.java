@@ -235,6 +235,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			}
 
 		} catch (UnhandledAlertException e) {
+			printScreen("Unexpected alert");
 			closeAlertByAccept();
 		} catch (NoSuchElementException e) {
 
@@ -1016,28 +1017,42 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	public void selectElementFromComboBox(String comboboxName,
 			String optionValue) throws Exception {
+		selectElementFromComboBox(comboboxName, optionValue, false);
+	}
+
+	public void selectElementFromComboBox(String comboboxName,
+			String optionValue, boolean contains) throws Exception {
 		boolean selected = false;
 		{
 			try {
-				// TODO - add webdriver wait
-				WebDriverWait wait = new WebDriverWait(webDriver, timeout, 1000);
-				wait.until(ExpectedConditions.elementToBeClickable(By
-						.id(comboboxName)));
-				Select select = new Select(webDriver.findElement(By
-						.id(comboboxName)));
+				Select select = new Select(waitForElement(comboboxName,
+						ByTypes.id));
+				waitForElement(comboboxName, ByTypes.id);
 				List<WebElement> options = select.getOptions();
 				for (int i = 0; i < options.size(); i++) {
-					if (options.get(i).getText().contains(optionValue)) {
-						select.selectByIndex(i);
-						System.out.println("option " + optionValue
-								+ " selected");
-						selected = true;
-						break;
-
+					if (contains == false) {
+						if (options.get(i).getText().equals(optionValue)) {
+							select.selectByIndex(i);
+							System.out.println("option " + optionValue
+									+ " selected");
+							selected = true;
+							break;
+						}
+					} else {
+						if (options.get(i).getText().contains(optionValue)) {
+							select.selectByIndex(i);
+							System.out.println("option " + optionValue
+									+ " selected");
+							selected = true;
+							break;
+						}
 					}
 				}
+				if (selected == false) {
+					testResultService.addFailTest(optionValue
+							+ " was not found in the combo box", true);
+				}
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				printScreen("problem selecting from combo box");
 				testResultService.addFailTest(
 						"problem selecting from combo box", true);
@@ -1045,8 +1060,6 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			}
 			System.out.println("Selected " + comboboxName + ": " + selected);
 		}
-		// TODO Auto-generated method stub
-
 	}
 
 	public void printConsoleLogs(String logFilter, boolean useFllter)
@@ -1069,22 +1082,47 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	public String getSelectedValueFromComboBox(String comboBoxId) {
 		WebDriverWait wait = new WebDriverWait(webDriver, timeout, 1000);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id(comboBoxId)));
-		Select select = new Select(webDriver.findElement(By.id(comboBoxId)));
+		WebElement option = null;
+		try {
+			wait.until(ExpectedConditions.elementToBeClickable(By
+					.id(comboBoxId)));
+			Select select = new Select(webDriver.findElement(By.id(comboBoxId)));
 
-		WebElement option = select.getFirstSelectedOption();
+			option = select.getFirstSelectedOption();
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return option.getText();
 	}
 
 	public void setPageLoadTimeOut() {
-		webDriver.manage().timeouts().pageLoadTimeout(timeout+10, TimeUnit.SECONDS);
+		webDriver.manage().timeouts()
+				.pageLoadTimeout(timeout + 10, TimeUnit.SECONDS);
 
 	}
 
 	public void setScriptLoadTimeOut() {
 		webDriver.manage().timeouts()
 				.setScriptTimeout(timeout, TimeUnit.SECONDS);
+	}
+
+	public String getPopUpText() {
+
+		String alertText = null;
+		try {
+
+			WebDriverWait wait = new WebDriverWait(webDriver, timeout, 1000);
+			if (wait.until(ExpectedConditions.alertIsPresent()) != null) {
+				alertText = webDriver.switchTo().alert().getText();
+			}
+		} catch (TimeoutException e) {
+			// TODO Auto-generated catch block
+			testResultService.addFailTest("Alert was not found", true);
+		}
+		return alertText;
+
 	}
 
 }

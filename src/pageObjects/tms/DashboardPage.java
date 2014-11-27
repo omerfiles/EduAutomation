@@ -5,10 +5,11 @@ import drivers.GenericWebDriver;
 import pageObjects.GenericPage;
 import services.TestResultService;
 
-public class DashboardPage extends GenericPage {
+public class DashboardPage extends TmsHomePage {
 
 	private static final String SELECT_COURSE = "selectCourse";
 	private static final String SELECT_CLASS = "selectClass";
+
 	public DashboardPage(GenericWebDriver webDriver,
 			TestResultService testResultService) {
 		super(webDriver, testResultService);
@@ -27,23 +28,34 @@ public class DashboardPage extends GenericPage {
 		return null;
 	}
 
-	public void selectClass(String className) throws Exception {
+	public void selectClassInDashBoard(String className) throws Exception {
 		webDriver.selectElementFromComboBox(SELECT_CLASS, className);
 	}
 
-	public void selectCourse(String courseName) throws Exception {
+	public void selectCourseInDashboard(String courseName) throws Exception {
 		webDriver.selectElementFromComboBox(SELECT_COURSE, courseName);
 	}
 
-	public void clickGoButton() throws Exception {
+	public void clickOnDashboardGoButton() throws Exception {
 		webDriver.waitForElement("goButton", ByTypes.id).click();
 	}
-	public String getSelectedClass()throws Exception{
+
+	public String getSelectedClass() throws Exception {
 		return webDriver.getSelectedValueFromComboBox(SELECT_CLASS);
 	}
-	
-	public String getSelectedCourse()throws Exception{
+
+	public String getSelectedCourse() throws Exception {
 		return webDriver.getSelectedValueFromComboBox(SELECT_COURSE);
+	}
+
+	public void clickOnReports() throws Exception {
+		webDriver.waitForElement("Reports", ByTypes.linkText).click();
+
+	}
+
+	public void clickTmsHome() throws Exception {
+		webDriver.waitForElement("homelink", ByTypes.id).click();
+
 	}
 
 }
