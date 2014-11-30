@@ -797,7 +797,7 @@ public class TmsHomePage extends GenericPage {
 		// "//select[@id='SelectTeacher']//option[contains(text(),'"
 		// + teacherName + "')]", ByTypes.xpath);
 
-		webDriver.selectElementFromComboBox("SelectTeacher", teacherName);
+		webDriver.selectElementFromComboBox("SelectTeacher", teacherName,true);
 
 	}
 
