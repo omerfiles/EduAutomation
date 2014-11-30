@@ -58,4 +58,9 @@ public class DashboardPage extends TmsHomePage {
 
 	}
 
+	public void selectTeacherInDashboard(String teacherName) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

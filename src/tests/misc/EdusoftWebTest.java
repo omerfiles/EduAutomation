@@ -81,6 +81,7 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 			webDriver.setEnableConsoleLog(true);
 		}
 		webDriver.init(testResultService);
+		webDriver.maximize();
 		try {
 			// webDriver.maximize();
 		} catch (Exception e) {

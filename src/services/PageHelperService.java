@@ -300,12 +300,12 @@ public class PageHelperService extends SystemObjectImpl {
 	}
 
 	public void logOut() throws Exception {
-		webDriver.waitForElement("Log Out", ByTypes.linkText).click();
-		// webDriver.switchToFrame("lastAct");
-		webDriver.switchToFrame(webDriver.waitForElement(
-				"//iframe[contains(@src,'LogOut')]", ByTypes.xpath));
-		// webDriver.closeAlertByAccept();
-		webDriver.waitForElement("btnOk", ByTypes.id).click();
+//		webDriver.waitForElement("Log Out", ByTypes.linkText).click();
+//		// webDriver.switchToFrame("lastAct");
+//		webDriver.switchToFrame(webDriver.waitForElement(
+//				"//iframe[contains(@src,'LogOut')]", ByTypes.xpath));
+//		// webDriver.closeAlertByAccept();
+//		webDriver.waitForElement("btnOk", ByTypes.id).click();
 
 	}
 

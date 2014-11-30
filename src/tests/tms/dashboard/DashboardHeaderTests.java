@@ -60,5 +60,22 @@ public class DashboardHeaderTests extends BasicDashboardTest{
 		testResultService.assertEquals(courseWithLastProgress, selectedCourse);
 	}
 	
+	@Test
+	@TestCaseParams(testCaseID = { "17347","" })
+	public void testOpenDashboardAsSupervisorAndSelectTeaccher() throws Exception {
+		String teacherName=autoInstitution.getTeacherUserName();
+		
+		
+		report.startLevel("Login as supervisor");
+		EdoHomePage edoHomePage=pageHelper.loginAsSupervisor();
+		report.startLevel("Click on Teachers corner");
+		DashboardPage dashboardPage=(DashboardPage) edoHomePage.openTeachersCorner(true);
+		report.startLevel("Select a teacher from the combo box");
+		dashboardPage.selectTeacherInDashboard(teacherName);
+		report.startLevel("Check that class and course with last update are selected");
+		
+		
+	}
+	
 
 }

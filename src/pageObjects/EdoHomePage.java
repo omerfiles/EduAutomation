@@ -400,7 +400,9 @@ public class EdoHomePage extends GenericPage {
 		WebElement saveBtn = webDriver.waitForElement("elm1_save_", ByTypes.id);
 		saveBtn.click();
 		String alertText = webDriver.getAlertText(10);
-		Assert.assertEquals("Your draft has been saved.", alertText);
+		// Assert.assertEquals("Your draft has been saved.", alertText);
+		testResultService.assertEquals("Your draft has been saved.", alertText,
+				"Alert was not displayed");
 		webDriver.closeAlertByAccept();
 		webDriver
 				.waitForElement(
