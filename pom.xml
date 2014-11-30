@@ -597,6 +597,8 @@
 							<testClassesDirectory>${project.basedir}/target/classes/</testClassesDirectory>
 							<includes>
 								<include>**/RecoredYourself.java</include>
+								<include>**/SpeechRecognitonInteract1.java</include>
+								<include>**/SpeechRecognitonInteract2.java</include>
 
 
 							</includes>
