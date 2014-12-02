@@ -6,7 +6,7 @@ import org.openqa.selenium.WebElement;
 import pageObjects.EdoHomePage;
 import pageObjects.tms.DashboardPage;
 
-public class WidgetTests extends BasicDashboardTest {
+public class DashboardWidgetTests extends BasicDashboardTest {
 
 	@Test
 	public void testClassCompletionWidget() throws Exception {
