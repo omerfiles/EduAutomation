@@ -3,7 +3,9 @@ package tests.tms.dashboard;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.WebElement;
 
+import Enums.UserType;
 import Interfaces.TestCaseParams;
 import pageObjects.EdoHomePage;
 import pageObjects.tms.DashboardPage;
@@ -24,14 +26,16 @@ public class BasicDashboardTest extends EdusoftWebTest {
 		super.tearDown();
 	}
 
-	public void getClassAndCourseWithLastProgress(String teacherName)
+	public void getClassAndCourseWithLastProgress(String teacherName,UserType userType)
 			throws Exception {
 		String[] str = dbService.getClassAndCourseWithLastProgress(teacherName,
-				autoInstitution.getInstitutionId());
+				autoInstitution.getInstitutionId(),userType);
 		classWithLastProgress = str[0];
 		courseWithLastProgress = str[1];
-
 	}
+	
+	
+	
 
 	
 

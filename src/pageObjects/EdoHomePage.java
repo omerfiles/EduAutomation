@@ -293,50 +293,53 @@ public class EdoHomePage extends GenericPage {
 	@Override
 	public GenericPage waitForPageToLoad() throws Exception {
 
-		int waitTimeOut = 20;
-		int elapsedTime = 0;
-		while (elapsedTime < waitTimeOut) {
-			try {
-				Boolean pageLoaded = webDriver.waitForElement("navTable",
-						ByTypes.id, 10, false).isDisplayed();
-				if (pageLoaded == true) {
-					break;
-				}
-				if (webDriver.waitForElement("cont", ByTypes.id).isDisplayed()) {
-					System.out.println("progress bar is displayed");
-					Thread.sleep(5000);
-					elapsedTime = elapsedTime + 5;
-					System.out.println("Slepping for 5 seconds");
-					continue;
-				}
-			} catch (Exception e) {
-				try {
-					System.out
-							.println("Catched exception in waitForPageToLoad");
-					logger.info("Checking if user is logged in already");
-
-					// String userIsLogged = webDriver.waitForElement(
-					// "//div[@class='insTxt']", ByTypes.xpath, false,
-					// webDriver.getTimeout()).getText();
-					// if (userIsLogged
-					// .contains("This username is currently logged")) {
-					// Assert.fail("User was logged in already");
-					// }
-					System.out.println("trying to close popup");
-					webDriver.closeAlertByAccept();
-					break;
-				} catch (NoSuchWindowException no) {
-					System.out.println("Catched NoSuchWindowException");
-				}
-
-				catch (Exception j) {
-					System.out.println("Catched exception jjjjj");
-				}
-
-				continue;
-			}
-
-		}
+		// int waitTimeOut = 20;
+		// int elapsedTime = 0;
+		// while (elapsedTime < waitTimeOut) {
+		// try {
+		// Boolean pageLoaded = webDriver.waitForElement("navTable",
+		// ByTypes.id, 10, false).isDisplayed();
+		// if (pageLoaded == true) {
+		// break;
+		// }
+		// if (webDriver.waitForElement("cont", ByTypes.id).isDisplayed()) {
+		// System.out.println("progress bar is displayed");
+		// Thread.sleep(5000);
+		// elapsedTime = elapsedTime + 5;
+		// System.out.println("Slepping for 5 seconds");
+		// continue;
+		// }
+		// } catch (Exception e) {
+		// try {
+		// System.out
+		// .println("Catched exception in waitForPageToLoad");
+		// logger.info("Checking if user is logged in already");
+		//
+		// // String userIsLogged = webDriver.waitForElement(
+		// // "//div[@class='insTxt']", ByTypes.xpath, false,
+		// // webDriver.getTimeout()).getText();
+		// // if (userIsLogged
+		// // .contains("This username is currently logged")) {
+		// // Assert.fail("User was logged in already");
+		// // }
+		// System.out.println("trying to close popup");
+		// webDriver.closeAlertByAccept();
+		// break;
+		// } catch (NoSuchWindowException no) {
+		// System.out.println("Catched NoSuchWindowException");
+		// }
+		//
+		// catch (Exception j) {
+		// System.out.println("Catched exception jjjjj");
+		// }
+		//
+		// continue;
+		// }
+		//
+		// }
+		
+//		webDriver.waitForElement("//*[@id='mainAreaTD']", ByTypes.xpath,
+//				"Page was not loaded");
 		System.out.println("Finished waitForPageToLoad");
 		return this;
 	}

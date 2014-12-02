@@ -27,7 +27,9 @@ import org.springframework.stereotype.Service;
 
 import com.thoughtworks.selenium.webdriven.commands.RunScript;
 
+import Enums.UserType;
 import Objects.Institution;
+import Objects.UserObject;
 
 @Service
 public class DbService extends SystemObjectImpl {
@@ -650,15 +652,27 @@ public class DbService extends SystemObjectImpl {
 	}
 
 	public String[] getClassAndCourseWithLastProgress(String teacherName,
-			String instId) throws Exception {
+			String instId, UserType userType) throws Exception {
 
 		String[] output = new String[2];
 
-		String sql = "select Top(1) userId,CourseId from Progress where UserId in( select distinct  UserId from ClassUsers where ClassId in(select ClassId from dbo.TeacherClasses where UserPermissionsId=(select up.UserPermissionsId from dbo.UserPermissions as up, users as u where  up.userId=u.userId and u.userName='"
-				+ teacherName
-				+ "' and u.institutionId="
-				+ instId
-				+ ") ))order by LastUpdate desc";
+		String sql = "select Top(1) userId,CourseId from Progress where UserId in( select distinct  UserId from ClassUsers ";
+
+		if(userType.equals(UserType.Teahcer)){
+			String sqlAsTeacher = " where ClassId in(select ClassId from dbo.TeacherClasses where UserPermissionsId=(select up.UserPermissionsId from dbo.UserPermissions as up, users as u where  up.userId=u.userId and u.userName='"
+					+ teacherName + "' and u.institutionId=" + instId + ") ))";
+			sql=sql+sqlAsTeacher;
+		}
+		else if(userType.equals(UserType.SchoolAdmin)){
+			String asSchoolAdmin = "where ClassId in( select ClassId  from class where institutionId="+instId+"))";
+			sql=sql+asSchoolAdmin;
+		}
+		
+
+		
+		
+		
+		sql = sql + "			order by LastUpdate desc";
 
 		List<String[]> results = getStringListFromQuery(sql, 5, 2);
 

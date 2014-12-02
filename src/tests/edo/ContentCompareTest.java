@@ -33,11 +33,12 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 	// private String changedFileInCFL1 =
 	// "\\\\NEWSTORAGE\\Sendhere\\omers\\contentFiles\\";
 	private String CFL1BaseFolder = "\\\\NEWSTORAGE\\Sendhere\\omers\\contentFiles\\";
-//	 private String newContentBaseFolder =
-//	 "\\\\frontdev2003\\EDOPedagogical\\EDO\\Runtime\\Content\\";
-//	// 17.11.2014 test
-//	private String newContentBaseFolder = "\\\\storage\\storage\\MARKETING\\Production\\EDO Facelift\\updated Package\\Runtime\\Content\\";
-	private String newContentBaseFolder="\\\\STORAGE\\storage\\MARKETING\\Production\\EDO Facelift\\Package 23-11\\Runtime\\Content\\";
+	// private String newContentBaseFolder =
+	// "\\\\frontdev2003\\EDOPedagogical\\EDO\\Runtime\\Content\\";
+	// // 17.11.2014 test
+	// private String newContentBaseFolder =
+	// "\\\\storage\\storage\\MARKETING\\Production\\EDO Facelift\\updated Package\\Runtime\\Content\\";
+	private String newContentBaseFolder = "\\\\STORAGE\\storage\\MARKETING\\Production\\EDO Facelift\\Package 23-11\\Runtime\\Content\\";
 	private int numberOfSegmentsNotTheSame;
 	private int wordsMisMatch;
 	private int numberOfWordsInSubSegmentsNotTheSame;
@@ -66,11 +67,13 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 		compareOldAndNewContent("grammar", true);
 	}
 
+	@Test
 	public void deleteUpdatedContant() throws Exception {
 		List<String[]> filesToDelete = new ArrayList<String[]>();
 		// get list of updated files from D:\Content\Explore\English
-		String baseFolder = "D:\\Content\\GrammarExplore_b4_OmerTool";
-		String baseFolderPath = "D:\\Content\\Explore\\English";
+		String baseFolder = "C:\\Users\\omers\\Desktop\\Nov30\\GrammarExplore";
+		String baseFolderPath = "D:\\ChangedFromOrig";
+		String baseSetHidden = "C:\\Users\\omers\\Desktop\\Nov30\\ToSetHidden\\GrammerExplore";
 		List<String> changedFiles = getFilesInFolder(baseFolderPath, 6);
 		// loop on every language folder in D:\Content\Explore except english
 		List<String> langFolders = getSubFoldersSimple(baseFolder);
@@ -79,6 +82,12 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 		langFolders.remove("English_b4_OmerTools");
 		// check if file exist in list - if true - delete it and keep its name
 		for (int i = 0; i < langFolders.size(); i++) {
+			// TODO create folder under baseSetHiddent
+
+			File newDir = new File(baseSetHidden + "\\" + langFolders.get(i));
+			if (!newDir.exists()) {
+				newDir.mkdir();
+			}
 			String langFolder = baseFolder + "\\" + langFolders.get(i);
 			List<String> langFiles = getFilesInFolder(langFolder, 0);
 			for (int j = 0; j < langFiles.size(); j++) {
@@ -87,7 +96,8 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 					// + langFolders.get(i) + "\\" + langFiles.get(j));
 					File file = new File(baseFolder + "\\" + langFolders.get(i)
 							+ "\\" + langFiles.get(j));
-					file.delete();
+					// TODO copy file
+					textService.copyFileToFolder(baseFolder + "\\" + langFolders.get(i)+ "\\" + langFiles.get(j), newDir.getAbsolutePath());
 					filesToDelete.add(new String[] { baseFolder + "\\"
 							+ langFolders.get(i) + "\\" + langFiles.get(j) });
 				} else {
@@ -121,11 +131,10 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 
 		int foldersPassed = 0;
 		int foldersFailed = 0;
-		outerloop:
-		for (int i = 0; i < newContentFolders.size(); i++) {
-//			CFL1diff=false;
-//			boolean fileExistInCFL1 = false;
-			boolean folderPassed=true;
+		outerloop: for (int i = 0; i < newContentFolders.size(); i++) {
+			// CFL1diff=false;
+			// boolean fileExistInCFL1 = false;
+			boolean folderPassed = true;
 			try {
 
 				report.startLevel("Checking folder: "
@@ -138,30 +147,30 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 						+ newContentFolders.get(i) + "\\"
 						+ newContentFolders.get(i) + ".js";
 
-//				String cfl1ContentFilePath = null;
+				// String cfl1ContentFilePath = null;
 
 				// check if file exist in CFL content folders:
 				// \\NEWSTORAGE\Sendhere\omers\contentFiles
-//				String[] cfl1Contentsegments = null;
-//				if (textService.checkIfFileExist(CFL1BaseFolder + "\\"
-//						+ newContentFolders.get(i) + ".js") == true) {
-//
-//					System.out.println("File " + newContentFolders.get(i)
-//							+ " found in CFL1");
-//					fileExistInCFL1 = true;
-//					cfl1ContentFilePath = CFL1BaseFolder + "\\"
-//							+ newContentFolders.get(i) + ".js";
-//
-//					String fileContent = textService.getTextFromFile(
-//							cfl1ContentFilePath, Charset.defaultCharset());
-//
-//					cfl1Contentsegments = textService
-//							.getHtmlElementFromHtmlFile(
-//									"//span[@class='segment']", fileContent);
-//
-//					cfl1Contentsegments = textService
-//							.trimLowerCaseAndRemoveChars(cfl1Contentsegments);
-//				}
+				// String[] cfl1Contentsegments = null;
+				// if (textService.checkIfFileExist(CFL1BaseFolder + "\\"
+				// + newContentFolders.get(i) + ".js") == true) {
+				//
+				// System.out.println("File " + newContentFolders.get(i)
+				// + " found in CFL1");
+				// fileExistInCFL1 = true;
+				// cfl1ContentFilePath = CFL1BaseFolder + "\\"
+				// + newContentFolders.get(i) + ".js";
+				//
+				// String fileContent = textService.getTextFromFile(
+				// cfl1ContentFilePath, Charset.defaultCharset());
+				//
+				// cfl1Contentsegments = textService
+				// .getHtmlElementFromHtmlFile(
+				// "//span[@class='segment']", fileContent);
+				//
+				// cfl1Contentsegments = textService
+				// .trimLowerCaseAndRemoveChars(cfl1Contentsegments);
+				// }
 				// if exist, compare CFL1 and CFL2
 
 				boolean fileExist = textService
@@ -184,15 +193,15 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 				currentContentsegments = textService
 						.trimLowerCaseAndRemoveChars(currentContentsegments);
 
-//				if (fileExistInCFL1) {
-//					compareSegments(cfl1Contentsegments, newContentsegments,
-//							newContentFolders, cfl1ContentFolders, i);
-//					if (CFL1diff == true) {
-//						
-//						continue;
-//					}
-//					// copy file to CFL1 folder
-//				}
+				// if (fileExistInCFL1) {
+				// compareSegments(cfl1Contentsegments, newContentsegments,
+				// newContentFolders, cfl1ContentFolders, i);
+				// if (CFL1diff == true) {
+				//
+				// continue;
+				// }
+				// // copy file to CFL1 folder
+				// }
 				// check number of segments
 				if (testResultService.assertEquals(newContentsegments.length,
 						currentContentsegments.length,
@@ -231,12 +240,10 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 										newContentFolders.get(i),
 										String.valueOf(j), "Passed" };
 
-								
-
 								passedTests++;
 								testResults.add(str);
 							} else {
-								folderPassed=false;
+								folderPassed = false;
 								String[] str = new String[] {
 										newContentFolders.get(i),
 										String.valueOf(j),
@@ -249,14 +256,17 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 								wordsMisMatch++;
 								testResults.add(str);
 								textService.copyFileToFolder(
-										newContentBaseFolder + "\\" + newContentFolders.get(i)
-												+ "\\" + newContentFolders.get(i) + ".js",
+										newContentBaseFolder + "\\"
+												+ newContentFolders.get(i)
+												+ "\\"
+												+ newContentFolders.get(i)
+												+ ".js",
 										"files/temp/ChangedFromOrig");
 								continue;
 							}
 
 						} else {
-							folderPassed=false;
+							folderPassed = false;
 							// add folder name, and sub segment number to test
 							// results
 							String[] str = new String[] {
@@ -277,9 +287,9 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 													currentSegmentWords, " ") };
 							numberOfWordsInSubSegmentsNotTheSame++;
 							testResults.add(str);
-							textService.copyFileToFolder(
-									newContentBaseFolder + "\\" + newContentFolders.get(i)
-											+ "\\" + newContentFolders.get(i) + ".js",
+							textService.copyFileToFolder(newContentBaseFolder
+									+ "\\" + newContentFolders.get(i) + "\\"
+									+ newContentFolders.get(i) + ".js",
 									"files/temp/ChangedFromOrig");
 							continue outerloop;
 
@@ -288,7 +298,7 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 
 					}
 				} else {
-					folderPassed=false;
+					folderPassed = false;
 					String[] str = new String[] {
 							newContentFolders.get(i),
 							null,
@@ -300,9 +310,9 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 									+ currentContentsegments.length };
 					numberOfSegmentsNotTheSame++;
 					testResults.add(str);
-					textService.copyFileToFolder(
-							newContentBaseFolder + "\\" + newContentFolders.get(i)
-									+ "\\" + newContentFolders.get(i) + ".js",
+					textService.copyFileToFolder(newContentBaseFolder + "\\"
+							+ newContentFolders.get(i) + "\\"
+							+ newContentFolders.get(i) + ".js",
 							"files/temp/ChangedFromOrig");
 					continue outerloop;
 
@@ -318,20 +328,18 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 								+ newContentFolders.get(i) + " " + e.toString());
 			}
 
-//			if (copyFolder) {
-//				textService.copyFileToFolder(
-//						newContentBaseFolder + "\\" + newContentFolders.get(i)
-//								+ "\\" + newContentFolders.get(i) + ".js",
-//						"files/temp/ChangedFromOrig");
-//			}
-			
-			if(folderPassed==true){
+			// if (copyFolder) {
+			// textService.copyFileToFolder(
+			// newContentBaseFolder + "\\" + newContentFolders.get(i)
+			// + "\\" + newContentFolders.get(i) + ".js",
+			// "files/temp/ChangedFromOrig");
+			// }
+
+			if (folderPassed == true) {
 				textService.copyFileToFolder(
-						newContentBaseFolder + "\\"
-								+ newContentFolders.get(i)
-								+ "\\"
-								+ newContentFolders.get(i)
-								+ ".js", "files/temp/noChange");
+						newContentBaseFolder + "\\" + newContentFolders.get(i)
+								+ "\\" + newContentFolders.get(i) + ".js",
+						"files/temp/noChange");
 			}
 
 		}
@@ -449,11 +457,11 @@ public class ContentCompareTest extends ContentCompareBasicTest {
 
 		}
 
-//		if (copyFolder) {
-//			textService.copyFileToFolder(
-//					newContentBaseFolder + "\\" + newContentFolders.get(i)
-//							+ "\\" + newContentFolders.get(i) + ".js",
-//					"files/temp/ChangedFromCFL1");
-//		}
+		// if (copyFolder) {
+		// textService.copyFileToFolder(
+		// newContentBaseFolder + "\\" + newContentFolders.get(i)
+		// + "\\" + newContentFolders.get(i) + ".js",
+		// "files/temp/ChangedFromCFL1");
+		// }
 	}
 }

@@ -27,7 +27,7 @@ public class FirefoxWebDriver extends GenericWebDriver {
 
 	@Override
 	public void init(String remoteUrl, String folderName) throws Exception {
-		this.timeout = 20;
+		this.timeout = 10;
 		setBrowserName("firefox");
 		setInitialized(true);
 		dbService = new DbService();

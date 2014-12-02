@@ -668,6 +668,10 @@ public class TmsHomePage extends GenericPage {
 
 	}
 
+	public void ClickTheHomeButton() throws Exception {
+		webDriver.waitForElement("homelink", ByTypes.id).click();
+	}
+
 	public void selectHomePageObject(String objectName) throws Exception {
 		webDriver.waitForElementAndClick("cpselect_Mode", ByTypes.name);
 		webDriver.waitForElement(
@@ -797,7 +801,7 @@ public class TmsHomePage extends GenericPage {
 		// "//select[@id='SelectTeacher']//option[contains(text(),'"
 		// + teacherName + "')]", ByTypes.xpath);
 
-		webDriver.selectElementFromComboBox("SelectTeacher", teacherName,true);
+		webDriver.selectElementFromComboBox("SelectTeacher", teacherName, true);
 
 	}
 
@@ -821,6 +825,25 @@ public class TmsHomePage extends GenericPage {
 	public void clickOnSave() throws Exception {
 		webDriver.waitForElement("Save", ByTypes.linkText).click();
 
+	}
+
+	public void checkForReportResults() throws Exception {
+		webDriver.waitForElement("resultRoot", ByTypes.id).isDisplayed();
+	}
+
+	public String getSelectedCourseInReport() {
+		String course = webDriver.getSelectedValueFromComboBox("SelectCourse");
+		return course;
+	}
+
+	public String getSelectedClassInReport() throws Exception {
+		webDriver.switchToMainWindow();
+		swithchToMainFrame();
+		swithchToFormFrame();
+		String className = webDriver
+				.getSelectedValueFromComboBox("SelectClass");
+		swithchToMainFrame();
+		return className;
 	}
 
 }

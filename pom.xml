@@ -67,7 +67,7 @@
 					<artifactId>maven-surefire-report-plugin</artifactId>
 					<version>2.18</version>
 					<configuration>
-					   <outputName>testReport</outputName>
+						<outputName>testReport</outputName>
 						<showSuccess>true</showSuccess>
 					</configuration>
 				</plugin>
@@ -97,6 +97,8 @@
 			<artifactId>java-client</artifactId>
 			<version>2.0.0</version>
 		</dependency>
+		
+
 
 
 		<dependency>

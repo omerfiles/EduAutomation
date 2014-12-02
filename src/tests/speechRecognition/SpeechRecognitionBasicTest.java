@@ -39,9 +39,9 @@ public class SpeechRecognitionBasicTest extends EdusoftWebTest {
 		List<Integer> sentenceLevels = new ArrayList<Integer>();
 		startStep("Login to EDO as student");
 		EdoHomePage edoHomePage = pageHelper.loginAsStudent();
-		sleep(3);
+		
 		edoHomePage.clickOnCourses();
-		sleep(2);
+		
 		edoHomePage.clickOnCourseByName(course.getName());
 		edoHomePage.clickOnCourseUnit(course.getCourseUnit());
 		edoHomePage.clickOntUnitComponent(course.getUnitComponent(), "Explore");

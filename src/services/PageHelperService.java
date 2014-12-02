@@ -11,6 +11,7 @@ import jsystem.framework.report.Reporter.EnumReportLevel;
 import jsystem.framework.system.SystemObjectImpl;
 
 import org.junit.Assert;
+import org.openqa.selenium.UnhandledAlertException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -110,17 +111,24 @@ public class PageHelperService extends SystemObjectImpl {
 
 	public EdoHomePage loginAsStudent() throws Exception {
 
+		EdoHomePage edoHomePage = null;
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver,
 				testResultService);
-		edoLoginPage.OpenPage(getSutAndSubDomain());
-		// TODO - check if there is DB access
-		setUserLoginToNull(dbService.getUserIdByUserName(student.getUserName(),
-				autoInstitution.getInstitutionId()));
-		EdoHomePage edoHomePage = edoLoginPage.login(student);
-		// edoHomePage.waitForPageToLoad();
-		edoLogoutNeeded = true;
-		webDriver.closeAlertByAccept();
-		Thread.sleep(2000);
+		try {
+			
+			edoLoginPage.OpenPage(getSutAndSubDomain());
+			// TODO - check if there is DB access
+			setUserLoginToNull(dbService.getUserIdByUserName(student.getUserName(),
+					autoInstitution.getInstitutionId()));
+			edoHomePage = edoLoginPage.login(student);
+			// edoHomePage.waitForPageToLoad();
+			edoLogoutNeeded = true;
+		} catch (UnhandledAlertException e) {
+			// TODO Auto-generated catch block
+			webDriver.closeAlertByAccept();
+		}
+		
+		
 		return edoHomePage;
 	}
 

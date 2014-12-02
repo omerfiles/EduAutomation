@@ -17,6 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import Enums.AutoParams;
+import Enums.UserType;
 import services.AudioService;
 
 public class NonUiTests extends EdusoftBasicTest {
@@ -58,7 +59,7 @@ public class NonUiTests extends EdusoftBasicTest {
 	public void getLastProgress() throws Exception {
 		try {
 			String[] str = dbService.getClassAndCourseWithLastProgress(
-					"autoTeacher", autoInstitution.getInstitutionId());
+					"autoTeacher", autoInstitution.getInstitutionId(),UserType.SchoolAdmin);
 			System.out.println(str[0]);
 			System.out.println(str[1]);
 		} catch (Exception e) {

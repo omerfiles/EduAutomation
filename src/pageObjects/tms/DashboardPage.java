@@ -1,5 +1,7 @@
 package pageObjects.tms;
 
+import org.openqa.selenium.WebElement;
+
 import Enums.ByTypes;
 import drivers.GenericWebDriver;
 import pageObjects.GenericPage;
@@ -60,7 +62,48 @@ public class DashboardPage extends TmsHomePage {
 
 	public void selectTeacherInDashboard(String teacherName) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
+	public WebElement getWidgetElement(int row, int col, String title)
+			throws Exception {
+		WebElement element = webDriver
+				.waitForElement("//div[@class='dashboard']//div[" + row
+						+ "]//div[" + col + "]", ByTypes.xpath);
+		return element;
+	}
+
+	public boolean checkIfWidgetHasData(int row, int col) throws Exception {
+		boolean hasData = true;
+		WebElement element = webDriver.waitForElement(
+				"//div[@class='dashboard']//div[" + row + "]//div[" + col
+						+ "]//[div[contains(@class,'nodata')]'", ByTypes.xpath,
+				false, webDriver.getTimeout());
+		if (element == null) {
+			hasData = false;
+		}
+		return hasData;
+	}
+
+	public String getWidgetTitle(int row, int col) throws Exception {
+		String title = webDriver.waitForElement(
+				"//div[@class='dashboard']//div[" + row + "]//div[" + col
+						+ "]//div//div//span", ByTypes.xpath).getText();
+		return title;
+	}
+
+	public void clickOnSuccessWidgetButton() throws Exception {
+		webDriver.waitForElement("successWidgetBtn", ByTypes.id).click();
+
+	}
+
+	public void clickOnCompletionWidgetButton() throws Exception {
+		webDriver.waitForElement("completaionRateBtn", ByTypes.id).click();
+
+	}
+
+	public void clickOnPltWidgetButton() throws Exception {
+		webDriver.waitForElement("PTWidgetBtn", ByTypes.id).click();
+		
+	}
 }
