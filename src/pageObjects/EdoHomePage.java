@@ -337,9 +337,9 @@ public class EdoHomePage extends GenericPage {
 		// }
 		//
 		// }
-		
-//		webDriver.waitForElement("//*[@id='mainAreaTD']", ByTypes.xpath,
-//				"Page was not loaded");
+
+		// webDriver.waitForElement("//*[@id='mainAreaTD']", ByTypes.xpath,
+		// "Page was not loaded");
 		System.out.println("Finished waitForPageToLoad");
 		return this;
 	}
@@ -350,6 +350,7 @@ public class EdoHomePage extends GenericPage {
 
 	public GenericPage openTeachersCorner(boolean showDashboard)
 			throws Exception {
+		webDriver.printScreen("OpeningTeachersCorner");
 		webDriver.waitForElement("Teacher's Corner", ByTypes.linkText).click();
 		webDriver.sleep(2000);
 		webDriver.switchToNewWindow();
