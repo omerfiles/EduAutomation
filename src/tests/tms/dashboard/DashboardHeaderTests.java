@@ -71,6 +71,8 @@ public class DashboardHeaderTests extends BasicDashboardTest {
 	public void testNavigateToDashboardUsingTheHomeButtonAsSchoolAdmin() throws Exception {
 		startStep("Login as a teacher and open the dashboard");
 		EdoHomePage edoHomePage = pageHelper.loginAsSchoolAdmin();
+		sleep(5);
+		webDriver.closeAlertByAccept();
 		DashboardPage dashboardPage = (DashboardPage) edoHomePage
 				.openTeachersCorner(true);
 
@@ -116,6 +118,7 @@ public class DashboardHeaderTests extends BasicDashboardTest {
 
 		report.startLevel("Login as supervisor");
 		EdoHomePage edoHomePage = pageHelper.loginAsSupervisor();
+		webDriver.closeAlertByAccept();
 		report.startLevel("Click on Teachers corner");
 		DashboardPage dashboardPage = (DashboardPage) edoHomePage
 				.openTeachersCorner(true);
@@ -144,6 +147,7 @@ public class DashboardHeaderTests extends BasicDashboardTest {
 		report.startLevel("Login as School admin");
 		EdoHomePage edoHomePage = pageHelper.loginAsSchoolAdmin();
 		report.startLevel("Click on Teachers corner");
+		webDriver.closeAlertByAccept();
 		DashboardPage dashboardPage = (DashboardPage) edoHomePage
 				.openTeachersCorner(true);
 

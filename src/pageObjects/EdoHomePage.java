@@ -4,6 +4,7 @@ import java.nio.charset.Charset;
 
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchWindowException;
+import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -350,12 +351,18 @@ public class EdoHomePage extends GenericPage {
 
 	public GenericPage openTeachersCorner(boolean showDashboard)
 			throws Exception {
-		webDriver.printScreen("OpeningTeachersCorner");
-		webDriver.waitForElement("Teacher's Corner", ByTypes.linkText).click();
-		webDriver.sleep(2000);
-		webDriver.switchToNewWindow();
-		System.out.println("URL:" + webDriver.getUrl());
-		webDriver.switchToFrame(0);
+		try {
+			webDriver.printScreen("OpeningTeachersCorner");
+			webDriver.waitForElement("//a[@href='javascript:gotoTMS()']",
+					ByTypes.xpath).click();
+			webDriver.sleep(2000);
+			webDriver.switchToNewWindow();
+			System.out.println("URL:" + webDriver.getUrl());
+			webDriver.switchToFrame(0);
+		} catch (UnhandledAlertException e) {
+			// TODO Auto-generated catch block
+			webDriver.closeAlertByAccept();
+		}
 		// webDriver.waitForElement("a5", ByTypes.id).click();
 		// webDriver.waitForElement("//a[@href='../Report/writingAssignments.aspx']",
 		// ByTypes.xpath.toString()).click();

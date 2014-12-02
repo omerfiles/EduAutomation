@@ -235,8 +235,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			}
 
 		} catch (UnhandledAlertException e) {
-			printScreen("Unexpected alert");
+			System.out.println("Closing alert and trying again");
 			closeAlertByAccept();
+			waitForElement(idValue, byType);
 		} catch (NoSuchElementException e) {
 
 			if (isElementMandatory == true) {

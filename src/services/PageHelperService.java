@@ -141,7 +141,7 @@ public class PageHelperService extends SystemObjectImpl {
 		setUserLoginToNull(dbService.getUserIdByUserName(teacher.getUserName(),
 				autoInstitution.getInstitutionId()));
 		EdoHomePage edoHomePage = edoLoginPage.login(teacher);
-		edoHomePage.waitForPageToLoad();
+//		edoHomePage.waitForPageToLoad();
 		webDriver.closeAlertByAccept();
 		return edoHomePage;
 	}
@@ -149,12 +149,18 @@ public class PageHelperService extends SystemObjectImpl {
 	public EdoHomePage loginAsSupervisor() throws Exception {
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver,
 				testResultService);
-		edoLoginPage.OpenPage(getSutAndSubDomain());
-		supervisor.setPassword(configuration.getProperty("supervisor.pass"));
-		setUserLoginToNull(dbService.getUserIdByUserName(
-				supervisor.getUserName(), autoInstitution.getInstitutionId()));
-		EdoHomePage edoHomePage = edoLoginPage.login(supervisor);
-		edoHomePage.waitForPageToLoad();
+		EdoHomePage edoHomePage = null;
+		try {
+			edoLoginPage.OpenPage(getSutAndSubDomain());
+			supervisor.setPassword(configuration.getProperty("supervisor.pass"));
+			setUserLoginToNull(dbService.getUserIdByUserName(
+					supervisor.getUserName(), autoInstitution.getInstitutionId()));
+			edoHomePage = edoLoginPage.login(supervisor);
+			edoHomePage.waitForPageToLoad();
+		} catch (UnhandledAlertException e) {
+			// TODO Auto-generated catch block
+			webDriver.closeAlertByAccept();
+		}
 
 		return edoHomePage;
 
@@ -163,12 +169,18 @@ public class PageHelperService extends SystemObjectImpl {
 	public EdoHomePage loginAsSchoolAdmin() throws Exception {
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver,
 				testResultService);
-		edoLoginPage.OpenPage(getSutAndSubDomain());
-		schoolAdmin.setPassword(configuration.getProperty("shcoolAdmin.pass"));
-		setUserLoginToNull(dbService.getUserIdByUserName(
-				schoolAdmin.getUserName(), autoInstitution.getInstitutionId()));
-		EdoHomePage edoHomePage = edoLoginPage.login(schoolAdmin);
-		edoHomePage.waitForPageToLoad();
+		EdoHomePage edoHomePage = null;
+		try {
+			edoLoginPage.OpenPage(getSutAndSubDomain());
+			schoolAdmin.setPassword(configuration.getProperty("shcoolAdmin.pass"));
+			setUserLoginToNull(dbService.getUserIdByUserName(
+					schoolAdmin.getUserName(), autoInstitution.getInstitutionId()));
+			edoHomePage = edoLoginPage.login(schoolAdmin);
+			edoHomePage.waitForPageToLoad();
+		} catch (UnhandledAlertException e) {
+			// TODO Auto-generated catch block
+			webDriver.closeAlertByAccept();
+		}
 
 		return edoHomePage;
 
@@ -178,11 +190,17 @@ public class PageHelperService extends SystemObjectImpl {
 		TmsLoginPage tmsLoginPage = new TmsLoginPage(webDriver,
 				testResultService);
 		tmsLoginPage.OpenPage(getTmsUrl());
-		SchoolAdmin schoolAdmin = new SchoolAdmin();
-		schoolAdmin.setUserName(configuration.getProperty("tmsadmin.user"));
-		schoolAdmin.setPassword(configuration.getProperty("tmsadmin.password"));
-		TmsHomePage tmsHomePage = tmsLoginPage.Login(schoolAdmin);
-		tmsHomePage.waitForPageToLoad();
+		TmsHomePage tmsHomePage = null;
+		try {
+			SchoolAdmin schoolAdmin = new SchoolAdmin();
+			schoolAdmin.setUserName(configuration.getProperty("tmsadmin.user"));
+			schoolAdmin.setPassword(configuration.getProperty("tmsadmin.password"));
+			tmsHomePage = tmsLoginPage.Login(schoolAdmin);
+			tmsHomePage.waitForPageToLoad();
+		} catch (UnhandledAlertException e) {
+			// TODO Auto-generated catch block
+			webDriver.closeAlertByAccept();
+		}
 		tmsLogoutNeeded = true;
 		return tmsHomePage;
 
