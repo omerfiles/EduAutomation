@@ -80,6 +80,7 @@ public class DashboardWidgetTests extends BasicDashboardTest {
 				.openTeachersCorner(true);
 
 		startStep("Select class and course");
+		dashboardPage.HoverOnBar();
 		dashboardPage.selectClassInDashBoard(className);
 		dashboardPage.selectCourseInDashboard(courseName);
 		dashboardPage.clickOnDashboardGoButton();

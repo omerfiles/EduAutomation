@@ -24,6 +24,7 @@ public class DashboardHeaderTests extends BasicDashboardTest {
 		
 
 		startStep("Select class and course");
+		dashboardPage.HoverOnBar();
 		dashboardPage.selectClassInDashBoard(classToSelect);
 		sleep(2);
 		dashboardPage.selectCourseInDashboard(courseToSelect);
@@ -32,8 +33,8 @@ public class DashboardHeaderTests extends BasicDashboardTest {
 		
 		startStep("Check number of students");
 		testResultService.assertEquals(
-				dbService.getNumberOfStudentsInClass(courseToSelect),
-				dashboardPage.getNumberOfStudentsPerClass());
+				dbService.getNumberOfStudentsInClass(classToSelect),
+				dashboardPage.getNumberOfStudentsPerClass(),"Number of students label");
 
 		startStep("Navigate to another report");
 		dashboardPage.clickOnReports();
@@ -41,6 +42,7 @@ public class DashboardHeaderTests extends BasicDashboardTest {
 		startStep("Click on the Home button");
 		dashboardPage.clickTmsHome();
 		sleep(3);
+		dashboardPage.HoverOnBar();
 		startStep("Check thet the class and course that where selected, are still appear as selected");
 		String currentSelectedClass = dashboardPage.getSelectedClass();
 		testResultService.assertEquals(classToSelect, currentSelectedClass,
@@ -66,7 +68,7 @@ public class DashboardHeaderTests extends BasicDashboardTest {
 
 		startStep("Click the Home button");
 		dashboardPage.ClickTheHomeButton();
-
+		dashboardPage.HoverOnBar();
 		startStep("Check that the dashboard opens");
 		String selectedClass = dashboardPage.getSelectedClass();
 		testResultService.assertTrue("Classes combo box",
@@ -92,7 +94,7 @@ public class DashboardHeaderTests extends BasicDashboardTest {
 
 		startStep("Click the Home button");
 		dashboardPage.ClickTheHomeButton();
-
+		dashboardPage.HoverOnBar();
 		startStep("Check that the dashboard opens");
 		String selectedClass = dashboardPage.getSelectedClass();
 		testResultService.assertTrue("Classes combo box",
@@ -111,7 +113,7 @@ public class DashboardHeaderTests extends BasicDashboardTest {
 
 		getClassAndCourseWithLastProgress(autoInstitution.getTeacherUserName(),
 				UserType.Teahcer);
-
+		dashboardPage.HoverOnBar();
 		String selectedClass = dashboardPage.getSelectedClass();
 		testResultService.assertEquals(classWithLastProgress, selectedClass);
 
@@ -133,7 +135,7 @@ public class DashboardHeaderTests extends BasicDashboardTest {
 				.openTeachersCorner(true);
 		report.startLevel("Select a teacher from the combo box");
 		getClassAndCourseWithLastProgress(teacherName, UserType.SchoolAdmin);
-
+		dashboardPage.HoverOnBar();
 		dashboardPage.selectTeacherInDashboard(teacherName);
 		report.startLevel("Check that class and course with last update are selected");
 
@@ -159,7 +161,7 @@ public class DashboardHeaderTests extends BasicDashboardTest {
 		webDriver.closeAlertByAccept();
 		DashboardPage dashboardPage = (DashboardPage) edoHomePage
 				.openTeachersCorner(true);
-
+		dashboardPage.HoverOnBar();
 		report.startLevel("Check selected class and course");
 		String selectedClass = dashboardPage.getSelectedClass();
 		testResultService.assertEquals(classWithLastProgress, selectedClass);

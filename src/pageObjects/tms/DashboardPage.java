@@ -114,11 +114,17 @@ public class DashboardPage extends TmsHomePage {
 		return number;
 	}
 
-	public String getAvgScorePerUnitClassTestScore(int unitNumber) throws Exception {
+	public String getAvgScorePerUnitClassTestScore(int unitNumber)
+			throws Exception {
 		String score = webDriver.waitForElement(
-				"//div[@id='successWidget']//div[contains(@class,'point-"+unitNumber+"')]",
-				ByTypes.xpath).getText();
+				"//div[@id='successWidget']//div[contains(@class,'point-"
+						+ unitNumber + "')]", ByTypes.xpath).getText();
 		return score;
 
+	}
+
+	public void HoverOnBar() throws Exception {
+		webDriver.hoverOnElement(webDriver.waitForElement("tmsDefaultBar",
+				ByTypes.id));
 	}
 }

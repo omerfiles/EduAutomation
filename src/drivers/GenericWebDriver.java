@@ -921,6 +921,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	public void hoverOnElement(WebElement element) throws Exception {
 		Actions builder = new Actions(webDriver);
 		builder.moveToElement(element).perform();
+		this.sleep(2000);
 
 	}
 

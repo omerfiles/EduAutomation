@@ -14,6 +14,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.CapabilityType;
+
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.springframework.stereotype.Service;
@@ -51,6 +52,10 @@ public class IEWebDriver extends GenericWebDriver {
 			capabilities.setCapability(
 					CapabilityType.ForSeleniumServer.ENSURING_CLEAN_SESSION,
 					true);
+			capabilities.setCapability(CapabilityType.ENABLE_PERSISTENT_HOVERING, false);
+	
+			
+			
 			webDriver = new RemoteWebDriver(new URL(remoteUrl + "/wd/hub"),
 					capabilities);
 			// webDriver = new RemoteWebDriver( capabilities);
