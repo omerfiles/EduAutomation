@@ -658,20 +658,16 @@ public class DbService extends SystemObjectImpl {
 
 		String sql = "select Top(1) userId,CourseId from Progress where UserId in( select distinct  UserId from ClassUsers ";
 
-		if(userType.equals(UserType.Teahcer)){
+		if (userType.equals(UserType.Teahcer)) {
 			String sqlAsTeacher = " where ClassId in(select ClassId from dbo.TeacherClasses where UserPermissionsId=(select up.UserPermissionsId from dbo.UserPermissions as up, users as u where  up.userId=u.userId and u.userName='"
 					+ teacherName + "' and u.institutionId=" + instId + ") ))";
-			sql=sql+sqlAsTeacher;
+			sql = sql + sqlAsTeacher;
+		} else if (userType.equals(UserType.SchoolAdmin)) {
+			String asSchoolAdmin = "where ClassId in( select ClassId  from class where institutionId="
+					+ instId + "))";
+			sql = sql + asSchoolAdmin;
 		}
-		else if(userType.equals(UserType.SchoolAdmin)){
-			String asSchoolAdmin = "where ClassId in( select ClassId  from class where institutionId="+instId+"))";
-			sql=sql+asSchoolAdmin;
-		}
-		
 
-		
-		
-		
 		sql = sql + "			order by LastUpdate desc";
 
 		List<String[]> results = getStringListFromQuery(sql, 5, 2);
@@ -688,6 +684,13 @@ public class DbService extends SystemObjectImpl {
 
 		return output;
 
+	}
+
+	public String getNumberOfStudentsInClass(String className) throws Exception {
+		String sql = "  select count(*) from classUsers as cu,class as c where cu.classId=c.classId and c.name='"
+				+ className + "'";
+		String result = getStringFromQuery(sql);
+		return result;
 	}
 	// s}
 

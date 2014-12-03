@@ -21,12 +21,19 @@ public class DashboardHeaderTests extends BasicDashboardTest {
 		DashboardPage dashboardPage = (DashboardPage) edoHomePage
 				.openTeachersCorner(true);
 
+		
+
 		startStep("Select class and course");
 		dashboardPage.selectClassInDashBoard(classToSelect);
 		sleep(2);
 		dashboardPage.selectCourseInDashboard(courseToSelect);
 		dashboardPage.clickOnDashboardGoButton();
 		sleep(5);
+		
+		startStep("Check number of students");
+		testResultService.assertEquals(
+				dbService.getNumberOfStudentsInClass(courseToSelect),
+				dashboardPage.getNumberOfStudentsPerClass());
 
 		startStep("Navigate to another report");
 		dashboardPage.clickOnReports();
@@ -45,7 +52,8 @@ public class DashboardHeaderTests extends BasicDashboardTest {
 
 	@Test
 	@TestCaseParams(testCaseID = { "16991" })
-	public void testNavigateToDashboardUsingTheHomeButtonAsTeacher() throws Exception {
+	public void testNavigateToDashboardUsingTheHomeButtonAsTeacher()
+			throws Exception {
 		startStep("Login as a teacher and open the dashboard");
 		EdoHomePage edoHomePage = pageHelper.loginAsTeacher();
 		DashboardPage dashboardPage = (DashboardPage) edoHomePage
@@ -65,10 +73,11 @@ public class DashboardHeaderTests extends BasicDashboardTest {
 				selectedClass.equals(null) == false);
 
 	}
-	
+
 	@Test
 	@TestCaseParams(testCaseID = { "17493" })
-	public void testNavigateToDashboardUsingTheHomeButtonAsSchoolAdmin() throws Exception {
+	public void testNavigateToDashboardUsingTheHomeButtonAsSchoolAdmin()
+			throws Exception {
 		startStep("Login as a teacher and open the dashboard");
 		EdoHomePage edoHomePage = pageHelper.loginAsSchoolAdmin();
 		sleep(5);

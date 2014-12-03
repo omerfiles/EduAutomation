@@ -104,6 +104,21 @@ public class DashboardPage extends TmsHomePage {
 
 	public void clickOnPltWidgetButton() throws Exception {
 		webDriver.waitForElement("PTWidgetBtn", ByTypes.id).click();
-		
+
+	}
+
+	public String getNumberOfStudentsPerClass() throws Exception {
+		String number = webDriver.waitForElement(
+				"//div[@class='studentsCounterNumber']", ByTypes.xpath)
+				.getText();
+		return number;
+	}
+
+	public String getAvgScorePerUnitClassTestScore(int unitNumber) throws Exception {
+		String score = webDriver.waitForElement(
+				"//div[@id='successWidget']//div[contains(@class,'point-"+unitNumber+"')]",
+				ByTypes.xpath).getText();
+		return score;
+
 	}
 }

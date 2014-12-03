@@ -115,36 +115,40 @@ public class PageHelperService extends SystemObjectImpl {
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver,
 				testResultService);
 		try {
-			
+
 			edoLoginPage.OpenPage(getSutAndSubDomain());
 			// TODO - check if there is DB access
-			setUserLoginToNull(dbService.getUserIdByUserName(student.getUserName(),
-					autoInstitution.getInstitutionId()));
+			setUserLoginToNull(dbService.getUserIdByUserName(
+					student.getUserName(), autoInstitution.getInstitutionId()));
 			edoHomePage = edoLoginPage.login(student);
 			// edoHomePage.waitForPageToLoad();
 			edoLogoutNeeded = true;
 		} catch (UnhandledAlertException e) {
 			// TODO Auto-generated catch block
 			webDriver.closeAlertByAccept();
-		}
-		finally{
+		} finally {
 			webDriver.closeAlertByAccept();
 		}
-		
-		
+
 		return edoHomePage;
 	}
 
 	public EdoHomePage loginAsTeacher() throws Exception {
+		return loginAsTeacher(configuration.getProperty("teacher.username"));
+	}
+
+	public EdoHomePage loginAsTeacher(String teacherUserName) throws Exception {
+		teacher.setUserName(teacherUserName);
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver,
 				testResultService);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
 
 		teacher.setPassword(configuration.getProperty("teacher.password"));
-		setUserLoginToNull(dbService.getUserIdByUserName(teacher.getUserName(),
+		setUserLoginToNull(dbService.getUserIdByUserName(teacherUserName,
 				autoInstitution.getInstitutionId()));
+
 		EdoHomePage edoHomePage = edoLoginPage.login(teacher);
-//		edoHomePage.waitForPageToLoad();
+		// edoHomePage.waitForPageToLoad();
 		webDriver.closeAlertByAccept();
 		return edoHomePage;
 	}
@@ -155,9 +159,11 @@ public class PageHelperService extends SystemObjectImpl {
 		EdoHomePage edoHomePage = null;
 		try {
 			edoLoginPage.OpenPage(getSutAndSubDomain());
-			supervisor.setPassword(configuration.getProperty("supervisor.pass"));
+			supervisor
+					.setPassword(configuration.getProperty("supervisor.pass"));
 			setUserLoginToNull(dbService.getUserIdByUserName(
-					supervisor.getUserName(), autoInstitution.getInstitutionId()));
+					supervisor.getUserName(),
+					autoInstitution.getInstitutionId()));
 			edoHomePage = edoLoginPage.login(supervisor);
 			edoHomePage.waitForPageToLoad();
 		} catch (UnhandledAlertException e) {
@@ -175,9 +181,11 @@ public class PageHelperService extends SystemObjectImpl {
 		EdoHomePage edoHomePage = null;
 		try {
 			edoLoginPage.OpenPage(getSutAndSubDomain());
-			schoolAdmin.setPassword(configuration.getProperty("shcoolAdmin.pass"));
+			schoolAdmin.setPassword(configuration
+					.getProperty("shcoolAdmin.pass"));
 			setUserLoginToNull(dbService.getUserIdByUserName(
-					schoolAdmin.getUserName(), autoInstitution.getInstitutionId()));
+					schoolAdmin.getUserName(),
+					autoInstitution.getInstitutionId()));
 			edoHomePage = edoLoginPage.login(schoolAdmin);
 			edoHomePage.waitForPageToLoad();
 		} catch (UnhandledAlertException e) {
@@ -197,7 +205,8 @@ public class PageHelperService extends SystemObjectImpl {
 		try {
 			SchoolAdmin schoolAdmin = new SchoolAdmin();
 			schoolAdmin.setUserName(configuration.getProperty("tmsadmin.user"));
-			schoolAdmin.setPassword(configuration.getProperty("tmsadmin.password"));
+			schoolAdmin.setPassword(configuration
+					.getProperty("tmsadmin.password"));
 			tmsHomePage = tmsLoginPage.Login(schoolAdmin);
 			tmsHomePage.waitForPageToLoad();
 		} catch (UnhandledAlertException e) {
@@ -213,7 +222,7 @@ public class PageHelperService extends SystemObjectImpl {
 		String str = configuration.getAutomationParam(
 				AutoParams.sutUrl.toString(), AutoParams.sutUrl.toString())
 				+ "//" + configuration.getProperty("institutaion.subdomain");
-		System.out.println("SUT is: "+str);
+		System.out.println("SUT is: " + str);
 		return str;
 
 	}
@@ -329,12 +338,12 @@ public class PageHelperService extends SystemObjectImpl {
 	}
 
 	public void logOut() throws Exception {
-//		webDriver.waitForElement("Log Out", ByTypes.linkText).click();
-//		// webDriver.switchToFrame("lastAct");
-//		webDriver.switchToFrame(webDriver.waitForElement(
-//				"//iframe[contains(@src,'LogOut')]", ByTypes.xpath));
-//		// webDriver.closeAlertByAccept();
-//		webDriver.waitForElement("btnOk", ByTypes.id).click();
+		// webDriver.waitForElement("Log Out", ByTypes.linkText).click();
+		// // webDriver.switchToFrame("lastAct");
+		// webDriver.switchToFrame(webDriver.waitForElement(
+		// "//iframe[contains(@src,'LogOut')]", ByTypes.xpath));
+		// // webDriver.closeAlertByAccept();
+		// webDriver.waitForElement("btnOk", ByTypes.id).click();
 
 	}
 
@@ -409,11 +418,13 @@ public class PageHelperService extends SystemObjectImpl {
 				"Sentence level do not match");
 
 	}
-	public void addStudent(String studentName) throws Exception{
+
+	public void addStudent(String studentName) throws Exception {
 		addStudent(studentName, configuration.getProperty("classname"));
 	}
-	
-	public void addStudent(String studentName,String className) throws Exception {
+
+	public void addStudent(String studentName, String className)
+			throws Exception {
 		// String studentName = "student" + dbService.sig(6);
 		// String studentPassword = "12345";
 		// TmsLoginPage tmsLoginPage = new TmsLoginPage(webDriver,
@@ -451,8 +462,8 @@ public class PageHelperService extends SystemObjectImpl {
 		// ************Using API to create the user
 
 		createUserUsingApi(configuration.getProperty("sut.url"), studentName,
-				studentName, studentName, "12345", autoInstitution.getInstitutionId(),
-				className);
+				studentName, studentName, "12345",
+				autoInstitution.getInstitutionId(), className);
 	}
 
 	public void createUserUsingApi(String sut, String userName, String fname,

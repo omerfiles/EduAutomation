@@ -10,6 +10,7 @@ import org.openqa.selenium.WebElement;
 
 import Enums.ByTypes;
 import Enums.InteractStatus;
+import Interfaces.TestCaseParams;
 import Objects.Course;
 import Objects.Recording;
 import pageObjects.EdoHomePage;
@@ -30,6 +31,7 @@ public class SpeechRecognitonInteract1 extends SpeechRecognitionBasicTest {
 	// Test case 13309
 	// First Discoveries,Unit 1 - About Me,I'm Tom Smith,6
 	@Test
+	@TestCaseParams(testCaseID = { "13309" })
 	public void testInteract1() throws Exception {
 		startStep("Init test data");
 		Course course = pageHelper.initCouse(8);
