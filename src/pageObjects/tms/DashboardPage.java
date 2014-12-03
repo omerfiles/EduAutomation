@@ -80,6 +80,7 @@ public class DashboardPage extends TmsHomePage {
 						+ "]//[div[contains(@class,'nodata')]'", ByTypes.xpath,
 				false, webDriver.getTimeout());
 		if (element == null) {
+			webDriver.printScreen("Chart has no data");
 			hasData = false;
 		}
 		return hasData;
@@ -88,7 +89,7 @@ public class DashboardPage extends TmsHomePage {
 	public String getWidgetTitle(int row, int col) throws Exception {
 		String title = webDriver.waitForElement(
 				"//div[@class='dashboard']//div[" + row + "]//div[" + col
-						+ "]//div//div//span", ByTypes.xpath).getText();
+						+ "]//div//div[1]//span", ByTypes.xpath).getText();
 		return title;
 	}
 
@@ -98,7 +99,7 @@ public class DashboardPage extends TmsHomePage {
 	}
 
 	public void clickOnCompletionWidgetButton() throws Exception {
-		webDriver.waitForElement("completaionRateBtn", ByTypes.id).click();
+		webDriver.waitForElement("completionRateBtn", ByTypes.id).click();
 
 	}
 
