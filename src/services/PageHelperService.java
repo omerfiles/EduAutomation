@@ -127,6 +127,9 @@ public class PageHelperService extends SystemObjectImpl {
 			// TODO Auto-generated catch block
 			webDriver.closeAlertByAccept();
 		}
+		finally{
+			webDriver.closeAlertByAccept();
+		}
 		
 		
 		return edoHomePage;
