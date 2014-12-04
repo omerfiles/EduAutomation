@@ -72,7 +72,7 @@ public class DashboardWidgetTests extends BasicDashboardTest {
 		String className = "1 student class";
 		String courseName = "2 unis";
 		String TeacherUser = "autoTeacher2";
-		String[] unitsAvgScores = new String[] { "25", "10" };
+		String[] unitsAvgScores = new String[] { "75", "50" };
 
 		startStep("Login as the teacher and open the dashboard");
 		EdoHomePage edoHomePage = pageHelper.loginAsTeacher(TeacherUser);
