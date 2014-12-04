@@ -42,12 +42,15 @@ import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.google.common.base.Predicate;
 
 import Enums.AutoParams;
 import Enums.ByTypes;
@@ -1019,6 +1022,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	public void selectElementFromComboBox(String comboboxName,
 			String optionValue) throws Exception {
+		waitUntilComboBoxIsPopulated(comboboxName);
 		selectElementFromComboBox(comboboxName, optionValue, false);
 	}
 
@@ -1029,7 +1033,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			try {
 				Select select = new Select(waitForElement(comboboxName,
 						ByTypes.id));
-				waitForElement(comboboxName, ByTypes.id);
+				// waitForElement(comboboxName, ByTypes.id);
 				List<WebElement> options = select.getOptions();
 				for (int i = 0; i < options.size(); i++) {
 					if (contains == false) {
@@ -1083,7 +1087,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	}
 
 	public String getSelectedValueFromComboBox(String comboBoxId) {
-		WebDriverWait wait = new WebDriverWait(webDriver, timeout, 1000);
+		WebDriverWait wait = new WebDriverWait(webDriver, timeout + 10, 1000);
 		WebElement option = null;
 		try {
 			wait.until(ExpectedConditions.elementToBeClickable(By
@@ -1125,6 +1129,19 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		}
 		return alertText;
 
+	}
+
+	public void waitUntilComboBoxIsPopulated(String comboBoxId) throws Exception {
+		final Select combo = new Select(waitForElement(comboBoxId, ByTypes.id));
+		new FluentWait<WebDriver>(webDriver).withTimeout(20, TimeUnit.SECONDS)
+				.pollingEvery(1, TimeUnit.SECONDS)
+				.until(new Predicate<WebDriver>() {
+
+					public boolean apply(WebDriver webdriver) {
+						// TODO Auto-generated method stub
+						return (!combo.getOptions().isEmpty());
+					}
+				});
 	}
 
 }
