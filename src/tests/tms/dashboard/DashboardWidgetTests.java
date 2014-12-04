@@ -93,21 +93,7 @@ public class DashboardWidgetTests extends BasicDashboardTest {
 
 	}
 
-	@Test
-	public void testCompletionRateWidget() throws Exception {
-		EdoHomePage edoHomePage = pageHelper.loginAsTeacher();
-		DashboardPage dashboardPage = (DashboardPage) edoHomePage
-				.openTeachersCorner(true);
-		dashboardPage.HoverOnBar();
-		String className = dashboardPage.getSelectedClass();
-		String courseName = dashboardPage.getSelectedCourse();
-
-		startStep("Check widget title");
-		String title = dashboardPage.getWidgetTitle(2, 1);
-		testResultService.assertEquals("Completaion Rate", title,
-				"title not found");
-	}
-
+	
 	@Test
 	public void testTPSWidget() throws Exception {
 		EdoHomePage edoHomePage = pageHelper.loginAsTeacher();
