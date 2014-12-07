@@ -133,7 +133,7 @@ public class PageHelperService extends SystemObjectImpl {
 			// TODO Auto-generated catch block
 			webDriver.getUnexpectedAlertDetails();
 		} finally {
-			// webDriver.closeAlertByAccept();
+			 webDriver.closeAlertByAccept();
 		}
 
 		return edoHomePage;
