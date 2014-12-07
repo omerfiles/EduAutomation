@@ -73,7 +73,7 @@ public class PageHelperService extends SystemObjectImpl {
 		this.testResultService = testResultService;
 		this.webDriver = webDriver;
 		this.autoInstitution = autoInstitution;
-		if (!configuration.getProperty("coursesCsvFileName").equals(null)) {
+		if (!configuration.getAutomationParam("coursesCsvFileName",null).equals(null)) {
 			courses = loadCoursedDetailsFromCsv("files/csvFiles/"
 					+ configuration.getProperty("coursesCsvFileName"));
 		} else {
