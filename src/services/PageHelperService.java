@@ -73,7 +73,13 @@ public class PageHelperService extends SystemObjectImpl {
 		this.testResultService = testResultService;
 		this.webDriver = webDriver;
 		this.autoInstitution = autoInstitution;
-		courses = loadCoursedDetailsFromCsv();
+		if (!configuration.getProperty("coursesCsvFileName").equals(null)) {
+			courses = loadCoursedDetailsFromCsv("files/csvFiles/"
+					+ configuration.getProperty("coursesCsvFileName"));
+		} else {
+			courses = loadCoursedDetailsFromCsv();
+		}
+
 		recordings = loadRecordings();
 		student = new Student();
 		teacher = new Teacher();
@@ -125,9 +131,9 @@ public class PageHelperService extends SystemObjectImpl {
 			edoLogoutNeeded = true;
 		} catch (UnhandledAlertException e) {
 			// TODO Auto-generated catch block
-			webDriver.closeAlertByAccept();
+			webDriver.getUnexpectedAlertDetails();
 		} finally {
-			webDriver.closeAlertByAccept();
+			// webDriver.closeAlertByAccept();
 		}
 
 		return edoHomePage;

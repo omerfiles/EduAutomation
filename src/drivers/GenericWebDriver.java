@@ -149,8 +149,8 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		try {
 			webDriver.get(url);
 		} catch (UnhandledAlertException e) {
-			System.out.println(e.toString());
-			closeAlertByAccept();
+			getUnexpectedAlertDetails();
+//			closeAlertByAccept();
 		} catch (Exception e) {
 			System.out.println(e.toString());
 
@@ -239,8 +239,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 		} catch (UnhandledAlertException e) {
 			System.out.println("Closing alert and trying again");
-			closeAlertByAccept();
-			waitForElement(idValue, byType);
+//			closeAlertByAccept();
+			getUnexpectedAlertDetails();
+//			waitForElement(idValue, byType);
 		} catch (NoSuchElementException e) {
 
 			if (isElementMandatory == true) {
@@ -1058,23 +1059,31 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 					testResultService.addFailTest(optionValue
 							+ " was not found in the combo box", true);
 				}
-			} catch (Exception e) {
+			} 
+			
+			catch(UnhandledAlertException e){
+				getUnexpectedAlertDetails();
+			}
+			
+			catch (Exception e) {
 				printScreen("problem selecting from combo box");
 				testResultService.addFailTest(
 						"problem selecting from combo box", true);
 				e.printStackTrace();
 			}
+			
 			System.out.println("Selected " + comboboxName + ": " + selected);
 		}
 	}
 
-	public void printConsoleLogs(String logFilter, boolean useFllter)
+	public List<String[]> printConsoleLogs(String logFilter, boolean useFllter)
 			throws Exception {
+		List<String[]> logList = null;
 		try {
 			textService = new TextService();
 			LogEntries logEntries = getConsoleLogEntries();
-			List<String[]> logList = textService.getListFromLogEntries(
-					logEntries, logFilter, useFllter);
+			logList = textService.getListFromLogEntries(logEntries, logFilter,
+					useFllter);
 			String consoleLogPath = "files/consoleOutput/consoleLog"
 					+ dbService.sig() + ".csv";
 			textService.writeArrayistToCSVFile(consoleLogPath, logList);
@@ -1084,6 +1093,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return logList;
 	}
 
 	public String getSelectedValueFromComboBox(String comboBoxId) {
@@ -1131,17 +1141,37 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	}
 
-	public void waitUntilComboBoxIsPopulated(String comboBoxId) throws Exception {
+	public void waitUntilComboBoxIsPopulated(String comboBoxId)
+			throws Exception {
 		final Select combo = new Select(waitForElement(comboBoxId, ByTypes.id));
-		new FluentWait<WebDriver>(webDriver).withTimeout(20, TimeUnit.SECONDS)
-				.pollingEvery(1, TimeUnit.SECONDS)
-				.until(new Predicate<WebDriver>() {
+		try {
+			new FluentWait<WebDriver>(webDriver).withTimeout(20, TimeUnit.SECONDS)
+					.pollingEvery(1, TimeUnit.SECONDS)
+					.until(new Predicate<WebDriver>() {
 
-					public boolean apply(WebDriver webdriver) {
-						// TODO Auto-generated method stub
-						return (!combo.getOptions().isEmpty());
-					}
-				});
+						public boolean apply(WebDriver webdriver) {
+							// TODO Auto-generated method stub
+							return (!combo.getOptions().isEmpty());
+						}
+					});
+		} catch (UnhandledAlertException e) {
+			// TODO Auto-generated catch block
+			getUnexpectedAlertDetails();
+		}
+	}
+
+	public void getUnexpectedAlertDetails() throws Exception {
+
+		// get alert text
+		String alertText = getAlertText(5);
+		System.out.println("Alert text was: " + alertText);
+		List<String[]> ConsoleLog = printConsoleLogs(null, false);
+		for(int i=0;i<ConsoleLog.size();i++){
+			System.out.println(ConsoleLog.get(i)[0].toString());
+		}
+		// get console log
+		// printscreen alert
+
 	}
 
 }
