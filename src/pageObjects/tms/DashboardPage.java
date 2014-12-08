@@ -128,4 +128,25 @@ public class DashboardPage extends TmsHomePage {
 		webDriver.hoverOnElement(webDriver.waitForElement("tmsDefaultBar",
 				ByTypes.id));
 	}
+
+	public String getPltWidgetContent() throws Exception {
+		String content = webDriver.getElementHTML(webDriver.waitForElement(
+				"PTWidgetCenter", ByTypes.id));
+		return content;
+	}
+
+	public void hoverOnPltWidget() throws Exception {
+
+		WebElement webElement = webDriver.waitForElement(
+				"//div[@id='PTWidget']//canvas[5]", ByTypes.xpath);
+		int width = Integer.parseInt(webElement.getAttribute("width"));
+		int height = Integer.parseInt(webElement.getAttribute("height"));
+		System.out.println("width: " + width + " Height: " + height);
+
+		webDriver.hoverOnElement(webDriver.waitForElement(
+				"//div[@id='PTWidget']//canvas[5]", ByTypes.xpath), width / 4,
+				height / 4);
+		webDriver.printScreen("onhover");
+
+	}
 }

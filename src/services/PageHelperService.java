@@ -73,7 +73,8 @@ public class PageHelperService extends SystemObjectImpl {
 		this.testResultService = testResultService;
 		this.webDriver = webDriver;
 		this.autoInstitution = autoInstitution;
-		if (!configuration.getAutomationParam("coursesCsvFileName",null).equals(null)) {
+		if (!configuration.getAutomationParam("coursesCsvFileName", "coursesCsvFileName")
+				.equals("")) {
 			courses = loadCoursedDetailsFromCsv("files/csvFiles/"
 					+ configuration.getProperty("coursesCsvFileName"));
 		} else {
@@ -133,7 +134,7 @@ public class PageHelperService extends SystemObjectImpl {
 			// TODO Auto-generated catch block
 			webDriver.getUnexpectedAlertDetails();
 		} finally {
-			 webDriver.closeAlertByAccept();
+			webDriver.closeAlertByAccept();
 		}
 
 		return edoHomePage;
@@ -240,10 +241,11 @@ public class PageHelperService extends SystemObjectImpl {
 
 	public List<Course> loadCoursedDetailsFromCsv() throws Exception {
 		// "files/csvFiles/Courses.csv"
-		String filepath = configuration.getProperty("coursesFilePath");
-		if (filepath == null) {
-			filepath = "files/csvFiles/Courses.csv";
-		}
+//		String filepath = configuration.getAutomationParam("coursesFilePath",
+//				null);
+//		if (filepath == null) {
+		String	filepath = "files/csvFiles/Courses.csv";
+//		}
 		return loadCoursedDetailsFromCsv(filepath);
 	}
 

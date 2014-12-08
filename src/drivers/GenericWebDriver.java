@@ -928,6 +928,12 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		this.sleep(2000);
 
 	}
+	public void hoverOnElement(WebElement element,int x,int y) throws Exception {
+		Actions builder = new Actions(webDriver);
+		builder.moveToElement(element,x,y).perform();
+		this.sleep(2000);
+
+	}
 
 	public void executeJsScript(String script) throws Exception {
 		// ScriptEngineManager factory = new ScriptEngineManager();

@@ -53,9 +53,9 @@ public class DashboardWidgetTests extends BasicDashboardTest {
 		testResultService.assertEquals("Completion Rate", title,
 				"title not found");
 
-//		startStep("Check that chart is displayed");
-//		testResultService.assertTrue("Chart has no data",
-//				dashboardPage.checkIfWidgetHasData(1, 1));
+		// startStep("Check that chart is displayed");
+		// testResultService.assertTrue("Chart has no data",
+		// dashboardPage.checkIfWidgetHasData(1, 1));
 
 		startStep("Click widget link button and check the report opens");
 		dashboardPage.clickOnCompletionWidgetButton();
@@ -93,7 +93,6 @@ public class DashboardWidgetTests extends BasicDashboardTest {
 
 	}
 
-	
 	@Test
 	public void testTPSWidget() throws Exception {
 		EdoHomePage edoHomePage = pageHelper.loginAsTeacher();
@@ -105,8 +104,7 @@ public class DashboardWidgetTests extends BasicDashboardTest {
 
 		startStep("Check widget title");
 		String title = dashboardPage.getWidgetTitle(1, 2);
-		testResultService.assertEquals("Avg. Scores", title,
-				"title not found");
+		testResultService.assertEquals("Avg. Scores", title, "title not found");
 	}
 
 	@Test
@@ -125,6 +123,8 @@ public class DashboardWidgetTests extends BasicDashboardTest {
 
 		startStep("Check that chart is displayed");
 		dashboardPage.checkIfWidgetHasData(3, 1);
+		dashboardPage.hoverOnPltWidget();
+		System.out.println(dashboardPage.getPltWidgetContent());
 		startStep("Click widget link button and check the report opens");
 
 		startStep("Click on report link, check that report opens and check selected class");
