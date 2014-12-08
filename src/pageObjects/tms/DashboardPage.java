@@ -38,6 +38,10 @@ public class DashboardPage extends TmsHomePage {
 		webDriver.selectElementFromComboBox(SELECT_COURSE, courseName);
 	}
 
+	public void selectCourseInDashboardByIndex(int index) throws Exception {
+		webDriver.selectElementFromComboBoByIndex(SELECT_COURSE, index);
+	}
+
 	public void clickOnDashboardGoButton() throws Exception {
 		webDriver.waitForElement("goButton", ByTypes.id).click();
 	}
@@ -155,5 +159,12 @@ public class DashboardPage extends TmsHomePage {
 				"//div[@id='PTWidgetCenter']//div[@class='coursePercentage']",
 				ByTypes.xpath).getText();
 		return text;
+	}
+
+	public String getPltComletedStudents() throws Exception,
+			NumberFormatException {
+		String pltStudents = webDriver.waitForElement("PTWidgetTotalNumber",
+				ByTypes.id).getText();
+		return pltStudents;
 	}
 }

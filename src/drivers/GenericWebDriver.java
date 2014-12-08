@@ -1032,6 +1032,32 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		waitUntilComboBoxIsPopulated(comboboxName);
 		selectElementFromComboBox(comboboxName, optionValue, false);
 	}
+	
+	public void selectElementFromComboBoByIndex(String comboboxName, int index) throws Exception {
+		boolean selected = false;
+		{
+			try {
+				Select select = new Select(waitForElement(comboboxName,
+						ByTypes.id));
+				List<WebElement> options = select.getOptions();
+				select.selectByIndex(index);			
+				
+			} 
+			
+			catch(UnhandledAlertException e){
+				getUnexpectedAlertDetails();
+			}
+			
+			catch (Exception e) {
+				printScreen("problem selecting from combo box");
+				testResultService.addFailTest(
+						"problem selecting from combo box", true);
+				e.printStackTrace();
+			}
+			
+			System.out.println("Selected " + comboboxName + ": " + selected);
+		}
+	}
 
 	public void selectElementFromComboBox(String comboboxName,
 			String optionValue, boolean contains) throws Exception {

@@ -18,7 +18,7 @@ public class BasicDashboardTest extends EdusoftWebTest {
 
 	protected String classWithLastProgress;
 	protected String courseWithLastProgress;
-	
+
 	public static final String FIRST_DISCOVERIES = "First Discoveries";
 
 	@Before
@@ -31,15 +31,16 @@ public class BasicDashboardTest extends EdusoftWebTest {
 		super.tearDown();
 	}
 
-	public void getClassAndCourseWithLastProgress(String teacherName,UserType userType)
-			throws Exception {
+	public void getClassAndCourseWithLastProgress(String teacherName,
+			UserType userType) throws Exception {
 		String[] str = dbService.getClassAndCourseWithLastProgress(teacherName,
-				autoInstitution.getInstitutionId(),userType);
+				autoInstitution.getInstitutionId(), userType);
 		classWithLastProgress = str[0];
 		courseWithLastProgress = str[1];
 	}
-	
-	public List<String[]>getClassPltScores(String className,String institutionName) throws Exception{
+
+	public List<String[]> getClassPltScores(String className,
+			String institutionName) throws Exception {
 		String sql = textService.getTextFromFile(
 				"files/sqlFiles/getPltScore.txt", Charset.defaultCharset());
 
@@ -50,11 +51,15 @@ public class BasicDashboardTest extends EdusoftWebTest {
 		List<String[]> list = rsList.get(2);
 		return rsList.get(2);
 	}
-	
-	
-	
 
-	
+	public int getNumberOfStudentWithPltScores(List<String[]> list) {
+		int count = 0;
+		for (int i = 0; i < list.size(); i++) {
+			count += Integer.parseInt(list.get(i)[0]);
+		}
+		System.out.println("with plt:"+count);
+		return count;
+		
+	}
 
-	
 }

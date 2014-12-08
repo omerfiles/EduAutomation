@@ -688,9 +688,9 @@ public class DbService extends SystemObjectImpl {
 
 	}
 
-	public String getNumberOfStudentsInClass(String className) throws Exception {
+	public String getNumberOfStudentsInClass(String className,String institutionId) throws Exception {
 		String sql = "  select count(*) from classUsers as cu,class as c where cu.classId=c.classId and c.name='"
-				+ className + "'";
+				+ className + "' and c.InstitutionId="+institutionId;
 		String result = getStringFromQuery(sql);
 		return result;
 	}

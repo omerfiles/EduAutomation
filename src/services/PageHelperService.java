@@ -73,8 +73,8 @@ public class PageHelperService extends SystemObjectImpl {
 		this.testResultService = testResultService;
 		this.webDriver = webDriver;
 		this.autoInstitution = autoInstitution;
-		if (!configuration.getAutomationParam("coursesCsvFileName", "coursesCsvFileName")
-				.equals("")) {
+		if (!configuration.getAutomationParam("coursesCsvFileName",
+				"coursesCsvFileName").equals("")) {
 			courses = loadCoursedDetailsFromCsv("files/csvFiles/"
 					+ configuration.getProperty("coursesCsvFileName"));
 		} else {
@@ -141,14 +141,14 @@ public class PageHelperService extends SystemObjectImpl {
 	}
 
 	public EdoHomePage loginAsTeacher() throws Exception {
-		return loginAsTeacher(configuration.getProperty("teacher.username"));
+		return loginAsTeacher(configuration.getProperty("teacher.username"),configuration.getProperty("institutaion.subdomain"));
 	}
 
-	public EdoHomePage loginAsTeacher(String teacherUserName) throws Exception {
+	public EdoHomePage loginAsTeacher(String teacherUserName,String instSubDomain) throws Exception {
 		teacher.setUserName(teacherUserName);
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver,
 				testResultService);
-		edoLoginPage.OpenPage(getSutAndSubDomain());
+		edoLoginPage.OpenPage(getSutAndSubDomain(instSubDomain));
 
 		teacher.setPassword(configuration.getProperty("teacher.password"));
 		setUserLoginToNull(dbService.getUserIdByUserName(teacherUserName,
@@ -227,9 +227,14 @@ public class PageHelperService extends SystemObjectImpl {
 	}
 
 	public String getSutAndSubDomain() {
+		return getSutAndSubDomain(configuration
+				.getProperty("institutaion.subdomain"));
+	}
+
+	public String getSutAndSubDomain(String subDomanin) {
 		String str = configuration.getAutomationParam(
 				AutoParams.sutUrl.toString(), AutoParams.sutUrl.toString())
-				+ "//" + configuration.getProperty("institutaion.subdomain");
+				+ "//" + subDomanin;
 		System.out.println("SUT is: " + str);
 		return str;
 
@@ -241,11 +246,11 @@ public class PageHelperService extends SystemObjectImpl {
 
 	public List<Course> loadCoursedDetailsFromCsv() throws Exception {
 		// "files/csvFiles/Courses.csv"
-//		String filepath = configuration.getAutomationParam("coursesFilePath",
-//				null);
-//		if (filepath == null) {
-		String	filepath = "files/csvFiles/Courses.csv";
-//		}
+		// String filepath = configuration.getAutomationParam("coursesFilePath",
+		// null);
+		// if (filepath == null) {
+		String filepath = "files/csvFiles/Courses.csv";
+		// }
 		return loadCoursedDetailsFromCsv(filepath);
 	}
 

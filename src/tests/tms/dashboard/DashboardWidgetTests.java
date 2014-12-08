@@ -1,5 +1,7 @@
 package tests.tms.dashboard;
 
+import java.util.List;
+
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
 
@@ -8,8 +10,6 @@ import pageObjects.EdoHomePage;
 import pageObjects.tms.DashboardPage;
 
 public class DashboardWidgetTests extends BasicDashboardTest {
-
-	
 
 	@Test
 	public void testClassCompletionWidget() throws Exception {
@@ -77,7 +77,8 @@ public class DashboardWidgetTests extends BasicDashboardTest {
 		String[] unitsAvgScores = new String[] { "75", "50" };
 
 		startStep("Login as the teacher and open the dashboard");
-		EdoHomePage edoHomePage = pageHelper.loginAsTeacher(TeacherUser);
+		EdoHomePage edoHomePage = pageHelper.loginAsTeacher(TeacherUser,
+				configuration.getProperty("institutaion.subdomain"));
 		DashboardPage dashboardPage = (DashboardPage) edoHomePage
 				.openTeachersCorner(true);
 
@@ -111,12 +112,19 @@ public class DashboardWidgetTests extends BasicDashboardTest {
 
 	@Test
 	public void testPLTWidget() throws Exception {
-		EdoHomePage edoHomePage = pageHelper.loginAsTeacher();
+		String classNameForTest = "class100";
+		String schoolName = "qa";
+		autoInstitution.setInstitutionId("5230002");
+		autoInstitution.setInstitutionName(schoolName);
+
+		EdoHomePage edoHomePage = pageHelper.loginAsTeacher("autoTeacher",
+				"qa.aspx");
 		DashboardPage dashboardPage = (DashboardPage) edoHomePage
 				.openTeachersCorner(true);
 		dashboardPage.HoverOnBar();
-		String className = dashboardPage.getSelectedClass();
-		String courseName = dashboardPage.getSelectedCourse();
+		dashboardPage.selectClassInDashBoard(classNameForTest);
+		dashboardPage.selectCourseInDashboardByIndex(1);
+		dashboardPage.clickOnDashboardGoButton();
 
 		startStep("Check widget title");
 		String title = dashboardPage.getWidgetTitle(3, 1);
@@ -125,9 +133,23 @@ public class DashboardWidgetTests extends BasicDashboardTest {
 
 		startStep("Check that chart is displayed");
 		dashboardPage.checkIfWidgetHasData(3, 1);
+		//hover on first discoveries
 		dashboardPage.hoverOnPltWidget();
 		System.out.println(dashboardPage.getPltWidgetContent());
-		String numOfStudents= dashboardPage.getNumberOfStudentsPerPltLevel();
+		String numOfStudentsPerLevel = dashboardPage
+				.getNumberOfStudentsPerPltLevel();
+		List<String[]> pltScores = getClassPltScores(classNameForTest,
+				schoolName);
+		testResultService.assertEquals(pltScores.get(0)[0],
+				numOfStudentsPerLevel);
+
+		String numOfStudentWithPLTScores =String.valueOf(getNumberOfStudentWithPltScores(pltScores)) ;
+		testResultService.assertEquals(numOfStudentWithPLTScores, dashboardPage.getPltComletedStudents());
+		
+		
+		//TODO - check filled person
+		
+		
 		startStep("Click widget link button and check the report opens");
 
 		startStep("Click on report link, check that report opens and check selected class");
@@ -138,5 +160,4 @@ public class DashboardWidgetTests extends BasicDashboardTest {
 		// testResultService.assertEquals(className,
 		// dashboardPage.getSelectedClassInReport());
 	}
-
 }

@@ -33,7 +33,7 @@ public class DashboardHeaderTests extends BasicDashboardTest {
 		
 		startStep("Check number of students");
 		testResultService.assertEquals(
-				dbService.getNumberOfStudentsInClass(classToSelect),
+				dbService.getNumberOfStudentsInClass(classToSelect,autoInstitution.getInstitutionId()),
 				dashboardPage.getNumberOfStudentsPerClass(),"Number of students label");
 
 		startStep("Navigate to another report");
