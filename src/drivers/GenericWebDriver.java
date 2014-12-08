@@ -675,7 +675,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			// If test is running using jenkins ci
 			if (runner == TestRunnerType.CI) {
 
-				newFileName = configuration.getProperty("logserver") + "\\\\"
+				
+				
+				newFileName = configuration.getGlobalProperties("logServer") + "\\\\"
 						+ configuration.getProperty("screenshotFolder")
 						+ "\\\\ScreenShot" + message.replace(" ", "") + sig
 						+ ".png";
