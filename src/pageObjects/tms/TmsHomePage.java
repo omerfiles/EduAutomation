@@ -831,7 +831,7 @@ public class TmsHomePage extends GenericPage {
 		webDriver.waitForElement("resultRoot", ByTypes.id).isDisplayed();
 	}
 
-	public String getSelectedCourseInReport() {
+	public String getSelectedCourseInReport() throws Exception {
 		String course = webDriver.getSelectedValueFromComboBox("SelectCourse");
 		return course;
 	}

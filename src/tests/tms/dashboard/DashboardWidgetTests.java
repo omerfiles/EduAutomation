@@ -9,6 +9,8 @@ import pageObjects.tms.DashboardPage;
 
 public class DashboardWidgetTests extends BasicDashboardTest {
 
+	
+
 	@Test
 	public void testClassCompletionWidget() throws Exception {
 
@@ -125,6 +127,7 @@ public class DashboardWidgetTests extends BasicDashboardTest {
 		dashboardPage.checkIfWidgetHasData(3, 1);
 		dashboardPage.hoverOnPltWidget();
 		System.out.println(dashboardPage.getPltWidgetContent());
+		String numOfStudents= dashboardPage.getNumberOfStudentsPerPltLevel();
 		startStep("Click widget link button and check the report opens");
 
 		startStep("Click on report link, check that report opens and check selected class");

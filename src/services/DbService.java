@@ -2,9 +2,11 @@ package services;
 
 import static org.junit.Assert.fail;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.SQLXML;
 import java.sql.Statement;
@@ -691,6 +693,54 @@ public class DbService extends SystemObjectImpl {
 				+ className + "'";
 		String result = getStringFromQuery(sql);
 		return result;
+	}
+
+	public List<List> getListFromStoreRrecedure(String sql)
+			throws SQLException {
+		List<List> rsList = new ArrayList<List>();
+		try {
+			db_userid = configuration.getProperty("db.connection.username");
+			db_password = configuration.getProperty("db.connection.password");
+			conn = DriverManager.getConnection(getDbConnString(), db_userid,
+					db_password);
+			System.out.println("connected");
+			if (conn.isClosed() == true) {
+				System.out.println("connection is closed");
+			}
+			// statement = conn.createStatement();
+
+			CallableStatement statement = conn.prepareCall(sql);
+//			for (int i = 0; i < params.length; i++) {
+//				statement.setString(i, params[i]);
+//			}
+
+			boolean results = statement.execute();
+			int rsCount = 0;
+			while (results) {
+				List<String[]> strList = new ArrayList<String[]>();
+				ResultSet rs = statement.getResultSet();
+				ResultSetMetaData rsmd = rs.getMetaData();
+
+				int columnsNumber = rsmd.getColumnCount();
+
+				while (rs.next()) {
+					String[] strArr = new String[columnsNumber];
+					for (int i = 0; i < columnsNumber; i++) {
+						strArr[i] = rs.getString(i + 1);
+					}
+					strList.add(strArr);
+				}
+
+				rs.close();
+				rsList.add(strList);
+				results = statement.getMoreResults();
+			}
+			statement.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return rsList;
 	}
 	// s}
 

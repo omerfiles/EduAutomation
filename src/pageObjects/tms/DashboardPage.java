@@ -149,4 +149,11 @@ public class DashboardPage extends TmsHomePage {
 		webDriver.printScreen("onhover");
 
 	}
+
+	public String getNumberOfStudentsPerPltLevel() throws Exception {
+		String text = webDriver.waitForElement(
+				"//div[@id='PTWidgetCenter']//div[@class='coursePercentage']",
+				ByTypes.xpath).getText();
+		return text;
+	}
 }

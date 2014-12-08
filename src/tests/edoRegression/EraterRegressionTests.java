@@ -236,7 +236,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 
 	// Test case: 13569,13572,13573
 	@Test
-	@TestCaseParams(testCaseID = "")
+@TestCaseParams(testCaseID = { "13569,13572,13573" })
 	public void testAddTeacherCommentToStudentAssignment() throws Exception {
 		startStep("Create a student for the test");
 		String StudentUserName = "student" + dbService.sig(6);

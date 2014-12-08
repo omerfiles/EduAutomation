@@ -1102,10 +1102,11 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		return logList;
 	}
 
-	public String getSelectedValueFromComboBox(String comboBoxId) {
+	public String getSelectedValueFromComboBox(String comboBoxId) throws Exception {
 		WebDriverWait wait = new WebDriverWait(webDriver, timeout + 10, 1000);
 		WebElement option = null;
 		try {
+			waitUntilComboBoxIsPopulated(comboBoxId);
 			wait.until(ExpectedConditions.elementToBeClickable(By
 					.id(comboBoxId)));
 			Select select = new Select(webDriver.findElement(By.id(comboBoxId)));

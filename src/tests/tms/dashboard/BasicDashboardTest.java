@@ -1,5 +1,8 @@
 package tests.tms.dashboard;
 
+import java.nio.charset.Charset;
+import java.util.List;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,6 +18,8 @@ public class BasicDashboardTest extends EdusoftWebTest {
 
 	protected String classWithLastProgress;
 	protected String courseWithLastProgress;
+	
+	public static final String FIRST_DISCOVERIES = "First Discoveries";
 
 	@Before
 	public void setup() throws Exception {
@@ -32,6 +37,18 @@ public class BasicDashboardTest extends EdusoftWebTest {
 				autoInstitution.getInstitutionId(),userType);
 		classWithLastProgress = str[0];
 		courseWithLastProgress = str[1];
+	}
+	
+	public List<String[]>getClassPltScores(String className,String institutionName) throws Exception{
+		String sql = textService.getTextFromFile(
+				"files/sqlFiles/getPltScore.txt", Charset.defaultCharset());
+
+		sql = sql.replace("%classPara%", className);
+		sql = sql.replace("%institutionParam%", institutionName);
+
+		List<List> rsList = dbService.getListFromStoreRrecedure(sql);
+		List<String[]> list = rsList.get(2);
+		return rsList.get(2);
 	}
 	
 	

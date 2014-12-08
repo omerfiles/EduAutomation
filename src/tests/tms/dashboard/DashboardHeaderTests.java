@@ -14,7 +14,7 @@ public class DashboardHeaderTests extends BasicDashboardTest {
 	public void TestKeepSelectedClassAndCourseWhenNavigating() throws Exception {
 
 		String classToSelect = "class015";
-		String courseToSelect = "Basic 2";
+		String courseToSelect = "Basic 2 V1";
 
 		startStep("Login as a teacher and open the dashboard");
 		EdoHomePage edoHomePage = pageHelper.loginAsTeacher();
@@ -101,7 +101,8 @@ public class DashboardHeaderTests extends BasicDashboardTest {
 				selectedClass.equals(null) == false);
 
 	}
-
+	
+//http://vstf2013:8080/tfs/DefaultCollection/EdusoftDev/_workitems#_a=edit&id=17894
 	@Test
 	@TestCaseParams(testCaseID = { "16997" })
 	public void testCheckClassAndCourseWithLastProgressAreSelectedAsTeacher()
