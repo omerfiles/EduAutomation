@@ -677,14 +677,14 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 				
 				
-				newFileName = configuration.getGlobalProperties("logServer") + "\\\\"
+				newFileName = configuration.getGlobalProperties("logserver") + "\\\\"
 						+ configuration.getProperty("screenshotFolder")
 						+ "\\\\ScreenShot" + message.replace(" ", "") + sig
 						+ ".png";
 				System.out.println("File path is :" + newFileName);
 
 				path = "http://"
-						+ configuration.getProperty("logserver").replace("\\",
+						+ configuration.getGlobalProperties("logserver").replace("\\",
 								"") + "/"
 						+ configuration.getProperty("screenshotFolder")
 						+ "/ScreenShot" + message.replace(" ", "") + sig
@@ -1100,6 +1100,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			}
 			
 			catch (Exception e) {
+				System.out.println(e.toString());
 				printScreen("problem selecting from combo box");
 				testResultService.addFailTest(
 						"problem selecting from combo box", true);
