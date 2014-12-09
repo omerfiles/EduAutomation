@@ -65,6 +65,7 @@ public class DashboardWidgetTests extends BasicDashboardTest {
 		dashboardPage.checkForReportResults();
 		testResultService.assertEquals(courseName,
 				dashboardPage.getSelectedCourseInReport());
+
 	}
 
 	@Test
@@ -94,6 +95,10 @@ public class DashboardWidgetTests extends BasicDashboardTest {
 		testResultService.assertEquals(unitsAvgScores[0], scoreUnit1);
 		testResultService.assertEquals(unitsAvgScores[1], scoreUnit2);
 
+		startStep("Check tooltip");
+		dashboardPage.hoverOnClassScoreTooltip(0);
+		dashboardPage.checkClassScoreToolipContent("Unit 1", scoreUnit1,null);
+
 	}
 
 	@Test
@@ -121,11 +126,14 @@ public class DashboardWidgetTests extends BasicDashboardTest {
 				"qa.aspx");
 		DashboardPage dashboardPage = (DashboardPage) edoHomePage
 				.openTeachersCorner(true);
-		dashboardPage.HoverOnBar();
-		dashboardPage.selectClassInDashBoard(classNameForTest);
+//		dashboardPage.HoverOnBar();
+//		dashboardPage.selectClassInDashBoard(classNameForTest);
+		dashboardPage.hoverOnHeaderAndSelectFromClassCombo(classNameForTest);
 		dashboardPage.selectCourseInDashboardByIndex(1);
+		dashboardPage.HoverOnBar();
 		dashboardPage.clickOnDashboardGoButton();
 
+		sleep(10);
 		startStep("Check widget title");
 		String title = dashboardPage.getWidgetTitle(3, 1);
 		testResultService.assertEquals("Placement Test", title,
@@ -133,7 +141,7 @@ public class DashboardWidgetTests extends BasicDashboardTest {
 
 		startStep("Check that chart is displayed");
 		dashboardPage.checkIfWidgetHasData(3, 1);
-		//hover on first discoveries
+		// hover on first discoveries
 		dashboardPage.hoverOnPltWidget();
 		System.out.println(dashboardPage.getPltWidgetContent());
 		String numOfStudentsPerLevel = dashboardPage
@@ -143,13 +151,13 @@ public class DashboardWidgetTests extends BasicDashboardTest {
 		testResultService.assertEquals(pltScores.get(0)[0],
 				numOfStudentsPerLevel);
 
-		String numOfStudentWithPLTScores =String.valueOf(getNumberOfStudentWithPltScores(pltScores)) ;
-		testResultService.assertEquals(numOfStudentWithPLTScores, dashboardPage.getPltComletedStudents());
-		
-		
-		//TODO - check filled person
-		
-		
+		String numOfStudentWithPLTScores = String
+				.valueOf(getNumberOfStudentWithPltScores(pltScores));
+		testResultService.assertEquals(numOfStudentWithPLTScores,
+				dashboardPage.getPltComletedStudents());
+
+		// TODO - check filled person
+
 		startStep("Click widget link button and check the report opens");
 
 		startStep("Click on report link, check that report opens and check selected class");

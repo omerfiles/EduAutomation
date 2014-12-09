@@ -53,7 +53,7 @@ public class EdusoftBasicTest extends TestCase {
 	protected boolean enableLoggin = false;
 
 	protected String logFilter = null;
-	private int testTimeoutInSeconds=3000;
+	private int testTimeoutInSeconds = 3000;
 
 	protected boolean inStep = false;
 	protected String testCaseId = null;
@@ -104,9 +104,9 @@ public class EdusoftBasicTest extends TestCase {
 	// public Timeout timeout=new Timeout(300000);//5 minutes timeout
 
 	@Rule
-	public final  TestRule testTimeOut = Timeout.builder()
-			.withTimeout(testTimeoutInSeconds, TimeUnit.SECONDS).withLookingForStuckThread(true)
-			.build();
+	public final TestRule testTimeOut = Timeout.builder()
+			.withTimeout(testTimeoutInSeconds, TimeUnit.SECONDS)
+			.withLookingForStuckThread(true).build();
 
 	// public static Reporter report = ListenerstManager.getInstance();
 
@@ -148,7 +148,7 @@ public class EdusoftBasicTest extends TestCase {
 
 		// System.out.println("Automation isntitution id is: "
 		// + autoInstitution.getInstitutionId());
-		
+
 	}
 
 	public void sleep(int seconds) throws Exception {
@@ -161,8 +161,20 @@ public class EdusoftBasicTest extends TestCase {
 		// report.startLevel("Test case id is: " + this.testCaseId,
 		// EnumReportLevel.MainFrame);
 
-		textService.writeArrayistToCSVFile(System.getProperty("user.dir")
-				+ "/log//current//TestLog.csv", report.getReportLogs());
+		// textService.writeArrayistToCSVFile(System.getProperty("user.dir")
+		// + "/log//current//TestLog.csv", report.getReportLogs());
+		String testLogFIle = "testlog" + dbService.sig() + ".csv";
+		testLogFIle=configuration.getGlobalProperties("logserver")
+				+ "\\automationLogs\\" + testLogFIle;
+		textService.writeArrayistToCSVFile(
+				testLogFIle,
+				report.getReportLogs());
+		String	path = "http:"+testLogFIle;
+		System.out.println("Test log can be found here: "+ path);
+				
+		
+		
+		
 		boolean testHasFailedResult = testResultService.hasFailedResults();
 		if (printResults == true && testHasFailedResult) {
 			testResultService.printAllFailures();
@@ -193,7 +205,7 @@ public class EdusoftBasicTest extends TestCase {
 		}
 		// report.step(stepName);
 		report.startLevel(stepName, EnumReportLevel.CurrentPlace);
-//		System.out.println("Step: " + stepName);
+		// System.out.println("Step: " + stepName);
 		inStep = true;
 	}
 

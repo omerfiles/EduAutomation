@@ -150,7 +150,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			webDriver.get(url);
 		} catch (UnhandledAlertException e) {
 			getUnexpectedAlertDetails();
-//			closeAlertByAccept();
+			// closeAlertByAccept();
 		} catch (Exception e) {
 			System.out.println(e.toString());
 
@@ -239,9 +239,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 		} catch (UnhandledAlertException e) {
 			System.out.println("Closing alert and trying again");
-//			closeAlertByAccept();
+			// closeAlertByAccept();
 			getUnexpectedAlertDetails();
-//			waitForElement(idValue, byType);
+			// waitForElement(idValue, byType);
 		} catch (NoSuchElementException e) {
 
 			if (isElementMandatory == true) {
@@ -279,6 +279,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 					testResultService.addFailTest("Element: " + idValue
 							+ " not found. Description:" + message);
 				}
+				printScreen("Element: " + idValue + " not found ");
 				Assert.fail("Element: " + idValue + " not found " + message);
 
 			}
@@ -675,17 +676,16 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			// If test is running using jenkins ci
 			if (runner == TestRunnerType.CI) {
 
-				
-				
-				newFileName = configuration.getGlobalProperties("logserver") + "\\\\"
+				newFileName = configuration.getGlobalProperties("logserver")
+						+ "\\\\"
 						+ configuration.getProperty("screenshotFolder")
 						+ "\\\\ScreenShot" + message.replace(" ", "") + sig
 						+ ".png";
 				System.out.println("File path is :" + newFileName);
 
 				path = "http://"
-						+ configuration.getGlobalProperties("logserver").replace("\\",
-								"") + "/"
+						+ configuration.getGlobalProperties("logserver")
+								.replace("\\", "") + "/"
 						+ configuration.getProperty("screenshotFolder")
 						+ "/ScreenShot" + message.replace(" ", "") + sig
 						+ ".png";
@@ -930,9 +930,11 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		this.sleep(2000);
 
 	}
-	public void hoverOnElement(WebElement element,int x,int y) throws Exception {
+
+	public void hoverOnElement(WebElement element, int x, int y)
+			throws Exception {
 		Actions builder = new Actions(webDriver);
-		builder.moveToElement(element,x,y).perform();
+		builder.moveToElement(element, x, y).perform();
 		this.sleep(2000);
 
 	}
@@ -1034,29 +1036,30 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		waitUntilComboBoxIsPopulated(comboboxName);
 		selectElementFromComboBox(comboboxName, optionValue, false);
 	}
-	
-	public void selectElementFromComboBoByIndex(String comboboxName, int index) throws Exception {
+
+	public void selectElementFromComboBoByIndex(String comboboxName, int index)
+			throws Exception {
 		boolean selected = false;
 		{
 			try {
 				Select select = new Select(waitForElement(comboboxName,
 						ByTypes.id));
 				List<WebElement> options = select.getOptions();
-				select.selectByIndex(index);			
-				
-			} 
-			
-			catch(UnhandledAlertException e){
+				select.selectByIndex(index);
+
+			}
+
+			catch (UnhandledAlertException e) {
 				getUnexpectedAlertDetails();
 			}
-			
+
 			catch (Exception e) {
 				printScreen("problem selecting from combo box");
 				testResultService.addFailTest(
 						"problem selecting from combo box", true);
 				e.printStackTrace();
 			}
-			
+
 			System.out.println("Selected " + comboboxName + ": " + selected);
 		}
 	}
@@ -1093,12 +1096,12 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 					testResultService.addFailTest(optionValue
 							+ " was not found in the combo box", true);
 				}
-			} 
-			
-			catch(UnhandledAlertException e){
+			}
+
+			catch (UnhandledAlertException e) {
 				getUnexpectedAlertDetails();
 			}
-			
+
 			catch (Exception e) {
 				System.out.println(e.toString());
 				printScreen("problem selecting from combo box");
@@ -1106,7 +1109,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 						"problem selecting from combo box", true);
 				e.printStackTrace();
 			}
-			
+
 			System.out.println("Selected " + comboboxName + ": " + selected);
 		}
 	}
@@ -1131,7 +1134,8 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		return logList;
 	}
 
-	public String getSelectedValueFromComboBox(String comboBoxId) throws Exception {
+	public String getSelectedValueFromComboBox(String comboBoxId)
+			throws Exception {
 		WebDriverWait wait = new WebDriverWait(webDriver, timeout + 10, 1000);
 		WebElement option = null;
 		try {
@@ -1181,7 +1185,8 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			throws Exception {
 		final Select combo = new Select(waitForElement(comboBoxId, ByTypes.id));
 		try {
-			new FluentWait<WebDriver>(webDriver).withTimeout(20, TimeUnit.SECONDS)
+			new FluentWait<WebDriver>(webDriver)
+					.withTimeout(20, TimeUnit.SECONDS)
 					.pollingEvery(1, TimeUnit.SECONDS)
 					.until(new Predicate<WebDriver>() {
 
@@ -1202,11 +1207,26 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		String alertText = getAlertText(5);
 		System.out.println("Alert text was: " + alertText);
 		List<String[]> ConsoleLog = printConsoleLogs(null, false);
-		for(int i=0;i<ConsoleLog.size();i++){
+		for (int i = 0; i < ConsoleLog.size(); i++) {
 			System.out.println(ConsoleLog.get(i)[0].toString());
 		}
 		// get console log
 		// printscreen alert
+
+	}
+
+	public WebElement findElementByXpath(String value, ByTypes byType) {
+		return webDriver.findElement(By.xpath(value));
+	}
+
+	public void HoverOnElementAndmoveToComboBoxElementAndSelectValue(
+			WebElement hoverElement, 
+			String comboboxName, String value) throws Exception {
+		Actions actions = new Actions(webDriver);
+		actions.moveToElement(hoverElement)
+				.moveToElement(webDriver.findElementById(comboboxName))
+				.clickAndHold().perform();
+		selectElementFromComboBox(comboboxName, value);
 
 	}
 

@@ -1,6 +1,8 @@
 package pageObjects.tms;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 
 import Enums.ByTypes;
 import drivers.GenericWebDriver;
@@ -130,7 +132,15 @@ public class DashboardPage extends TmsHomePage {
 
 	public void HoverOnBar() throws Exception {
 		webDriver.hoverOnElement(webDriver.waitForElement("tmsDefaultBar",
-				ByTypes.id));
+				ByTypes.id),50,50);
+		Thread.sleep(500);
+	}
+	public void hoverOnHeaderAndSelectFromClassCombo(String value)throws Exception{
+		WebElement hoverElement=webDriver.waitForElement("tmsDefaultBar", ByTypes.id);
+//		WebElement selectElement= webDriver.waitForElement(SELECT_CLASS, ByTypes.xpath);
+		
+		
+		webDriver.HoverOnElementAndmoveToComboBoxElementAndSelectValue( hoverElement,SELECT_CLASS, value );
 	}
 
 	public String getPltWidgetContent() throws Exception {
@@ -166,5 +176,21 @@ public class DashboardPage extends TmsHomePage {
 		String pltStudents = webDriver.waitForElement("PTWidgetTotalNumber",
 				ByTypes.id).getText();
 		return pltStudents;
+	}
+
+	public void hoverOnClassScoreTooltip(int scoreIndex) throws Exception {
+		WebElement tooltip = webDriver.waitForElement(
+				"//div[contains(@class,'point-'" + scoreIndex + ")]",
+				ByTypes.xpath);
+		webDriver.hoverOnElement(tooltip);
+
+	}
+
+	public void checkClassScoreToolipContent(String unitName, String grade,
+			String numOfStudents) throws Exception {
+		WebElement tooltip = webDriver.waitForElement("//div[@role='tooltip']",
+				ByTypes.xpath);
+		System.out.println(webDriver.getElementHTML(tooltip));
+
 	}
 }
