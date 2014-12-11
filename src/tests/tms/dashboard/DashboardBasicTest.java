@@ -14,7 +14,7 @@ import pageObjects.EdoHomePage;
 import pageObjects.tms.DashboardPage;
 import tests.misc.EdusoftWebTest;
 
-public class BasicDashboardTest extends EdusoftWebTest {
+public class DashboardBasicTest extends EdusoftWebTest {
 
 	protected String classWithLastProgress;
 	protected String courseWithLastProgress;
@@ -39,6 +39,7 @@ public class BasicDashboardTest extends EdusoftWebTest {
 				autoInstitution.getInstitutionId(), userType);
 		classWithLastProgress = str[0];
 		courseWithLastProgress = str[1];
+		courseWithLastProgress=courseWithLastProgress.replaceAll("\\s+$", "");
 	}
 
 	public List<String[]> getClassPltScores(String className,

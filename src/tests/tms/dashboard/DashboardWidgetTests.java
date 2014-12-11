@@ -9,7 +9,7 @@ import Interfaces.TestCaseParams;
 import pageObjects.EdoHomePage;
 import pageObjects.tms.DashboardPage;
 
-public class DashboardWidgetTests extends BasicDashboardTest {
+public class DashboardWidgetTests extends DashboardBasicTest {
 
 	@Test
 	public void testClassCompletionWidget() throws Exception {
@@ -17,7 +17,7 @@ public class DashboardWidgetTests extends BasicDashboardTest {
 		EdoHomePage edoHomePage = pageHelper.loginAsTeacher();
 		DashboardPage dashboardPage = (DashboardPage) edoHomePage
 				.openTeachersCorner(true);
-		dashboardPage.HoverOnBar();
+		dashboardPage.ClickOnBar();
 		String className = dashboardPage.getSelectedClass();
 		String courseName = dashboardPage.getSelectedCourse();
 
@@ -46,7 +46,7 @@ public class DashboardWidgetTests extends BasicDashboardTest {
 		EdoHomePage edoHomePage = pageHelper.loginAsTeacher();
 		DashboardPage dashboardPage = (DashboardPage) edoHomePage
 				.openTeachersCorner(true);
-		dashboardPage.HoverOnBar();
+		dashboardPage.ClickOnBar();
 		String className = dashboardPage.getSelectedClass();
 		String courseName = dashboardPage.getSelectedCourse();
 
@@ -84,7 +84,7 @@ public class DashboardWidgetTests extends BasicDashboardTest {
 				.openTeachersCorner(true);
 
 		startStep("Select class and course");
-		dashboardPage.HoverOnBar();
+		dashboardPage.ClickOnBar();
 		dashboardPage.selectClassInDashBoard(className);
 		dashboardPage.selectCourseInDashboard(courseName);
 		dashboardPage.clickOnDashboardGoButton();
@@ -106,7 +106,7 @@ public class DashboardWidgetTests extends BasicDashboardTest {
 		EdoHomePage edoHomePage = pageHelper.loginAsTeacher();
 		DashboardPage dashboardPage = (DashboardPage) edoHomePage
 				.openTeachersCorner(true);
-		dashboardPage.HoverOnBar();
+		dashboardPage.ClickOnBar();
 		String className = dashboardPage.getSelectedClass();
 		String courseName = dashboardPage.getSelectedCourse();
 
@@ -130,7 +130,7 @@ public class DashboardWidgetTests extends BasicDashboardTest {
 //		dashboardPage.selectClassInDashBoard(classNameForTest);
 		dashboardPage.hoverOnHeaderAndSelectFromClassCombo(classNameForTest);
 		dashboardPage.selectCourseInDashboardByIndex(1);
-		dashboardPage.HoverOnBar();
+		dashboardPage.ClickOnBar();
 		dashboardPage.clickOnDashboardGoButton();
 
 		sleep(10);
