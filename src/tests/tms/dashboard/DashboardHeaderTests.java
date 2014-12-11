@@ -21,8 +21,6 @@ public class DashboardHeaderTests extends BasicDashboardTest {
 		DashboardPage dashboardPage = (DashboardPage) edoHomePage
 				.openTeachersCorner(true);
 
-		
-
 		startStep("Select class and course");
 		dashboardPage.HoverOnBar();
 		dashboardPage.selectClassInDashBoard(classToSelect);
@@ -30,11 +28,12 @@ public class DashboardHeaderTests extends BasicDashboardTest {
 		dashboardPage.selectCourseInDashboard(courseToSelect);
 		dashboardPage.clickOnDashboardGoButton();
 		sleep(5);
-		
+
 		startStep("Check number of students");
-		testResultService.assertEquals(
-				dbService.getNumberOfStudentsInClass(classToSelect,autoInstitution.getInstitutionId()),
-				dashboardPage.getNumberOfStudentsPerClass(),"Number of students label");
+		testResultService.assertEquals(dbService.getNumberOfStudentsInClass(
+				classToSelect, autoInstitution.getInstitutionId()),
+				dashboardPage.getNumberOfStudentsPerClass(),
+				"Number of students label");
 
 		startStep("Navigate to another report");
 		dashboardPage.clickOnReports();
@@ -101,8 +100,8 @@ public class DashboardHeaderTests extends BasicDashboardTest {
 				selectedClass.equals(null) == false);
 
 	}
-	
-//http://vstf2013:8080/tfs/DefaultCollection/EdusoftDev/_workitems#_a=edit&id=17894
+
+	// http://vstf2013:8080/tfs/DefaultCollection/EdusoftDev/_workitems#_a=edit&id=17894
 	@Test
 	@TestCaseParams(testCaseID = { "16997" })
 	public void testCheckClassAndCourseWithLastProgressAreSelectedAsTeacher()
@@ -119,6 +118,7 @@ public class DashboardHeaderTests extends BasicDashboardTest {
 		testResultService.assertEquals(classWithLastProgress, selectedClass);
 
 		String selectedCourse = dashboardPage.getSelectedCourse();
+		courseWithLastProgress=courseWithLastProgress.replaceAll("\\s+$", "");
 		testResultService.assertEquals(courseWithLastProgress, selectedCourse);
 	}
 
@@ -170,6 +170,47 @@ public class DashboardHeaderTests extends BasicDashboardTest {
 		String selectedCourse = dashboardPage.getSelectedCourse();
 		testResultService.assertEquals(courseWithLastProgress, selectedCourse);
 
+	}
+
+	@Test
+	@TestCaseParams(testCaseID = { "17005" })
+	public void dashboardGridTest() throws Exception {
+		startStep("Login as a teacher and open the dashboard");
+		EdoHomePage edoHomePage = pageHelper.loginAsTeacher();
+		DashboardPage dashboardPage = (DashboardPage) edoHomePage
+				.openTeachersCorner(true);
+
+		startStep("Check dashbaord width");
+		int currentWidth = webDriver.getWindowWidth();
+		testResultService.assertEquals(1024, currentWidth,
+				"Current width is not 1024");
+
+		startStep("Check the width of widgets");
+		testResultService.assertEquals(dashboardPage.getWidgetWidth(1, 1),
+				getDashboardwidth() / 2, "wrong width of widget");
+		
+		testResultService.assertEquals(dashboardPage.getWidgetWidth(1, 2),
+				getDashboardwidth() / 2, "wrong width of widget");
+
+
+	}
+	
+	@Test
+	@TestCaseParams(testCaseID = { "17382","17383" })
+	public void testHeaderHiddenAndDIsplayed() throws Exception{
+		startStep("Login as a teacher and open the dashboard");
+		EdoHomePage edoHomePage = pageHelper.loginAsTeacher();
+		DashboardPage dashboardPage = (DashboardPage) edoHomePage
+				.openTeachersCorner(true);
+		
+		startStep("Check that header is not displayed by default");
+		dashboardPage.checkThatClassComboBoxIsNotDisplayed();
+		dashboardPage.HoverOnBar();
+		sleep(2);
+		webDriver.printScreen("test");
+		dashboardPage.checkThatClassComboBoxIsNotDisplayed();
+		
+		
 	}
 
 }

@@ -570,23 +570,28 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	public void checkElementNotExist(String xpath, String message)
 			throws Exception {
-		boolean elementFound = false;
-		try {
-			WebElement element = waitForElement(xpath, ByTypes.xpath, false,
-					timeout);
-			if (element != null) {
-				elementFound = true;
-				printScreen(message);
-			}
+		// boolean elementFound = false;
+		// try {
+		// WebElement element = waitForElement(xpath, ByTypes.xpath, false,
+		// timeout);
+		// if (element != null) {
+		// elementFound = true;
+		// printScreen(message);
+		// }
+		//
+		// } catch (Exception e) {
+		// System.out.println("Exceptin found during checkElementNotExist "
+		// + e.toString());
+		// } finally {
+		//
+		// testResultService.assertTrue("Element with xpath " + xpath
+		// + " found when it should not", elementFound == false);
+		// }
+		WebDriverWait wait = new WebDriverWait(webDriver,2, 1000);
 
-		} catch (Exception e) {
-			System.out.println("Exceptin found during checkElementNotExist "
-					+ e.toString());
-		} finally {
+		wait.until(ExpectedConditions.invisibilityOfElementLocated(By
+				.xpath(xpath)));
 
-			testResultService.assertTrue("Element with xpath " + xpath
-					+ " found when it should not", elementFound == false);
-		}
 	}
 
 	public void checkElementNotExist(String xpath) throws Exception {
@@ -1220,14 +1225,22 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	}
 
 	public void HoverOnElementAndmoveToComboBoxElementAndSelectValue(
-			WebElement hoverElement, 
-			String comboboxName, String value) throws Exception {
+			WebElement hoverElement, String comboboxName, String value)
+			throws Exception {
 		Actions actions = new Actions(webDriver);
 		actions.moveToElement(hoverElement)
 				.moveToElement(webDriver.findElementById(comboboxName))
 				.clickAndHold().perform();
 		selectElementFromComboBox(comboboxName, value);
 
+	}
+
+	public int getWindowWidth() {
+		return webDriver.manage().window().getSize().getWidth();
+	}
+
+	public int getWindowHeight() {
+		return webDriver.manage().window().getSize().getHeight();
 	}
 
 }

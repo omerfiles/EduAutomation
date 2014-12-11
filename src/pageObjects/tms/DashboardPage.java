@@ -131,16 +131,20 @@ public class DashboardPage extends TmsHomePage {
 	}
 
 	public void HoverOnBar() throws Exception {
-		webDriver.hoverOnElement(webDriver.waitForElement("tmsDefaultBar",
-				ByTypes.id),50,50);
+		webDriver.hoverOnElement(
+				webDriver.waitForElement("tmsDefaultBar", ByTypes.id), 50, 50);
 		Thread.sleep(500);
 	}
-	public void hoverOnHeaderAndSelectFromClassCombo(String value)throws Exception{
-		WebElement hoverElement=webDriver.waitForElement("tmsDefaultBar", ByTypes.id);
-//		WebElement selectElement= webDriver.waitForElement(SELECT_CLASS, ByTypes.xpath);
-		
-		
-		webDriver.HoverOnElementAndmoveToComboBoxElementAndSelectValue( hoverElement,SELECT_CLASS, value );
+
+	public void hoverOnHeaderAndSelectFromClassCombo(String value)
+			throws Exception {
+		WebElement hoverElement = webDriver.waitForElement("tmsDefaultBar",
+				ByTypes.id);
+		// WebElement selectElement= webDriver.waitForElement(SELECT_CLASS,
+		// ByTypes.xpath);
+
+		webDriver.HoverOnElementAndmoveToComboBoxElementAndSelectValue(
+				hoverElement, SELECT_CLASS, value);
 	}
 
 	public String getPltWidgetContent() throws Exception {
@@ -191,6 +195,21 @@ public class DashboardPage extends TmsHomePage {
 		WebElement tooltip = webDriver.waitForElement("//div[@role='tooltip']",
 				ByTypes.xpath);
 		System.out.println(webDriver.getElementHTML(tooltip));
+
+	}
+
+	public int getWidgetWidth(int row, int col) throws Exception {
+		int actualWidth = webDriver
+				.waitForElement(
+						"//div[@class='dashboard']//div[" + row + "]//div["
+								+ col + "]", ByTypes.xpath).getSize()
+				.getWidth();
+		return actualWidth;
+
+	}
+
+	public void checkThatClassComboBoxIsNotDisplayed() throws Exception {
+		webDriver.checkElementNotExist("//select[@id='"+SELECT_CLASS+"']");
 
 	}
 }

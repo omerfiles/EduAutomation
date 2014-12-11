@@ -20,6 +20,8 @@ public class BasicDashboardTest extends EdusoftWebTest {
 	protected String courseWithLastProgress;
 
 	public static final String FIRST_DISCOVERIES = "First Discoveries";
+	
+	private static final int DASHBOARDWIDTH=1024;
 
 	@Before
 	public void setup() throws Exception {
@@ -60,6 +62,10 @@ public class BasicDashboardTest extends EdusoftWebTest {
 		System.out.println("with plt:"+count);
 		return count;
 		
+	}
+
+	public static int getDashboardwidth() {
+		return DASHBOARDWIDTH;
 	}
 
 }
