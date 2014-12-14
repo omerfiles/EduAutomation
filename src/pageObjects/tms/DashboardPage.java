@@ -53,7 +53,9 @@ public class DashboardPage extends TmsHomePage {
 	}
 
 	public String getSelectedCourse() throws Exception {
-		return webDriver.getSelectedValueFromComboBox(SELECT_COURSE);
+		String course=webDriver.getSelectedValueFromComboBox(SELECT_COURSE);
+		course=course.replaceAll("\\s+$", "");
+		return course;
 	}
 
 	public void clickOnReports() throws Exception {
@@ -130,10 +132,13 @@ public class DashboardPage extends TmsHomePage {
 
 	}
 
-	public void HoverOnBar() throws Exception {
-		webDriver.hoverOnElement(
-				webDriver.waitForElement("tmsDefaultBar", ByTypes.id), 50, 50);
-		Thread.sleep(500);
+	public void ClickOnBar() throws Exception {
+//		webDriver.hoverOnElement(
+//				webDriver.waitForElement("tmsDashNavHandle", ByTypes.className), 50, 50);
+//		Thread.sleep(500);
+		
+		webDriver.waitForElement("tmsDashNavHandle", ByTypes.id).click();
+		Thread.sleep(1000);
 	}
 
 	public void hoverOnHeaderAndSelectFromClassCombo(String value)
