@@ -27,10 +27,10 @@ public class DashboardCacheTest extends DashboardBasicTest {
 				.clickOnTeachersCorner(true);
 		String className = "classForCacheTest";
 		String courseName = "1 unit 1 component";
-		String studentName = "Stud"+dbService.sig(4);
-		
-		int cacheInterval=5;
-		
+		String studentName = "Stud" + dbService.sig(4);
+
+		int cacheInterval = 5;
+
 		pageHelper.addStudent(studentName, className);
 
 		Course course = pageHelper.getCourses().get(26);
@@ -38,9 +38,9 @@ public class DashboardCacheTest extends DashboardBasicTest {
 		String oldScore = getAvgScoresByClassIdAndCourseId(className,
 				courseName).get(0)[0];
 		sleep(4);
-		dashboardPage.ClickOnBar();
+		dashboardPage.hideSelectionBar();
 		dashboardPage.selectClassInDashBoard(className);
-	
+
 		dashboardPage.selectCourseInDashboard(courseName);
 		dashboardPage.clickOnDashboardGoButton();
 		sleep(5);
@@ -65,28 +65,21 @@ public class DashboardCacheTest extends DashboardBasicTest {
 				.getUnitComponent().get(0).getName(), "Test");
 		edoHomePage.clickOnStartTest();
 
-//		int rand = dbService.getRandonNumber(1, 100);
-//		System.out.println("Randon number is: " + rand);
+		// int rand = dbService.getRandonNumber(1, 100);
+		// System.out.println("Randon number is: " + rand);
 
-		boolean[]answers = pageHelper.randomizeCorrectAndIncorrectAnswers(4);
-		
+		boolean[] answers = pageHelper.randomizeCorrectAndIncorrectAnswers(5);
+
 		if (answers[0] == true) {
 			edoHomePage.selectTestRadioAnswer("q1a2");
 		} else {
-			edoHomePage.selectTestRadioAnswer("q1a3");
+			edoHomePage.selectTestRadioAnswer("q1a1");
 		}
 		// second question
 
 		edoHomePage.clickOnNextComponent(1);
 		if (answers[1] == true) {
-			edoHomePage.selectTestRadioAnswer("q1a1");
-		} else {
-			edoHomePage.selectTestRadioAnswer("q1a2");
-		}
-
-		edoHomePage.clickOnNextComponent(1);
-		if (answers[2] == true) {
-			edoHomePage.dragAnswerToElement("54",
+			edoHomePage.dragAnswerToElement("68",
 					edoHomePage.getDropQuestionByQnum("1"));
 		} else {
 			edoHomePage.dragAnswerToElement("93",
@@ -94,10 +87,25 @@ public class DashboardCacheTest extends DashboardBasicTest {
 		}
 
 		edoHomePage.clickOnNextComponent(1);
-		if (answers[3] == true) {
-			edoHomePage.selectTestRadioAnswer("q1a1");
-		} else {
+		if (answers[2] == true) {
 			edoHomePage.selectTestRadioAnswer("q1a2");
+		} else {
+			edoHomePage.selectTestRadioAnswer("q1a1");
+		}
+
+		edoHomePage.clickOnNextComponent(1);
+		if (answers[3] == true) {
+			edoHomePage.dragAnswerToElement("51",
+					edoHomePage.getDropQuestionByQnum("1"));
+		} else {
+			edoHomePage.dragAnswerToElement("39",
+					edoHomePage.getDropQuestionByQnum("1"));
+		}
+		edoHomePage.clickOnNextComponent(1);
+		if (answers[4] == true) {
+			edoHomePage.selectTestRadioAnswer("q1a2");
+		} else {
+			edoHomePage.selectTestRadioAnswer("q1a3");
 		}
 
 		edoHomePage.clickOnSubmitTest();
@@ -110,35 +118,35 @@ public class DashboardCacheTest extends DashboardBasicTest {
 		pageHelper.loginAsTeacher();
 		dashboardPage = (DashboardPage) edoHomePage.clickOnTeachersCorner(true);
 
-		dashboardPage.ClickOnBar();
-//		sleep(2);
-//		dashboardPage.selectClassInDashBoard(className);
-//
-//		dashboardPage.selectCourseInDashboard(courseName);
-//		dashboardPage.clickOnDashboardGoButton();
+		dashboardPage.hideSelectionBar();
+		// sleep(2);
+		// dashboardPage.selectClassInDashBoard(className);
+		//
+		// dashboardPage.selectCourseInDashboard(courseName);
+		// dashboardPage.clickOnDashboardGoButton();
 		String actualUnitScore = dashboardPage
 				.getAvgScorePerUnitClassTestScore(0);
-//		testResultService.assertEquals(oldScore, actualUnitScore);
+		// testResultService.assertEquals(oldScore, actualUnitScore);
 		startStep("Wait until cache is refreshed");
-		DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss");
-		DateTime dt = formatter.parseDateTime(dashboardPage.getDashboardLastUpdateDateAndTime());
+		DateTimeFormatter formatter = DateTimeFormat
+				.forPattern("dd/MM/yyyy HH:mm:ss");
+		DateTime dt = formatter.parseDateTime(dashboardPage
+				.getDashboardLastUpdateDateAndTime());
 		dt.plusMinutes(cacheInterval);
 		pageHelper.waitForDateTime(dt);
-		
+
 		startStep("Refresh the dashboard and check the score");
 		webDriver.closeBrowser();
 		webDriver.switchToMainWindow();
-		 edoHomePage.clickOnTeachersCorner(true);
+		edoHomePage.clickOnTeachersCorner(true);
 		sleep(2);
 		String newScoreAvg = getAvgScoresByClassIdAndCourseId(className,
 				courseName).get(0)[0];
-		 actualUnitScore = dashboardPage
-				.getAvgScorePerUnitClassTestScore(0);
-		testResultService.assertEquals(newScoreAvg, actualUnitScore,"check refresh after cache refresh");
-		System.out.println("Get last update: "+dashboardPage.getDashboardLastUpdateDateAndTime());
-		
-		
-		
+		actualUnitScore = dashboardPage.getAvgScorePerUnitClassTestScore(0);
+		testResultService.assertEquals(newScoreAvg, actualUnitScore,
+				"check refresh after cache refresh");
+		System.out.println("Get last update: "
+				+ dashboardPage.getDashboardLastUpdateDateAndTime());
 
 	}
 

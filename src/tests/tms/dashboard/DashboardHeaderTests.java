@@ -24,7 +24,7 @@ public class DashboardHeaderTests extends DashboardBasicTest {
 		startStep("Select class and course");
 //		dashboardPage.ClickOnBar();
 		sleep(4);
-		dashboardPage.ClickOnBar();
+		dashboardPage.hideSelectionBar();
 		dashboardPage.selectClassInDashBoard(classToSelect);
 		sleep(2);
 		dashboardPage.selectCourseInDashboard(courseToSelect);
@@ -43,7 +43,7 @@ public class DashboardHeaderTests extends DashboardBasicTest {
 		startStep("Click on the Home button");
 		dashboardPage.clickTmsHome();
 		sleep(3);
-		dashboardPage.ClickOnBar();
+		dashboardPage.hideSelectionBar();
 		startStep("Check thet the class and course that where selected, are still appear as selected");
 		String currentSelectedClass = dashboardPage.getSelectedClass();
 		testResultService.assertEquals(classToSelect, currentSelectedClass,
@@ -69,7 +69,8 @@ public class DashboardHeaderTests extends DashboardBasicTest {
 
 		startStep("Click the Home button");
 		dashboardPage.ClickTheHomeButton();
-//		dashboardPage.ClickOnBar();
+//		dashboardPage
+		dashboardPage.hideSelectionBar();
 		startStep("Check that the dashboard opens");
 		String selectedClass = dashboardPage.getSelectedClass();
 		testResultService.assertTrue("Classes combo box",
@@ -95,7 +96,7 @@ public class DashboardHeaderTests extends DashboardBasicTest {
 
 		startStep("Click the Home button");
 		dashboardPage.ClickTheHomeButton();
-//		dashboardPage.ClickOnBar();
+		dashboardPage.hideSelectionBar();
 		startStep("Check that the dashboard opens");
 		String selectedClass = dashboardPage.getSelectedClass();
 		testResultService.assertTrue("Classes combo box",
@@ -116,7 +117,7 @@ public class DashboardHeaderTests extends DashboardBasicTest {
 		getClassAndCourseWithLastProgress(autoInstitution.getTeacherUserName(),
 				UserType.Teahcer);
 		sleep(2);
-		dashboardPage.ClickOnBar();
+		dashboardPage.hideSelectionBar();
 		String selectedClass = dashboardPage.getSelectedClass();
 		testResultService.assertEquals(classWithLastProgress, selectedClass);
 
@@ -165,7 +166,7 @@ public class DashboardHeaderTests extends DashboardBasicTest {
 		webDriver.closeAlertByAccept();
 		DashboardPage dashboardPage = (DashboardPage) edoHomePage
 				.clickOnTeachersCorner(true);
-//		dashboardPage.ClickOnBar();
+		dashboardPage.hideSelectionBar();
 		report.startLevel("Check selected class and course");
 		String selectedClass = dashboardPage.getSelectedClass();
 		testResultService.assertEquals(classWithLastProgress, selectedClass);
@@ -208,7 +209,7 @@ public class DashboardHeaderTests extends DashboardBasicTest {
 		
 		startStep("Check that header is not displayed by default");
 		dashboardPage.checkThatClassComboBoxIsNotDisplayed();
-		dashboardPage.ClickOnBar();
+		dashboardPage.hideSelectionBar();
 		sleep(2);
 		webDriver.printScreen("test");
 		dashboardPage.checkThatClassComboBoxIsNotDisplayed();

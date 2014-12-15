@@ -43,6 +43,7 @@ public class AccessLicenseTests extends EdusoftWebTest {
 		tmsHomePage.deactivateStudent();
 		webDriver.switchToMainWindow();
 		tmsHomePage.swithchToMainFrame();
+		
 		tmsHomePage.clickOnSave();
 
 		report.startLevel("Try to login with the deactivated student");

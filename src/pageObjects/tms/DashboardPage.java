@@ -129,19 +129,46 @@ public class DashboardPage extends TmsHomePage {
 			throws Exception {
 		String score = webDriver.waitForElement(
 				"//div[@id='successWidget']//div[contains(@class,'point-"
-						+ unitNumber + "')]", ByTypes.xpath).getText();
+						+ unitNumber + "')]", ByTypes.xpath,true,20).getText();
 		return score;
 
 	}
 
-	public void ClickOnBar() throws Exception {
+	public void hideSelectionBar() throws Exception {
 		// webDriver.hoverOnElement(
 		// webDriver.waitForElement("tmsDashNavHandle", ByTypes.className), 50,
 		// 50);
 		// Thread.sleep(500);
+		// if selection bar is shown, wait few seconds to and check if it
+		// becomes hidden. if not - click the handle
+		if (isSelectionBarShown()) {
+			Thread.sleep(3000);
+			if (isSelectionBarShown()) {
+				// click the handle
+				clickDashBoardHandle();
+			}
+		}
 
 		webDriver.waitForElement("tmsDashNavHandle", ByTypes.id).click();
 		Thread.sleep(1000);
+	}
+
+	private void clickDashBoardHandle() throws Exception {
+		webDriver.waitForElement("tmsDashNavHandle", ByTypes.id).click();
+
+	}
+
+	private boolean isSelectionBarShown() throws Exception {
+
+		WebElement handleShow = webDriver.waitForElement(
+				"//div[@id='tmsDashNavHandle'][contains(@class,'handleOpen')]",
+				ByTypes.xpath, false, 5);
+		if (handleShow==null) {
+			return true;
+		} else {
+			return false;
+		}
+
 	}
 
 	public void hoverOnHeaderAndSelectFromClassCombo(String value)
@@ -238,6 +265,6 @@ public class DashboardPage extends TmsHomePage {
 				"//div[@class='LastUpdatedDate']", ByTypes.xpath).getText();
 		String time = webDriver.waitForElement(
 				"//div[@class='LastUpdatedHrs']", ByTypes.xpath).getText();
-		return date+" "+time;
+		return date + " " + time;
 	}
 }

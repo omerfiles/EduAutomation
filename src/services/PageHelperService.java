@@ -509,27 +509,32 @@ public class PageHelperService extends SystemObjectImpl {
 			questions[i] = true;
 		}
 
-		if (rand < 250) {
+		if (rand < 200) {
+			// test score will be 0
+			for (int i = 0; i < questions.length ; i++) {
+				questions[i] = false;
+			}
+
+		} else if (rand > 201 && rand < 400) {
 			// test score will be 25
 			for (int i = 0; i < questions.length * 0.75; i++) {
 				questions[i] = false;
 			}
-
-		} else if (rand > 251 && rand < 500) {
-			for (int i = 0; i < questions.length * 0.5; i++) {
-				questions[i] = false;
-			}
-		} else if (rand > 501 && rand < 750) {
+		} else if (rand > 401 && rand < 600) {
+			// test score will be 50
 			for (int i = 0; i < questions.length * 0.5; i++) {
 				questions[i] = false;
 			}
 			// test score will be 75
-		} else if (rand > 751 && rand <= 1000) {
+		} else if (rand > 601 && rand < 800) {
 			for (int i = 0; i < questions.length * 0.25; i++) {
 				questions[i] = false;
 			}
 		}
-
+		else if (rand > 801 && rand <= 1000) {
+			//test score will be 100
+			
+		}
 		return questions;
 	}
 

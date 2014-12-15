@@ -823,7 +823,7 @@ public class TmsHomePage extends GenericPage {
 	}
 
 	public void clickOnSave() throws Exception {
-		webDriver.waitForElement("Save", ByTypes.linkText).click();
+		webDriver.waitForElement("//td[@id='SaveTd0']//span", ByTypes.xpath).click();
 
 	}
 
