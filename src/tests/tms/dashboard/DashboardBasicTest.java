@@ -20,8 +20,8 @@ public class DashboardBasicTest extends EdusoftWebTest {
 	protected String courseWithLastProgress;
 
 	public static final String FIRST_DISCOVERIES = "First Discoveries";
-	
-	private static final int DASHBOARDWIDTH=1024;
+
+	private static final int DASHBOARDWIDTH = 1024;
 
 	@Before
 	public void setup() throws Exception {
@@ -39,7 +39,18 @@ public class DashboardBasicTest extends EdusoftWebTest {
 				autoInstitution.getInstitutionId(), userType);
 		classWithLastProgress = str[0];
 		courseWithLastProgress = str[1];
-		courseWithLastProgress=courseWithLastProgress.replaceAll("\\s+$", "");
+		courseWithLastProgress = courseWithLastProgress.replaceAll("\\s+$", "");
+	}
+
+	public  List<String[]> getAvgScoresByClassIdAndCourseId(String className,
+			String courseName) throws Exception {
+
+		String classId = dbService.getClassIdByName(className,
+				autoInstitution.getInstitutionId());
+		
+		String courseId=dbService.getCourseIdByName(courseName);
+		List<String[]> scores = dbService.getClassScores(classId, courseId);
+		return scores;
 	}
 
 	public List<String[]> getClassPltScores(String className,
@@ -60,9 +71,9 @@ public class DashboardBasicTest extends EdusoftWebTest {
 		for (int i = 0; i < list.size(); i++) {
 			count += Integer.parseInt(list.get(i)[0]);
 		}
-		System.out.println("with plt:"+count);
+		System.out.println("with plt:" + count);
 		return count;
-		
+
 	}
 
 	public static int getDashboardwidth() {

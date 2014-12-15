@@ -13,6 +13,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
 
 import javax.sql.DataSource;
 
@@ -688,15 +689,15 @@ public class DbService extends SystemObjectImpl {
 
 	}
 
-	public String getNumberOfStudentsInClass(String className,String institutionId) throws Exception {
+	public String getNumberOfStudentsInClass(String className,
+			String institutionId) throws Exception {
 		String sql = "  select count(*) from classUsers as cu,class as c where cu.classId=c.classId and c.name='"
-				+ className + "' and c.InstitutionId="+institutionId;
+				+ className + "' and c.InstitutionId=" + institutionId;
 		String result = getStringFromQuery(sql);
 		return result;
 	}
 
-	public List<List> getListFromStoreRrecedure(String sql)
-			throws SQLException {
+	public List<List> getListFromStoreRrecedure(String sql) throws SQLException {
 		List<List> rsList = new ArrayList<List>();
 		try {
 			db_userid = configuration.getProperty("db.connection.username");
@@ -710,9 +711,9 @@ public class DbService extends SystemObjectImpl {
 			// statement = conn.createStatement();
 
 			CallableStatement statement = conn.prepareCall(sql);
-//			for (int i = 0; i < params.length; i++) {
-//				statement.setString(i, params[i]);
-//			}
+			// for (int i = 0; i < params.length; i++) {
+			// statement.setString(i, params[i]);
+			// }
 
 			boolean results = statement.execute();
 			int rsCount = 0;
@@ -742,6 +743,32 @@ public class DbService extends SystemObjectImpl {
 		}
 		return rsList;
 	}
+
 	// s}
+
+	public String getCourseIdByName(String courseName) throws Exception {
+		String sql = "select CourseId from course where name='" + courseName
+				+ "'";
+		return getStringFromQuery(sql);
+
+	}
+
+	public List<String[]> getClassScores(String classId, String courseId)
+			throws Exception {
+		String sql = "select  avg( tr.Grade) from testResults as tr  where tr.userId in( select distinct  UserId from ClassUsers where ClassId="
+				+ classId
+				+ " and courseId="
+				+ courseId
+				+ " )group by ComponentSubComponentId";
+
+		List<String[]> results = getStringListFromQuery(sql, 1, 1);
+		return results;
+	}
+
+	public int getRandonNumber(int min, int max) {
+		Random r = new Random();
+		int i1 = r.nextInt(max - min);
+		return i1;
+	}
 
 }

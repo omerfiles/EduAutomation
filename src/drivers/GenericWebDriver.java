@@ -587,7 +587,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		// testResultService.assertTrue("Element with xpath " + xpath
 		// + " found when it should not", elementFound == false);
 		// }
-		WebDriverWait wait = new WebDriverWait(webDriver,2, 1000);
+		WebDriverWait wait = new WebDriverWait(webDriver, 2, 1000);
 
 		wait.until(ExpectedConditions.invisibilityOfElementLocated(By
 				.xpath(xpath)));
@@ -798,6 +798,11 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	public WebElement getChildElementByXpath(WebElement element, String xpath) {
 		WebElement chileElement = element.findElement(By.xpath(xpath));
 		return chileElement;
+	}
+
+	public List<WebElement> getChildElementsByXpath(WebElement element,
+			String xpath) {
+		return element.findElements(By.xpath(xpath));
 	}
 
 	public int getTimeout() {

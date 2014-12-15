@@ -1,5 +1,7 @@
 package pageObjects.tms;
 
+import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
@@ -53,8 +55,8 @@ public class DashboardPage extends TmsHomePage {
 	}
 
 	public String getSelectedCourse() throws Exception {
-		String course=webDriver.getSelectedValueFromComboBox(SELECT_COURSE);
-		course=course.replaceAll("\\s+$", "");
+		String course = webDriver.getSelectedValueFromComboBox(SELECT_COURSE);
+		course = course.replaceAll("\\s+$", "");
 		return course;
 	}
 
@@ -133,10 +135,11 @@ public class DashboardPage extends TmsHomePage {
 	}
 
 	public void ClickOnBar() throws Exception {
-//		webDriver.hoverOnElement(
-//				webDriver.waitForElement("tmsDashNavHandle", ByTypes.className), 50, 50);
-//		Thread.sleep(500);
-		
+		// webDriver.hoverOnElement(
+		// webDriver.waitForElement("tmsDashNavHandle", ByTypes.className), 50,
+		// 50);
+		// Thread.sleep(500);
+
 		webDriver.waitForElement("tmsDashNavHandle", ByTypes.id).click();
 		Thread.sleep(1000);
 	}
@@ -214,7 +217,27 @@ public class DashboardPage extends TmsHomePage {
 	}
 
 	public void checkThatClassComboBoxIsNotDisplayed() throws Exception {
-		webDriver.checkElementNotExist("//select[@id='"+SELECT_CLASS+"']");
+		webDriver.checkElementNotExist("//select[@id='" + SELECT_CLASS + "']");
 
+	}
+
+	public String[] getClassTestScoreResults() throws Exception {
+		WebElement successWidget = webDriver.waitForElement("successWidget",
+				ByTypes.id);
+		List<WebElement> points = webDriver.getChildElementsByXpath(
+				successWidget, "//div[contains(@class,'jqplot-point-label')]");
+		String[] scores = new String[points.size()];
+		for (int i = 0; i < points.size(); i++) {
+			scores[i] = points.get(i).getText();
+		}
+		return scores;
+	}
+
+	public String getDashboardLastUpdateDateAndTime() throws Exception {
+		String date = webDriver.waitForElement(
+				"//div[@class='LastUpdatedDate']", ByTypes.xpath).getText();
+		String time = webDriver.waitForElement(
+				"//div[@class='LastUpdatedHrs']", ByTypes.xpath).getText();
+		return date+" "+time;
 	}
 }

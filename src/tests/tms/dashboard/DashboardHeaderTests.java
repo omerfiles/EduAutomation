@@ -19,7 +19,7 @@ public class DashboardHeaderTests extends DashboardBasicTest {
 		startStep("Login as a teacher and open the dashboard");
 		EdoHomePage edoHomePage = pageHelper.loginAsTeacher();
 		DashboardPage dashboardPage = (DashboardPage) edoHomePage
-				.openTeachersCorner(true);
+				.clickOnTeachersCorner(true);
 
 		startStep("Select class and course");
 //		dashboardPage.ClickOnBar();
@@ -60,7 +60,7 @@ public class DashboardHeaderTests extends DashboardBasicTest {
 		startStep("Login as a teacher and open the dashboard");
 		EdoHomePage edoHomePage = pageHelper.loginAsTeacher();
 		DashboardPage dashboardPage = (DashboardPage) edoHomePage
-				.openTeachersCorner(true);
+				.clickOnTeachersCorner(true);
 
 		startStep("Go out of the dashboard");
 		sleep(3);
@@ -86,7 +86,7 @@ public class DashboardHeaderTests extends DashboardBasicTest {
 		sleep(5);
 		webDriver.closeAlertByAccept();
 		DashboardPage dashboardPage = (DashboardPage) edoHomePage
-				.openTeachersCorner(true);
+				.clickOnTeachersCorner(true);
 
 		startStep("Go out of the dashboard");
 		sleep(3);
@@ -111,7 +111,7 @@ public class DashboardHeaderTests extends DashboardBasicTest {
 		EdoHomePage edoHomePage = pageHelper.loginAsTeacher();
 
 		DashboardPage dashboardPage = (DashboardPage) edoHomePage
-				.openTeachersCorner(true);
+				.clickOnTeachersCorner(true);
 
 		getClassAndCourseWithLastProgress(autoInstitution.getTeacherUserName(),
 				UserType.Teahcer);
@@ -124,7 +124,7 @@ public class DashboardHeaderTests extends DashboardBasicTest {
 		
 		testResultService.assertEquals(courseWithLastProgress, selectedCourse);
 	}
-
+//fails due t bug 17984
 	@Test
 	@TestCaseParams(testCaseID = { "17347" })
 	public void testOpenDashboardAsSupervisorAndSelectTeaccher()
@@ -136,7 +136,7 @@ public class DashboardHeaderTests extends DashboardBasicTest {
 		webDriver.closeAlertByAccept();
 		report.startLevel("Click on Teachers corner");
 		DashboardPage dashboardPage = (DashboardPage) edoHomePage
-				.openTeachersCorner(true);
+				.clickOnTeachersCorner(true);
 		report.startLevel("Select a teacher from the combo box");
 		getClassAndCourseWithLastProgress(teacherName, UserType.SchoolAdmin);
 //		dashboardPage.ClickOnBar();
@@ -164,7 +164,7 @@ public class DashboardHeaderTests extends DashboardBasicTest {
 		report.startLevel("Click on Teachers corner");
 		webDriver.closeAlertByAccept();
 		DashboardPage dashboardPage = (DashboardPage) edoHomePage
-				.openTeachersCorner(true);
+				.clickOnTeachersCorner(true);
 //		dashboardPage.ClickOnBar();
 		report.startLevel("Check selected class and course");
 		String selectedClass = dashboardPage.getSelectedClass();
@@ -181,7 +181,7 @@ public class DashboardHeaderTests extends DashboardBasicTest {
 		startStep("Login as a teacher and open the dashboard");
 		EdoHomePage edoHomePage = pageHelper.loginAsTeacher();
 		DashboardPage dashboardPage = (DashboardPage) edoHomePage
-				.openTeachersCorner(true);
+				.clickOnTeachersCorner(true);
 
 		startStep("Check dashbaord width");
 		int currentWidth = webDriver.getWindowWidth();
@@ -204,7 +204,7 @@ public class DashboardHeaderTests extends DashboardBasicTest {
 		startStep("Login as a teacher and open the dashboard");
 		EdoHomePage edoHomePage = pageHelper.loginAsTeacher();
 		DashboardPage dashboardPage = (DashboardPage) edoHomePage
-				.openTeachersCorner(true);
+				.clickOnTeachersCorner(true);
 		
 		startStep("Check that header is not displayed by default");
 		dashboardPage.checkThatClassComboBoxIsNotDisplayed();

@@ -346,10 +346,10 @@ public class EdoHomePage extends GenericPage {
 	}
 
 	public GenericPage openTeachersCorner() throws Exception {
-		return openTeachersCorner(false);
+		return clickOnTeachersCorner(false);
 	}
 
-	public GenericPage openTeachersCorner(boolean showDashboard)
+	public GenericPage clickOnTeachersCorner(boolean showDashboard)
 			throws Exception {
 		try {
 			webDriver.printScreen("OpeningTeachersCorner");
@@ -913,6 +913,25 @@ public class EdoHomePage extends GenericPage {
 	public void clickOnSeeAnswer() throws Exception {
 		webDriver.waitForElement("SeeAnswer", ByTypes.id).click();
 
+	}
+
+	public void selectTestRadioAnswer(String answerId) throws Exception {
+		webDriver.waitForElement(
+				"//div[@id='" + answerId + "']//div//div//div//input",
+				ByTypes.xpath).click();
+		;
+
+	}
+
+	public WebElement getDropQuestionByQnum(String string) throws Exception {
+		return webDriver.waitForElement("//span[@qnum='" + string + "']",
+				ByTypes.xpath);
+	}
+
+	public String getTestScore() throws Exception {
+		String actualScore = webDriver.waitForElement(
+				"//span[@class='TestCongratulation']", ByTypes.xpath).getText();
+		return actualScore;
 	}
 
 }

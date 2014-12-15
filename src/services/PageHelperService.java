@@ -10,6 +10,9 @@ import java.util.Random;
 import jsystem.framework.report.Reporter.EnumReportLevel;
 import jsystem.framework.system.SystemObjectImpl;
 
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
+import org.joda.time.LocalDateTime;
 import org.junit.Assert;
 import org.openqa.selenium.UnhandledAlertException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -141,10 +144,12 @@ public class PageHelperService extends SystemObjectImpl {
 	}
 
 	public EdoHomePage loginAsTeacher() throws Exception {
-		return loginAsTeacher(configuration.getProperty("teacher.username"),configuration.getProperty("institutaion.subdomain"));
+		return loginAsTeacher(configuration.getProperty("teacher.username"),
+				configuration.getProperty("institutaion.subdomain"));
 	}
 
-	public EdoHomePage loginAsTeacher(String teacherUserName,String instSubDomain) throws Exception {
+	public EdoHomePage loginAsTeacher(String teacherUserName,
+			String instSubDomain) throws Exception {
 		teacher.setUserName(teacherUserName);
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver,
 				testResultService);
@@ -492,5 +497,48 @@ public class PageHelperService extends SystemObjectImpl {
 		NetService netService = new NetService();
 		netService.sentHttpRequest(request);
 
+	}
+
+	public boolean[] randomizeCorrectAndIncorrectAnswers(int answersNumber) {
+		int rand = dbService.getRandonNumber(1, 1000);
+		System.out.println("Randon number is: " + rand);
+		boolean[] questions = new boolean[answersNumber];
+
+		// set all answersToBeTrue
+		for (int i = 0; i < answersNumber; i++) {
+			questions[i] = true;
+		}
+
+		if (rand < 250) {
+			// test score will be 25
+			for (int i = 0; i < questions.length * 0.75; i++) {
+				questions[i] = false;
+			}
+
+		} else if (rand > 251 && rand < 500) {
+			for (int i = 0; i < questions.length * 0.5; i++) {
+				questions[i] = false;
+			}
+		} else if (rand > 501 && rand < 750) {
+			for (int i = 0; i < questions.length * 0.5; i++) {
+				questions[i] = false;
+			}
+			// test score will be 75
+		} else if (rand > 751 && rand <= 1000) {
+			for (int i = 0; i < questions.length * 0.25; i++) {
+				questions[i] = false;
+			}
+		}
+
+		return questions;
+	}
+
+	public void waitForDateTime(DateTime timeToWaitFor) throws InterruptedException {
+		LocalDateTime localDateTime = new LocalDateTime();  
+		
+		Duration myDuration = new Duration(timeToWaitFor.toDateTime(),
+				localDateTime.toDateTime());
+		System.out.println("Seconds left: " + myDuration.getStandardSeconds());
+		Thread.sleep(myDuration.getMillis()+60000);
 	}
 }
