@@ -1155,9 +1155,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			Select select = new Select(webDriver.findElement(By.id(comboBoxId)));
 
 			option = select.getFirstSelectedOption();
-		} catch (org.openqa.selenium.NoSuchElementException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			testResultService.addFailTest("getting value from combo box: "+comboBoxId+" failed");
 		}
 
 		return option.getText();

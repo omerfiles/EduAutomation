@@ -63,12 +63,12 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 		dashboardPage.clickOnCompletionWidgetButton();
 		sleep(4);
 		dashboardPage.checkForReportResults();
-		testResultService.assertEquals(courseName,
-				dashboardPage.getSelectedCourseInReport());
+//		testResultService.assertEquals(courseName,
+//				dashboardPage.getSelectedCourseInReport());
 
 	}
 
-	@Test
+	
 	@TestCaseParams(testCaseID = { "17097" })
 	public void testDataValidationOnClassTestScoreWidget() throws Exception {
 
@@ -119,7 +119,7 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 		testResultService.assertEquals("Avg. Scores", title, "title not found");
 	}
 
-	@Test
+	
 	public void testPLTWidget() throws Exception {
 		String classNameForTest = "class100";
 		String schoolName = "qa";

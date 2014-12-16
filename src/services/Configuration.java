@@ -63,7 +63,7 @@ public class Configuration {
 //
 //			// input = new FileInputStream("files/properties/QA/"
 //			// + localPropertiesFile);
-			input = new FileInputStream("C:\\automation\\"
+			input = new FileInputStream("\\\\"+globalProperties.getProperty("logserver")+"\\automationConfig\\"
 					+ localPropertiesFile);
 			properties.load(input);
 
