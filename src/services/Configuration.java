@@ -19,14 +19,21 @@ import java.util.Enumeration;
 import java.util.Properties;
 import java.util.Set;
 
+import jcifs.smb.NtlmPasswordAuthentication;
+import jcifs.smb.SmbFile;
+import jcifs.smb.SmbFileInputStream;
+
 @Service
 public class Configuration {
 	private static Configuration configuration = new Configuration();
-	
+
 	@Autowired
 	Reporter reporter;
 
-	public Configuration()    {
+	@Autowired
+	NetService netService;
+
+	public Configuration() {
 		InputStream input = null;
 		InputStream globaConfigInput = null;
 
@@ -38,34 +45,41 @@ public class Configuration {
 			// input = new FileInputStream("C:\\qa.properties");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-//			e.printStackTrace();
+			// e.printStackTrace();
 		}
 		String localPropertiesFile = null;
 		// load a properties file
 		try {
-			
-			localPropertiesFile=getAutomationParam(AutoParams.envFile.toString(), "envFileCMD");
 
-//			// try to get properties file name from pom profile
-//			localPropertiesFile = System.getProperty("envFile");
-//			System.out
-//					.println("Got envFile propery from pom profile. EnvFile is: "
-//							+ localPropertiesFile);
-//
-//			// if local properties files does not exist in the pom xml, get if
-//			// from the global properties file
-//			if (localPropertiesFile == null) {
-//				globalProperties.load(globaConfigInput);
-//				localPropertiesFile = getGlobalProperties("envFile");
-//				System.out
-//						.println("Got envFile propery from Global config file");
-//			}
-//
-//			// input = new FileInputStream("files/properties/QA/"
-//			// + localPropertiesFile);
-			input = new FileInputStream("\\\\"+globalProperties.getProperty("logserver")+"\\automationConfig\\"
-					+ localPropertiesFile);
-			properties.load(input);
+			localPropertiesFile = getAutomationParam(
+					AutoParams.envFile.toString(), "envFileCMD");
+
+			// // try to get properties file name from pom profile
+			// localPropertiesFile = System.getProperty("envFile");
+			// System.out
+			// .println("Got envFile propery from pom profile. EnvFile is: "
+			// + localPropertiesFile);
+			//
+			// // if local properties files does not exist in the pom xml, get
+			// if
+			// // from the global properties file
+			// if (localPropertiesFile == null) {
+			// globalProperties.load(globaConfigInput);
+			// localPropertiesFile = getGlobalProperties("envFile");
+			// System.out
+			// .println("Got envFile propery from Global config file");
+			// }
+			//
+			// // input = new FileInputStream("files/properties/QA/"
+			// // + localPropertiesFile);
+			String path = "smb://10.1.0.83/automationConfig/" + localPropertiesFile;
+			netService=new NetService();
+			NtlmPasswordAuthentication auto = netService.getAuth();
+			SmbFile smbFile = new SmbFile(path, auto);
+
+//			input = new FileInputStream(smbFile.getPath());
+			SmbFileInputStream inputStream=new SmbFileInputStream(smbFile);
+			properties.load(inputStream);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -277,49 +291,51 @@ public class Configuration {
 
 	public String getAutomationParam(String paramName, String mavenCmdParam) {
 		String value = null;
-		System.out.println("Maven cmd param:"+mavenCmdParam);
+		System.out.println("Maven cmd param:" + mavenCmdParam);
 		// check in maven command line
 		try {
 			value = System.getProperty(mavenCmdParam);
 			// check in properties file
 			if (value != null) {
-			System.out.println("got param from maven cmd: " + value);
+				System.out.println("got param from maven cmd: " + value);
 				return value;
 			}
 			// check in properties file
 			value = getProperty(paramName);
 			if (value != null) {
-//			System.out.println("got param from properties file: " + value);
-//			reporter.startLevel("got param from properties file: " + value);
+				// System.out.println("got param from properties file: " +
+				// value);
+				// reporter.startLevel("got param from properties file: " +
+				// value);
 				return value;
 			}
 			// check in pom profile
 			value = System.getProperty(paramName);
 			if (value != null) {
-//			System.out.println("got param from pom profile: " + value);
+				// System.out.println("got param from pom profile: " + value);
 				return value;
 			}
 			// check in global properties
 			value = globalProperties.getProperty(paramName);
 			if (value != null) {
-//			System.out.println("got from global properties: " + value);
+				// System.out.println("got from global properties: " + value);
 				return value;
 			} else {
-//			System.out.println("value "+paramName+" not found");
-//			org.junit.Assert.fail("Auto param value not found. Check properties file or maven CMD param");
+				// System.out.println("value "+paramName+" not found");
+				// org.junit.Assert.fail("Auto param value not found. Check properties file or maven CMD param");
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		if(value==null){
-			value="";
+		if (value == null) {
+			value = "";
 		}
 		return value;
 	}
-	
-	public void savePropertiesToFile(){
-		
+
+	public void savePropertiesToFile() {
+
 	}
 }

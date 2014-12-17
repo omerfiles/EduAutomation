@@ -7,6 +7,7 @@ import java.util.logging.Level;
 
 import jsystem.framework.report.Reporter;
 
+import org.openqa.selenium.Proxy;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.LoggingPreferences;
@@ -39,6 +40,9 @@ public class ChromeWebDriver extends GenericWebDriver {
 				capabilities.setCapability(CapabilityType.LOGGING_PREFS,
 						logPrefs);
 			}
+			
+			
+		
 
 			ChromeOptions options = new ChromeOptions();
 			options.addArguments("--disable-extensions");
