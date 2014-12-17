@@ -110,7 +110,7 @@ public class PageHelperService extends SystemObjectImpl {
 		supervisor.setUserName(configuration.getProperty("supervisor.user"));
 		System.out.println("School admin from properties file is: "
 				+ configuration.getProperty("shcoolAdmin.user"));
-		schoolAdmin.setUserName(configuration.getProperty("shcoolAdmin.user"));
+		schoolAdmin.setUserName(configuration.getProperty("schoolAdmin.user"));
 
 	}
 
@@ -194,7 +194,7 @@ public class PageHelperService extends SystemObjectImpl {
 		try {
 			edoLoginPage.OpenPage(getSutAndSubDomain());
 			schoolAdmin.setPassword(configuration
-					.getProperty("shcoolAdmin.pass"));
+					.getProperty("schoolAdmin.pass"));
 			setUserLoginToNull(dbService.getUserIdByUserName(
 					schoolAdmin.getUserName(),
 					autoInstitution.getInstitutionId()));

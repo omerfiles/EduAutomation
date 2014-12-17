@@ -164,6 +164,9 @@ public class EdusoftBasicTest extends TestCase {
 		// textService.writeArrayistToCSVFile(System.getProperty("user.dir")
 		// + "/log//current//TestLog.csv", report.getReportLogs());
 		String testLogFIle = "testlog" + dbService.sig() + ".csv";
+		
+		
+		
 		testLogFIle=configuration.getGlobalProperties("logserver")
 				+ "\\automationLogs\\" + testLogFIle;
 		textService.writeArrayistToCSVFile(
