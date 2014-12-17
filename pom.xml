@@ -440,7 +440,7 @@
 								</property>
 								<property>
 									<name>envFile</name>
-									<value>qa.properties</value>
+									<value>nov14.properties</value>
 								</property>
 
 							</systemProperties>
@@ -626,7 +626,7 @@
 								</property>
 								<property>
 									<name>envFile</name>
-									<value>sr.properties</value>
+									<value>nov14.properties</value>
 								</property>
 
 							</systemProperties>
@@ -930,7 +930,7 @@
 								</property>
 								<property>
 									<name>envFile</name>
-									<value>qa.properties</value>
+									<value>nov14.properties</value>
 								</property>
 
 							</systemProperties>
