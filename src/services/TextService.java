@@ -269,6 +269,8 @@ public class TextService extends SystemObjectImpl {
 		return printStringArray(str, "|");
 	}
 
+	
+
 	public String printStringArray(String[] str, String seperator) {
 		String output = "";
 		for (int i = 0; i < str.length; i++) {
@@ -381,7 +383,7 @@ public class TextService extends SystemObjectImpl {
 					String.valueOf(entry.getTimestamp()),
 					entry.getLevel().toString() };
 			if (filter != null && entry.getMessage().contains(filter)
-					|| useFilter ==false && filter == null) {
+					|| useFilter == false && filter == null) {
 				strList.add(str);
 			}
 		}

@@ -279,7 +279,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 					testResultService.addFailTest("Element: " + idValue
 							+ " not found. Description:" + message);
 				}
-				printScreen("Element: " + idValue + " not found ");
+				String idValueForPrintScreen=idValue.replaceAll("/", "_");
+				
+				printScreen("Element " + idValueForPrintScreen + " _not_found ");
 				Assert.fail("Element: " + idValue + " not found " + message);
 
 			}
@@ -1077,13 +1079,21 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	public void selectElementFromComboBox(String comboboxName,
 			String optionValue, boolean contains) throws Exception {
 		boolean selected = false;
+
+		String[] optionValues = null;
 		{
 			try {
 				Select select = new Select(waitForElement(comboboxName,
 						ByTypes.id));
 				// waitForElement(comboboxName, ByTypes.id);
 				List<WebElement> options = select.getOptions();
+				optionValues = new String[options.size()];
+
+				for (int j = 0; j < options.size(); j++) {
+					optionValues[j] = (options.get(j).getText());
+				}
 				for (int i = 0; i < options.size(); i++) {
+
 					if (contains == false) {
 						if (options.get(i).getText().equals(optionValue)) {
 							select.selectByIndex(i);
@@ -1114,6 +1124,8 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 			catch (Exception e) {
 				System.out.println(e.toString());
+				System.out.println("Options were: "
+						+ textService.printStringArray(optionValues));
 				printScreen("problem selecting from combo box");
 				testResultService.addFailTest(
 						"problem selecting from combo box", true);
@@ -1157,7 +1169,8 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			option = select.getFirstSelectedOption();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			testResultService.addFailTest("getting value from combo box: "+comboBoxId+" failed");
+			testResultService.addFailTest("getting value from combo box: "
+					+ comboBoxId + " failed");
 		}
 
 		return option.getText();

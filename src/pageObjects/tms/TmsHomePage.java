@@ -41,10 +41,14 @@ public class TmsHomePage extends GenericPage {
 	}
 
 	public TmsHomePage clickOnWritingAssignments() throws Exception {
-		webDriver
-				.waitForElement(
-						"//a[@href='../Report/writingAssignments.aspx']",
-						ByTypes.xpath).click();
+		// webDriver
+		// .waitForElement(
+		// "//a[@href='../Report/writingAssignments.aspx']",
+		// ByTypes.xpath).click();
+		// return this;
+
+		webDriver.waitForElement("Reports", ByTypes.linkText).click();
+		webDriver.waitForElement("Writing Assignments", ByTypes.linkText).click();
 		return this;
 	}
 
@@ -823,7 +827,8 @@ public class TmsHomePage extends GenericPage {
 	}
 
 	public void clickOnSave() throws Exception {
-		webDriver.waitForElement("//td[@id='SaveTd0']//span", ByTypes.xpath).click();
+		webDriver.waitForElement("//td[@id='SaveTd0']//span", ByTypes.xpath)
+				.click();
 
 	}
 
