@@ -940,7 +940,8 @@
 								<include>**/LicenseUsageReportTests.java</include>
 								<include>**/DashboardHeaderTests.java</include>
 								<include>**/DashboardWidgetTests.java</include>
-
+								
+								<include>**/AccessLicenseTests.java</include>
 							</includes>
 
 						</configuration>

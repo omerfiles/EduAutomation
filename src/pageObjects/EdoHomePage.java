@@ -352,7 +352,7 @@ public class EdoHomePage extends GenericPage {
 	public GenericPage clickOnTeachersCorner(boolean showDashboard)
 			throws Exception {
 		try {
-			webDriver.printScreen("OpeningTeachersCorner");
+//			webDriver.printScreen("OpeningTeachersCorner");
 			webDriver.waitForElement("//a[@href='javascript:gotoTMS()']",
 					ByTypes.xpath).click();
 			webDriver.sleep(2000);

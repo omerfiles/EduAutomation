@@ -55,7 +55,7 @@ public class AccessLicenseTests extends EdusoftWebTest {
 		edoLoginPage.submitLogin();
 		String popupText = edoLoginPage.getPopupText();
 		testResultService
-				.assertEquals("bbb", popupText, "popup text not found");
+				.assertEquals("Your access license is no longer active. Please contact your administrator for activation.", popupText, "popup text not found");
 
 	}
 
