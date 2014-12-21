@@ -356,7 +356,7 @@ public class NetService extends SystemObjectImpl {
 		return arrStatus;
 	}
 
-	protected NtlmPasswordAuthentication getAuth() {
+	public NtlmPasswordAuthentication getAuth() {
 		NtlmPasswordAuthentication auth = new NtlmPasswordAuthentication("",
 				"automation", "tamar2010");
 		return auth;

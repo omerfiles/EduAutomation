@@ -13,6 +13,10 @@ import java.util.concurrent.TimeUnit;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
+import jcifs.smb.NtlmPasswordAuthentication;
+import jcifs.smb.SmbFile;
+import jcifs.smb.SmbFileOutputStream;
+
 import org.apache.http.HttpHost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHttpEntityEnclosingRequest;
@@ -56,6 +60,7 @@ import Enums.AutoParams;
 import Enums.ByTypes;
 import Enums.TestRunnerType;
 import services.DbService;
+import services.NetService;
 import services.TestResultService;
 import services.TextService;
 import jsystem.framework.report.Reporter;
@@ -279,8 +284,8 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 					testResultService.addFailTest("Element: " + idValue
 							+ " not found. Description:" + message);
 				}
-				String idValueForPrintScreen=idValue.replaceAll("/", "_");
-				
+				String idValueForPrintScreen = idValue.replaceAll("/", "_");
+
 				printScreen("Element " + idValueForPrintScreen + " _not_found ");
 				Assert.fail("Element: " + idValue + " not found " + message);
 
@@ -1042,8 +1047,6 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		this.testResultService = testResultService;
 
 	}
-	
-	
 
 	public void selectElementFromComboBox(String comboboxName,
 			String optionValue) throws Exception {
@@ -1146,11 +1149,21 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			LogEntries logEntries = getConsoleLogEntries();
 			logList = textService.getListFromLogEntries(logEntries, logFilter,
 					useFllter);
-			String consoleLogPath = "files/consoleOutput/consoleLog"
+			// TD DO change to SMB auth
+			NetService netService = new NetService();
+
+			String tempCsvFile = "files/csvFiles/temp" + dbService.sig(6);
+			SmbFile sFile = new SmbFile(tempCsvFile);
+			textService.writeArrayistToCSVFile(tempCsvFile, logList);
+			NtlmPasswordAuthentication auto = netService.getAuth();
+			String path = "smb://10.1.0.83/automationLogs/consoleLog"
 					+ dbService.sig() + ".csv";
-			textService.writeArrayistToCSVFile(consoleLogPath, logList);
-			System.out
-					.println("Console log can be found in: " + consoleLogPath);
+			SmbFile dFile = new SmbFile(path, auto);
+			sFile.copyTo(dFile);
+//			SmbFileOutputStream outputStream = new SmbFileOutputStream(smbFile);
+//			outputStream.write(b);
+			// textService.writeArrayistToCSVFile(path, logList);
+			System.out.println("Console log can be found in: " + path);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

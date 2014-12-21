@@ -4,11 +4,14 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import jcifs.smb.NtlmPasswordAuthentication;
+import jcifs.smb.SmbFile;
 import jsystem.framework.report.Reporter.EnumReportLevel;
 import junit.framework.SystemTestCase4;
 import junit.framework.SystemTestCaseImpl;
 import junit.framework.TestCase;
 
+import org.apache.commons.compress.utils.IOUtils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -163,21 +166,34 @@ public class EdusoftBasicTest extends TestCase {
 
 		// textService.writeArrayistToCSVFile(System.getProperty("user.dir")
 		// + "/log//current//TestLog.csv", report.getReportLogs());
-		String testLogFIle = "testlog" + dbService.sig() + ".csv";
-		
-		
-		
-		testLogFIle=configuration.getGlobalProperties("logserver")
-				+ "\\automationLogs\\" + testLogFIle;
-		textService.writeArrayistToCSVFile(
-				testLogFIle,
-				report.getReportLogs());
-		String	path = "http:"+testLogFIle;
-		System.out.println("Test log can be found here: "+ path);
-				
-		
-		
-		
+		try {
+//			String fileName = "testlog" + dbService.sig() + ".csv";
+//			String testLogFIle = "files/csvFiles/" + fileName;
+//			textService.writeArrayistToCSVFile(testLogFIle,
+//					report.getReportLogs());
+//
+//			SmbFile sFile = new SmbFile(System.getProperty("user.dir")
+//					+ testLogFIle);
+//			NtlmPasswordAuthentication auto = netService.getAuth();
+//			String path = "smb://10.1.0.83/automationLogs/" + fileName;
+//
+//			SmbFile dFile = new SmbFile(path, auto);
+//			dFile.createNewFile();
+//
+//			IOUtils.copy(sFile.getInputStream(), dFile.getOutputStream());
+
+			// testLogFIle=configuration.getGlobalProperties("logserver")
+			// + "\\automationLogs\\" + testLogFIle;
+			// textService.writeArrayistToCSVFile(
+			// testLogFIle,
+			// report.getReportLogs());
+			// String path = "http:"+testLogFIle;
+//			System.out.println("Test log can be found here: " + path);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		boolean testHasFailedResult = testResultService.hasFailedResults();
 		if (printResults == true && testHasFailedResult) {
 			testResultService.printAllFailures();

@@ -367,6 +367,7 @@ public class TextService extends SystemObjectImpl {
 		String csv = path;
 		CSVWriter writer = new CSVWriter(new FileWriter(csv));
 		writer.writeAll(list);
+		
 		writer.close();
 	}
 
