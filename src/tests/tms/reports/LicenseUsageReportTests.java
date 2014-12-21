@@ -42,8 +42,9 @@ public class LicenseUsageReportTests extends EdusoftWebTest {
 
 	public void testLicenseUsageReportAsTMSDomain_16168(UserType userType)
 			throws Exception {
-		String packageName = "B1-A3/6M_12M";
-		String studentFirstName = "student1";
+		String packageName = "FD-A3/6m_7m";
+		String classForTest="class1";
+		String studentFirstName = configuration.getProperty("student");
 
 		// Login as TMSDOMAIN
 		report.startLevel("Login as " + userType.toString());
@@ -97,7 +98,7 @@ public class LicenseUsageReportTests extends EdusoftWebTest {
 		}
 		
 		report.startLevel("Select class");
-		tmsHomePage.selectClass(configuration.getProperty("classname"), false,
+		tmsHomePage.selectClass(classForTest, false,
 				false);
 		sleep(2);
 		report.startLevel("Select package name");
@@ -115,7 +116,7 @@ public class LicenseUsageReportTests extends EdusoftWebTest {
 		testResultService.assertEquals(packageName, packageNameFromSammary,
 				"Package name not found in report sammary");
 
-		testResultService.assertEquals(configuration.getProperty("classname"),
+		testResultService.assertEquals(classForTest,
 				classNameFromSammary, "class name not found in report sammary");
 
 		report.startLevel("Check for specific student details");
