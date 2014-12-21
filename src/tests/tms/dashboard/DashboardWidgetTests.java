@@ -68,14 +68,14 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 
 	}
 
-	
+	@Test
 	@TestCaseParams(testCaseID = { "17097" })
 	public void testDataValidationOnClassTestScoreWidget() throws Exception {
 
-		String className = "1 student class";
-		String courseName = "2 unis";
+		String className = "classForCacheTest";
+		String courseName = "2 units";
 		String TeacherUser = "autoTeacher2";
-		String[] unitsAvgScores = new String[] { "75", "50" };
+		String[] unitsAvgScores = new String[] { "60", "70" };
 
 		startStep("Login as the teacher and open the dashboard");
 		EdoHomePage edoHomePage = pageHelper.loginAsTeacher(TeacherUser,
@@ -86,7 +86,7 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 		startStep("Select class and course");
 		dashboardPage.hideSelectionBar();
 		dashboardPage.selectClassInDashBoard(className);
-	
+		sleep(2);
 
 		dashboardPage.selectCourseInDashboard(courseName);
 		sleep(1);
@@ -119,11 +119,11 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 		testResultService.assertEquals("Avg. Scores", title, "title not found");
 	}
 
-	
+	@Test
 	public void testPLTWidget() throws Exception {
-		String classNameForTest = "class100";
+		String classNameForTest = "class1";
 		String schoolName = "qa";
-		autoInstitution.setInstitutionId("5230002");
+		autoInstitution.setInstitutionId("5231907");
 		autoInstitution.setInstitutionName(schoolName);
 
 		EdoHomePage edoHomePage = pageHelper.loginAsTeacher("autoTeacher",

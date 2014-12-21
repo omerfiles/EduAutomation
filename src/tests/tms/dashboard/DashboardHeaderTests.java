@@ -140,7 +140,7 @@ public class DashboardHeaderTests extends DashboardBasicTest {
 				.clickOnTeachersCorner(true);
 		report.startLevel("Select a teacher from the combo box");
 		getClassAndCourseWithLastProgress(teacherName, UserType.SchoolAdmin);
-//		dashboardPage.ClickOnBar();
+		dashboardPage.hideSelectionBar();
 		dashboardPage.selectTeacherInDashboard(teacherName);
 		report.startLevel("Check that class and course with last update are selected");
 

@@ -699,6 +699,7 @@ public class DbService extends SystemObjectImpl {
 
 	public List<List> getListFromStoreRrecedure(String sql) throws SQLException {
 		List<List> rsList = new ArrayList<List>();
+		System.out.println("SQL query was: "+sql);
 		try {
 			db_userid = configuration.getProperty("db.connection.username");
 			db_password = configuration.getProperty("db.connection.password");

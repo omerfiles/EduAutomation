@@ -58,6 +58,8 @@ public class AccessLicenseTests extends EdusoftWebTest {
 				.assertEquals("Your access license is no longer active. Please contact your administrator for activation.", popupText, "popup text not found");
 
 	}
+	
+
 
 	@After
 	public void tearDowb() throws Exception {

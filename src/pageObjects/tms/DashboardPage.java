@@ -15,6 +15,7 @@ public class DashboardPage extends TmsHomePage {
 
 	private static final String SELECT_COURSE = "selectCourse";
 	private static final String SELECT_CLASS = "selectClass";
+	private static final String SELECT_TEACHER="selectTeacher";
 
 	public DashboardPage(GenericWebDriver webDriver,
 			TestResultService testResultService) {
@@ -70,8 +71,8 @@ public class DashboardPage extends TmsHomePage {
 
 	}
 
-	public void selectTeacherInDashboard(String teacherName) {
-		// TODO Auto-generated method stub
+	public void selectTeacherInDashboard(String teacherName) throws Exception {
+		webDriver.selectElementFromComboBox(SELECT_TEACHER, teacherName,true);
 
 	}
 
@@ -219,7 +220,7 @@ public class DashboardPage extends TmsHomePage {
 
 	public void hoverOnClassScoreTooltip(int scoreIndex) throws Exception {
 		WebElement tooltip = webDriver.waitForElement(
-				"//div[contains(@class,'point-'" + scoreIndex + ")]",
+				"//div[contains(@class,'point-" + scoreIndex + "')]",
 				ByTypes.xpath);
 		webDriver.hoverOnElement(tooltip);
 
