@@ -43,7 +43,7 @@ public class AccessLicenseTests extends EdusoftWebTest {
 		tmsHomePage.deactivateStudent();
 		webDriver.switchToMainWindow();
 		tmsHomePage.swithchToMainFrame();
-		
+
 		tmsHomePage.clickOnSave();
 
 		report.startLevel("Try to login with the deactivated student");
@@ -55,11 +55,52 @@ public class AccessLicenseTests extends EdusoftWebTest {
 		edoLoginPage.submitLogin();
 		String popupText = edoLoginPage.getPopupText();
 		testResultService
-				.assertEquals("Your access license is no longer active. Please contact your administrator for activation.", popupText, "popup text not found");
+				.assertEquals(
+						"Your access license is no longer active. Please contact your administrator for activation.",
+						popupText, "popup text not found");
 
 	}
-	
 
+	@Test
+	@TestCaseParams(testCaseID = { "16744" })
+	public void testCreateUserUsingUiWhenThereAreNoActiveLicenses()
+			throws Exception {
+
+		String testSchool = "auto2";
+		String testClass = "class1";
+
+		startStep("limit the number of access Licences in the institution");
+		TmsHomePage tmsPage = pageHelper.loginToTmsAsAdmin();
+		tmsPage.clickOnInstitutions();
+		String testSchoolId = dbService.getInstituteIdByName(testSchool);
+		tmsPage.clickOnInstitutionDetails(testSchoolId);
+		sleep(2);
+		webDriver.switchToNewWindow();
+		tmsPage.swithchToFormFrame();
+		tmsPage.setActiveLicencesUnlimited(false);
+		tmsPage.setNumberOfActiveLicences("1");
+		webDriver.switchToTopMostFrame();
+		tmsPage.clickOnInstSettingSubmitButton();
+
+		startStep("Try to add new user");
+		webDriver.switchToMainWindow();
+		tmsPage.swithchToMainFrame();
+		tmsPage.clickOnStudents();
+
+		tmsPage.selectInstitute(testSchool, null, true);
+		Thread.sleep(1000);
+		tmsPage.selectClass(testClass);
+
+		tmsPage.enterStudentDetails("Student" + dbService.sig(4));
+
+		String popupText = tmsPage.getPopupText();
+
+		testResultService
+				.assertEquals(
+						"There are not enough licenses to create more users. Please deactivate some users or contact your Administrator.",
+						popupText, "Error message was not displayed");
+
+	}
 
 	@After
 	public void tearDowb() throws Exception {
