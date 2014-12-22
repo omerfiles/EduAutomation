@@ -150,7 +150,7 @@ public class DashboardPage extends TmsHomePage {
 			}
 		}
 
-		webDriver.waitForElement("tmsDashNavHandle", ByTypes.id).click();
+//		webDriver.waitForElement("tmsDashNavHandle", ByTypes.id).click();
 		Thread.sleep(1000);
 	}
 
