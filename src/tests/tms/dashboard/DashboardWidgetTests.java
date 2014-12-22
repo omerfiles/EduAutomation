@@ -2,6 +2,7 @@ package tests.tms.dashboard;
 
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
 
@@ -23,7 +24,7 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 
 		startStep("Check widget title");
 		String title = dashboardPage.getWidgetTitle(1, 2);
-		testResultService.assertEquals("Avg. Scores", title, "title not found");
+		testResultService.assertEquals("Average Test Scores", title, "title not found");
 		startStep("Check that chart is displayed");
 		dashboardPage.checkIfWidgetHasData(1, 2);
 		startStep("Click widget link button and check the report opens");
@@ -52,7 +53,7 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 
 		startStep("Check widget title");
 		String title = dashboardPage.getWidgetTitle(1, 1);
-		testResultService.assertEquals("Completion Rate", title,
+		testResultService.assertEquals("Course Completion Rate", title,
 				"title not found");
 
 		// startStep("Check that chart is displayed");
@@ -116,9 +117,9 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 
 		startStep("Check widget title");
 		String title = dashboardPage.getWidgetTitle(1, 2);
-		testResultService.assertEquals("Avg. Scores", title, "title not found");
+		testResultService.assertEquals("Average Test Scores", title, "title not found");
 	}
-
+	@Ignore
 	@Test
 	public void testPLTWidget() throws Exception {
 		String classNameForTest = "class1";

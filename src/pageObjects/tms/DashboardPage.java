@@ -234,12 +234,12 @@ public class DashboardPage extends TmsHomePage {
 
 	}
 
-	public int getWidgetWidth(int row, int col) throws Exception {
-		int actualWidth = webDriver
+	public String getWidgetWidth(int row, int col) throws Exception {
+		String actualWidth = webDriver
 				.waitForElement(
 						"//div[@class='dashboard']//div[" + row + "]//div["
-								+ col + "]", ByTypes.xpath).getSize()
-				.getWidth();
+								+ col + "]", ByTypes.xpath).getCssValue("width");
+				
 		return actualWidth;
 
 	}

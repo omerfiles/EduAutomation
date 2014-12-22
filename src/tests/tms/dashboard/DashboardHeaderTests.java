@@ -8,7 +8,7 @@ import Enums.UserType;
 import Interfaces.TestCaseParams;
 
 public class DashboardHeaderTests extends DashboardBasicTest {
-	//fixed 11.12.14
+	// fixed 11.12.14
 	@Test
 	@TestCaseParams(testCaseID = { "16908" })
 	public void TestKeepSelectedClassAndCourseWhenNavigating() throws Exception {
@@ -22,7 +22,7 @@ public class DashboardHeaderTests extends DashboardBasicTest {
 				.clickOnTeachersCorner(true);
 
 		startStep("Select class and course");
-//		dashboardPage.ClickOnBar();
+		// dashboardPage.ClickOnBar();
 		sleep(4);
 		dashboardPage.hideSelectionBar();
 		dashboardPage.selectClassInDashBoard(classToSelect);
@@ -69,7 +69,7 @@ public class DashboardHeaderTests extends DashboardBasicTest {
 
 		startStep("Click the Home button");
 		dashboardPage.ClickTheHomeButton();
-//		dashboardPage
+		// dashboardPage
 		dashboardPage.hideSelectionBar();
 		startStep("Check that the dashboard opens");
 		String selectedClass = dashboardPage.getSelectedClass();
@@ -122,10 +122,11 @@ public class DashboardHeaderTests extends DashboardBasicTest {
 		testResultService.assertEquals(classWithLastProgress, selectedClass);
 
 		String selectedCourse = dashboardPage.getSelectedCourse();
-		
+
 		testResultService.assertEquals(courseWithLastProgress, selectedCourse);
 	}
-//fails due t bug 17984
+
+	// fails due t bug 17984
 	@Test
 	@TestCaseParams(testCaseID = { "17347" })
 	public void testOpenDashboardAsSupervisorAndSelectTeaccher()
@@ -186,35 +187,32 @@ public class DashboardHeaderTests extends DashboardBasicTest {
 
 		startStep("Check dashbaord width");
 		int currentWidth = webDriver.getWindowWidth();
-		testResultService.assertEquals(1024, currentWidth,
+		testResultService.assertEquals(getDashboardwidth(), currentWidth,
 				"Current width is not 1024");
 
 		startStep("Check the width of widgets");
-		testResultService.assertEquals(dashboardPage.getWidgetWidth(1, 1),
-				getDashboardwidth() / 2, "wrong width of widget");
-		
-		testResultService.assertEquals(dashboardPage.getWidgetWidth(1, 2),
-				getDashboardwidth() / 2, "wrong width of widget");
+		testResultService.assertEquals("50%",
+				dashboardPage.getWidgetWidth(1, 1), "wrong width of widget");
 
+		testResultService.assertEquals("50%",
+				dashboardPage.getWidgetWidth(1, 2), "wrong width of widget");
 
 	}
-	
-	
-	@TestCaseParams(testCaseID = { "17382","17383" })
-	public void testHeaderHiddenAndDIsplayed() throws Exception{
+
+	@TestCaseParams(testCaseID = { "17382", "17383" })
+	public void testHeaderHiddenAndDIsplayed() throws Exception {
 		startStep("Login as a teacher and open the dashboard");
 		EdoHomePage edoHomePage = pageHelper.loginAsTeacher();
 		DashboardPage dashboardPage = (DashboardPage) edoHomePage
 				.clickOnTeachersCorner(true);
-		
+
 		startStep("Check that header is not displayed by default");
 		dashboardPage.checkThatClassComboBoxIsNotDisplayed();
 		dashboardPage.hideSelectionBar();
 		sleep(2);
 		webDriver.printScreen("test");
 		dashboardPage.checkThatClassComboBoxIsNotDisplayed();
-		
-		
+
 	}
 
 }
