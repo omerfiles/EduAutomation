@@ -33,6 +33,14 @@ public class ReportPage extends GenericPage {
 		return packageNameFromSammary;
 
 	}
+	
+	public String getNumberOfStudentsInClass() throws Exception{
+		String studentsNumber = webDriver
+				.waitForElement(
+						"//table[@id='tblLicUsageSummeryReportGrid']//tbody//tr[2]//td[3]",
+						ByTypes.xpath).getText();
+		return studentsNumber;
+	}
 
 	public String getSammaryClassName() throws Exception {
 		String classNameFromSammary = webDriver
