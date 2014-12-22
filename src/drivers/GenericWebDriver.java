@@ -710,10 +710,19 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 						+ "ScreenShot" + message.replace(" ", "") + sig
 						+ ".png";
 			}
-			FileOutputStream fos = new FileOutputStream(new File(newFileName));
-			fos.write(decodedScreenshot);
-			fos.close();
-			System.out.println(path);
+			NetService netService=new NetService();
+			String sFileName="scr_"
+					+ dbService.sig(8)+message + ".png";
+			SmbFile smbFile = new SmbFile(
+					"smb://10.1.0.83/automationScreenshots/"+sFileName,netService.getAuth());
+			SmbFileOutputStream smbFileOutputStream = new SmbFileOutputStream(
+					smbFile);
+
+//			FileOutputStream fos = new FileOutputStream(new File(newFileName));
+//			fos.write(decodedScreenshot);
+			smbFileOutputStream.write(decodedScreenshot);
+			smbFileOutputStream.close();
+			System.out.println("http://jenkins/automationScreenshots/"+sFileName);
 
 		} catch (Exception e) {
 			System.out.println("Taking the screenshot failed: " + e.toString());
@@ -1160,8 +1169,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 					+ dbService.sig() + ".csv";
 			SmbFile dFile = new SmbFile(path, auto);
 			sFile.copyTo(dFile);
-//			SmbFileOutputStream outputStream = new SmbFileOutputStream(smbFile);
-//			outputStream.write(b);
+			// SmbFileOutputStream outputStream = new
+			// SmbFileOutputStream(smbFile);
+			// outputStream.write(b);
 			// textService.writeArrayistToCSVFile(path, logList);
 			System.out.println("Console log can be found in: " + path);
 		} catch (Exception e) {
