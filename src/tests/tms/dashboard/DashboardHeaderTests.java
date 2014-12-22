@@ -116,7 +116,18 @@ public class DashboardHeaderTests extends DashboardBasicTest {
 
 		getClassAndCourseWithLastProgress(autoInstitution.getTeacherUserName(),
 				UserType.Teahcer);
-		sleep(2);
+		sleep(5);
+
+		startStep("Check class and course labels");
+		String classInLabel = dashboardPage.getClassLabelText();
+		String courseInLabel = dashboardPage.getCourseLabelText();
+
+		testResultService.assertEquals(classWithLastProgress, classInLabel,
+				"class name not found in label");
+		
+		testResultService.assertEquals(courseWithLastProgress, courseInLabel,
+				"course name not found in label");
+
 		dashboardPage.hideSelectionBar();
 		String selectedClass = dashboardPage.getSelectedClass();
 		testResultService.assertEquals(classWithLastProgress, selectedClass);
@@ -199,6 +210,7 @@ public class DashboardHeaderTests extends DashboardBasicTest {
 
 	}
 
+	@Test
 	@TestCaseParams(testCaseID = { "17382", "17383" })
 	public void testHeaderHiddenAndDIsplayed() throws Exception {
 		startStep("Login as a teacher and open the dashboard");
@@ -207,11 +219,22 @@ public class DashboardHeaderTests extends DashboardBasicTest {
 				.clickOnTeachersCorner(true);
 
 		startStep("Check that header is not displayed by default");
+		sleep(5);
 		dashboardPage.checkThatClassComboBoxIsNotDisplayed();
+
+		startStep("Click the handle");
 		dashboardPage.hideSelectionBar();
-		sleep(2);
-		webDriver.printScreen("test");
-		dashboardPage.checkThatClassComboBoxIsNotDisplayed();
+
+		startStep("Select only class and check that Go button is disabled");
+		dashboardPage.selectClassInDashBoard(classForCacheTest);
+		sleep(3);
+		boolean isEnabled = dashboardPage.getDashboardGoButtonStatus();
+		testResultService
+				.assertEquals(false, isEnabled, "Go button is enabled");
+
+		startStep("Select course and click the Go button");
+
+		startStep("Check that header becomes hidden");
 
 	}
 

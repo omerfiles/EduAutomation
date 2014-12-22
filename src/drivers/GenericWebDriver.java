@@ -1,17 +1,11 @@
 package drivers;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 
 import jcifs.smb.NtlmPasswordAuthentication;
 import jcifs.smb.SmbFile;
@@ -41,7 +35,6 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.logging.LogEntries;
-import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -63,7 +56,6 @@ import services.DbService;
 import services.NetService;
 import services.TestResultService;
 import services.TextService;
-import jsystem.framework.report.Reporter;
 import junit.framework.SystemTestCaseImpl;
 
 @Service
@@ -487,7 +479,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		} catch (TimeoutException e) {
 			// Assert.fail("Frame waw not found");
 			System.out.println(e.toString());
-			testResultService.addFailTest("Frame was not found", true);
+			testResultService.addFailTest("Frame was not found", true,true);
 		} finally {
 
 		}
@@ -594,10 +586,21 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		// testResultService.assertTrue("Element with xpath " + xpath
 		// + " found when it should not", elementFound == false);
 		// }
-		WebDriverWait wait = new WebDriverWait(webDriver, 2, 1000);
+		WebDriverWait wait = new WebDriverWait(webDriver, timeout, 1000);
 
-		wait.until(ExpectedConditions.invisibilityOfElementLocated(By
-				.xpath(xpath)));
+		try {
+			wait.until(ExpectedConditions.invisibilityOfElementLocated(By
+					.xpath(xpath)));
+			WebElement element = waitForElement(xpath, ByTypes.xpath, 10, false);
+			if (element != null) {
+				testResultService.addFailTest("Element with xpath: " + xpath
+						+ " was found when it should not");
+			}
+		} catch (TimeoutException e) {
+			// TODO Auto-generated catch block
+			testResultService.addFailTest("Element with xpath: " + xpath
+					+ " was found when it should not");
+		}
 
 	}
 
@@ -710,19 +713,21 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 						+ "ScreenShot" + message.replace(" ", "") + sig
 						+ ".png";
 			}
-			NetService netService=new NetService();
-			String sFileName="scr_"
-					+ dbService.sig(8)+message + ".png";
+			NetService netService = new NetService();
+			String sFileName = "scr_" + dbService.sig(8) + message + ".png";
 			SmbFile smbFile = new SmbFile(
-					"smb://10.1.0.83/automationScreenshots/"+sFileName,netService.getAuth());
+					"smb://10.1.0.83/automationScreenshots/" + sFileName,
+					netService.getAuth());
 			SmbFileOutputStream smbFileOutputStream = new SmbFileOutputStream(
 					smbFile);
 
-//			FileOutputStream fos = new FileOutputStream(new File(newFileName));
-//			fos.write(decodedScreenshot);
+			// FileOutputStream fos = new FileOutputStream(new
+			// File(newFileName));
+			// fos.write(decodedScreenshot);
 			smbFileOutputStream.write(decodedScreenshot);
 			smbFileOutputStream.close();
-			System.out.println("http://jenkins/automationScreenshots/"+sFileName);
+			System.out.println("http://jenkins/automationScreenshots/"
+					+ sFileName);
 
 		} catch (Exception e) {
 			System.out.println("Taking the screenshot failed: " + e.toString());
@@ -1082,7 +1087,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			catch (Exception e) {
 				printScreen("problem selecting from combo box");
 				testResultService.addFailTest(
-						"problem selecting from combo box", true);
+						"problem selecting from combo box", true,true);
 				e.printStackTrace();
 			}
 
@@ -1128,7 +1133,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 				}
 				if (selected == false) {
 					testResultService.addFailTest(optionValue
-							+ " was not found in the combo box", true);
+							+ " was not found in the combo box", true,true);
 				}
 			}
 
@@ -1142,7 +1147,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 						+ textService.printStringArray(optionValues));
 				printScreen("problem selecting from combo box");
 				testResultService.addFailTest(
-						"problem selecting from combo box", true);
+						"problem selecting from combo box", true,true);
 				e.printStackTrace();
 			}
 
@@ -1212,7 +1217,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 				.setScriptTimeout(timeout, TimeUnit.SECONDS);
 	}
 
-	public String getPopUpText() {
+	public String getPopUpText() throws Exception {
 
 		String alertText = null;
 		try {
@@ -1223,7 +1228,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			}
 		} catch (TimeoutException e) {
 			// TODO Auto-generated catch block
-			testResultService.addFailTest("Alert was not found", true);
+			testResultService.addFailTest("Alert was not found", true,false);
 		}
 		return alertText;
 

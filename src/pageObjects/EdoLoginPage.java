@@ -116,7 +116,7 @@ public class EdoLoginPage extends LoginPage {
 		return this;
 	}
 
-	public String getPopupText() {
+	public String getPopupText() throws Exception {
 		return webDriver.getPopUpText();
 
 	}

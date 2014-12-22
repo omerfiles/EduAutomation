@@ -97,6 +97,7 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 		audioService = (AudioService) ctx.getBean("AudioService");
 
 		setEnableLoggin(true);
+		testResultService.setWebDriver(webDriver);
 
 	}
 
@@ -107,21 +108,22 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 		// pageHelper.logOut();
 		// }
 
-//		if (enableLoggin == true && browser.equals(Browsers.chrome.toString())) {
-//			LogEntries logEntries = webDriver.getConsoleLogEntries();
-//			boolean useLogFilter=true;
-//			if(logFilter==null){
-//				useLogFilter=false;
-//			}
-//			List<String[]> logList = textService.getListFromLogEntries(
-//					logEntries, logFilter,useLogFilter);
-//			String consoleLogPath = "files/consoleOutput/consoleLog"
-//					+ dbService.sig() + ".csv";
-//			textService.writeArrayistToCSVFile(consoleLogPath, logList);
-//			System.out
-//					.println("Console log can be found in: " + consoleLogPath);
-//
-//		}
+		// if (enableLoggin == true &&
+		// browser.equals(Browsers.chrome.toString())) {
+		// LogEntries logEntries = webDriver.getConsoleLogEntries();
+		// boolean useLogFilter=true;
+		// if(logFilter==null){
+		// useLogFilter=false;
+		// }
+		// List<String[]> logList = textService.getListFromLogEntries(
+		// logEntries, logFilter,useLogFilter);
+		// String consoleLogPath = "files/consoleOutput/consoleLog"
+		// + dbService.sig() + ".csv";
+		// textService.writeArrayistToCSVFile(consoleLogPath, logList);
+		// System.out
+		// .println("Console log can be found in: " + consoleLogPath);
+		//
+		// }
 
 		System.out.println("Start of EdusoftWebTest teardown");
 		try {

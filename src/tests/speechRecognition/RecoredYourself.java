@@ -24,7 +24,7 @@ public class RecoredYourself extends SpeechRecognitionBasicTest {
 	public void setup() throws Exception {
 		super.setup();
 		setEnableLoggin(true);
-		setLogFilter("Incomming message");
+//		setLogFilter("Incomming message");
 		setPrintResults(true);
 		
 

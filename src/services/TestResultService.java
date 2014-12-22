@@ -19,8 +19,15 @@ public class TestResultService extends SystemObjectImpl {
 	List<String> results = new ArrayList<String>();
 	List<String> consoleLogEntries = new ArrayList<String>();
 
-	public void addFailTest(String failCause, boolean terminateTest) {
+	private GenericWebDriver webDriver;
+
+	public void addFailTest(String failCause, boolean terminateTest,
+			boolean takeScreenshot) throws Exception {
 		results.add(failCause);
+		if (takeScreenshot) {
+			webDriver.printScreen(failCause);
+		}
+
 		if (terminateTest == true) {
 			Assert.fail("Terminating test");
 		}
@@ -123,6 +130,10 @@ public class TestResultService extends SystemObjectImpl {
 
 	public void setConsoleLogEntries(List<String> consoleLogEntries) {
 		this.consoleLogEntries = consoleLogEntries;
+	}
+
+	public void setWebDriver(GenericWebDriver webDriver) {
+		this.webDriver = webDriver;
 	}
 
 }

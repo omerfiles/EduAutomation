@@ -25,21 +25,21 @@ public class DashboardCacheTest extends DashboardBasicTest {
 		EdoHomePage edoHomePage = pageHelper.loginAsTeacher();
 		DashboardPage dashboardPage = (DashboardPage) edoHomePage
 				.clickOnTeachersCorner(true);
-		String className = "classForCacheTest";
+		
 		String courseName = "1 unit 1 component";
 		String studentName = "Stud" + dbService.sig(4);
 
 		int cacheInterval = 5;
 
-		pageHelper.addStudent(studentName, className);
+		pageHelper.addStudent(studentName, classForCacheTest);
 
 		Course course = pageHelper.getCourses().get(26);
 
-		String oldScore = getAvgScoresByClassIdAndCourseId(className,
+		String oldScore = getAvgScoresByClassIdAndCourseId(classForCacheTest,
 				courseName).get(0)[0];
 		sleep(4);
 		dashboardPage.hideSelectionBar();
-		dashboardPage.selectClassInDashBoard(className);
+		dashboardPage.selectClassInDashBoard(classForCacheTest);
 
 		dashboardPage.selectCourseInDashboard(courseName);
 		dashboardPage.clickOnDashboardGoButton();
@@ -140,7 +140,7 @@ public class DashboardCacheTest extends DashboardBasicTest {
 		webDriver.switchToMainWindow();
 		edoHomePage.clickOnTeachersCorner(true);
 		sleep(2);
-		String newScoreAvg = getAvgScoresByClassIdAndCourseId(className,
+		String newScoreAvg = getAvgScoresByClassIdAndCourseId(classForCacheTest,
 				courseName).get(0)[0];
 		actualUnitScore = dashboardPage.getAvgScorePerUnitClassTestScore(0);
 		testResultService.assertEquals(newScoreAvg, actualUnitScore,

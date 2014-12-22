@@ -13,6 +13,7 @@ import pageObjects.tms.DashboardPage;
 public class DashboardWidgetTests extends DashboardBasicTest {
 
 	@Test
+	@TestCaseParams(testCaseID = { "17947" })
 	public void testClassCompletionWidget() throws Exception {
 
 		EdoHomePage edoHomePage = pageHelper.loginAsTeacher();
@@ -24,13 +25,14 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 
 		startStep("Check widget title");
 		String title = dashboardPage.getWidgetTitle(1, 2);
-		testResultService.assertEquals("Average Test Scores", title, "title not found");
+		testResultService.assertEquals("Average Test Scores", title,
+				"title not found");
 		startStep("Check that chart is displayed");
 		dashboardPage.checkIfWidgetHasData(1, 2);
 		startStep("Click widget link button and check the report opens");
 
 		startStep("Click on report link, check that report opens and check selected class");
-		dashboardPage.clickOnSuccessWidgetButton();
+		dashboardPage.clickOnCompletionWidgetButton();
 
 		sleep(4);
 		dashboardPage.checkForReportResults();
@@ -42,6 +44,8 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 	}
 
 	@Test
+	@TestCaseParams(testCaseID = { "17097"})
+	
 	public void testClassTestScoreWidget() throws Exception {
 
 		EdoHomePage edoHomePage = pageHelper.loginAsTeacher();
@@ -64,8 +68,8 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 		dashboardPage.clickOnCompletionWidgetButton();
 		sleep(4);
 		dashboardPage.checkForReportResults();
-//		testResultService.assertEquals(courseName,
-//				dashboardPage.getSelectedCourseInReport());
+		// testResultService.assertEquals(courseName,
+		// dashboardPage.getSelectedCourseInReport());
 
 	}
 
@@ -102,7 +106,7 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 
 		startStep("Check tooltip");
 		dashboardPage.hoverOnClassScoreTooltip(0);
-		dashboardPage.checkClassScoreToolipContent("Unit 1", scoreUnit1,null);
+		dashboardPage.checkClassScoreToolipContent("Unit 1", scoreUnit1, null);
 
 	}
 
@@ -116,10 +120,17 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 		String courseName = dashboardPage.getSelectedCourse();
 
 		startStep("Check widget title");
-		String title = dashboardPage.getWidgetTitle(1, 2);
-		testResultService.assertEquals("Average Test Scores", title, "title not found");
+		String title = dashboardPage.getTpsWidgetTitle();
+		testResultService.assertEquals("Units", title, "title not found");
+
+		startStep("click on report test");
+		dashboardPage.clickOnTimeOnTaskReport();
+		sleep(4);
+		dashboardPage.checkForReportResults();
+
 	}
-	@Ignore
+
+	
 	@Test
 	public void testPLTWidget() throws Exception {
 		String classNameForTest = "class1";
@@ -131,14 +142,14 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 				"qa.aspx");
 		DashboardPage dashboardPage = (DashboardPage) edoHomePage
 				.clickOnTeachersCorner(true);
-//		dashboardPage.HoverOnBar();
-//		dashboardPage.selectClassInDashBoard(classNameForTest);
-//		dashboardPage.hoverOnHeaderAndSelectFromClassCombo(classNameForTest);
-		//TODO wait until all dashboard is loaded
+		// dashboardPage.HoverOnBar();
+		// dashboardPage.selectClassInDashBoard(classNameForTest);
+		// dashboardPage.hoverOnHeaderAndSelectFromClassCombo(classNameForTest);
+		// TODO wait until all dashboard is loaded
 		dashboardPage.hideSelectionBar();
 		dashboardPage.selectClassInDashBoard(classNameForTest);
 		dashboardPage.selectCourseInDashboardByIndex(1);
-//		dashboardPage.hideSelectionBar();
+		// dashboardPage.hideSelectionBar();
 		dashboardPage.clickOnDashboardGoButton();
 
 		sleep(10);
@@ -154,15 +165,15 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 		System.out.println(dashboardPage.getPltWidgetContent());
 		String numOfStudentsPerLevel = dashboardPage
 				.getNumberOfStudentsPerPltLevel();
-		List<String[]> pltScores = getClassPltScores(classNameForTest,
-				schoolName);
-		testResultService.assertEquals(pltScores.get(0)[0],
-				numOfStudentsPerLevel);
+		// List<String[]> pltScores = getClassPltScores(classNameForTest,
+		// schoolName);
+		// testResultService.assertEquals(pltScores.get(0)[0],
+		// numOfStudentsPerLevel);
 
-		String numOfStudentWithPLTScores = String
-				.valueOf(getNumberOfStudentWithPltScores(pltScores));
-		testResultService.assertEquals(numOfStudentWithPLTScores,
-				dashboardPage.getPltComletedStudents());
+//		String numOfStudentWithPLTScores = String
+//				.valueOf(getNumberOfStudentWithPltScores(pltScores));
+//		testResultService.assertEquals(numOfStudentWithPLTScores,
+//				dashboardPage.getPltComletedStudents());
 
 		// TODO - check filled person
 

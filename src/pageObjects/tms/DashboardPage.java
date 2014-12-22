@@ -15,7 +15,9 @@ public class DashboardPage extends TmsHomePage {
 
 	private static final String SELECT_COURSE = "selectCourse";
 	private static final String SELECT_CLASS = "selectClass";
-	private static final String SELECT_TEACHER="selectTeacher";
+	private static final String SELECT_TEACHER = "selectTeacher";
+
+	private static final String GOBUTTONID = "goButton";
 
 	public DashboardPage(GenericWebDriver webDriver,
 			TestResultService testResultService) {
@@ -48,7 +50,7 @@ public class DashboardPage extends TmsHomePage {
 	}
 
 	public void clickOnDashboardGoButton() throws Exception {
-		webDriver.waitForElement("goButton", ByTypes.id).click();
+		webDriver.waitForElement(GOBUTTONID, ByTypes.id).click();
 	}
 
 	public String getSelectedClass() throws Exception {
@@ -72,7 +74,7 @@ public class DashboardPage extends TmsHomePage {
 	}
 
 	public void selectTeacherInDashboard(String teacherName) throws Exception {
-		webDriver.selectElementFromComboBox(SELECT_TEACHER, teacherName,true);
+		webDriver.selectElementFromComboBox(SELECT_TEACHER, teacherName, true);
 
 	}
 
@@ -130,7 +132,8 @@ public class DashboardPage extends TmsHomePage {
 			throws Exception {
 		String score = webDriver.waitForElement(
 				"//div[@id='successWidget']//div[contains(@class,'point-"
-						+ unitNumber + "')]", ByTypes.xpath,true,20).getText();
+						+ unitNumber + "')]", ByTypes.xpath, true, 20)
+				.getText();
 		return score;
 
 	}
@@ -150,7 +153,7 @@ public class DashboardPage extends TmsHomePage {
 			}
 		}
 
-//		webDriver.waitForElement("tmsDashNavHandle", ByTypes.id).click();
+		// webDriver.waitForElement("tmsDashNavHandle", ByTypes.id).click();
 		Thread.sleep(1000);
 	}
 
@@ -164,7 +167,7 @@ public class DashboardPage extends TmsHomePage {
 		WebElement handleShow = webDriver.waitForElement(
 				"//div[@id='tmsDashNavHandle'][contains(@class,'handleOpen')]",
 				ByTypes.xpath, false, 5);
-		if (handleShow==null) {
+		if (handleShow == null) {
 			return true;
 		} else {
 			return false;
@@ -238,8 +241,9 @@ public class DashboardPage extends TmsHomePage {
 		String actualWidth = webDriver
 				.waitForElement(
 						"//div[@class='dashboard']//div[" + row + "]//div["
-								+ col + "]", ByTypes.xpath).getCssValue("width");
-				
+								+ col + "]", ByTypes.xpath)
+				.getCssValue("width");
+
 		return actualWidth;
 
 	}
@@ -267,5 +271,34 @@ public class DashboardPage extends TmsHomePage {
 		String time = webDriver.waitForElement(
 				"//div[@class='LastUpdatedHrs']", ByTypes.xpath).getText();
 		return date + " " + time;
+	}
+
+	public boolean getDashboardGoButtonStatus() throws Exception {
+		WebElement element = webDriver.waitForElement(GOBUTTONID, ByTypes.id);
+
+		if (element.isEnabled()) {
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
+	public void clickOnTimeOnTaskReport() throws Exception {
+		webDriver.waitForElement("TimeOnTask", ByTypes.id).click();
+
+	}
+
+	public String getTpsWidgetTitle() throws Exception {
+		return webDriver.waitForElement("unitsBut", ByTypes.id).getText();
+
+	}
+
+	public String getClassLabelText() throws Exception {
+		return webDriver.waitForElement("spnClass", ByTypes.id).getText();
+	}
+
+	public String getCourseLabelText() throws Exception {
+		return webDriver.waitForElement("spnCourse", ByTypes.id).getText();
 	}
 }

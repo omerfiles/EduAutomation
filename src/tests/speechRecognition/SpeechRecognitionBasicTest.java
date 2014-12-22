@@ -165,14 +165,14 @@ public class SpeechRecognitionBasicTest extends EdusoftWebTest {
 		}
 	}
 
-	public void checkIfErrorAppear(String message) {
+	public void checkIfErrorAppear(String message) throws Exception {
 
 		String []errorCodes=new String[]{"10","-1","-10","-20","-40","-50","-60"};
 		for(int i=0;i<errorCodes.length;i++){
 			if (message.contains("("+errorCodes[i]+")")) {
 				System.out.println(message);
 				testResultService.addFailTest(message,
-						true);
+						true,true);
 				break;
 			}
 		}

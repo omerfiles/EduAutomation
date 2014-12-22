@@ -20,6 +20,7 @@ public class DashboardBasicTest extends EdusoftWebTest {
 	protected String courseWithLastProgress;
 
 	public static final String FIRST_DISCOVERIES = "First Discoveries";
+	public static final String classForCacheTest= "classForCacheTest";
 
 	private static final int DASHBOARDWIDTH = 1024;
 
