@@ -147,14 +147,14 @@ public class EraterService extends SystemObjectImpl {
 		String sqlxml = dbService
 				.getStringFromQuery(
 						"select EraterXML from Erater where writingId="
-								+ writingId, 10);
+								+ writingId, 10,false);
 		report.report("RAW XML: " + sqlxml);
 		try {
 			xmlList = netService.getListFromXmlNode(
 					netService.getXmlFromString(sqlxml), "/WAT:DetailInfo");
 			String jsonStr = dbService.getStringFromQuery(
 					"select EraterJson from Erater where writingId="
-							+ writingId, 10);
+							+ writingId, 10,false);
 			report.report("RAW JSON: " + jsonStr);
 			jsonList = netService.getListFromJson(jsonStr, "sections",
 					"details", new String[] { "feedback", "length", "offset" });

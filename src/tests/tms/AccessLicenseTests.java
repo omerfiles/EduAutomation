@@ -1,5 +1,6 @@
 package tests.tms;
 
+import org.hamcrest.core.IsNull;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,6 +11,11 @@ import Interfaces.TestCaseParams;
 import tests.misc.EdusoftWebTest;
 
 public class AccessLicenseTests extends EdusoftWebTest {
+
+	String testSchool = "auto2";
+	String testClass = "class1";
+
+	TmsHomePage tmsPage = null;
 
 	@Before
 	public void setup() throws Exception {
@@ -66,21 +72,7 @@ public class AccessLicenseTests extends EdusoftWebTest {
 	public void testCreateUserUsingUiWhenThereAreNoActiveLicenses()
 			throws Exception {
 
-		String testSchool = "auto2";
-		String testClass = "class1";
-
-		startStep("limit the number of access Licences in the institution");
-		TmsHomePage tmsPage = pageHelper.loginToTmsAsAdmin();
-		tmsPage.clickOnInstitutions();
-		String testSchoolId = dbService.getInstituteIdByName(testSchool);
-		tmsPage.clickOnInstitutionDetails(testSchoolId);
-		sleep(2);
-		webDriver.switchToNewWindow();
-		tmsPage.swithchToFormFrame();
-		tmsPage.setActiveLicencesUnlimited(false);
-		tmsPage.setNumberOfActiveLicences("1");
-		webDriver.switchToTopMostFrame();
-		tmsPage.clickOnInstSettingSubmitButton();
+		limitActiveUsers();
 
 		startStep("Try to add new user");
 		webDriver.switchToMainWindow();
@@ -102,9 +94,44 @@ public class AccessLicenseTests extends EdusoftWebTest {
 
 	}
 
+	@Test
+	@TestCaseParams(testCaseID = { "17024" })
+	public void testCreateUserUsingAPIWhenThereAreNoActiveLicenses()
+			throws Exception {
+
+		String instId = dbService.getInstituteIdByName(testSchool);
+		String studentUserName = "students" + dbService.sig(6);
+		limitActiveUsers();
+
+		startStep("Try to add student using API");
+		pageHelper.createUserUsingApi(configuration.getProperty("sut.url"),
+				studentUserName, "fname", "lname", "12345", instId, testClass);
+
+		startStep("Check that user was not created");
+		String sql = "select * from Users where InstitutionId=" + instId
+				+ " and UserName='" + studentUserName + "'";
+		String dbResult = dbService.getStringFromQuery(sql,10,true);
+		testResultService.assertEquals(true, dbResult==null,"User was created in DB, when it should not");
+	}
+
 	@After
 	public void tearDowb() throws Exception {
 		super.tearDown();
+	}
+
+	public void limitActiveUsers() throws Exception {
+		startStep("limit the number of access Licences in the institution");
+		tmsPage = pageHelper.loginToTmsAsAdmin();
+		tmsPage.clickOnInstitutions();
+		String testSchoolId = dbService.getInstituteIdByName(testSchool);
+		tmsPage.clickOnInstitutionDetails(testSchoolId);
+		sleep(2);
+		webDriver.switchToNewWindow();
+		tmsPage.swithchToFormFrame();
+		tmsPage.setActiveLicencesUnlimited(false);
+		tmsPage.setNumberOfActiveLicences("1");
+		webDriver.switchToTopMostFrame();
+		tmsPage.clickOnInstSettingSubmitButton();
 	}
 
 }

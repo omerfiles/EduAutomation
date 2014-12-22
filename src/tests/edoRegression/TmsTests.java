@@ -137,7 +137,7 @@ public class TmsTests extends EdusoftWebTest {
 		String instituteName = dbService.getInstituteNameById(institutionId);
 		tmsHomePage.selectInstitute(instituteName, institutionId, false);
 		Thread.sleep(1000);
-		tmsHomePage.selectClass(configuration.getProperty("classname"));
+		tmsHomePage.selectClass(configuration.getProperty("classname"),true,true);
 
 		report.stopLevel();
 

@@ -444,39 +444,7 @@ public class PageHelperService extends SystemObjectImpl {
 
 	public void addStudent(String studentName, String className)
 			throws Exception {
-		// String studentName = "student" + dbService.sig(6);
-		// String studentPassword = "12345";
-		// TmsLoginPage tmsLoginPage = new TmsLoginPage(webDriver,
-		// testResultService);
-		// UserObject tmsAdmin = new UserObject();
-		// tmsAdmin.setUserName(configuration.getProperty("tmsadmin.user"));
-		// tmsAdmin.setPassword(configuration.getProperty("tmsadmin.password"));
-		// tmsLoginPage.OpenPage(configuration.getProperty("tms.url"));
-		// TmsHomePage tmsHomePage = tmsLoginPage.Login(tmsAdmin);
-		// tmsHomePage.waitForPageToLoad();
-		// report.stopLevel();
-		//
-		// //
-		// report.startLevel("Go to students section and select the institute",
-		// // EnumReportLevel.CurrentPlace);
-		// tmsHomePage.clickOnStudents();
-		// Thread.sleep(2000);
-		// String institutionId = configuration.getProperty("institution.id");
-		// String instituteName = dbService.getInstituteNameById(institutionId);
-		// tmsHomePage.selectInstitute(instituteName, institutionId, false,
-		// true);
-		// Thread.sleep(3000);
-		// tmsHomePage.selectClass(configuration.getProperty("classname"));
-		//
-		// report.stopLevel();
-		//
-		// // report.startLevel("Enter new student details",
-		// // EnumReportLevel.CurrentPlace);
-		//
-		// tmsHomePage.enterStudentDetails(studentName);
-		// String userId = dbService.getUserIdByUserName(studentName,
-		// autoInstitution.getInstitutionId());
-		// tmsHomePage.enterStudentPassword(userId, studentPassword);
+
 
 		// ************Using API to create the user
 

@@ -48,7 +48,8 @@ public class TmsHomePage extends GenericPage {
 		// return this;
 
 		webDriver.waitForElement("Reports", ByTypes.linkText).click();
-		webDriver.waitForElement("Writing Assignments", ByTypes.linkText).click();
+		webDriver.waitForElement("Writing Assignments", ByTypes.linkText)
+				.click();
 		return this;
 	}
 
@@ -241,15 +242,28 @@ public class TmsHomePage extends GenericPage {
 	public TmsHomePage enterStudentDetails(String studentName) throws Exception {
 		webDriver.switchToTopMostFrame();
 		webDriver.switchToFrame("mainFrame");
-		webDriver.waitForElement("FirstName", ByTypes.name).sendKeys(
-				studentName);
-		webDriver.waitForElement("LastName", ByTypes.name)
-				.sendKeys(studentName);
-		webDriver.waitForElement("UserName", ByTypes.name)
-				.sendKeys(studentName);
+		enterStudentFname(studentName);
+
+		enterStudentLname(studentName);
+		
+		enterStudentUserName(studentName);
+
+		
 		webDriver.waitForElement("//input[@value='Add']", ByTypes.xpath)
 				.click();
 		return this;
+	}
+
+	public void enterStudentFname(String fName) throws Exception {
+		webDriver.waitForElement("FirstName", ByTypes.name).sendKeys(fName);
+	}
+
+	public void enterStudentLname(String name) throws Exception {
+		webDriver.waitForElement("LastName", ByTypes.name).sendKeys(name);
+	}
+	public void enterStudentUserName(String userName)throws Exception{
+		webDriver.waitForElement("UserName", ByTypes.name)
+		.sendKeys(userName);
 	}
 
 	public TmsHomePage enterStudentPassword(String userId, String password)
@@ -849,6 +863,53 @@ public class TmsHomePage extends GenericPage {
 				.getSelectedValueFromComboBox("SelectClass");
 		swithchToMainFrame();
 		return className;
+	}
+
+	public void clickOnInstitutionDetails(String testSchoolId) throws Exception {
+		webDriver.waitForElement(
+				"//tbody[@id='con']//tr[@id='tr" + testSchoolId + "']//td",
+				ByTypes.xpath).click();
+
+	}
+
+	public void setActiveLicencesUnlimited(boolean setChecked) throws Exception {
+		// get status
+		boolean isChecked = webDriver.waitForElement("ActLicLimitation",
+				ByTypes.id, "access license checkbox").isSelected();
+		if (isChecked) {
+			if (!setChecked) {
+				// set uncheck
+				webDriver.waitForElement("ActLicLimitation", ByTypes.id,
+						"access license checkbox").click();
+			}
+		} else {
+			if (setChecked) {
+				webDriver.waitForElement("ActLicLimitation", ByTypes.id,
+						"access license checkbox").click();
+			}
+		}
+
+	}
+
+	public void setNumberOfActiveLicences(String number) throws Exception {
+		webDriver.waitForElement("NumOfActLic", ByTypes.id).clear();
+		webDriver.waitForElement("NumOfActLic", ByTypes.id).sendKeys(number);
+
+	}
+
+	public void clickOnInstSettingSubmitButton() throws Exception {
+		webDriver.waitForElement("Submitbutton", ByTypes.id).click();
+
+	}
+
+	public String getPopupText() {
+		return  webDriver.getAlertText(10);
+		
+	}
+
+	public void checkPopupText(String string) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -342,8 +342,13 @@ public class DbService extends SystemObjectImpl {
 		}
 	}
 
+	public String getStringFromQuery(String sql, boolean allowNull)
+			throws Exception {
+		return getStringFromQuery(sql, 10, allowNull);
+	}
+
 	public String getStringFromQuery(String sql) throws Exception {
-		return getStringFromQuery(sql, 10);
+		return getStringFromQuery(sql, 10, false);
 	}
 
 	public void runDeleteUpdateSql(String sql) throws Exception {
@@ -474,8 +479,8 @@ public class DbService extends SystemObjectImpl {
 		return list;
 	}
 
-	public String getStringFromQuery(String sql, int intervals)
-			throws Exception {
+	public String getStringFromQuery(String sql, int intervals,
+			boolean allowNull) throws Exception {
 		// System.out.println(configuration.getProperty("db.connection"));
 		report.report("Query is: " + sql + ". Max db time out is: "
 				+ MAX_DB_TIMEOUT);
@@ -527,9 +532,12 @@ public class DbService extends SystemObjectImpl {
 		} finally {
 
 			try {
-				if (str == null) {
+				if (str == null && allowNull == false) {
 					Assert.fail("Query result is null. Query was: " + sql);
+				} else if (str == null && allowNull == true) {
+					return null;
 				}
+
 			} catch (Exception e) {
 
 			}
@@ -699,7 +707,7 @@ public class DbService extends SystemObjectImpl {
 
 	public List<List> getListFromStoreRrecedure(String sql) throws SQLException {
 		List<List> rsList = new ArrayList<List>();
-		System.out.println("SQL query was: "+sql);
+		System.out.println("SQL query was: " + sql);
 		try {
 			db_userid = configuration.getProperty("db.connection.username");
 			db_password = configuration.getProperty("db.connection.password");
