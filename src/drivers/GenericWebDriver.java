@@ -479,7 +479,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		} catch (TimeoutException e) {
 			// Assert.fail("Frame waw not found");
 			System.out.println(e.toString());
-			testResultService.addFailTest("Frame was not found", true,true);
+			testResultService.addFailTest("Frame was not found", true, true);
 		} finally {
 
 		}
@@ -1087,7 +1087,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			catch (Exception e) {
 				printScreen("problem selecting from combo box");
 				testResultService.addFailTest(
-						"problem selecting from combo box", true,true);
+						"problem selecting from combo box", true, true);
 				e.printStackTrace();
 			}
 
@@ -1133,7 +1133,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 				}
 				if (selected == false) {
 					testResultService.addFailTest(optionValue
-							+ " was not found in the combo box", true,true);
+							+ " was not found in the combo box", true, true);
 				}
 			}
 
@@ -1147,7 +1147,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 						+ textService.printStringArray(optionValues));
 				printScreen("problem selecting from combo box");
 				testResultService.addFailTest(
-						"problem selecting from combo box", true,true);
+						"problem selecting from combo box", true, true);
 				e.printStackTrace();
 			}
 
@@ -1228,7 +1228,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			}
 		} catch (TimeoutException e) {
 			// TODO Auto-generated catch block
-			testResultService.addFailTest("Alert was not found", true,false);
+			testResultService.addFailTest("Alert was not found", true, false);
 		}
 		return alertText;
 
@@ -1251,6 +1251,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		} catch (UnhandledAlertException e) {
 			// TODO Auto-generated catch block
 			getUnexpectedAlertDetails();
+		} catch (TimeoutException e) {
+			testResultService
+					.addFailTest("Combobox is not filled after 20 seconds");
 		}
 	}
 

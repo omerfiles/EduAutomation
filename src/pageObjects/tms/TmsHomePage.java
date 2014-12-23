@@ -867,7 +867,7 @@ public class TmsHomePage extends GenericPage {
 
 	public void clickOnInstitutionDetails(String testSchoolId) throws Exception {
 		webDriver.waitForElement(
-				"//tbody[@id='con']//tr[@id='tr" + testSchoolId + "']//td",
+				"//tbody[@id='con']//tr[@id='tr" + testSchoolId + "']//td//a//img",
 				ByTypes.xpath).click();
 
 	}

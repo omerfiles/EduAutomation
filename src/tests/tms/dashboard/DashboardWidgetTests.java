@@ -24,8 +24,8 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 		String courseName = dashboardPage.getSelectedCourse();
 
 		startStep("Check widget title");
-		String title = dashboardPage.getWidgetTitle(1, 2);
-		testResultService.assertEquals("Average Test Scores", title,
+		String title = dashboardPage.getWidgetTitle(1, 1);
+		testResultService.assertEquals("Course Completion", title,
 				"title not found");
 		startStep("Check that chart is displayed");
 		dashboardPage.checkIfWidgetHasData(1, 2);
@@ -56,8 +56,8 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 		String courseName = dashboardPage.getSelectedCourse();
 
 		startStep("Check widget title");
-		String title = dashboardPage.getWidgetTitle(1, 1);
-		testResultService.assertEquals("Course Completion Rate", title,
+		String title = dashboardPage.getWidgetTitle(1, 2);
+		testResultService.assertEquals("Average Test Scores", title,
 				"title not found");
 
 		// startStep("Check that chart is displayed");
@@ -65,7 +65,7 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 		// dashboardPage.checkIfWidgetHasData(1, 1));
 
 		startStep("Click widget link button and check the report opens");
-		dashboardPage.clickOnCompletionWidgetButton();
+		dashboardPage.clickOnSuccessWidgetButton();
 		sleep(4);
 		dashboardPage.checkForReportResults();
 		// testResultService.assertEquals(courseName,
