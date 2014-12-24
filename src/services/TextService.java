@@ -6,13 +6,19 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.io.StringReader;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -25,6 +31,12 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+
+import jcifs.ntlmssp.NtlmMessage;
+import jcifs.smb.NtlmPasswordAuthentication;
+import jcifs.smb.SmbException;
+import jcifs.smb.SmbFile;
+import jcifs.smb.SmbFileOutputStream;
 
 import org.apache.commons.io.FileUtils;
 import org.htmlcleaner.CleanerProperties;
@@ -269,8 +281,6 @@ public class TextService extends SystemObjectImpl {
 		return printStringArray(str, "|");
 	}
 
-	
-
 	public String printStringArray(String[] str, String seperator) {
 		String output = "";
 		for (int i = 0; i < str.length; i++) {
@@ -367,8 +377,29 @@ public class TextService extends SystemObjectImpl {
 		String csv = path;
 		CSVWriter writer = new CSVWriter(new FileWriter(csv));
 		writer.writeAll(list);
-		
+
 		writer.close();
+	}
+
+	public void writeListToSmbFile(String path, List<String> list,
+			NtlmPasswordAuthentication auth) throws IOException {
+		
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		DataOutputStream out = new DataOutputStream(baos);
+		String nl = System.getProperty("line.separator");
+		for (String element : list) {
+//		    out.writeUTF(element);
+		    out.writeBytes(element);
+		    out.writeBytes(nl);
+		}
+		byte[] bytes = baos.toByteArray();
+		
+		
+		SmbFile smbFile = new SmbFile(path, auth);
+		SmbFileOutputStream output = new SmbFileOutputStream(smbFile);
+		output.write(bytes);
+		
+
 	}
 
 	public List<String[]> getListFromLogEntries(LogEntries logEntries) {

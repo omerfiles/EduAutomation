@@ -167,20 +167,26 @@ public class EdusoftBasicTest extends TestCase {
 		// textService.writeArrayistToCSVFile(System.getProperty("user.dir")
 		// + "/log//current//TestLog.csv", report.getReportLogs());
 		try {
-//			String fileName = "testlog" + dbService.sig() + ".csv";
-//			String testLogFIle = "files/csvFiles/" + fileName;
-//			textService.writeArrayistToCSVFile(testLogFIle,
-//					report.getReportLogs());
-//
-//			SmbFile sFile = new SmbFile(System.getProperty("user.dir")
-//					+ testLogFIle);
-//			NtlmPasswordAuthentication auto = netService.getAuth();
-//			String path = "smb://10.1.0.83/automationLogs/" + fileName;
-//
-//			SmbFile dFile = new SmbFile(path, auto);
-//			dFile.createNewFile();
-//
-//			IOUtils.copy(sFile.getInputStream(), dFile.getOutputStream());
+
+			;
+
+			String fileName = "testlog" + dbService.sig() + ".csv";
+			String path = "smb://10.1.0.83/automationLogs/" + fileName;
+			textService.writeListToSmbFile(path, report.getReportLogs(),
+					netService.getAuth());
+			// String testLogFIle = "files/csvFiles/" + fileName;
+			// textService.writeArrayistToCSVFile(testLogFIle,
+			// report.getReportLogs());
+			//
+			// SmbFile sFile = new SmbFile(System.getProperty("user.dir")
+			// + testLogFIle);
+			// NtlmPasswordAuthentication auto = netService.getAuth();
+			// String path = "smb://10.1.0.83/automationLogs/" + fileName;
+			//
+			// SmbFile dFile = new SmbFile(path, auto);
+			// dFile.createNewFile();
+			//
+			// IOUtils.copy(sFile.getInputStream(), dFile.getOutputStream());
 
 			// testLogFIle=configuration.getGlobalProperties("logserver")
 			// + "\\automationLogs\\" + testLogFIle;
@@ -188,7 +194,8 @@ public class EdusoftBasicTest extends TestCase {
 			// testLogFIle,
 			// report.getReportLogs());
 			// String path = "http:"+testLogFIle;
-//			System.out.println("Test log can be found here: " + path);
+			// System.out.println("Test log can be found here: " + path);
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

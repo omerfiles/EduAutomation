@@ -8,7 +8,7 @@ import jsystem.framework.report.Reporter.EnumReportLevel;
 
 @Service
 public class Reporter {
-	ArrayList<String[]> reportLogs;
+	ArrayList<String> reportLogs;
 
 	public Reporter() {
 		// TODO Auto-generated constructor stub
@@ -20,16 +20,16 @@ public class Reporter {
 
 	public void report(String message){
 		//append text to list
-		reportLogs.add(new String[]{message});
+		reportLogs.add(message);
 	}
 
 	public void startLevel(String string, EnumReportLevel currentplace) {
-		reportLogs.add(new String[]{string});
+		reportLogs.add(string);
 
 	}
 
 	public void startLevel(String string) {
-		reportLogs.add(new String[]{string});
+		reportLogs.add(string);
 
 	}
 
@@ -38,7 +38,7 @@ public class Reporter {
 
 	}
 
-	public ArrayList<String[]> getReportLogs() {
+	public ArrayList<String> getReportLogs() {
 		return reportLogs;
 	}
 

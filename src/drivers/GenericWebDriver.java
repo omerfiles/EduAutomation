@@ -714,7 +714,8 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 						+ ".png";
 			}
 			NetService netService = new NetService();
-			String sFileName = "scr_" + dbService.sig(8) + message + ".png";
+			String sFileName = "scr_" + dbService.sig(8)
+					+ message.replace(" ", "") + ".png";
 			SmbFile smbFile = new SmbFile(
 					"smb://10.1.0.83/automationScreenshots/" + sFileName,
 					netService.getAuth());
