@@ -941,7 +941,7 @@
 								<include>**/DashboardHeaderTests.java</include>
 								<include>**/DashboardWidgetTests.java</include>
 								
-								<include>**/AccessLicenseTests.java</include>
+							
 							</includes>
 
 						</configuration>
