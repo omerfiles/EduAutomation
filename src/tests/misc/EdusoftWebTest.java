@@ -99,6 +99,8 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 		setEnableLoggin(true);
 		testResultService.setWebDriver(webDriver);
 
+		// webDriver.initEyes();
+
 	}
 
 	@After
@@ -127,6 +129,12 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 
 		System.out.println("Start of EdusoftWebTest teardown");
 		try {
+
+			// print console log if browser was chrome
+			if (browser.equals(Browsers.chrome.toString())) {
+				webDriver.printConsoleLogs("", false);
+			}
+
 			if (testResultService.hasFailedResults()) {
 
 				webDriver.printScreen("FailCause_", null);

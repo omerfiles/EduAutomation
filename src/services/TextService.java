@@ -383,37 +383,39 @@ public class TextService extends SystemObjectImpl {
 
 	public void writeListToSmbFile(String path, List<String> list,
 			NtlmPasswordAuthentication auth) throws IOException {
-		
+
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(baos);
 		String nl = System.getProperty("line.separator");
 		for (String element : list) {
-//		    out.writeUTF(element);
-		    out.writeBytes(element);
-		    out.writeBytes(nl);
+			// out.writeUTF(element);
+			out.writeBytes(element);
+			out.writeBytes(nl);
 		}
 		byte[] bytes = baos.toByteArray();
-		
-		
+
 		SmbFile smbFile = new SmbFile(path, auth);
 		SmbFileOutputStream output = new SmbFileOutputStream(smbFile);
 		output.write(bytes);
-		
 
 	}
 
-	public List<String[]> getListFromLogEntries(LogEntries logEntries) {
+	public List<String> getListFromLogEntries(LogEntries logEntries) {
 		return getListFromLogEntries(logEntries, null, true);
 	}
 
-	public List<String[]> getListFromLogEntries(LogEntries logEntries,
+	public List<String> getListFromLogEntries(LogEntries logEntries,
 			String filter, boolean useFilter) {
-		List<String[]> strList = new ArrayList<String[]>();
+		List<String> strList = new ArrayList<String>();
 		for (LogEntry entry : logEntries) {
 
-			String[] str = new String[] { entry.getMessage(),
-					String.valueOf(entry.getTimestamp()),
-					entry.getLevel().toString() };
+			// String str = new String { entry.getMessage(),
+			// String.valueOf(entry.getTimestamp()),
+			// entry.getLevel().toString() };
+
+			String str = entry.getMessage() + " "
+					+ String.valueOf(entry.getTimestamp()) + " "
+					+ entry.getLevel().toString();
 			if (filter != null && entry.getMessage().contains(filter)
 					|| useFilter == false && filter == null) {
 				strList.add(str);

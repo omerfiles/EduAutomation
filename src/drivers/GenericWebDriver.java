@@ -47,6 +47,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.applitools.eyes.Eyes;
 import com.google.common.base.Predicate;
 
 import Enums.AutoParams;
@@ -88,11 +89,16 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	protected String logsFolder;
 	private boolean failureAdded;
 
+	Eyes eyes = new Eyes();
+
+	// This is your api key, make sure you use it in all your tests.
+
 	abstract public void init(String remoteUrl, String folderName)
 			throws Exception;
 
 	public void init(TestResultService testResultService) throws Exception {
 		this.testResultService = testResultService;
+		eyes.setApiKey("tsN45rbyinZ1084MxMVSzumAgD106Qn3MOpBcr101hiyVEpSY110");
 		// String remoteMachine = null;
 
 		// getting remote machine from maven command line
@@ -399,6 +405,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 						+ "failed. " + e.toString());
 			}
 		}
+		// eyes.close();
 
 	}
 
@@ -713,6 +720,8 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 						+ "ScreenShot" + message.replace(" ", "") + sig
 						+ ".png";
 			}
+
+			// **printscreen using smbFile
 			NetService netService = new NetService();
 			String sFileName = "scr_" + dbService.sig(8)
 					+ message.replace(" ", "") + ".png";
@@ -1156,9 +1165,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		}
 	}
 
-	public List<String[]> printConsoleLogs(String logFilter, boolean useFllter)
+	public List<String> printConsoleLogs(String logFilter, boolean useFllter)
 			throws Exception {
-		List<String[]> logList = null;
+		List<String> logList = null;
 		try {
 			textService = new TextService();
 			LogEntries logEntries = getConsoleLogEntries();
@@ -1167,14 +1176,14 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			// TD DO change to SMB auth
 			NetService netService = new NetService();
 
-			String tempCsvFile = "files/csvFiles/temp" + dbService.sig(6);
-			SmbFile sFile = new SmbFile(tempCsvFile);
-			textService.writeArrayistToCSVFile(tempCsvFile, logList);
+//			String tempCsvFile = "files/csvFiles/temp" + dbService.sig(6);
+//			SmbFile sFile = new SmbFile(tempCsvFile);
+			// textService.writeArrayistToCSVFile(tempCsvFile, logList);
 			NtlmPasswordAuthentication auto = netService.getAuth();
 			String path = "smb://10.1.0.83/automationLogs/consoleLog"
 					+ dbService.sig() + ".csv";
-			SmbFile dFile = new SmbFile(path, auto);
-			sFile.copyTo(dFile);
+			textService.writeListToSmbFile(path, logList, netService.getAuth());
+
 			// SmbFileOutputStream outputStream = new
 			// SmbFileOutputStream(smbFile);
 			// outputStream.write(b);
@@ -1263,9 +1272,9 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		// get alert text
 		String alertText = getAlertText(5);
 		System.out.println("Alert text was: " + alertText);
-		List<String[]> ConsoleLog = printConsoleLogs(null, false);
-		for (int i = 0; i < ConsoleLog.size(); i++) {
-			System.out.println(ConsoleLog.get(i)[0].toString());
+		List<String> consoleLog = printConsoleLogs(null, false);
+		for (int i = 0; i < consoleLog.size(); i++) {
+			System.out.println(consoleLog.get(i).toString());
 		}
 		// get console log
 		// printscreen alert
@@ -1293,6 +1302,15 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	public int getWindowHeight() {
 		return webDriver.manage().window().getSize().getHeight();
+	}
+
+	public void initEyes() {
+		webDriver = (RemoteWebDriver) eyes.open((RemoteWebDriver) webDriver,
+				"edusoft", "Test web page");
+	}
+
+	public void eyesCheckPage(String text) {
+		eyes.checkWindow(text);
 	}
 
 }
