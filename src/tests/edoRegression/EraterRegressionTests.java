@@ -236,7 +236,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 
 	// Test case: 13569,13572,13573
 	@Test
-@TestCaseParams(testCaseID = { "13569,13572,13573" })
+@TestCaseParams(testCaseID = { "13569","13572","13573" })
 	public void testAddTeacherCommentToStudentAssignment() throws Exception {
 		startStep("Create a student for the test");
 		String StudentUserName = "student" + dbService.sig(6);
@@ -299,6 +299,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 
 		startStep("Login as teacher and send feedback to the student");
 		webDriver.deleteCookiesAndRefresh();
+		sleep(2);
 		edoHomePage = pageHelper.loginAsTeacher();
 		edoHomePage.waitForPageToLoad();
 		tmsHomePage =(TmsHomePage) edoHomePage.openTeachersCorner();

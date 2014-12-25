@@ -610,7 +610,7 @@ public class TmsHomePage extends GenericPage {
 	}
 
 	public void clickOnTeacherFeedbackContinueButton() throws Exception {
-		webDriver.waitForElement("Continue", ByTypes.linkText).click();
+		webDriver.waitForElement("Continue", ByTypes.linkText,"Problem finding Continue button in teacher's feedback").click();
 	}
 
 	public void clickOnImport() throws Exception {
