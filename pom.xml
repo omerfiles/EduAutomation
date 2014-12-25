@@ -298,6 +298,11 @@
 			<artifactId>json</artifactId>
 			<version>20090211</version>
 		</dependency>
+		<dependency>
+			<groupId>com.applitools</groupId>
+			<artifactId>eyes-selenium-java</artifactId>
+			<version>RELEASE</version>
+		</dependency>
 
 
 
@@ -940,8 +945,8 @@
 								<include>**/LicenseUsageReportTests.java</include>
 								<include>**/DashboardHeaderTests.java</include>
 								<include>**/DashboardWidgetTests.java</include>
-								
-							
+
+
 							</includes>
 
 						</configuration>
