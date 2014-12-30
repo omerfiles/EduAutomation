@@ -8,6 +8,7 @@ import jsystem.framework.system.SystemObjectImpl;
 
 import org.junit.Assert;
 import org.junit.ComparisonFailure;
+import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +57,17 @@ public class TestResultService extends SystemObjectImpl {
 		if (condition != true) {
 
 			addFailTest(message);
+		}
+
+	}
+
+	public void assertElementText(WebElement element, String expectedText) throws Exception {
+		String actualText = element.getText();
+
+		if (assertEquals(expectedText, actualText,
+				"Text do not match for element: " + element.getAttribute("id"))) {
+			webDriver.highlightElement(element);
+			webDriver.printScreen("elementTextDoNotMatch");
 		}
 
 	}

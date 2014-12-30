@@ -201,6 +201,8 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 				+ byType + " for " + timeout + " seconds");
 		WebElement element = null;
 
+		long startTime = System.currentTimeMillis();
+
 		try {
 			WebDriverWait wait = new WebDriverWait(webDriver, timeout, sleepMS);
 
@@ -262,7 +264,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			}
 		} catch (InvalidElementStateException e) {
 			testResultService.addFailTest("Element " + idValue
-					+ " was in ivalid state " + " Description of element:"
+					+ " was in invalid state " + " Description of element:"
 					+ message);
 			failureAdded = true;
 		}
@@ -287,6 +289,12 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 				printScreen("Element " + idValueForPrintScreen + " _not_found ");
 				Assert.fail("Element: " + idValue + " not found " + message);
 
+			}
+			long endTime = System.currentTimeMillis();
+			long elapsedTime = endTime - startTime;
+			if (element != null) {
+				reporter.report("Element " + idValue + " found after: "
+						+ elapsedTime + " ms");
 			}
 			return element;
 		}
@@ -340,26 +348,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		}
 	}
 
-	public void waitUntilElementExist(String idValue, ByTypes byType,
-			int timeOut) throws Exception {
-
-		boolean exist = false;
-		int elapsedTime = 0;
-		while (elapsedTime < timeOut) {
-			try {
-				WebDriverWait wait = new WebDriverWait(webDriver, timeOut, 200);
-				wait.until(ExpectedConditions
-						.visibilityOfAllElementsLocatedBy(By.xpath(idValue)));
-				webDriver.findElement(By.xpath(idValue));
-				exist = true;
-				break;
-			} catch (Exception e) {
-				Thread.sleep(100);
-			}
-
-		}
-
-	}
+	
 
 	public void assertTextBy(String idValue, String byType, String text)
 			throws Exception {
@@ -877,10 +866,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		System.out.println("X is: " + p.getX() + " and Y is: " + p.getY());
 	}
 
-	public void setElementSelected(WebElement element) throws Exception {
-		element.click();
-
-	}
+	
 
 	public TestRunnerType getTestRunner() {
 		// if test is run in debug/development
@@ -1176,8 +1162,8 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			// TD DO change to SMB auth
 			NetService netService = new NetService();
 
-//			String tempCsvFile = "files/csvFiles/temp" + dbService.sig(6);
-//			SmbFile sFile = new SmbFile(tempCsvFile);
+			// String tempCsvFile = "files/csvFiles/temp" + dbService.sig(6);
+			// SmbFile sFile = new SmbFile(tempCsvFile);
 			// textService.writeArrayistToCSVFile(tempCsvFile, logList);
 			NtlmPasswordAuthentication auto = netService.getAuth();
 			String path = "smb://10.1.0.83/automationLogs/consoleLog"
@@ -1311,6 +1297,13 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	public void eyesCheckPage(String text) {
 		eyes.checkWindow(text);
+	}
+
+	public void highlightElement(WebElement element) {
+		JavascriptExecutor js = (JavascriptExecutor) webDriver;
+		js.executeScript("arguments[0].setAttribute('style', arguments[1]);",
+
+		element, "color: yellow; border: 2px solid red;");
 	}
 
 }

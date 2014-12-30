@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -405,6 +406,7 @@ public class DbService extends SystemObjectImpl {
 			statement = conn.createStatement();
 
 			rs = statement.executeQuery(sql);
+
 			while (rs.next()) {
 
 				String[] strArr = new String[columns];
@@ -431,13 +433,37 @@ public class DbService extends SystemObjectImpl {
 		return list;
 	}
 
+	public List<String[]> getListFromPrepairedStmt(String sql, int columns)
+			throws SQLException {
+		System.out.println(sql);
+		conn = getConnection();
+		PreparedStatement ps = conn.prepareStatement(sql);
+		ps.executeUpdate(); // do not use execute() here otherwise you may get
+							// the error
+							// The statement must be executed before
+							// any results can be obtained on the next
+							// getGeneratedKeys statement.
+		List<String[]> list = new ArrayList<String[]>();
+		ResultSet rs = ps.getGeneratedKeys();
+		while (rs.next()) {
+			String[] str = new String[columns];
+			for (int i = 0; i < columns; i++) {
+				str[i] = rs.getString(i+1);
+			}
+			list.add(str);
+		}
+
+		return list;
+
+	}
+
 	public List<String> getArrayListFromQuery(String sql, int intervals)
 			throws Exception {
 		List<String> list = new ArrayList<String>();
 		report.report("Query is: " + sql + ". Max db time out is: "
 				+ MAX_DB_TIMEOUT);
-		db_userid = configuration.getProperty("db.connection.username");
-		db_password = configuration.getProperty("db.connection.password");
+		// db_userid = configuration.getProperty("db.connection.username");
+		// db_password = configuration.getProperty("db.connection.password");
 		System.out.println(sql);
 		ResultSet rs = null;
 		Statement statement = null;
@@ -446,8 +472,7 @@ public class DbService extends SystemObjectImpl {
 
 		try {
 			Class.forName(SQL_SERVER_DRIVER_CLASS);
-			conn = DriverManager.getConnection(getDbConnString(), db_userid,
-					db_password);
+			conn = getConnection();
 			System.out.println("connected");
 			if (conn.isClosed() == true) {
 				System.out.println("connection is closed");
@@ -484,8 +509,8 @@ public class DbService extends SystemObjectImpl {
 		// System.out.println(configuration.getProperty("db.connection"));
 		report.report("Query is: " + sql + ". Max db time out is: "
 				+ MAX_DB_TIMEOUT);
-		db_userid = configuration.getProperty("db.connection.username");
-		db_password = configuration.getProperty("db.connection.password");
+		// db_userid = configuration.getProperty("db.connection.username");
+		// db_password = configuration.getProperty("db.connection.password");
 		System.out.println(db_userid + "  " + db_password);
 		System.out.println(sql);
 		ResultSet rs = null;
@@ -496,8 +521,7 @@ public class DbService extends SystemObjectImpl {
 		try {
 			Class.forName(SQL_SERVER_DRIVER_CLASS);
 			System.out.println("DB user id is: " + db_userid);
-			conn = DriverManager.getConnection(getDbConnString(), db_userid,
-					db_password);
+			conn = getConnection();
 			System.out.println("connected");
 
 			if (conn.isClosed() == true) {
@@ -709,10 +733,8 @@ public class DbService extends SystemObjectImpl {
 		List<List> rsList = new ArrayList<List>();
 		System.out.println("SQL query was: " + sql);
 		try {
-			db_userid = configuration.getProperty("db.connection.username");
-			db_password = configuration.getProperty("db.connection.password");
-			conn = DriverManager.getConnection(getDbConnString(), db_userid,
-					db_password);
+			conn = getConnection();
+
 			System.out.println("connected");
 			if (conn.isClosed() == true) {
 				System.out.println("connection is closed");
@@ -725,6 +747,7 @@ public class DbService extends SystemObjectImpl {
 			// }
 
 			boolean results = statement.execute();
+
 			int rsCount = 0;
 			while (results) {
 				List<String[]> strList = new ArrayList<String[]>();
@@ -778,6 +801,15 @@ public class DbService extends SystemObjectImpl {
 		Random r = new Random();
 		int i1 = r.nextInt(max - min);
 		return i1;
+	}
+
+	public Connection getConnection() throws SQLException {
+		db_userid = configuration.getProperty("db.connection.username");
+		db_password = configuration.getProperty("db.connection.password");
+		conn = DriverManager.getConnection(getDbConnString(), db_userid,
+				db_password);
+
+		return conn;
 	}
 
 }

@@ -121,11 +121,11 @@ public class DashboardPage extends TmsHomePage {
 
 	}
 
-	public String getNumberOfStudentsPerClass() throws Exception {
-		String number = webDriver.waitForElement(
-				"//div[@class='studentsCounterNumber']", ByTypes.xpath)
-				.getText();
-		return number;
+	public WebElement getNumberOfStudentsPerClass() throws Exception {
+		WebElement element = webDriver.waitForElement(
+				"//div[@class='studentsCounterNumber']", ByTypes.xpath);
+
+		return element;
 	}
 
 	public String getAvgScorePerUnitClassTestScore(int unitNumber)
@@ -300,5 +300,14 @@ public class DashboardPage extends TmsHomePage {
 
 	public String getCourseLabelText() throws Exception {
 		return webDriver.waitForElement("spnCourse", ByTypes.id).getText();
+	}
+
+	public String getNumberOfStudentsInCompletiionChart(int index)
+			throws Exception {
+		String value = webDriver.waitForElement(
+				"//div[@id='completionRate']//div[contains(@class,'jqplot-point-"
+						+ index + "')]", ByTypes.xpath).getText();
+		System.out.println(value);
+		return value;
 	}
 }

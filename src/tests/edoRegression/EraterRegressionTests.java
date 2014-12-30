@@ -67,7 +67,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 
 	// Test case id:15621
 	@Test
-	@TestCaseParams(testCaseID = "15621")
+	@TestCaseParams(testCaseID = "15621", testName = "testSubmitTextAsStudentAndCheckFeedbackAsTeacherAndSendAgain")
 	public void testSubmitTextAsStudentAndCheckFeedbackAsTeacherAndSendAgain()
 			throws Exception {
 
@@ -76,8 +76,9 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		Student student = new Student();
 
 		EdoHomePage edoHomePage = null;
-	
-		if (configuration.getAutomationParam("dbaccess","dbaccess").equals("false") ) {
+
+		if (configuration.getAutomationParam("dbaccess", "dbaccess").equals(
+				"false")) {
 			edoHomePage = pageHelper.loginAsStudent();
 		} else {
 			startStep("Create a student for the test");
@@ -116,7 +117,8 @@ public class EraterRegressionTests extends EdusoftWebTest {
 
 		startStep("start checking the xml and json");
 
-		if (!configuration.getAutomationParam("dbaccess","dbaccess").equals("false")) {
+		if (!configuration.getAutomationParam("dbaccess", "dbaccess").equals(
+				"false")) {
 			String userId = dbService.getUserIdByUserName(
 					student.getUserName(), autoInstitution.getInstitutionId());
 			writingId = eraterService.getWritingIdByUserIdAndTextStart(userId,
@@ -145,7 +147,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		webDriver.deleteCookiesAndRefresh();
 		pageHelper.loginAsTeacher();
 		webDriver.closeAlertByAccept();
-		tmsHomePage =(TmsHomePage) edoHomePage.openTeachersCorner();
+		tmsHomePage = (TmsHomePage) edoHomePage.openTeachersCorner();
 		newWritingId = eraterService.getWritingIdByUserIdAndTextStart(
 				student.getId(), newText);
 		eraterService.checkWritingIsProcessed(newWritingId);
@@ -190,7 +192,8 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		startStep("Create a student for the test");
 		String StudentUserName = "student" + dbService.sig(6);
 		pageHelper.addStudent(StudentUserName);
-		if (configuration.getAutomationParam("dbaccess","dbaccess").equals("false")) {
+		if (configuration.getAutomationParam("dbaccess", "dbaccess").equals(
+				"false")) {
 			edoHomePage = pageHelper.loginAsStudent();
 			student.setUserName(pageHelper.getStudent().getUserName());
 		} else {
@@ -227,7 +230,8 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		startStep("Check the assignment in the DB");
 		String userId = dbService.getUserIdByUserName(student.getUserName(),
 				autoInstitution.getInstitutionId());
-		if (!configuration.getAutomationParam("dbaccess","dbaccess").equals("false")) {
+		if (!configuration.getAutomationParam("dbaccess", "dbaccess").equals(
+				"false")) {
 			Assert.assertNotNull("validate writing id in DB",
 					eraterService.getWritingIdByUserId(userId));
 		}
@@ -236,7 +240,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 
 	// Test case: 13569,13572,13573
 	@Test
-@TestCaseParams(testCaseID = { "13569","13572","13573" })
+	@TestCaseParams(testCaseID = { "13569", "13572", "13573" })
 	public void testAddTeacherCommentToStudentAssignment() throws Exception {
 		startStep("Create a student for the test");
 		String StudentUserName = "student" + dbService.sig(6);
@@ -302,7 +306,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		sleep(2);
 		edoHomePage = pageHelper.loginAsTeacher();
 		edoHomePage.waitForPageToLoad();
-		tmsHomePage =(TmsHomePage) edoHomePage.openTeachersCorner();
+		tmsHomePage = (TmsHomePage) edoHomePage.openTeachersCorner();
 		newWritingId = eraterService.getWritingIdByUserIdAndTextStart(
 				student.getId(), textStart);
 		eraterService.checkWritingIsProcessed(newWritingId);
@@ -553,7 +557,8 @@ public class EraterRegressionTests extends EdusoftWebTest {
 		// edoHomePage = edoLoginPage.login(teacher);
 		edoHomePage = pageHelper.loginAsTeacher();
 		edoHomePage.waitForPageToLoad();
-		TmsHomePage tmsHomePage =(TmsHomePage) edoHomePage.openTeachersCorner();
+		TmsHomePage tmsHomePage = (TmsHomePage) edoHomePage
+				.openTeachersCorner();
 		String newWritingId = eraterService.getWritingIdByUserIdAndTextStart(
 				student.getId(), newText);
 		eraterService.checkWritingIsProcessed(newWritingId);

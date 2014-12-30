@@ -113,7 +113,7 @@ public class TextService extends SystemObjectImpl {
 
 	}
 
-	public List<String> getStrListFromCsv(String filePath, int colIndex)
+	public List<String> getListFromCsv(String filePath, int colIndex)
 			throws Exception {
 		List<String> list = new ArrayList<String>();
 
