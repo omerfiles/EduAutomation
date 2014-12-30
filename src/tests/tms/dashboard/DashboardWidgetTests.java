@@ -16,12 +16,17 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 	@TestCaseParams(testCaseID = { "17947" })
 	public void testClassCompletionWidget() throws Exception {
 
+		String[] stages = new String[] { "0-20", "21-40", "41-60", "61-80",
+				"81-100" };
+
 		EdoHomePage edoHomePage = pageHelper.loginAsTeacher();
 		DashboardPage dashboardPage = (DashboardPage) edoHomePage
 				.clickOnTeachersCorner(true);
 		dashboardPage.hideSelectionBar();
-		String className = dashboardPage.getSelectedClass();
-		String courseName = dashboardPage.getSelectedCourse();
+		String className = "classCompTest";
+		dashboardPage.selectClassInDashBoard(className);
+		String courseName = "1 unit 1 component";
+		dashboardPage.selectCourseInDashboard(courseName);
 
 		startStep("Check widget title");
 		String title = dashboardPage.getWidgetTitle(1, 1);
@@ -29,7 +34,61 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 				"title not found");
 		startStep("Check that chart is displayed");
 		dashboardPage.checkIfWidgetHasData(1, 2);
-		startStep("Click widget link button and check the report opens");
+
+		startStep("Check total number of students");
+
+		String courseId = dbService.getCourseIdByName(courseName);
+
+		List<String[]> completionList = getClassCompletion(className,
+				autoInstitution.getInstitutionName(), courseId);
+		int allStudentsWithProgress = 0;
+		String[] complStudents = new String[5];
+		for (int i = 0; i <= 4; i++) {
+			complStudents[i] = dashboardPage
+					.getNumberOfStudentsInCompletiionChart(i);
+			allStudentsWithProgress += Integer.valueOf(complStudents[i]);
+		}
+
+		startStep("Check number of students for each stage");
+		for (int i = 0; i < completionList.size(); i++) {
+			if (completionList.get(i)[0] != null) {
+				if (completionList.get(i)[3].equals(stages[0])) {
+					testResultService.assertEquals(complStudents[i],
+							completionList.get(1)[0],
+							"number of students for stage:" + stages[0]
+									+ " not found");
+				} else if (completionList.get(i)[3].equals(stages[1])) {
+					testResultService.assertEquals(complStudents[i],
+							completionList.get(1)[0],
+							"number of students for stage:" + stages[1]
+									+ " not found");
+
+				} else if (completionList.get(i)[3].equals(stages[2])) {
+					testResultService.assertEquals(complStudents[i],
+							completionList.get(1)[0],
+							"number of students for stage:" + stages[2]
+									+ " not found");
+
+				} else if (completionList.get(i)[3].equals(stages[3])) {
+					testResultService.assertEquals(complStudents[i],
+							completionList.get(1)[0],
+							"number of students for stage:" + stages[3]
+									+ " not found");
+				} else if (completionList.get(i)[3].equals(stages[4])) {
+					testResultService.assertEquals(complStudents[i],
+							completionList.get(1)[0],
+							"number of students for stage:" + stages[4]
+									+ " not found");
+				}
+			}
+		}
+
+		startStep("Check summary of all students");
+
+		testResultService.assertEquals(allStudentsWithProgress, Integer
+				.parseInt(dbService.getNumberOfStudentsInClass(className,
+						autoInstitution.getInstitutionId())),
+				"total number of students with completion do not match");
 
 		startStep("Click on report link, check that report opens and check selected class");
 		dashboardPage.clickOnCompletionWidgetButton();
@@ -43,9 +102,13 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 
 	}
 
+	private void getNumberOfStudentsInCompletiionChart(int i) {
+		// TODO Auto-generated method stub
+
+	}
+
 	@Test
-	@TestCaseParams(testCaseID = { "17097"})
-	
+	@TestCaseParams(testCaseID = { "17097" })
 	public void testClassTestScoreWidget() throws Exception {
 
 		EdoHomePage edoHomePage = pageHelper.loginAsTeacher();
@@ -130,7 +193,6 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 
 	}
 
-	
 	@Test
 	public void testPLTWidget() throws Exception {
 		String classNameForTest = "class1";
@@ -165,15 +227,15 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 		System.out.println(dashboardPage.getPltWidgetContent());
 		String numOfStudentsPerLevel = dashboardPage
 				.getNumberOfStudentsPerPltLevel();
-		// List<String[]> pltScores = getClassPltScores(classNameForTest,
+
 		// schoolName);
 		// testResultService.assertEquals(pltScores.get(0)[0],
 		// numOfStudentsPerLevel);
 
-//		String numOfStudentWithPLTScores = String
-//				.valueOf(getNumberOfStudentWithPltScores(pltScores));
-//		testResultService.assertEquals(numOfStudentWithPLTScores,
-//				dashboardPage.getPltComletedStudents());
+		// String numOfStudentWithPLTScores = String
+		// .valueOf(getNumberOfStudentWithPltScores(pltScores));
+		// testResultService.assertEquals(numOfStudentWithPLTScores,
+		// dashboardPage.getPltComletedStudents());
 
 		// TODO - check filled person
 

@@ -32,10 +32,9 @@ public class DashboardHeaderTests extends DashboardBasicTest {
 		sleep(5);
 
 		startStep("Check number of students");
-		testResultService.assertEquals(dbService.getNumberOfStudentsInClass(
-				classToSelect, autoInstitution.getInstitutionId()),
-				dashboardPage.getNumberOfStudentsPerClass(),
-				"Number of students label");
+		testResultService.assertElementText(dashboardPage.getNumberOfStudentsPerClass(), dbService.getNumberOfStudentsInClass(
+				classToSelect, autoInstitution.getInstitutionId()));
+			
 
 		startStep("Navigate to another report");
 		dashboardPage.clickOnReports();

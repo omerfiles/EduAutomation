@@ -20,7 +20,7 @@ public class DashboardBasicTest extends EdusoftWebTest {
 	protected String courseWithLastProgress;
 
 	public static final String FIRST_DISCOVERIES = "First Discoveries";
-	public static final String classForCacheTest= "classForCacheTest";
+	public static final String classForCacheTest = "classForCacheTest";
 
 	private static final int DASHBOARDWIDTH = 1024;
 
@@ -43,13 +43,13 @@ public class DashboardBasicTest extends EdusoftWebTest {
 		courseWithLastProgress = courseWithLastProgress.replaceAll("\\s+$", "");
 	}
 
-	public  List<String[]> getAvgScoresByClassIdAndCourseId(String className,
+	public List<String[]> getAvgScoresByClassIdAndCourseId(String className,
 			String courseName) throws Exception {
 
 		String classId = dbService.getClassIdByName(className,
 				autoInstitution.getInstitutionId());
-		
-		String courseId=dbService.getCourseIdByName(courseName);
+
+		String courseId = dbService.getCourseIdByName(courseName);
 		List<String[]> scores = dbService.getClassScores(classId, courseId);
 		return scores;
 	}
@@ -65,6 +65,20 @@ public class DashboardBasicTest extends EdusoftWebTest {
 		List<List> rsList = dbService.getListFromStoreRrecedure(sql);
 		List<String[]> list = rsList.get(2);
 		return rsList.get(2);
+	}
+
+	public List<String[]> getClassCompletion(String className,
+			String institutionName,String courseId) throws Exception {
+		String sql = textService.getTextFromFile(
+				"files/sqlFiles/getClassCompletion.txt",
+				Charset.defaultCharset());
+		sql = sql.replace("%classParam%", className);
+		sql = sql.replace("%instNameParam%", institutionName);
+		sql=sql.replace("%courseId%", courseId);
+
+		List<String[]> rsList = dbService.getListFromPrepairedStmt(sql,4);
+		return rsList;
+
 	}
 
 	public int getNumberOfStudentWithPltScores(List<String[]> list) {
