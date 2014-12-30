@@ -219,7 +219,7 @@ public class ContentCompareBasicTest extends EdusoftBasicTest {
 
 		List<String> grammarsFromExcel = null;
 		if (csvFilePath != null) {
-			grammarsFromExcel = textService.getStrListFromCsv(csvFilePath, 0);
+			grammarsFromExcel = textService.getListFromCsv(csvFilePath, 0);
 		}
 		try {
 			File file = new File(path);
