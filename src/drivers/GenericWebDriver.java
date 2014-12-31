@@ -1303,7 +1303,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 		JavascriptExecutor js = (JavascriptExecutor) webDriver;
 		js.executeScript("arguments[0].setAttribute('style', arguments[1]);",
 
-		element, "color: yellow; border: 2px solid red;");
+		element, "color: blue; border: 2px solid red;");
 	}
 
 }

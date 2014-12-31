@@ -275,7 +275,8 @@ public class DashboardPage extends TmsHomePage {
 
 	public boolean getDashboardGoButtonStatus() throws Exception {
 		WebElement element = webDriver.waitForElement(GOBUTTONID, ByTypes.id);
-
+		webDriver.highlightElement(element);
+		webDriver.printScreen("Dashboard go button");
 		if (element.isEnabled()) {
 			return true;
 		} else {
@@ -331,8 +332,9 @@ public class DashboardPage extends TmsHomePage {
 	}
 
 	public void clickTPSNextButton() throws Exception {
-		webDriver.waitForElement("//button[@class='slick-next']",
-				ByTypes.xpath).click();
+		webDriver
+				.waitForElement("//button[@class='slick-next']", ByTypes.xpath)
+				.click();
 
 	}
 
