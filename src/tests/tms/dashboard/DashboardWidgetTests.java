@@ -13,7 +13,7 @@ import pageObjects.tms.DashboardPage;
 public class DashboardWidgetTests extends DashboardBasicTest {
 
 	@Test
-	@TestCaseParams(testCaseID = { "17947" })
+	@TestCaseParams(testCaseID = { "17947","17318","18177" })
 	public void testClassCompletionWidget() throws Exception {
 
 		String[] stages = new String[] { "0-20", "21-40", "41-60", "61-80",
@@ -27,6 +27,8 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 		dashboardPage.selectClassInDashBoard(className);
 		String courseName = "1 unit 1 component";
 		dashboardPage.selectCourseInDashboard(courseName);
+		
+		dashboardPage.clickOnDashboardGoButton();
 
 		startStep("Check widget title");
 		String title = dashboardPage.getWidgetTitle(1, 1);
@@ -143,7 +145,7 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 		String className = "classForCacheTest";
 		String courseName = "2 units";
 		String TeacherUser = "autoTeacher2";
-		String[] unitsAvgScores = new String[] { "60", "70" };
+		String[] unitsAvgScores = new String[] { "80", "17" };
 
 		startStep("Login as the teacher and open the dashboard");
 		EdoHomePage edoHomePage = pageHelper.loginAsTeacher(TeacherUser,
