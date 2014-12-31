@@ -1,5 +1,6 @@
 package drivers;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Arrays;
@@ -40,9 +41,6 @@ public class ChromeWebDriver extends GenericWebDriver {
 				capabilities.setCapability(CapabilityType.LOGGING_PREFS,
 						logPrefs);
 			}
-			
-			
-		
 
 			ChromeOptions options = new ChromeOptions();
 			options.addArguments("--disable-extensions");
@@ -80,6 +78,11 @@ public class ChromeWebDriver extends GenericWebDriver {
 		catch (Exception e) {
 			logger.error("Cannot register node or start the remote driver! ", e);
 		}
+
+	}
+
+	public void killAllBrowsersInstances() throws IOException {
+		Runtime.getRuntime().exec("taskkill /im chromedriver.exe /f");
 	}
 
 }

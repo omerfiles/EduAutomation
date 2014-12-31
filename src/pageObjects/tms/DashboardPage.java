@@ -310,4 +310,30 @@ public class DashboardPage extends TmsHomePage {
 		System.out.println(value);
 		return value;
 	}
+
+	public WebElement getTPSUnitElement(int index) throws Exception {
+		WebElement element = webDriver.waitForElement(
+				"//div[@id='unitsWrapper']//div[1]//div[1]//div[" + index
+						+ "]//div[2]//div//div", ByTypes.xpath);
+		return element;
+	}
+
+	public String getTPSUnitScore(WebElement element) throws Exception {
+		WebElement webElement = element.findElement(By.xpath("//div[2]"));
+		return webElement.getText();
+	}
+
+	public String getTPSUnitNameTooltip(int index) throws Exception {
+		WebElement child = webDriver.waitForElement(
+				"//div[@id='unitsWrapper']//div[1]//div[1]//div[" + index
+						+ "]//div[2]//div//div//div[1]", ByTypes.xpath);
+		return child.getAttribute("data-tooltip");
+	}
+
+	public void clickTPSNextButton() throws Exception {
+		webDriver.waitForElement("//button[@class='slick-next']",
+				ByTypes.xpath).click();
+
+	}
+
 }

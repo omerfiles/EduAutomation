@@ -818,7 +818,14 @@ public class DbService extends SystemObjectImpl {
 															// taking 2
 															// parameters
 		conn = getConnection();
-		CallableStatement statement=conn.prepareCall(SPsql);
-//		statement.registerOutParameter(0, params[0]);
+		CallableStatement statement = conn.prepareCall(SPsql);
+		// statement.registerOutParameter(0, params[0]);
+	}
+
+	public List<String> getUnitNamesByCourse(String courseId) throws Exception {
+		String sql = "	select UnitName from Units where CourseId=" + courseId
+				+ " order by Sequence";
+
+		return getArrayListFromQuery(sql, 1);
 	}
 }

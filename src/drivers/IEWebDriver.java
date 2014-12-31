@@ -1,5 +1,6 @@
 package drivers;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,6 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.CapabilityType;
-
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.springframework.stereotype.Service;
@@ -25,15 +25,21 @@ import services.DbService;
 @Service
 public class IEWebDriver extends GenericWebDriver {
 
-	
-//	For IE 11 only, you will need to set a registry entry on the target computer so that the driver can maintain a connection to
-//	the instance of Internet Explorer it creates. For 32-bit Windows installations, the key you must examine in the registry 
-//	editor is HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BFCACHE. For 64-bit Windows 
-//	installations, the key is HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BFCACHE. 
-//	Please note that the FEATURE_BFCACHE subkey may or may not be present, and should be created if it is not present. Important: Inside this key,
-//	create a DWORD value named iexplore.exe with the value of 0.
+	// For IE 11 only, you will need to set a registry entry on the target
+	// computer so that the driver can maintain a connection to
+	// the instance of Internet Explorer it creates. For 32-bit Windows
+	// installations, the key you must examine in the registry
+	// editor is HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Internet
+	// Explorer\Main\FeatureControl\FEATURE_BFCACHE. For 64-bit Windows
+	// installations, the key is
+	// HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Internet
+	// Explorer\Main\FeatureControl\FEATURE_BFCACHE.
+	// Please note that the FEATURE_BFCACHE subkey may or may not be present,
+	// and should be created if it is not present. Important: Inside this key,
+	// create a DWORD value named iexplore.exe with the value of 0.
 	@Override
 	public void init(String remoteUrl, String folderName) throws Exception {
+		killAllBrowsersInstances();
 		setTimeout(30);
 		setBrowserName("Internet Exporer");
 		setInitialized(true);
@@ -44,21 +50,21 @@ public class IEWebDriver extends GenericWebDriver {
 			if (remoteUrl == null) {
 				// remoteUrl = configuration.getProperty("remote.machine");
 			}
-//			report.startLevel("Initializing IEWebDriver",
-//					Reporter.EnumReportLevel.CurrentPlace);
+			// report.startLevel("Initializing IEWebDriver",
+			// Reporter.EnumReportLevel.CurrentPlace);
 
 			DesiredCapabilities capabilities = DesiredCapabilities
 					.internetExplorer();
 			capabilities.setCapability(
 					CapabilityType.ForSeleniumServer.ENSURING_CLEAN_SESSION,
 					true);
-			capabilities.setCapability(CapabilityType.ENABLE_PERSISTENT_HOVERING, false);
-	
-			
-			
+			capabilities.setCapability(
+					CapabilityType.ENABLE_PERSISTENT_HOVERING, false);
+
 			webDriver = new RemoteWebDriver(new URL(remoteUrl + "/wd/hub"),
 					capabilities);
 			// webDriver = new RemoteWebDriver( capabilities);
+			deleteCookiesAndCache();
 			setPageLoadTimeOut();
 			setScriptLoadTimeOut();
 			report.stopLevel();
@@ -67,14 +73,11 @@ public class IEWebDriver extends GenericWebDriver {
 		}
 	}
 
-	
 	@Override
 	public void waitForElementAndClick(String idValue, ByTypes byType)
 			throws Exception {
 		waitForElement(idValue, byType, timeout, true).click();
 	}
-	
-	
 
 	@Override
 	public String switchToNewWindow(int windowId) throws Exception {
@@ -88,5 +91,10 @@ public class IEWebDriver extends GenericWebDriver {
 		System.out.println("after switch: " + webDriver.getWindowHandle());
 		return oldWindow;
 
+	}
+
+	public void killAllBrowsersInstances() throws IOException {
+		Runtime.getRuntime().exec("taskkill /im iexplore.exe /f");
+		Runtime.getRuntime().exec("taskkill /im IEDriverServer.exe /f");
 	}
 }

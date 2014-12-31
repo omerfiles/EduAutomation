@@ -13,7 +13,7 @@ import pageObjects.tms.DashboardPage;
 public class DashboardWidgetTests extends DashboardBasicTest {
 
 	@Test
-	@TestCaseParams(testCaseID = { "17947","17318","18177" })
+	@TestCaseParams(testCaseID = { "17947", "17318", "18177" })
 	public void testClassCompletionWidget() throws Exception {
 
 		String[] stages = new String[] { "0-20", "21-40", "41-60", "61-80",
@@ -27,7 +27,7 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 		dashboardPage.selectClassInDashBoard(className);
 		String courseName = "1 unit 1 component";
 		dashboardPage.selectCourseInDashboard(courseName);
-		
+
 		dashboardPage.clickOnDashboardGoButton();
 
 		startStep("Check widget title");
@@ -187,6 +187,33 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 		startStep("Check widget title");
 		String title = dashboardPage.getTpsWidgetTitle();
 		testResultService.assertEquals("Units", title, "title not found");
+
+		dashboardPage.selectClassInDashBoard("class1");
+		sleep(4);
+		dashboardPage.selectCourseInDashboard("Basic 2 V1");
+		dashboardPage.clickOnDashboardGoButton();
+
+		startStep("Check widget data - scores");
+
+		startStep("Check widget data - unit names");
+
+		startStep("Select class1 and Basic 1");
+
+		// get all units in course
+		List<String> unitNames = dbService.getUnitNamesByCourse(dbService
+				.getCourseIdByName("Basic 2 V1"));
+		boolean tpsButtonClicked = false;
+		for (int i = 0; i < unitNames.size(); i++) {
+			if (i == 4 && tpsButtonClicked == false) {
+				dashboardPage.clickTPSNextButton();
+				tpsButtonClicked = true;
+			}
+			WebElement unitElement = dashboardPage.getTPSUnitElement(i + 1);
+			// webDriver.highlightElement(unitElement);
+			String unitName = dashboardPage.getTPSUnitNameTooltip(i + 1);
+			testResultService.assertEquals("Unit Name: " + unitNames.get(i), unitName,
+					"Unit number: " + i + " tooltip not found");
+		}
 
 		startStep("click on report test");
 		dashboardPage.clickOnTimeOnTaskReport();
