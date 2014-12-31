@@ -448,7 +448,7 @@ public class DbService extends SystemObjectImpl {
 		while (rs.next()) {
 			String[] str = new String[columns];
 			for (int i = 0; i < columns; i++) {
-				str[i] = rs.getString(i+1);
+				str[i] = rs.getString(i + 1);
 			}
 			list.add(str);
 		}
@@ -812,4 +812,13 @@ public class DbService extends SystemObjectImpl {
 		return conn;
 	}
 
+	public void runStorePrecedure(String precedureName, String... params)
+			throws SQLException {
+		String SPsql = "EXEC " + precedureName + " ?,?,?"; // for stored proc
+															// taking 2
+															// parameters
+		conn = getConnection();
+		CallableStatement statement=conn.prepareCall(SPsql);
+//		statement.registerOutParameter(0, params[0]);
+	}
 }

@@ -6,7 +6,8 @@ public enum AutoParams {
 	sutUrl("sut.url"),
 	envFile("envFile"),
 	srdebug("srdebug"),
-	slaveName("slaveName")
+	slaveName("slaveName"),
+	scenarioFile("scenarioFile")
 	
 	;
 	

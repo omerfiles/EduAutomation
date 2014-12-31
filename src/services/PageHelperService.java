@@ -100,11 +100,7 @@ public class PageHelperService extends SystemObjectImpl {
 		// }
 		student.setPassword(configuration.getProperty("student.user.password"));
 
-		if (System.getProperty("teacher") != null) {
-			teacher.setUserName(System.getProperty("teacher"));
-		} else {
-			teacher.setUserName(configuration.getProperty("teacher.username"));
-		}
+		teacher.setUserName(configuration.getAutomationParam("teacher.username", "teacher"));
 		teacher.setPassword(configuration.getProperty("teacher.password"));
 
 		supervisor.setUserName(configuration.getProperty("supervisor.user"));
@@ -144,7 +140,7 @@ public class PageHelperService extends SystemObjectImpl {
 	}
 
 	public EdoHomePage loginAsTeacher() throws Exception {
-		return loginAsTeacher(configuration.getProperty("teacher.username"),
+		return loginAsTeacher(teacher.getUserName(),
 				configuration.getProperty("institutaion.subdomain"));
 	}
 
