@@ -16,7 +16,7 @@ public class SafariWebDriver extends GenericWebDriver {
 			setBrowserName("safari");
 			setInitialized(true);
 			dbService = new DbService();
-			report.report("Remote url from pom file is: " + remoteUrl);
+			reporter.report("Remote url from pom file is: " + remoteUrl);
 			logsFolder = folderName;
 			try {
 				if (remoteUrl == null) {
@@ -30,7 +30,7 @@ public class SafariWebDriver extends GenericWebDriver {
 						DesiredCapabilities.safari());
 				// webDriver = new RemoteWebDriver( capabilities);
 				setPageLoadTimeOut();
-				report.stopLevel();
+				reporter.stopLevel();
 			} catch (Exception e) {
 				logger.error("Cannot register node or start the remote driver! ", e);
 			}

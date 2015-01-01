@@ -44,7 +44,7 @@ public class IEWebDriver extends GenericWebDriver {
 		setBrowserName("Internet Exporer");
 		setInitialized(true);
 		dbService = new DbService();
-		report.report("Remote url from pom file is: " + remoteUrl);
+		reporter.report("Remote url from pom file is: " + remoteUrl);
 		logsFolder = folderName;
 		try {
 
@@ -61,7 +61,7 @@ public class IEWebDriver extends GenericWebDriver {
 			deleteCookiesAndCache();
 			setPageLoadTimeOut();
 			setScriptLoadTimeOut();
-			report.stopLevel();
+			reporter.stopLevel();
 		} catch (Exception e) {
 			logger.error("Cannot register node or start the remote driver! ", e);
 		}

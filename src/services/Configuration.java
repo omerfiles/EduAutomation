@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import Enums.AutoParams;
+import Enums.TestRunnerType;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -24,7 +25,7 @@ import jcifs.smb.SmbFile;
 import jcifs.smb.SmbFileInputStream;
 
 @Service
-public class Configuration {
+public class Configuration extends GenericService {
 	private static Configuration configuration = new Configuration();
 
 	@Autowired
@@ -54,32 +55,25 @@ public class Configuration {
 			localPropertiesFile = getAutomationParam(
 					AutoParams.envFile.toString(), "envFileCMD");
 
-			// // try to get properties file name from pom profile
-			// localPropertiesFile = System.getProperty("envFile");
-			// System.out
-			// .println("Got envFile propery from pom profile. EnvFile is: "
-			// + localPropertiesFile);
-			//
-			// // if local properties files does not exist in the pom xml, get
-			// if
-			// // from the global properties file
-			// if (localPropertiesFile == null) {
-			// globalProperties.load(globaConfigInput);
-			// localPropertiesFile = getGlobalProperties("envFile");
-			// System.out
-			// .println("Got envFile propery from Global config file");
-			// }
-			//
-			// // input = new FileInputStream("files/properties/QA/"
-			// // + localPropertiesFile);
-			String path = "smb://10.1.0.83/automationConfig/" + localPropertiesFile;
-			netService=new NetService();
-			NtlmPasswordAuthentication auto = netService.getAuth();
-			SmbFile smbFile = new SmbFile(path, auto);
+			
+			if(getTestRunner().equals(TestRunnerType.CI)){
+				String path = "smb://10.1.0.83/automationConfig/"
+						+ localPropertiesFile;
+				netService = new NetService();
+				NtlmPasswordAuthentication auto = netService.getAuth();
+				SmbFile smbFile = new SmbFile(path, auto);
 
-//			input = new FileInputStream(smbFile.getPath());
-			SmbFileInputStream inputStream=new SmbFileInputStream(smbFile);
-			properties.load(inputStream);
+				// input = new FileInputStream(smbFile.getPath());
+				SmbFileInputStream inputStream = new SmbFileInputStream(smbFile);
+				properties.load(inputStream);
+			}
+			else{
+				String path="C:\\automation\\"+localPropertiesFile;
+				input = new FileInputStream(path);
+				properties.load(input);
+			}
+			
+			
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

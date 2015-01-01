@@ -201,7 +201,7 @@ public class DashboardPage extends TmsHomePage {
 		System.out.println("width: " + width + " Height: " + height);
 
 		webDriver.hoverOnElement(webDriver.waitForElement(
-				"//div[@id='PTWidget']//canvas[5]", ByTypes.xpath), width / 4,
+				"//div[@id='PTWidget']//canvas[5]", ByTypes.xpath), 10+ width/2,
 				height / 4);
 		webDriver.printScreen("onhover");
 

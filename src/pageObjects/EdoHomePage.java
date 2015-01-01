@@ -355,7 +355,8 @@ public class EdoHomePage extends GenericPage {
 //			webDriver.printScreen("OpeningTeachersCorner");
 			webDriver.waitForElement("//a[@href='javascript:gotoTMS()']",
 					ByTypes.xpath).click();
-			webDriver.sleep(2000);
+			
+			Thread.sleep(2000);
 			webDriver.switchToNewWindow();
 			System.out.println("URL:" + webDriver.getUrl());
 			webDriver.switchToFrame(0);

@@ -1,5 +1,7 @@
 package drivers;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,13 +56,14 @@ import Enums.AutoParams;
 import Enums.ByTypes;
 import Enums.TestRunnerType;
 import services.DbService;
+import services.GenericService;
 import services.NetService;
 import services.TestResultService;
 import services.TextService;
 import junit.framework.SystemTestCaseImpl;
 
 @Service
-public abstract class GenericWebDriver extends SystemTestCaseImpl {
+public abstract class GenericWebDriver extends GenericService {
 
 	protected static final Logger logger = LoggerFactory
 			.getLogger(GenericWebDriver.class);
@@ -82,7 +85,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	private TextService textService;
 
-	private services.Reporter reporter;
+	protected services.Reporter reporter;
 
 	TestResultService testResultService;
 
@@ -347,8 +350,6 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 					.addFailTest("Element not found or element is not Clickable");
 		}
 	}
-
-	
 
 	public void assertTextBy(String idValue, String byType, String text)
 			throws Exception {
@@ -710,23 +711,35 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 						+ ".png";
 			}
 
-			// **printscreen using smbFile
-			NetService netService = new NetService();
-			String sFileName = "scr_" + dbService.sig(8)
-					+ message.replace(" ", "") + ".png";
-			SmbFile smbFile = new SmbFile(
-					"smb://10.1.0.83/automationScreenshots/" + sFileName,
-					netService.getAuth());
-			SmbFileOutputStream smbFileOutputStream = new SmbFileOutputStream(
-					smbFile);
+			if (runner == TestRunnerType.CI) {
+				// **printscreen using smbFile
+				NetService netService = new NetService();
+				String sFileName = "scr_" + dbService.sig(8)
+						+ message.replace(" ", "") + ".png";
+				SmbFile smbFile = new SmbFile(
+						"smb://10.1.0.83/automationScreenshots/" + sFileName,
+						netService.getAuth());
+				SmbFileOutputStream smbFileOutputStream = new SmbFileOutputStream(
+						smbFile);
+				// FileOutputStream fos = new FileOutputStream(new
+				// File(newFileName));
+				// fos.write(decodedScreenshot);
+				smbFileOutputStream.write(decodedScreenshot);
+				smbFileOutputStream.close();
+				System.out.println("http://jenkins/automationScreenshots/"
+						+ sFileName);
+			} else {
+				newFileName = System.getProperty("user.dir") + "/log//current/"
+						+ "ScreenShot" + message.replace(" ", "") + sig
+						+ ".png";
+				path = System.getProperty("user.dir") + "//" + "log//current//"
+						+ "ScreenShot" + message.replace(" ", "") + sig
+						+ ".png";
 
-			// FileOutputStream fos = new FileOutputStream(new
-			// File(newFileName));
-			// fos.write(decodedScreenshot);
-			smbFileOutputStream.write(decodedScreenshot);
-			smbFileOutputStream.close();
-			System.out.println("http://jenkins/automationScreenshots/"
-					+ sFileName);
+				FileOutputStream fos = new FileOutputStream(new File(
+						newFileName));
+				fos.write(decodedScreenshot);
+			}
 
 		} catch (Exception e) {
 			System.out.println("Taking the screenshot failed: " + e.toString());
@@ -873,17 +886,6 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 
 	
 
-	public TestRunnerType getTestRunner() {
-		// if test is run in debug/development
-		TestRunnerType testRunner = null;
-		if (System.getProperty("remote.machine") != null) {
-			testRunner = TestRunnerType.CI;
-		} else if (System.getProperty("remote.machine") == null) {
-			testRunner = TestRunnerType.local;
-		}
-		return testRunner;
-	}
-
 	public String getElementHTML(WebElement element) throws Exception {
 		String html = element.getAttribute("innerHTML");
 		System.out.println("Element HTMl is: " + html);
@@ -959,7 +961,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	public void hoverOnElement(WebElement element) throws Exception {
 		Actions builder = new Actions(webDriver);
 		builder.moveToElement(element).perform();
-		this.sleep(2000);
+		Thread.sleep(2000);
 
 	}
 
@@ -967,7 +969,7 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 			throws Exception {
 		Actions builder = new Actions(webDriver);
 		builder.moveToElement(element, x, y).perform();
-		this.sleep(2000);
+		Thread.sleep(2000);
 
 	}
 

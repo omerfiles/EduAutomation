@@ -69,6 +69,7 @@ public class EdusoftBasicTest extends TestCase {
 	// public services.Reporter report=new services.Reporter();
 
 	private boolean hasFailures;
+	private String testCaseId1;
 
 	@Rule
 	public TestWatcher watcher = new TestWatcher() {
@@ -115,6 +116,10 @@ public class EdusoftBasicTest extends TestCase {
 
 	@Before
 	public void setup() throws Exception {
+
+		testCaseId = System.getProperty("testCaseId");
+		System.out.println("Test case is in edusoftBasicTest:" + testCaseId);
+
 		System.out.println("url from maven command line: "
 				+ System.getProperty("URL"));
 
@@ -149,8 +154,6 @@ public class EdusoftBasicTest extends TestCase {
 		report.init();
 		autoInstitution = institutionService.getInstitution();
 
-		// System.out.println("Automation isntitution id is: "
-		// + autoInstitution.getInstitutionId());
 
 	}
 
@@ -161,40 +164,13 @@ public class EdusoftBasicTest extends TestCase {
 
 	@After
 	public void tearDown() throws Exception {
-		// report.startLevel("Test case id is: " + this.testCaseId,
-		// EnumReportLevel.MainFrame);
 
-		// textService.writeArrayistToCSVFile(System.getProperty("user.dir")
-		// + "/log//current//TestLog.csv", report.getReportLogs());
 		try {
-
-			;
 
 			String fileName = "testlog" + dbService.sig() + ".csv";
 			String path = "smb://10.1.0.83/automationLogs/" + fileName;
 			textService.writeListToSmbFile(path, report.getReportLogs(),
 					netService.getAuth());
-			// String testLogFIle = "files/csvFiles/" + fileName;
-			// textService.writeArrayistToCSVFile(testLogFIle,
-			// report.getReportLogs());
-			//
-			// SmbFile sFile = new SmbFile(System.getProperty("user.dir")
-			// + testLogFIle);
-			// NtlmPasswordAuthentication auto = netService.getAuth();
-			// String path = "smb://10.1.0.83/automationLogs/" + fileName;
-			//
-			// SmbFile dFile = new SmbFile(path, auto);
-			// dFile.createNewFile();
-			//
-			// IOUtils.copy(sFile.getInputStream(), dFile.getOutputStream());
-
-			// testLogFIle=configuration.getGlobalProperties("logserver")
-			// + "\\automationLogs\\" + testLogFIle;
-			// textService.writeArrayistToCSVFile(
-			// testLogFIle,
-			// report.getReportLogs());
-			// String path = "http:"+testLogFIle;
-			// System.out.println("Test log can be found here: " + path);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -205,25 +181,14 @@ public class EdusoftBasicTest extends TestCase {
 		if (printResults == true && testHasFailedResult) {
 			testResultService.printAllFailures();
 		}
-		// if (testResultService.hasFailedResults() && ==true) {
-		// Assert.fail("Test failed due to several errors");
-		// }
-		//
-		// System.out.println("Test passed: " + testPassed());
+
 		System.out.println("test passed?: " + testStatus);
 		if (testHasFailedResult) {
 			System.out.println("Test failed due to some errors");
 			// Assert.fail("Test failed due to some errors");
 		}
-		// if (this.isPass == false) {
-		// report.startLevel("Test failed", EnumReportLevel.MainFrame);
-		// }
-	}
 
-	// @AfterClass
-	// public static void afterClass(){
-	//
-	// }
+	}
 
 	public void startStep(String stepName) throws Exception {
 		if (inStep == true) {
@@ -244,34 +209,7 @@ public class EdusoftBasicTest extends TestCase {
 		report.stopLevel();
 	}
 
-	public String getTestCaseId(String methodName, Class c) {
-		Method method = null;
-		try {
-			method = c.getDeclaredMethod(methodName, null);
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// Method[] methods = c.getMethods();
-		// for (Method m : methods) {
-		// if (m.isAnnotationPresent(TestCaseParams.class)) {
-		// TestCaseParams ta = m.getAnnotation(TestCaseParams.class);
-		// System.out.println("test cas_e id: " + ta.testCaseID());
-		// testCaseId = ta.testCaseID();
-		// break;
-		// }
-		// }
 
-		// if (method.isAnnotationPresent(TestCaseParams.class)) {
-		// TestCaseParams tc = method.getAnnotation(TestCaseParams.class);
-		// testCaseId = tc.testCaseID();
-		// }
-
-		return testCaseId;
-	}
 
 	public boolean isPrintResults() {
 		return printResults;
