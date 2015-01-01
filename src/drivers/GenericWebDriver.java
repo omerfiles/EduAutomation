@@ -812,7 +812,12 @@ public abstract class GenericWebDriver extends SystemTestCaseImpl {
 	}
 
 	public void maximize() {
-		webDriver.manage().window().maximize();
+		try {
+			webDriver.manage().window().maximize();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public WebElement getChildElementByXpath(WebElement element, String xpath) {
