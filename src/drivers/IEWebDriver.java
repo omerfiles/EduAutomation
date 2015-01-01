@@ -47,11 +47,6 @@ public class IEWebDriver extends GenericWebDriver {
 		report.report("Remote url from pom file is: " + remoteUrl);
 		logsFolder = folderName;
 		try {
-			if (remoteUrl == null) {
-				// remoteUrl = configuration.getProperty("remote.machine");
-			}
-			// report.startLevel("Initializing IEWebDriver",
-			// Reporter.EnumReportLevel.CurrentPlace);
 
 			DesiredCapabilities capabilities = DesiredCapabilities
 					.internetExplorer();
@@ -63,7 +58,6 @@ public class IEWebDriver extends GenericWebDriver {
 
 			webDriver = new RemoteWebDriver(new URL(remoteUrl + "/wd/hub"),
 					capabilities);
-			// webDriver = new RemoteWebDriver( capabilities);
 			deleteCookiesAndCache();
 			setPageLoadTimeOut();
 			setScriptLoadTimeOut();
