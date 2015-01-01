@@ -1,16 +1,22 @@
 package services;
 
+import java.util.ArrayList;
+import java.util.List;
 
-import java.lang.annotation.Annotation;
-
+import org.json.Test;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 
 import Interfaces.TestCaseParams;
+
 ;
 
 public class ExtendedRunner extends BlockJUnit4ClassRunner {
+
+	private String testId;
 
 	public ExtendedRunner(Class<?> klass)
 			throws org.junit.runners.model.InitializationError {
@@ -21,80 +27,110 @@ public class ExtendedRunner extends BlockJUnit4ClassRunner {
 	@Override
 	protected Statement methodBlock(FrameworkMethod method) {
 		// TODO Auto-generated method stub
-		TestCaseParams params=	method.getAnnotation(TestCaseParams.class);
-		if(params!=null){
-		System.out.println("Test case id is:"+ params.testCaseID()[0]);
+		TestCaseParams params = method.getAnnotation(TestCaseParams.class);
+		if (params != null) {
+			for (int i = 0; i < params.testCaseID().length; i++) {
+				System.out.println("Covers test case id:"
+						+ params.testCaseID()[i]);
+			}
+			System.setProperty("testCaseId", params.testCaseID()[0]);
 		}
 		return super.methodBlock(method);
 	}
-	
-	
 
+	public String getTestId() {
+		return testId;
+	}
+
+	public void setTestId(String testId) {
+		this.testId = testId;
+	}
+
+	// get scenraio name from naven command line
 //	@Override
-//	protected org.junit.runners.model.Statement methodBlock(
-//			FrameworkMethod method) {
-//		// TODO Auto-generated method stub
+//	protected List<FrameworkMethod> computeTestMethods() {
 //
-//		final TestCaseParams customAnnotation = method
-//				.getAnnotation(TestCaseParams.class);
-//		if (customAnnotation != null) {
-//			for (int i = 0; i < customAnnotation.testCaseID().length; i++) {
-//				System.out.println("Test case id is:"
-//						+ customAnnotation.testCaseID()[i]);
+//		// load test names from scenario file
+//
+//		boolean useScenarioFile = false;
+//		TextService textService = new TextService();
+//		List<String[]> testNames = null;
+//		try {
+//			String filePath = System.getProperty("scenarioFile");
+//			if (filePath == null) {
+//				filePath = "files//csvFiles/testScenarios/regression.csv";
 //			}
-//		}
-//		else
-//		{
-//			System.out.println("Test case id is missing");
+//			testNames = textService.getStr2dimArrFromCsv(filePath);
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
 //		}
 //
-//		return super.methodBlock(method);
+//		// First, get the base list of tests
+//		final List<FrameworkMethod> allMethods = getTestClass()
+//				.getAnnotatedMethods();
+//		if (allMethods == null || allMethods.size() == 0)
+//			return allMethods;
+//
+//		// Filter the list down
+//		final List<FrameworkMethod> filteredMethods = new ArrayList<FrameworkMethod>(
+//				allMethods.size());
+//		if (useScenarioFile == true) {
+//
+//			for (final FrameworkMethod method : allMethods) {
+//				final TestCaseParams customAnnotation = method
+//						.getAnnotation(TestCaseParams.class);
+//				if (customAnnotation != null) {
+//					// Add to accepted test methods, if matching criteria met
+//					// For example `if(currentOs.equals(customAnnotation.OS()))`
+//
+//					for (int i = 0; i < testNames.size(); i++) {
+//						if (testNames.get(i)[0].equals(customAnnotation
+//								.testName())) {
+//							filteredMethods.add(method);
+//							break;
+//						}
+//					}
+//
+//				} else {
+//
+//					// If test method doesnt have the custom annotation, either
+//					// add
+//					// it to
+//					// the accepted methods, or not, depending on what the
+//					// 'default'
+//					// behavior
+//					// should be
+//					// filteredMethods.add(method);
+//				}
+//			}
+//		} else {
+//			return allMethods;
+//		}
+//
+//		return filteredMethods;
 //	}
+//
+//	
+//	
+	
+	@Override
+	protected void validateInstanceMethods(List<Throwable> errors) {
+        validatePublicVoidNoArgMethods(After.class, false, errors);
+        validatePublicVoidNoArgMethods(Before.class, false, errors);
+        validateTestMethods(errors);
 
-	// @Override
-	// protected List<FrameworkMethod> computeTestMethods() {
-	// // First, get the base list of tests
-	// // Filter the list down
-	// List<FrameworkMethod> filteredMethods = null;
-	// try {
-	// final List<FrameworkMethod> allMethods = getTestClass()
-	// .getAnnotatedMethods(TestCaseParams.class);
-	// if (allMethods == null || allMethods.size() == 0)
-	// return allMethods;
-	//
-	// filteredMethods = new ArrayList<FrameworkMethod>(
-	// allMethods.size());
-	// for (final FrameworkMethod method : allMethods) {
-	// final TestCaseParams customAnnotation = method
-	// .getAnnotation(TestCaseParams.class);
-	// if (customAnnotation != null) {
-	// // Add to accepted test methods, if matching criteria met
-	// // For example `if(currentOs.equals(customAnnotation.OS()))`
-	// System.out.println(customAnnotation.testCaseID());
-	// filteredMethods.add(method);
-	// } else {
-	// // If test method doesnt have the custom annotation, either add it to
-	// // the accepted methods, or not, depending on what the 'default' behavior
-	// // should be
-	// filteredMethods.add(method);
-	// }
-	// }
-	// } catch (Exception e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	//
-	// return filteredMethods;
-	// }
+//        if (computeTestMethods().size() == 0)
+//            errors.add(new Exception("No runnable methods"));
+       
+    }
 
-	// @Override
-	// protected Description methodDescription(Method method) {
-	// TODO Auto-generated method stub
-	// method.getAnnotation(TestCaseParams.class);
-	// TestCaseParams tc = method.getAnnotation(TestCaseParams.class);
-	// String testCaseId = tc.testCaseID();
-	// System.out.println(testCaseId);
-	// return super.methodDescription(method);
+	@Override
+	protected Object createTest() throws Exception {
+		// TODO Auto-generated method stub
+		return super.createTest();
+	}
+
 }
 
 // }
