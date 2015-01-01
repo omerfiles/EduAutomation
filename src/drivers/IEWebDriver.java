@@ -39,7 +39,7 @@ public class IEWebDriver extends GenericWebDriver {
 	// create a DWORD value named iexplore.exe with the value of 0.
 	@Override
 	public void init(String remoteUrl, String folderName) throws Exception {
-		killAllBrowsersInstances();
+//		killAllBrowsersInstances();
 		setTimeout(30);
 		setBrowserName("Internet Exporer");
 		setInitialized(true);
