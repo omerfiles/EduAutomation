@@ -52,37 +52,43 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 		}
 
 		startStep("Check number of students for each stage");
-		for (int i = 0; i < completionList.size(); i++) {
-			if (completionList.get(i)[0] != null) {
-				if (completionList.get(i)[3].equals(stages[0])) {
+		int listCounter=0;
+		for (int i = 0; i < complStudents.length; i++) {
+			if (!complStudents[i].equals("0")) {
+				if (completionList.get(listCounter)[3].equals(stages[0])) {
 					testResultService.assertEquals(complStudents[i],
-							completionList.get(1)[0],
+							completionList.get(listCounter)[0],
 							"number of students for stage:" + stages[0]
 									+ " not found");
-				} else if (completionList.get(i)[3].equals(stages[1])) {
+					listCounter++;
+				} else if (completionList.get(listCounter)[3].equals(stages[1])) {
 					testResultService.assertEquals(complStudents[i],
-							completionList.get(1)[0],
+							completionList.get(listCounter)[0],
 							"number of students for stage:" + stages[1]
 									+ " not found");
-
-				} else if (completionList.get(i)[3].equals(stages[2])) {
+					listCounter++;
+				} else if (completionList.get(listCounter)[3].equals(stages[2])) {
 					testResultService.assertEquals(complStudents[i],
-							completionList.get(1)[0],
+							completionList.get(listCounter)[0],
 							"number of students for stage:" + stages[2]
 									+ " not found");
-
-				} else if (completionList.get(i)[3].equals(stages[3])) {
+					listCounter++;
+				} else if (completionList.get(listCounter)[3].equals(stages[3])) {
 					testResultService.assertEquals(complStudents[i],
-							completionList.get(1)[0],
+							completionList.get(listCounter)[0],
 							"number of students for stage:" + stages[3]
 									+ " not found");
-				} else if (completionList.get(i)[3].equals(stages[4])) {
+					listCounter++;
+				} else if (completionList.get(listCounter)[3].equals(stages[4])) {
 					testResultService.assertEquals(complStudents[i],
-							completionList.get(1)[0],
+							completionList.get(listCounter)[0],
 							"number of students for stage:" + stages[4]
 									+ " not found");
+					listCounter++;
 				}
 			}
+			//check that value is 0
+			
 		}
 
 		startStep("Check summary of all students");
