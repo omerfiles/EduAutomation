@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import drivers.GenericWebDriver;
 
-@Service
+@Service("testResultService")
 public class TestResultService extends SystemObjectImpl {
 
 	List<String> results = new ArrayList<String>();

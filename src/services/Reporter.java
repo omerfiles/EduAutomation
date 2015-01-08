@@ -6,20 +6,23 @@ import org.springframework.stereotype.Service;
 
 import jsystem.framework.report.Reporter.EnumReportLevel;
 
-@Service
+@Service("reporter")
 public class Reporter {
-	ArrayList<String> reportLogs;
 
-	public Reporter() {
-		// TODO Auto-generated constructor stub
+	private static Reporter reporter = new Reporter();
+	ArrayList<String> reportLogs = new ArrayList<>();
+
+	public static Reporter getInstance() {
+
+		return reporter;
 	}
 
-	public void init() {
-		reportLogs = new ArrayList<>();
-	}
+	// public void init() {
+	// reportLogs = new ArrayList<>();
+	// }
 
-	public void report(String message){
-		//append text to list
+	public void report(String message) {
+		// append text to list
 		reportLogs.add(message);
 	}
 

@@ -165,7 +165,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 
 		startStep("Login again as student and check the feedback from the teacher");
 		webDriver.quitBrowser();
-		webDriver.init(testResultService);
+		webDriver.init();
 		webDriver.openUrl(getSutAndSubDomain());
 		pageHelper.loginAsStudent(student);
 		sleep(2);
@@ -329,7 +329,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 
 		startStep("Login as student and check that the commnet is not displayed");
 		webDriver.quitBrowser();
-		webDriver.init(testResultService);
+		webDriver.init();
 		pageHelper.loginAsStudent();
 		sleep(5);
 		webDriver.printScreen("after student login");
@@ -592,7 +592,7 @@ public class EraterRegressionTests extends EdusoftWebTest {
 
 		startStep("Login as student and check that the commnet is not displayed");
 		webDriver.quitBrowser();
-		webDriver.init(testResultService);
+		webDriver.init();
 		pageHelper.loginAsStudent();
 		sleep(5);
 		webDriver.printScreen("after student login");

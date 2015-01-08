@@ -36,7 +36,7 @@ import Objects.Teacher;
 import Objects.UnitComponent;
 import Objects.UserObject;
 
-@Service
+@Service("pageHelperService")
 public class PageHelperService extends SystemObjectImpl {
 
 	GenericWebDriver webDriver;
@@ -45,6 +45,9 @@ public class PageHelperService extends SystemObjectImpl {
 	Configuration configuration;
 	@Autowired
 	TextService textService;
+
+	@Autowired
+	NetService netService;
 
 	@Autowired
 	DbService dbService;
@@ -100,7 +103,8 @@ public class PageHelperService extends SystemObjectImpl {
 		// }
 		student.setPassword(configuration.getProperty("student.user.password"));
 
-		teacher.setUserName(configuration.getAutomationParam("teacher.username", "teacher"));
+		teacher.setUserName(configuration.getAutomationParam(
+				"teacher.username", "teacher"));
 		teacher.setPassword(configuration.getProperty("teacher.password"));
 
 		supervisor.setUserName(configuration.getProperty("supervisor.user"));
@@ -441,7 +445,6 @@ public class PageHelperService extends SystemObjectImpl {
 	public void addStudent(String studentName, String className)
 			throws Exception {
 
-
 		// ************Using API to create the user
 
 		createUserUsingApi(configuration.getProperty("sut.url"), studentName,
@@ -458,8 +461,8 @@ public class PageHelperService extends SystemObjectImpl {
 				+ "&FirstName=" + fname + "&LastName=" + lname + "&Password="
 				+ pass + "&Email=test40@edusoft.co.il";
 
-		NetService netService = new NetService();
-		netService.sentHttpRequest(request);
+		// NetService netService = new NetService();
+		netService.sendHttpRequest(request);
 
 	}
 
@@ -475,7 +478,7 @@ public class PageHelperService extends SystemObjectImpl {
 
 		if (rand < 200) {
 			// test score will be 0
-			for (int i = 0; i < questions.length ; i++) {
+			for (int i = 0; i < questions.length; i++) {
 				questions[i] = false;
 			}
 
@@ -494,20 +497,20 @@ public class PageHelperService extends SystemObjectImpl {
 			for (int i = 0; i < questions.length * 0.25; i++) {
 				questions[i] = false;
 			}
-		}
-		else if (rand > 801 && rand <= 1000) {
-			//test score will be 100
-			
+		} else if (rand > 801 && rand <= 1000) {
+			// test score will be 100
+
 		}
 		return questions;
 	}
 
-	public void waitForDateTime(DateTime timeToWaitFor) throws InterruptedException {
-		LocalDateTime localDateTime = new LocalDateTime();  
-		
+	public void waitForDateTime(DateTime timeToWaitFor)
+			throws InterruptedException {
+		LocalDateTime localDateTime = new LocalDateTime();
+
 		Duration myDuration = new Duration(timeToWaitFor.toDateTime(),
 				localDateTime.toDateTime());
 		System.out.println("Seconds left: " + myDuration.getStandardSeconds());
-		Thread.sleep(myDuration.getMillis()+60000);
+		Thread.sleep(myDuration.getMillis() + 60000);
 	}
 }

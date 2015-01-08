@@ -52,7 +52,7 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 		}
 
 		startStep("Check number of students for each stage");
-		int listCounter=0;
+		int listCounter = 0;
 		for (int i = 0; i < complStudents.length; i++) {
 			if (!complStudents[i].equals("0")) {
 				if (completionList.get(listCounter)[3].equals(stages[0])) {
@@ -87,8 +87,10 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 					listCounter++;
 				}
 			}
-			//check that value is 0
+			// check that value is 0
 			
+			
+
 		}
 
 		startStep("Check summary of all students");
@@ -126,6 +128,8 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 		String className = dashboardPage.getSelectedClass();
 		String courseName = dashboardPage.getSelectedCourse();
 
+		selectClassAndCourse("class1", "Basic 1 ");
+		sleep(4);
 		startStep("Check widget title");
 		String title = dashboardPage.getWidgetTitle(1, 2);
 		testResultService.assertEquals("Average Test Scores", title,
@@ -137,7 +141,7 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 
 		startStep("Click widget link button and check the report opens");
 		dashboardPage.clickOnSuccessWidgetButton();
-		sleep(4);
+		sleep(6);
 		dashboardPage.checkForReportResults();
 		// testResultService.assertEquals(courseName,
 		// dashboardPage.getSelectedCourseInReport());
@@ -217,8 +221,8 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 			WebElement unitElement = dashboardPage.getTPSUnitElement(i + 1);
 			// webDriver.highlightElement(unitElement);
 			String unitName = dashboardPage.getTPSUnitNameTooltip(i + 1);
-			testResultService.assertEquals("Unit Name: " + unitNames.get(i), unitName,
-					"Unit number: " + i + " tooltip not found");
+			testResultService.assertEquals("Unit Name: " + unitNames.get(i),
+					unitName, "Unit number: " + i + " tooltip not found");
 		}
 
 		startStep("click on report test");
@@ -245,7 +249,7 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 		// TODO wait until all dashboard is loaded
 		dashboardPage.hideSelectionBar();
 		dashboardPage.selectClassInDashBoard(classNameForTest);
-		dashboardPage.selectCourseInDashboardByIndex(1);
+		dashboardPage.selectCourseInDashboardByIndex(2);
 		// dashboardPage.hideSelectionBar();
 		dashboardPage.clickOnDashboardGoButton();
 
@@ -259,6 +263,7 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 		dashboardPage.checkIfWidgetHasData(3, 1);
 		// hover on first discoveries
 		dashboardPage.hoverOnPltWidget();
+		webDriver.printScreen("Over on plt");
 		System.out.println(dashboardPage.getPltWidgetContent());
 		String numOfStudentsPerLevel = dashboardPage
 				.getNumberOfStudentsPerPltLevel();

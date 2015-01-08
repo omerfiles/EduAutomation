@@ -33,9 +33,10 @@ public class DashboardHeaderTests extends DashboardBasicTest {
 		sleep(5);
 
 		startStep("Check number of students");
-		testResultService.assertElementText(dashboardPage.getNumberOfStudentsPerClass(), dbService.getNumberOfStudentsInClass(
-				classToSelect, autoInstitution.getInstitutionId()));
-			
+		testResultService.assertElementText(dashboardPage
+				.getNumberOfStudentsPerClass(), dbService
+				.getNumberOfStudentsInClass(classToSelect,
+						autoInstitution.getInstitutionId()));
 
 		startStep("Navigate to another report");
 		dashboardPage.clickOnReports();
@@ -124,7 +125,7 @@ public class DashboardHeaderTests extends DashboardBasicTest {
 
 		testResultService.assertEquals(classWithLastProgress, classInLabel,
 				"class name not found in label");
-		
+
 		testResultService.assertEquals(courseWithLastProgress, courseInLabel,
 				"course name not found in label");
 
@@ -198,8 +199,8 @@ public class DashboardHeaderTests extends DashboardBasicTest {
 
 		startStep("Check dashbaord width");
 		int currentWidth = webDriver.getWindowWidth();
-//		testResultService.assertEquals(getDashboardwidth(), currentWidth,
-//				"Current width is not 1024");
+		// testResultService.assertEquals(getDashboardwidth(), currentWidth,
+		// "Current width is not 1024");
 
 		startStep("Check the width of widgets");
 		testResultService.assertEquals("50%",
@@ -235,6 +236,19 @@ public class DashboardHeaderTests extends DashboardBasicTest {
 		startStep("Select course and click the Go button");
 
 		startStep("Check that header becomes hidden");
+
+	}
+
+	@Test
+	public void testDashboardLoading() throws Exception {
+		startStep("Login as a teacher and open the dashboard");
+		EdoHomePage edoHomePage = pageHelper.loginAsTeacher();
+		DashboardPage dashboardPage = (DashboardPage) edoHomePage
+				.clickOnTeachersCorner(true);
+
+		startStep("Check that header is not displayed by default");
+		// webDriver.waitForJqueryToFinish();
+		
 
 	}
 

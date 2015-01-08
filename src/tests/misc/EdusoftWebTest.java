@@ -49,12 +49,12 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 			testResultService
 					.addFailTest("No webdriver found. Please check properties file or pom for webdriver name");
 		}
-		webDriver.setReporter(report);
+//		webDriver.setReporter(report);
 
 		if (enableLoggin == true) {
 			webDriver.setEnableConsoleLog(true);
 		}
-		webDriver.init(testResultService);
+		webDriver.init();
 		webDriver.maximize();
 		try {
 

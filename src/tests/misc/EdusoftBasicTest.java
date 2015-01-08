@@ -1,19 +1,11 @@
 package tests.misc;
 
-import java.lang.reflect.Method;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import jcifs.smb.NtlmPasswordAuthentication;
-import jcifs.smb.SmbFile;
 import jsystem.framework.report.Reporter.EnumReportLevel;
-import junit.framework.SystemTestCase4;
-import junit.framework.SystemTestCaseImpl;
 import junit.framework.TestCase;
 
-import org.apache.commons.compress.utils.IOUtils;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TestRule;
@@ -21,10 +13,7 @@ import org.junit.rules.TestWatcher;
 import org.junit.rules.Timeout;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
-import org.openqa.selenium.logging.LogEntries;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.test.context.ContextConfiguration;
-
 import services.Configuration;
 import services.DbService;
 import services.EraterService;
@@ -33,7 +22,6 @@ import services.InstitutionService;
 import services.NetService;
 import services.TestResultService;
 import services.TextService;
-import Enums.Browsers;
 import Objects.AutoInstitution;
 import drivers.GenericWebDriver;
 
@@ -129,13 +117,15 @@ public class EdusoftBasicTest extends TestCase {
 
 		textService = (TextService) ctx.getBean("TextSerivce");
 		dbService = (DbService) ctx.getBean("DbService");
-		netService = (NetService) ctx.getBean("NetService");
+		
 		eraterService = (EraterService) ctx.getBean("EraterService");
 		institutionService = (InstitutionService) ctx
 				.getBean("InstitutionService");
 		testResultService = (TestResultService) ctx
-				.getBean("TestResultService");
-		report = (services.Reporter) ctx.getBean("Reporter");
+				.getBean("testResultService");
+		report = (services.Reporter) ctx.getBean("reporter");
+//		report.init();
+		netService = (NetService) ctx.getBean("NetService");
 		// audioService = (AudioService) ctx.getBean("AudioService");
 
 		int institutionId;
@@ -151,7 +141,7 @@ public class EdusoftBasicTest extends TestCase {
 		}
 
 		institutionService.init();
-		report.init();
+		
 		autoInstitution = institutionService.getInstitution();
 
 

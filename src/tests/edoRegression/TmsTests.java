@@ -90,7 +90,7 @@ public class TmsTests extends EdusoftWebTest {
 		report.startLevel("Logout from TMS and login as the new teacher",
 				EnumReportLevel.CurrentPlace);
 		webDriver.quitBrowser();
-		webDriver.init(testResultService);
+		webDriver.init();
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver,
 				testResultService);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
@@ -156,7 +156,7 @@ public class TmsTests extends EdusoftWebTest {
 		report.stopLevel();
 		report.startLevel("Login as student", EnumReportLevel.CurrentPlace);
 		webDriver.closeBrowser();
-		webDriver.init(testResultService);
+		webDriver.init();
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver,
 				testResultService);
 		edoLoginPage.OpenPage(getSutAndSubDomain());
@@ -254,7 +254,7 @@ public class TmsTests extends EdusoftWebTest {
 
 		startStep("Open institution URL and self register as a student");
 		webDriver.closeBrowser();
-		webDriver.init(testResultService);
+		webDriver.init();
 		EdoLoginPage edoLoginPage = new EdoLoginPage(webDriver,
 				testResultService);
 		edoLoginPage.OpenPage(getSutAndSubDomain());

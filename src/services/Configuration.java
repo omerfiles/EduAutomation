@@ -3,6 +3,7 @@ package services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -20,6 +21,8 @@ import java.util.Enumeration;
 import java.util.Properties;
 import java.util.Set;
 
+import javax.annotation.Resource;
+
 import jcifs.smb.NtlmPasswordAuthentication;
 import jcifs.smb.SmbFile;
 import jcifs.smb.SmbFileInputStream;
@@ -28,8 +31,14 @@ import jcifs.smb.SmbFileInputStream;
 public class Configuration extends GenericService {
 	private static Configuration configuration = new Configuration();
 
-	@Autowired
-	Reporter reporter;
+	@Resource
+	@Qualifier("Reporter")
+	private Reporter report;
+	
+//	@Autowired
+//	public void setReporter(Reporter report){
+//		this.report=report;
+//	}
 
 	@Autowired
 	NetService netService;
@@ -37,6 +46,8 @@ public class Configuration extends GenericService {
 	public Configuration() {
 		InputStream input = null;
 		InputStream globaConfigInput = null;
+		
+		
 
 		try {
 			globaConfigInput = new FileInputStream(

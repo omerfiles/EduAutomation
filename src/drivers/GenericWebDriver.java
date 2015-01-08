@@ -32,6 +32,7 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.interactions.Action;
@@ -40,6 +41,7 @@ import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
@@ -85,8 +87,10 @@ public abstract class GenericWebDriver extends GenericService {
 
 	private TextService textService;
 
+	@Autowired
 	protected services.Reporter reporter;
 
+	@Autowired
 	TestResultService testResultService;
 
 	protected String logsFolder;
@@ -99,8 +103,8 @@ public abstract class GenericWebDriver extends GenericService {
 	abstract public void init(String remoteUrl, String folderName)
 			throws Exception;
 
-	public void init(TestResultService testResultService) throws Exception {
-		this.testResultService = testResultService;
+	public void init() throws Exception {
+//		this.testResultService = testResultService;
 		eyes.setApiKey("tsN45rbyinZ1084MxMVSzumAgD106Qn3MOpBcr101hiyVEpSY110");
 		// String remoteMachine = null;
 
@@ -270,6 +274,9 @@ public abstract class GenericWebDriver extends GenericService {
 					+ " was in invalid state " + " Description of element:"
 					+ message);
 			failureAdded = true;
+		} catch (WebDriverException e) {
+			printScreen("Web driver exception found");
+			System.out.println(e.toString());
 		}
 
 		catch (Exception e) {
@@ -884,8 +891,6 @@ public abstract class GenericWebDriver extends GenericService {
 		System.out.println("X is: " + p.getX() + " and Y is: " + p.getY());
 	}
 
-	
-
 	public String getElementHTML(WebElement element) throws Exception {
 		String html = element.getAttribute("innerHTML");
 		System.out.println("Element HTMl is: " + html);
@@ -1056,9 +1061,9 @@ public abstract class GenericWebDriver extends GenericService {
 		return webDriver;
 	}
 
-	public void setReporter(services.Reporter reporter) {
-		this.reporter = reporter;
-	}
+//	public void setReporter(services.Reporter reporter) {
+//		this.reporter = reporter;
+//	}
 
 	public void setTestResultService(TestResultService testResultService) {
 		this.testResultService = testResultService;
@@ -1313,4 +1318,31 @@ public abstract class GenericWebDriver extends GenericService {
 		element, "color: blue; border: 2px solid red;");
 	}
 
+	public void waitForJqueryToFinish() {
+		long startime = System.currentTimeMillis();
+		// System.out.println("startted: "+System.currentTimeMillis());
+		new WebDriverWait(webDriver, 180)
+				.until(new ExpectedCondition<Boolean>() {
+					public Boolean apply(WebDriver driver) {
+						// JavascriptExecutor js = (JavascriptExecutor) driver;
+						// return (Boolean) js
+						// .executeScript("return jQuery.active == 0");
+						return runJavascript("return jQuery.active == 0");
+
+					}
+				});
+		long finishTime = System.currentTimeMillis();
+		finishTime = finishTime - startime;
+		System.out.println("finished. took: " + finishTime + "ms");
+	}
+
+	public boolean runJavascript(String script) {
+		JavascriptExecutor js = (JavascriptExecutor) webDriver;
+		return (Boolean) js.executeScript(script);
+	}
+	
+	public void failTest(){
+		testResultService.addFailTest("Failed by webdriver");
+		reporter.report("fail in webdriver");
+	}
 }

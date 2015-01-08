@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
@@ -36,10 +37,20 @@ import jcifs.smb.SmbFile;
 import jcifs.smb.SmbFileInputStream;
 import jcifs.smb.SmbFileOutputStream;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
 import org.hamcrest.core.IsInstanceOf;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openqa.selenium.JavascriptExecutor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -50,12 +61,16 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import com.google.common.primitives.Chars;
+import com.sun.mail.iap.Response;
 
 import jsystem.framework.system.SystemObjectImpl;
 import junit.framework.Assert;
 
 @Service
-public class NetService extends SystemObjectImpl {
+public class NetService extends GenericService {
+
+	@Autowired
+	Reporter reporter;
 
 	public NetService() {
 	};
@@ -222,26 +237,76 @@ public class NetService extends SystemObjectImpl {
 
 	}
 
-	public void sentHttpRequest(String request, String requestMethod)
+	public void sendHttpRequest(String request, String requestMethod)
 			throws Exception {
-		report.report("Request is: " + request);
+		sendHttpRequest(request, requestMethod, false);
+	}
+
+	public void sendHttpRequest(String request, String requestMethod,
+			boolean json) throws Exception {
+		reporter.report("Request is: " + request);
 		URL url = new URL(request);
 		HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
 		httpCon.setDoOutput(true);
-		httpCon.setRequestMethod(requestMethod);
+		if (json) {
+			httpCon.setRequestProperty("content-type", "application/json");
+		}
+		if (!requestMethod.equals("")) {
+			httpCon.setRequestMethod(requestMethod);
+		}
 		OutputStreamWriter out = new OutputStreamWriter(
 				httpCon.getOutputStream());
 		// System.out.println(httpCon.getResponseCode()) ;
-		report.report("Get response code: " + httpCon.getResponseCode());
+		reporter.report("Get response code: " + httpCon.getResponseCode());
+		System.out.println(httpCon.getResponseCode());
 		System.out.println(httpCon.getResponseMessage());
-		report.report("Get response message: " + httpCon.getResponseMessage());
+		reporter.report("Get response message: " + httpCon.getResponseMessage());
 		out.close();
 
 	}
 
-	public void sentHttpRequest(String request) throws Exception {
-		sentHttpRequest(request, "POST");
+	public void sendServiceRequest(String requestText) {
 
+		long start = System.currentTimeMillis();
+		try (CloseableHttpClient httpClient = HttpClientBuilder.create()
+				.build()) {
+			HttpGet request = new HttpGet(requestText);
+
+			// StringEntity params = new StringEntity(body);
+			request.addHeader("content-type", "text/html");
+
+			// request.setEntity(params);
+			HttpResponse result = httpClient.execute(request);
+			// if()
+			reporter.startLevel(request.toString());
+			System.out.println("request: " + request.toString());
+			System.out.println(result.getStatusLine().toString());
+			long end = System.currentTimeMillis();
+			long time = end - start;
+			System.out.println("Time spent: " + time);
+
+		} catch (IOException ex) {
+		}
+
+	}
+
+	public void sendHttpRequest(String request) throws Exception {
+		sendHttpRequest(request, "POST");
+
+	}
+
+	public void sendHttpRequestWithParams(String baseRequest,
+			String[] paramsNames, String[] paramValues) throws Exception {
+		String request = baseRequest + "?";
+		for (int i = 0; i < paramsNames.length; i++) {
+			if (i > 0) {
+				request += "&";
+			}
+			request += paramsNames[i] + "=" + paramValues[i];
+		}
+
+		sendServiceRequest(request);
+		// sendHttpRequest(request, "", true);
 	}
 
 	public void updateSlaveStatus(String slaveName, String text)
@@ -361,4 +426,5 @@ public class NetService extends SystemObjectImpl {
 				"automation", "tamar2010");
 		return auth;
 	}
+
 }

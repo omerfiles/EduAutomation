@@ -60,8 +60,8 @@ public class SRLoadTest extends SpeechRecognitionBasicTest {
 		for (int i = 0; i < numberOfInstances; i++) {
 			ChromeWebDriver driver = new ChromeWebDriver();
 
-			driver.setReporter(report);
-			driver.setTestResultService(testResultService);
+//			driver.setReporter(report);
+//			driver.setTestResultService(testResultService);
 			driver.setEnableConsoleLog(true);
 			driver.init(
 					configuration.getAutomationParam(

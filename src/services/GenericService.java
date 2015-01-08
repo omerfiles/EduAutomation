@@ -1,11 +1,20 @@
 package services;
 
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import Enums.TestRunnerType;
 
-public class GenericService {
+public abstract class GenericService {
+	
+	
+	Reporter reporter;
 
 	public GenericService() {
 		// TODO Auto-generated constructor stub
+	}
+	
+	private void init() {
+		
 	}
 	
 	public void sleep(int seconds) throws Exception {

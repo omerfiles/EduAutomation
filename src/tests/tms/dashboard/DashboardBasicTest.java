@@ -68,15 +68,15 @@ public class DashboardBasicTest extends EdusoftWebTest {
 	}
 
 	public List<String[]> getClassCompletion(String className,
-			String institutionName,String courseId) throws Exception {
+			String institutionName, String courseId) throws Exception {
 		String sql = textService.getTextFromFile(
 				"files/sqlFiles/getClassCompletion.txt",
 				Charset.defaultCharset());
 		sql = sql.replace("%classParam%", className);
 		sql = sql.replace("%instNameParam%", institutionName);
-		sql=sql.replace("%courseId%", courseId);
+		sql = sql.replace("%courseId%", courseId);
 
-		List<String[]> rsList = dbService.getListFromPrepairedStmt(sql,4);
+		List<String[]> rsList = dbService.getListFromPrepairedStmt(sql, 4);
 		return rsList;
 
 	}
@@ -95,4 +95,15 @@ public class DashboardBasicTest extends EdusoftWebTest {
 		return DASHBOARDWIDTH;
 	}
 
+	public void selectClassAndCourse(String className, String courseName) throws Exception{
+		DashboardPage dashboardPage=new DashboardPage(webDriver, testResultService);
+		dashboardPage.selectClassInDashBoard(className);
+		sleep(2);
+		dashboardPage.selectCourseInDashboard(courseName);
+		dashboardPage.clickOnDashboardGoButton();
+	}
+	
+	public void waitForLoadingofAllWidgets(){
+		
+	}
 }
