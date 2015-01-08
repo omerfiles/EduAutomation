@@ -8,11 +8,10 @@ import java.util.List;
 import jsystem.framework.report.Reporter;
 import jsystem.framework.report.Reporter.EnumReportLevel;
 import jsystem.framework.system.SystemObjectImpl;
+
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-
 
 @Service
 public class EraterService extends SystemObjectImpl {
@@ -28,7 +27,7 @@ public class EraterService extends SystemObjectImpl {
 	private NetService netService;
 	@Autowired
 	Configuration configuration;
-	
+
 	@Autowired
 	TestResultService testResultService;
 
@@ -144,39 +143,40 @@ public class EraterService extends SystemObjectImpl {
 			throws Exception {
 		List<String[]> xmlList = null;
 		List<String[]> jsonList = null;
-		String sqlxml = dbService
-				.getStringFromQuery(
-						"select EraterXML from Erater where writingId="
-								+ writingId, 10,false);
+		String sqlxml = dbService.getStringFromQuery(
+				"select EraterXML from Erater where writingId=" + writingId,
+				10, false);
 		report.report("RAW XML: " + sqlxml);
 		try {
 			xmlList = netService.getListFromXmlNode(
 					netService.getXmlFromString(sqlxml), "/WAT:DetailInfo");
 			String jsonStr = dbService.getStringFromQuery(
 					"select EraterJson from Erater where writingId="
-							+ writingId, 10,false);
+							+ writingId, 10, false);
 			report.report("RAW JSON: " + jsonStr);
 			jsonList = netService.getListFromJson(jsonStr, "sections",
 					"details", new String[] { "feedback", "length", "offset" });
-//			report.startLevel("Printing json list",
-//					EnumReportLevel.CurrentPlace);
+			// report.startLevel("Printing json list",
+			// EnumReportLevel.CurrentPlace);
 			printArrayList(jsonList);
 			report.stopLevel();
 			// jsonList = sortArrayList(jsonList);
 			xmlList = removeHiddenCodesAndConvertToFeedbackCodes(xmlList);
 			// xmlList = sortArrayList(xmlList);
 
-//			report.startLevel("Printing xml list", EnumReportLevel.CurrentPlace);
+			// report.startLevel("Printing xml list",
+			// EnumReportLevel.CurrentPlace);
 			printArrayList(xmlList);
 			report.stopLevel();
 
 			report.report("json list length is: " + jsonList.size());
 			report.report("xml list length is: " + xmlList.size());
 		} catch (Exception e) {
-//			Assert.fail("Test failed during comparing json and xml");
-			testResultService.addFailTest("Test failed during comparing json and xml");
+			// Assert.fail("Test failed during comparing json and xml");
+			testResultService
+					.addFailTest("Test failed during comparing json and xml");
 		} finally {
-			
+
 		}
 		return AssertJsonAndXmlLists(xmlList, jsonList);
 
@@ -212,9 +212,17 @@ public class EraterService extends SystemObjectImpl {
 
 	public String getWritingIdByUserIdAndTextStart(String userId,
 			String textStart) throws Exception {
+		return getWritingIdByUserIdAndTextStart(userId, textStart, false);
+	}
+
+	public String getWritingIdByUserIdAndTextStart(String userId,
+			String textStart, boolean waitFor2ndSubmission) throws Exception {
 		String sql = "  select * from writing where UserId='" + userId
-				+ "' and EssayText like '%" + textStart + "%'";
-		String result = dbService.getStringFromQuery(sql);
+				+ "' and EssayText like '%" + textStart + "%' ";
+		if (waitFor2ndSubmission) {
+			sql += " and Submissions=2 and Reviewed=0";
+		}
+		String result = dbService.getStringFromQuery(sql, 60, false);
 
 		Assert.assertFalse("writing id is null", result.equals("null"));
 		return result;
@@ -248,33 +256,33 @@ public class EraterService extends SystemObjectImpl {
 		}
 	}
 
-//	public List<Course> loadCoursedDetailsFromCsv() throws Exception {
-//		List<String[]> courses = textService
-//				.getStr2dimArrFromCsv("files/csvFiles/Courses.csv");
-//		List<Course> coursesList = new ArrayList<Course>();
-//		for (int i = 0; i < courses.size(); i++) {
-//			Course course = new Course();
-//			course.setName(courses.get(i)[0]);
-//
-//			CourseUnit courseUnit = new CourseUnit();
-//			courseUnit.setName(courses.get(i)[1]);
-//
-//			UnitComponent unitComponent = new UnitComponent();
-//			unitComponent.setName(courses.get(i)[2]);
-//			unitComponent.setStageNumber(courses.get(i)[3]);
-//
-//			courseUnit.addUnitComponent(unitComponent);
-//
-//			course.AddUnit(courseUnit);
-//
-//			coursesList.add(course);
-//
-//			// courseUnit.setUnitComponent(unitComponent);
-//
-//		}
-//		return coursesList;
-//
-//	}
+	// public List<Course> loadCoursedDetailsFromCsv() throws Exception {
+	// List<String[]> courses = textService
+	// .getStr2dimArrFromCsv("files/csvFiles/Courses.csv");
+	// List<Course> coursesList = new ArrayList<Course>();
+	// for (int i = 0; i < courses.size(); i++) {
+	// Course course = new Course();
+	// course.setName(courses.get(i)[0]);
+	//
+	// CourseUnit courseUnit = new CourseUnit();
+	// courseUnit.setName(courses.get(i)[1]);
+	//
+	// UnitComponent unitComponent = new UnitComponent();
+	// unitComponent.setName(courses.get(i)[2]);
+	// unitComponent.setStageNumber(courses.get(i)[3]);
+	//
+	// courseUnit.addUnitComponent(unitComponent);
+	//
+	// course.AddUnit(courseUnit);
+	//
+	// coursesList.add(course);
+	//
+	// // courseUnit.setUnitComponent(unitComponent);
+	//
+	// }
+	// return coursesList;
+	//
+	// }
 
 	public void deleteStudentAssignments(String userId) throws Exception {
 
@@ -325,7 +333,8 @@ public class EraterService extends SystemObjectImpl {
 				+ writingId;
 		dbService.getStringFromQuery(sql);
 	}
-	public void checkWritingIsReviewed(String writingId)throws Exception{
+
+	public void checkWritingIsReviewed(String writingId) throws Exception {
 		String institutionSubmissions = dbService
 				.getStringFromQuery(" select NumberOfSubmissions from institutions where institutionid="
 						+ configuration.getProperty("institution.id"));

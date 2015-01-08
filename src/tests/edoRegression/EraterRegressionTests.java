@@ -117,10 +117,12 @@ public class EraterRegressionTests extends EdusoftWebTest {
 
 		startStep("start checking the xml and json");
 
+		String userId = dbService.getUserIdByUserName(student.getUserName(),
+				autoInstitution.getInstitutionId());
+
 		if (!configuration.getAutomationParam("dbaccess", "dbaccess").equals(
 				"false")) {
-			String userId = dbService.getUserIdByUserName(
-					student.getUserName(), autoInstitution.getInstitutionId());
+
 			writingId = eraterService.getWritingIdByUserIdAndTextStart(userId,
 					textStart);
 			writingIdForDelete.add(writingId);
@@ -143,6 +145,10 @@ public class EraterRegressionTests extends EdusoftWebTest {
 
 		edoHomePage.clickOnFeedbackSubmitBtn();
 
+		startStep("wait for writing to be processed again");
+		eraterService.getWritingIdByUserIdAndTextStart(userId, textStart, true);
+		
+		
 		startStep("Login as teacher and send feedback to the student");
 		webDriver.deleteCookiesAndRefresh();
 		pageHelper.loginAsTeacher();

@@ -24,13 +24,13 @@ public class DashboardHeaderTests extends DashboardBasicTest {
 
 		startStep("Select class and course");
 		// dashboardPage.ClickOnBar();
-		sleep(4);
+		webDriver.waitForJqueryToFinish();
 		dashboardPage.hideSelectionBar();
 		dashboardPage.selectClassInDashBoard(classToSelect);
 		sleep(2);
 		dashboardPage.selectCourseInDashboard(courseToSelect);
 		dashboardPage.clickOnDashboardGoButton();
-		sleep(5);
+//		webDriver.waitForJqueryToFinish();
 
 		startStep("Check number of students");
 		testResultService.assertElementText(dashboardPage
