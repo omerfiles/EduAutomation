@@ -3,6 +3,7 @@ package tests.speechRecognition;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Before;
 
 import pageObjects.EdoHomePage;
@@ -18,6 +19,11 @@ public class SpeechRecognitionBasicTest extends EdusoftWebTest {
 	public void setup() throws Exception {
 		super.setup();
 		setEnableLoggin(true);
+	}
+	
+	@After
+	public void tearDowb()throws Exception{
+		super.tearDown();
 	}
 
 	public void testRecordYourselfIntegrated(int courseId, int scriptSection,

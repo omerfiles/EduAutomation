@@ -58,6 +58,7 @@ public class EdusoftBasicTest extends TestCase {
 
 	private boolean hasFailures;
 	private String testCaseId1;
+	private String testCaseName;
 
 	@Rule
 	public TestWatcher watcher = new TestWatcher() {
@@ -106,6 +107,8 @@ public class EdusoftBasicTest extends TestCase {
 	public void setup() throws Exception {
 
 		testCaseId = System.getProperty("testCaseId");
+		testCaseName=System.getProperty("testCaseName");
+		System.out.println("Test case name:"+ testCaseName);
 		System.out.println("Test case is in edusoftBasicTest:" + testCaseId);
 
 		System.out.println("url from maven command line: "
@@ -157,7 +160,7 @@ public class EdusoftBasicTest extends TestCase {
 
 		try {
 
-			String fileName = "testlog" + dbService.sig() + ".csv";
+			String fileName = "testlog"+testCaseName + dbService.sig() + ".csv";
 			String path = "smb://10.1.0.83/automationLogs/" + fileName;
 			textService.writeListToSmbFile(path, report.getReportLogs(),
 					netService.getAuth());
