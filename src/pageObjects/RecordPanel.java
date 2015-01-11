@@ -91,7 +91,7 @@ public class RecordPanel extends SRpage {
 
 		// approve popup using Java robot
 
-		webDriver.sleep(1000);
+		webDriver.sleep(1);
 		// if (webDriver.getSutUrl().contains("develop")) {
 		// allowMicFirefox();
 		// }
