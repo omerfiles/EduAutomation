@@ -15,16 +15,16 @@ import tests.misc.EdusoftWebTest;
 
 public class SpeechRecognitionBasicTest extends EdusoftWebTest {
 
-	@Before
-	public void setup() throws Exception {
-		super.setup();
-		setEnableLoggin(true);
-	}
+//	@Before
+//	public void setup() throws Exception {
+//		super.setup();
+//		setEnableLoggin(true);
+//	}
 	
-	@After
-	public void tearDowb()throws Exception{
-		super.tearDown();
-	}
+//	@After
+//	public void tearDowb()throws Exception{
+//		super.tearDown();
+//	}
 
 	public void testRecordYourselfIntegrated(int courseId, int scriptSection,
 			int recordingId, float sampleRate) throws Exception {

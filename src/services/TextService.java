@@ -10,6 +10,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -439,5 +440,27 @@ public class TextService extends SystemObjectImpl {
 
 		String lipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum";
 		return lipsum.substring(0, chars);
+	}
+
+	public void writeListToCsvFile(String path, ArrayList<String> list)
+			throws IOException {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		DataOutputStream out = new DataOutputStream(baos);
+		String nl = System.getProperty("line.separator");
+		for (String element : list) {
+			// out.writeUTF(element);
+			out.writeBytes(element);
+			out.writeBytes(nl);
+		}
+		byte[] bytes = baos.toByteArray();
+
+		// SmbFile smbFile = new SmbFile(path, auth);
+		// SmbFileOutputStream output = new SmbFileOutputStream(smbFile);
+		// output.write(bytes);
+
+		File file = new File(path);
+		FileOutputStream outputStream = new FileOutputStream(file);
+		outputStream.write(bytes);
+
 	}
 }

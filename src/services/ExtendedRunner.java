@@ -34,10 +34,13 @@ public class ExtendedRunner extends BlockJUnit4ClassRunner {
 						+ params.testCaseID()[i]);
 			}
 			System.setProperty("testCaseId", params.testCaseID()[0]);
-			System.setProperty("testCaseName",method.getName());
+			
 		}
 		return super.methodBlock(method);
 	}
+
+	
+	
 
 	public String getTestId() {
 		return testId;

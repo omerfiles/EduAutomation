@@ -8,12 +8,14 @@ import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
+import org.junit.rules.TestName;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.rules.Timeout;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import services.Configuration;
 import services.DbService;
 import services.EraterService;
@@ -22,6 +24,7 @@ import services.InstitutionService;
 import services.NetService;
 import services.TestResultService;
 import services.TextService;
+import Enums.TestRunnerType;
 import Objects.AutoInstitution;
 import drivers.GenericWebDriver;
 
@@ -92,6 +95,9 @@ public class EdusoftBasicTest extends TestCase {
 		}
 
 	};
+	
+	@Rule public TestName testName=new TestName();
+	
 	// junit <4.12
 	// @Rule
 	// public Timeout timeout=new Timeout(300000);//5 minutes timeout
@@ -107,8 +113,8 @@ public class EdusoftBasicTest extends TestCase {
 	public void setup() throws Exception {
 
 		testCaseId = System.getProperty("testCaseId");
-		testCaseName=System.getProperty("testCaseName");
-		System.out.println("Test case name:"+ testCaseName);
+		testCaseName =testName.getMethodName();
+		System.out.println("Test case name:" + testCaseName);
 		System.out.println("Test case is in edusoftBasicTest:" + testCaseId);
 
 		System.out.println("url from maven command line: "
@@ -120,14 +126,14 @@ public class EdusoftBasicTest extends TestCase {
 
 		textService = (TextService) ctx.getBean("TextSerivce");
 		dbService = (DbService) ctx.getBean("DbService");
-		
+
 		eraterService = (EraterService) ctx.getBean("EraterService");
 		institutionService = (InstitutionService) ctx
 				.getBean("InstitutionService");
 		testResultService = (TestResultService) ctx
 				.getBean("testResultService");
 		report = (services.Reporter) ctx.getBean("reporter");
-//		report.init();
+		// report.init();
 		netService = (NetService) ctx.getBean("NetService");
 		// audioService = (AudioService) ctx.getBean("AudioService");
 
@@ -144,9 +150,8 @@ public class EdusoftBasicTest extends TestCase {
 		}
 
 		institutionService.init();
-		
-		autoInstitution = institutionService.getInstitution();
 
+		autoInstitution = institutionService.getInstitution();
 
 	}
 
@@ -159,11 +164,22 @@ public class EdusoftBasicTest extends TestCase {
 	public void tearDown() throws Exception {
 
 		try {
+			String fileName = "testlog" + testCaseName + dbService.sig()
+					+ ".csv";
 
-			String fileName = "testlog"+testCaseName + dbService.sig() + ".csv";
-			String path = "smb://10.1.0.83/automationLogs/" + fileName;
-			textService.writeListToSmbFile(path, report.getReportLogs(),
-					netService.getAuth());
+			// if running in CI
+			TestRunnerType runner = configuration.getTestRunner();
+			if (runner == TestRunnerType.CI) {
+				
+				String path = "smb://10.1.0.83/automationLogs/" + fileName;
+				textService.writeListToSmbFile(path, report.getReportLogs(),
+						netService.getAuth());
+			}
+			else{
+				String path =System.getProperty("user.dir") + "/log//current/"+fileName;
+				textService.writeListToCsvFile(path,report.getReportLogs());
+				
+			}
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -201,8 +217,6 @@ public class EdusoftBasicTest extends TestCase {
 	public void endStep() throws Exception {
 		report.stopLevel();
 	}
-
-
 
 	public boolean isPrintResults() {
 		return printResults;
