@@ -179,6 +179,7 @@ public class DashboardHeaderTests extends DashboardBasicTest {
 		webDriver.closeAlertByAccept();
 		DashboardPage dashboardPage = (DashboardPage) edoHomePage
 				.clickOnTeachersCorner(true);
+		webDriver.waitForJqueryToFinish();
 		dashboardPage.hideSelectionBar();
 		report.startLevel("Check selected class and course");
 		String selectedClass = dashboardPage.getSelectedClass();

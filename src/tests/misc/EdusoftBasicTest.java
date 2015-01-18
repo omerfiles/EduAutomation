@@ -21,6 +21,7 @@ import services.DbService;
 import services.EraterService;
 import services.ExtendedRunner;
 import services.InstitutionService;
+import services.MailService;
 import services.NetService;
 import services.TestResultService;
 import services.TextService;
@@ -42,6 +43,7 @@ public class EdusoftBasicTest extends TestCase {
 	protected InstitutionService institutionService;
 	protected TestResultService testResultService;
 	protected services.Reporter report;
+	protected MailService mailService;
 	// protected static AudioService audioService;
 	public ClassPathXmlApplicationContext ctx;
 	protected boolean enableLoggin = false;
@@ -95,9 +97,10 @@ public class EdusoftBasicTest extends TestCase {
 		}
 
 	};
-	
-	@Rule public TestName testName=new TestName();
-	
+
+	@Rule
+	public TestName testName = new TestName();
+
 	// junit <4.12
 	// @Rule
 	// public Timeout timeout=new Timeout(300000);//5 minutes timeout
@@ -113,9 +116,9 @@ public class EdusoftBasicTest extends TestCase {
 	public void setup() throws Exception {
 
 		testCaseId = System.getProperty("testCaseId");
-		testCaseName =testName.getMethodName();
-		System.out.println("Test case name:" + testCaseName);
-		System.out.println("Test case is in edusoftBasicTest:" + testCaseId);
+		testCaseName = testName.getMethodName();
+		// System.out.println("Test case name:" + testCaseName);
+		// System.out.println("Test case is in edusoftBasicTest:" + testCaseId);
 
 		System.out.println("url from maven command line: "
 				+ System.getProperty("URL"));
@@ -133,10 +136,11 @@ public class EdusoftBasicTest extends TestCase {
 		testResultService = (TestResultService) ctx
 				.getBean("testResultService");
 		report = (services.Reporter) ctx.getBean("reporter");
+		mailService = (MailService) ctx.getBean("MailService");
 		// report.init();
 		netService = (NetService) ctx.getBean("NetService");
 		// audioService = (AudioService) ctx.getBean("AudioService");
-
+		report.writelogger("Test name:" + testCaseName);
 		int institutionId;
 		if (System.getProperty("institutionId") == null) {
 			institutionId = 1;
@@ -170,15 +174,15 @@ public class EdusoftBasicTest extends TestCase {
 			// if running in CI
 			TestRunnerType runner = configuration.getTestRunner();
 			if (runner == TestRunnerType.CI) {
-				
+
 				String path = "smb://10.1.0.83/automationLogs/" + fileName;
 				textService.writeListToSmbFile(path, report.getReportLogs(),
 						netService.getAuth());
-			}
-			else{
-				String path =System.getProperty("user.dir") + "/log//current/"+fileName;
-				textService.writeListToCsvFile(path,report.getReportLogs());
-				
+			} else {
+				String path = System.getProperty("user.dir") + "/log//current/"
+						+ fileName;
+				textService.writeListToCsvFile(path, report.getReportLogs());
+
 			}
 
 		} catch (Exception e) {

@@ -164,9 +164,10 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 				.clickOnTeachersCorner(true);
 
 		startStep("Select class and course");
+		webDriver.waitForJqueryToFinish();
 		dashboardPage.hideSelectionBar();
 		dashboardPage.selectClassInDashBoard(className);
-		sleep(2);
+		webDriver.waitForJqueryToFinish();
 
 		dashboardPage.selectCourseInDashboard(courseName);
 		sleep(1);
