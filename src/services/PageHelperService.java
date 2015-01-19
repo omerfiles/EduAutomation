@@ -156,8 +156,10 @@ public class PageHelperService extends SystemObjectImpl {
 		edoLoginPage.OpenPage(getSutAndSubDomain(instSubDomain));
 
 		teacher.setPassword(configuration.getProperty("teacher.password"));
+		String instId = dbService.getInstituteIdByName(instSubDomain.replace(
+				".aspx", ""));
 		setUserLoginToNull(dbService.getUserIdByUserName(teacherUserName,
-				autoInstitution.getInstitutionId()));
+				instId));
 
 		EdoHomePage edoHomePage = edoLoginPage.login(teacher);
 		// edoHomePage.waitForPageToLoad();

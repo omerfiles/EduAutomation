@@ -1,5 +1,6 @@
 package tests.tms.dashboard;
 
+import java.io.File;
 import java.nio.charset.Charset;
 import java.util.List;
 
@@ -105,5 +106,23 @@ public class DashboardBasicTest extends EdusoftWebTest {
 	
 	public void waitForLoadingofAllWidgets(){
 		
+	}
+	
+	public void waitForDashboardCacheToExpire(String filePath) throws Exception{
+		File file = new File(filePath);
+		if (file.exists()) {
+			String text = textService.getTextFromFile(filePath,
+					Charset.defaultCharset());
+			long lastReportTime = Long.parseLong(text);
+			long currentTime = System.currentTimeMillis();
+			long timeAfterLastReport = currentTime - lastReportTime;
+			if (timeAfterLastReport < 60000) {
+				// wait
+				System.out.println("Sleeping test - waiting for cache to end");
+				Thread.sleep(60000 - timeAfterLastReport);
+
+			}
+
+		}
 	}
 }

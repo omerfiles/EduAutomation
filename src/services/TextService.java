@@ -463,4 +463,11 @@ public class TextService extends SystemObjectImpl {
 		outputStream.write(bytes);
 
 	}
+	
+	public void writeTxtFileWithText(String path, String text)throws IOException{
+		File file = new File(path);
+		FileOutputStream outputStream = new FileOutputStream(file);
+		outputStream.write(text.getBytes());
+		outputStream.close();
+	}
 }

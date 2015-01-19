@@ -1318,22 +1318,28 @@ public abstract class GenericWebDriver extends GenericService {
 		element, "color: blue; border: 2px solid red;");
 	}
 
-	public void waitForJqueryToFinish() {
-		long startime = System.currentTimeMillis();
-		// System.out.println("startted: "+System.currentTimeMillis());
-		new WebDriverWait(webDriver, 180)
-				.until(new ExpectedCondition<Boolean>() {
-					public Boolean apply(WebDriver driver) {
-						// JavascriptExecutor js = (JavascriptExecutor) driver;
-						// return (Boolean) js
-						// .executeScript("return jQuery.active == 0");
-						return runJavascript("return jQuery.active == 0");
+	public void waitForJqueryToFinish() throws Exception {
+		try {
+			long startime = System.currentTimeMillis();
+			// System.out.println("startted: "+System.currentTimeMillis());
+			new WebDriverWait(webDriver, 1800)
+					.until(new ExpectedCondition<Boolean>() {
+						public Boolean apply(WebDriver driver) {
+							// JavascriptExecutor js = (JavascriptExecutor) driver;
+							// return (Boolean) js
+							// .executeScript("return jQuery.active == 0");
+							return runJavascript("return jQuery.active == 0");
 
-					}
-				});
-		long finishTime = System.currentTimeMillis();
-		finishTime = finishTime - startime;
-		System.out.println("finished. took: " + finishTime + "ms");
+						}
+					});
+			long finishTime = System.currentTimeMillis();
+			finishTime = finishTime - startime;
+			System.out.println("finished. took: " + finishTime + "ms");
+		} catch (WebDriverException e) {
+			// TODO Auto-generated catch block
+			printScreen();
+			e.printStackTrace();
+		}
 	}
 
 	public boolean runJavascript(String script) {
