@@ -16,11 +16,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="lib/jsystem-launcher.jar"/>
 	<classpathentry kind="lib" path="lib/jsystemAgent.jar" sourcepath="lib/jsystemAgent.jar"/>
 	<classpathentry kind="lib" path="lib/jsystemAnt.jar"/>
@@ -34,5 +29,22 @@
 	<classpathentry kind="lib" path="lib/MonteScreenRecorder.jar" sourcepath="C:/Users/omers/workspace/AutomationInfra/lib/MonteScreenRecorder.jar"/>
 	<classpathentry kind="lib" path="lib/monte-cc.jar" sourcepath="C:/Users/omers/Downloads/MonteMedia-0.7.7src-cc"/>
 	<classpathentry kind="lib" path="lib/jsminim.jar"/>
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/ApacheJMeter_core-2.12.jar" sourcepath="lib/ApacheJMeter_core-2.12.jar"/>
+	<classpathentry kind="lib" path="lib/ApacheJMeter_http-2.12.jar" sourcepath="lib/ApacheJMeter_http-2.12.jar"/>
+	<classpathentry kind="lib" path="lib/ApacheJMeter_java-2.12.jar"/>
+	<classpathentry kind="lib" path="lib/jorphan-2.9.jar"/>
+	<classpathentry kind="lib" path="lib/avalon-framework-4.1.4.jar"/>
+	<classpathentry kind="lib" path="lib/ApacheJMeter_junit-2.12.jar"/>
+	<classpathentry kind="lib" path="lib/ApacheJMeter_components-2.12.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/ApacheJMeter_config-2.12.jar"/>
+	<classpathentry kind="lib" path="lib/ApacheJMeter_functions-2.12.jar"/>
+	<classpathentry kind="lib" path="lib/ApacheJMeter_jdbc-2.12.jar"/>
+	<classpathentry kind="lib" path="lib/ApacheJMeter_native-2.12.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
