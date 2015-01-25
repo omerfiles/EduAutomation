@@ -1,4 +1,4 @@
-package tests.speechRecognition;
+package tests.edo.speechRecognition;
 
 import java.util.ArrayList;
 import java.util.List;

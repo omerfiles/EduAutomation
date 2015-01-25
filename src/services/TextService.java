@@ -385,19 +385,24 @@ public class TextService extends SystemObjectImpl {
 	public void writeListToSmbFile(String path, List<String> list,
 			NtlmPasswordAuthentication auth) throws IOException {
 
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		DataOutputStream out = new DataOutputStream(baos);
-		String nl = System.getProperty("line.separator");
-		for (String element : list) {
-			// out.writeUTF(element);
-			out.writeBytes(element);
-			out.writeBytes(nl);
-		}
-		byte[] bytes = baos.toByteArray();
+		try {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			DataOutputStream out = new DataOutputStream(baos);
+			String nl = System.getProperty("line.separator");
+			for (String element : list) {
+				// out.writeUTF(element);
+				out.writeBytes(element);
+				out.writeBytes(nl);
+			}
+			byte[] bytes = baos.toByteArray();
 
-		SmbFile smbFile = new SmbFile(path, auth);
-		SmbFileOutputStream output = new SmbFileOutputStream(smbFile);
-		output.write(bytes);
+			SmbFile smbFile = new SmbFile(path, auth);
+			SmbFileOutputStream output = new SmbFileOutputStream(smbFile);
+			output.write(bytes);
+		} catch (SmbException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
@@ -442,7 +447,7 @@ public class TextService extends SystemObjectImpl {
 		return lipsum.substring(0, chars);
 	}
 
-	public void writeListToCsvFile(String path, ArrayList<String> list)
+	public void writeListToCsvFile(String path, List<String> list)
 			throws IOException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(baos);

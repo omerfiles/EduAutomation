@@ -13,6 +13,7 @@ import services.AudioService;
 import services.PageHelperService;
 import Enums.AutoParams;
 import Enums.Browsers;
+import drivers.AndroidWebDriver;
 //import drivers.AndroidWebDriver;
 import drivers.ChromeWebDriver;
 import drivers.FirefoxWebDriver;
@@ -43,6 +44,9 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 			webDriver = (IEWebDriver) ctx.getBean("IEWebDriver");
 		} else if (browser.equals(Browsers.firefox.toString())) {
 			webDriver = (FirefoxWebDriver) ctx.getBean("FirefoxWebDriver");
+		}
+		else if(browser.equals(Browsers.android.toString())){
+			webDriver=(AndroidWebDriver)ctx.getBean("AndroidWebDriver");
 		}
 
 		if (webDriver == null) {

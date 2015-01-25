@@ -17,10 +17,19 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 
+import com.applitools.eyes.Eyes;
+
 import services.DbService;
 import services.TestResultService;
 
 public class ChromeWebDriver extends GenericWebDriver {
+
+	@Override
+	public void quitBrowser() throws Exception {
+		// TODO Auto-generated method stub
+//		eyes.close();
+		super.quitBrowser();
+	}
 
 	@Override
 	public void init(String remoteUrl, String folderName) throws Exception {
@@ -52,6 +61,7 @@ public class ChromeWebDriver extends GenericWebDriver {
 					capabilities);
 			setPageLoadTimeOut();
 			setScriptLoadTimeOut();
+			initEyes();
 
 		} catch (UnreachableBrowserException e) {
 			System.out.println("Browser unreachable");
@@ -84,5 +94,6 @@ public class ChromeWebDriver extends GenericWebDriver {
 	public void killAllBrowsersInstances() throws IOException {
 		Runtime.getRuntime().exec("taskkill /im chromedriver.exe /f");
 	}
+	
 
 }

@@ -1,4 +1,4 @@
-package tests.speechRecognition;
+package tests.edo.speechRecognition;
 
 import java.io.File;
 import java.io.IOException;

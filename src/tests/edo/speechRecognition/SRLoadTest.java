@@ -1,4 +1,4 @@
-package tests.misc;
+package tests.edo.speechRecognition;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import org.openqa.selenium.support.ThreadGuard;
 import pageObjects.EdoHomePage;
 import pageObjects.RecordPanel;
 import services.AudioService;
-import tests.speechRecognition.SpeechRecognitionBasicTest;
+//import tests.speechRecognition.SpeechRecognitionBasicTest;
 import Enums.AutoParams;
 import Enums.ByTypes;
 import Interfaces.TestCaseParams;
@@ -23,7 +23,7 @@ import Objects.Recording;
 import drivers.ChromeWebDriver;
 import drivers.ThreadedWebDriver;
 
-public class SRLoadTest extends SpeechRecognitionBasicTest {
+public class SRLoadTest extends tests.edo.speechRecognition.SpeechRecognitionBasicTest {
 
 	int numberOfInstances = 1;
 	int timeOut=120;

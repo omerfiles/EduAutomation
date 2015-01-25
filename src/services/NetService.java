@@ -71,6 +71,9 @@ public class NetService extends GenericService {
 
 	@Autowired
 	Reporter reporter;
+	
+	@Autowired
+	Configuration configuration;
 
 	public NetService() {
 	};
@@ -424,6 +427,14 @@ public class NetService extends GenericService {
 	public NtlmPasswordAuthentication getAuth() {
 		NtlmPasswordAuthentication auth = new NtlmPasswordAuthentication("",
 				"automation", "tamar2010");
+		return auth;
+	}
+	public NtlmPasswordAuthentication getDomainAuth() {
+		
+		String user=configuration.getGlobalProperties("domain.user");
+		System.out.println(user);
+		NtlmPasswordAuthentication auth = new NtlmPasswordAuthentication("",
+				configuration.getGlobalProperties("domain.user"), configuration.getGlobalProperties("domain.pass"));
 		return auth;
 	}
 

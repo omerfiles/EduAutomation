@@ -1303,8 +1303,13 @@ public abstract class GenericWebDriver extends GenericService {
 	}
 
 	public void initEyes() {
-		webDriver = (RemoteWebDriver) eyes.open((RemoteWebDriver) webDriver,
-				"edusoft", "Test web page");
+		try {
+			eyes.open(webDriver, "testApp", "TestPOC").manage();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("Eyes init OK");
 	}
 
 	public void eyesCheckPage(String text) {

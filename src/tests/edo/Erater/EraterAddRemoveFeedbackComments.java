@@ -1,4 +1,4 @@
-package tests.Erater;
+package tests.edo.Erater;
 
 import java.util.ArrayList;
 import java.util.List;
