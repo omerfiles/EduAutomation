@@ -22,6 +22,7 @@ import org.junit.Assert;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
@@ -104,7 +105,7 @@ public abstract class GenericWebDriver extends GenericService {
 			throws Exception;
 
 	public void init() throws Exception {
-//		this.testResultService = testResultService;
+		// this.testResultService = testResultService;
 		eyes.setApiKey("tsN45rbyinZ1084MxMVSzumAgD106Qn3MOpBcr101hiyVEpSY110");
 		// String remoteMachine = null;
 
@@ -1061,9 +1062,9 @@ public abstract class GenericWebDriver extends GenericService {
 		return webDriver;
 	}
 
-//	public void setReporter(services.Reporter reporter) {
-//		this.reporter = reporter;
-//	}
+	// public void setReporter(services.Reporter reporter) {
+	// this.reporter = reporter;
+	// }
 
 	public void setTestResultService(TestResultService testResultService) {
 		this.testResultService = testResultService;
@@ -1330,7 +1331,8 @@ public abstract class GenericWebDriver extends GenericService {
 			new WebDriverWait(webDriver, 1800)
 					.until(new ExpectedCondition<Boolean>() {
 						public Boolean apply(WebDriver driver) {
-							// JavascriptExecutor js = (JavascriptExecutor) driver;
+							// JavascriptExecutor js = (JavascriptExecutor)
+							// driver;
 							// return (Boolean) js
 							// .executeScript("return jQuery.active == 0");
 							return runJavascript("return jQuery.active == 0");
@@ -1351,9 +1353,35 @@ public abstract class GenericWebDriver extends GenericService {
 		JavascriptExecutor js = (JavascriptExecutor) webDriver;
 		return (Boolean) js.executeScript(script);
 	}
-	
-	public void failTest(){
+
+	public void failTest() {
 		testResultService.addFailTest("Failed by webdriver");
 		reporter.report("fail in webdriver");
+	}
+
+	public void checkForBrokenImages() {
+		List<WebElement> imageElements= webDriver.findElementsByTagName("img");
+		for (int i = 0; i < imageElements.size(); i++) {
+			isImageLoaded(imageElements.get(i));
+		}
+	}
+
+	public boolean isImageLoaded(WebElement image) {
+		Boolean imageLoaded = (Boolean) ((JavascriptExecutor) webDriver)
+				.executeScript(
+						"return arguments[0].complete && type of arguments[0].naturalWidth != \"undefined\" && arguments[0].naturalWidth > 0",
+						image);
+		System.out.println("image not found");
+		return imageLoaded;
+	}
+	
+	public void setBrowserWidth(int width)throws Exception{
+		try {
+			int height=webDriver.manage().window().getSize().getHeight();
+			webDriver.manage().window().setSize(new Dimension(width, height));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
