@@ -403,7 +403,7 @@ public abstract class GenericWebDriver extends GenericService {
 						+ "failed. " + e.toString());
 			}
 		}
-		// eyes.close();
+		eyes.close();
 
 	}
 
@@ -1074,16 +1074,21 @@ public abstract class GenericWebDriver extends GenericService {
 	public void selectElementFromComboBox(String comboboxName,
 			String optionValue) throws Exception {
 		waitUntilComboBoxIsPopulated(comboboxName);
-		selectElementFromComboBox(comboboxName, optionValue, false);
+		selectElementFromComboBox(comboboxName, optionValue,ByTypes.id, false);
 	}
 
 	public void selectElementFromComboBoByIndex(String comboboxName, int index)
 			throws Exception {
+		selectElementFromComboBoByIndex(comboboxName, ByTypes.id, index);
+	}
+
+	public void selectElementFromComboBoByIndex(String comboboxName,
+			ByTypes byType, int index) throws Exception {
 		boolean selected = false;
 		{
 			try {
 				Select select = new Select(waitForElement(comboboxName,
-						ByTypes.id));
+						byType));
 				List<WebElement> options = select.getOptions();
 				select.selectByIndex(index);
 
@@ -1105,14 +1110,14 @@ public abstract class GenericWebDriver extends GenericService {
 	}
 
 	public void selectElementFromComboBox(String comboboxName,
-			String optionValue, boolean contains) throws Exception {
+			String optionValue,ByTypes byType, boolean contains) throws Exception {
 		boolean selected = false;
 
 		String[] optionValues = null;
 		{
 			try {
 				Select select = new Select(waitForElement(comboboxName,
-						ByTypes.id));
+						byType));
 				// waitForElement(comboboxName, ByTypes.id);
 				List<WebElement> options = select.getOptions();
 				optionValues = new String[options.size()];
@@ -1303,9 +1308,10 @@ public abstract class GenericWebDriver extends GenericService {
 		return webDriver.manage().window().getSize().getHeight();
 	}
 
-	public void initEyes() {
+	public void initEyes(String appName, String testName) {
 		try {
-			eyes.open(webDriver, "testApp", "TestPOC").manage();
+			initEyesTest(appName, testName);
+			eyes.setSaveNewTests(true);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1360,7 +1366,7 @@ public abstract class GenericWebDriver extends GenericService {
 	}
 
 	public void checkForBrokenImages() {
-		List<WebElement> imageElements= webDriver.findElementsByTagName("img");
+		List<WebElement> imageElements = webDriver.findElementsByTagName("img");
 		for (int i = 0; i < imageElements.size(); i++) {
 			isImageLoaded(imageElements.get(i));
 		}
@@ -1374,14 +1380,18 @@ public abstract class GenericWebDriver extends GenericService {
 		System.out.println("image not found");
 		return imageLoaded;
 	}
-	
-	public void setBrowserWidth(int width)throws Exception{
+
+	public void setBrowserWidth(int width) throws Exception {
 		try {
-			int height=webDriver.manage().window().getSize().getHeight();
+			int height = webDriver.manage().window().getSize().getHeight();
 			webDriver.manage().window().setSize(new Dimension(width, height));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public void initEyesTest(String appName, String testName) {
+		eyes.open(webDriver, appName, testName);
 	}
 }
