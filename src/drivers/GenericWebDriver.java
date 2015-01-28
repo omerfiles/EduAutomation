@@ -1108,6 +1108,11 @@ public abstract class GenericWebDriver extends GenericService {
 			System.out.println("Selected " + comboboxName + ": " + selected);
 		}
 	}
+	
+	public void selectElementFromComboBox(String comboboxName,
+			String optionValue, boolean contains) throws Exception{
+		selectElementFromComboBox(comboboxName,optionValue,ByTypes.id,contains);
+	}
 
 	public void selectElementFromComboBox(String comboboxName,
 			String optionValue,ByTypes byType, boolean contains) throws Exception {
