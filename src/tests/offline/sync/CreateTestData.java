@@ -12,7 +12,7 @@ public class CreateTestData extends EdusoftBasicTest {
 
 	@Test
 	public void setSubmitTestForOffline() throws Exception {
-		String csvFilePath = "\\\\storage\\QA\\Automation\\testData\\forOffline\\input\\submitTest.csv";
+		String csvFilePath = "smb://storage//QA//Automation//testData//forOffline//input//submitTest.csv";
 		List<String[]> list = new ArrayList<String[]>();
 		// String sqlFilePath =
 		// "\\\\storage\\QA\\Automation\\testData\\forOffline\\output";
@@ -22,7 +22,7 @@ public class CreateTestData extends EdusoftBasicTest {
 		List<String> sqlTextForFile = new ArrayList<String>();
 
 		System.out.println("Import data from csv file");
-		list = textService.getStr2dimArrFromCsv(csvFilePath);
+		list = textService.getStr2dimArrFromCsv(csvFilePath, true);
 
 		System.out.println("Iterate on csv file data");
 		String componentId;
@@ -30,8 +30,7 @@ public class CreateTestData extends EdusoftBasicTest {
 		studentId = list.get(0)[15].toString();
 
 		String tempCompId = "";
-		String sqlText = "exec SubmitTest @UserId="
-				+ studentId
+		String sqlText = "exec SubmitTest @UserId=%userId%"
 				+ ",@UnitId=%unitId%,@ComponentId=%compId%,@Grade=%grade%,@Marks=%marks%,@SetId='23277|23278|23279|23280|23281|',@VisitedItems='[1][2][3][4][5]',@TimeOver=0,@UserState=0x7B2261223A5B7B2269436F6465223A22623372706C6F74303031222C22694964223A32333237372C22695479706,@TestTime=3200";
 		List<String> marks = new ArrayList<String>();
 		String sql;
@@ -46,6 +45,7 @@ public class CreateTestData extends EdusoftBasicTest {
 				System.out
 						.println("Create the query and add it to sqlTextForFile");
 				sql = sqlText;
+				sql = sql.replace("%userId%", list.get(i)[15].toString());
 				sql = sql.replace("%unitId%", list.get(i)[11].toString());
 				sql = sql.replace("%compId%", componentId);
 				sql = sql.replace("%marks%", getStringFromMarks(marks));
@@ -69,11 +69,10 @@ public class CreateTestData extends EdusoftBasicTest {
 				netService.getDomainAuth());
 
 	}
-	
-	
+
 	@Test
 	public void setSubmitTestForOnline() throws Exception {
-		String csvFilePath = "\\\\storage\\QA\\Automation\\testData\\forOnline\\input\\submitTest.csv";
+		String csvFilePath = "smb://storage//QA//Automation//testData//forOnline//input//submitTest.csv";
 		List<String[]> list = new ArrayList<String[]>();
 		// String sqlFilePath =
 		// "\\\\storage\\QA\\Automation\\testData\\forOffline\\output";
@@ -83,7 +82,7 @@ public class CreateTestData extends EdusoftBasicTest {
 		List<String> sqlTextForFile = new ArrayList<String>();
 
 		System.out.println("Import data from csv file");
-		list = textService.getStr2dimArrFromCsv(csvFilePath);
+		list = textService.getStr2dimArrFromCsv(csvFilePath, true);
 
 		System.out.println("Iterate on csv file data");
 		String componentId;
@@ -91,8 +90,7 @@ public class CreateTestData extends EdusoftBasicTest {
 		studentId = list.get(0)[15].toString();
 
 		String tempCompId = "";
-		String sqlText = "exec SubmitTest @UserId="
-				+ studentId
+		String sqlText = "exec SubmitTest @UserId=%userId%"
 				+ ",@UnitId=%unitId%,@ComponentId=%compId%,@Grade=%grade%,@Marks=%marks%,@SetId='23277|23278|23279|23280|23281|',@VisitedItems='[1][2][3][4][5]',@TimeOver=0,@UserState=0x7B2261223A5B7B2269436F6465223A22623372706C6F74303031222C22694964223A32333237372C22695479706,@TestTime=3200";
 		List<String> marks = new ArrayList<String>();
 		String sql;
@@ -107,6 +105,7 @@ public class CreateTestData extends EdusoftBasicTest {
 				System.out
 						.println("Create the query and add it to sqlTextForFile");
 				sql = sqlText;
+				sql = sql.replace("%userId%", list.get(i)[15].toString());
 				sql = sql.replace("%unitId%", list.get(i)[11].toString());
 				sql = sql.replace("%compId%", componentId);
 				sql = sql.replace("%marks%", getStringFromMarks(marks));
@@ -130,12 +129,14 @@ public class CreateTestData extends EdusoftBasicTest {
 				netService.getDomainAuth());
 
 	}
-	
-	
 
 	@Test
 	public void setStudentProgressForOffline() throws Exception {
-		String csvFilePath = "\\\\storage\\QA\\Automation\\testData\\forOffline\\input\\setProgress.csv";
+		// String csvFilePath =
+		// "\\\\storage\\QA\\Automation\\testData\\forOffline\\input\\setProgress.csv";
+
+		String csvFilePath = "smb://storage//QA//Automation//testData//forOffline//input//setProgress.csv";
+
 		List<String[]> list = new ArrayList<String[]>();
 		// String sqlFilePath =
 		// "\\\\storage\\QA\\Automation\\testData\\forOffline\\output";
@@ -145,7 +146,7 @@ public class CreateTestData extends EdusoftBasicTest {
 		List<String> sqlTextForFile = new ArrayList<String>();
 
 		System.out.println("Import data from csv file");
-		list = textService.getStr2dimArrFromCsv(csvFilePath);
+		list = textService.getStr2dimArrFromCsv(csvFilePath, true);
 		studentId = list.get(0)[14];
 		System.out.println("Iterate on csv file data");
 		String componentId;
@@ -162,13 +163,14 @@ public class CreateTestData extends EdusoftBasicTest {
 			sqlTextForFile.add(sql);
 			System.out.println(sql);
 		}
-		textService.writeListToSmbFile(sqlFilePath, sqlTextForFile, netService.getDomainAuth());
+		textService.writeListToSmbFile(sqlFilePath, sqlTextForFile,
+				netService.getDomainAuth());
 
 	}
-	
+
 	@Test
 	public void setStudentProgressForOnline() throws Exception {
-		String csvFilePath = "\\\\storage\\QA\\Automation\\testData\\forOnline\\input\\setProgress.csv";
+		String csvFilePath = "smb://storage//QA//Automation//testData//forOnline//input//setProgress.csv";
 		List<String[]> list = new ArrayList<String[]>();
 		// String sqlFilePath =
 		// "\\\\storage\\QA\\Automation\\testData\\forOffline\\output";
@@ -178,27 +180,28 @@ public class CreateTestData extends EdusoftBasicTest {
 		List<String> sqlTextForFile = new ArrayList<String>();
 
 		System.out.println("Import data from csv file");
-		list = textService.getStr2dimArrFromCsv(csvFilePath);
+		list = textService.getStr2dimArrFromCsv(csvFilePath, true);
 		studentId = list.get(0)[14];
 		System.out.println("Iterate on csv file data");
 		String componentId;
-		String sqlText = "exec SetProgress @CourseId=%courseId%,@ItemId=%itemId%,@UserId="
-				+ studentId
+		String sqlText = "exec SetProgress @CourseId=%courseId%,@ItemId=%itemId%,@UserId=%userId%"
+
 				+ ",@Last=1,@Seconds=60,@Visited=1,@ComponentTypeId=1";
 
 		List<String> marks = new ArrayList<String>();
 		String sql;
 		for (int i = 0; i < list.size(); i++) {
 			sql = sqlText;
+			sql = sql.replace("%userId%", list.get(i)[14]);
 			sql = sql.replace("%courseId%", list.get(i)[10]);
 			sql = sql.replace("%itemId%", list.get(i)[13]);
 			sqlTextForFile.add(sql);
 			System.out.println(sql);
 		}
-		textService.writeListToSmbFile(sqlFilePath, sqlTextForFile, netService.getDomainAuth());
+		textService.writeListToSmbFile(sqlFilePath, sqlTextForFile,
+				netService.getDomainAuth());
 
 	}
-
 
 	public String getStringFromMarks(List<String> marks) {
 		String result = "'";

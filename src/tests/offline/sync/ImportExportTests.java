@@ -17,8 +17,8 @@ import tests.misc.EdusoftWebTest;
 
 public class ImportExportTests extends EdusoftWebTest {
 
-	String[] offlineStudents = new String[] { "91000010000004" };
-	String[] onlineStudents = new String[] { "52319080000005" };
+	String[] offlineStudents;
+	String[] onlineStudents;
 
 	String offlineTestCsvPathBeofreSync;
 	String onlineTestCsvPathBeforeSync;
@@ -41,6 +41,11 @@ public class ImportExportTests extends EdusoftWebTest {
 				+ ".csv";
 		onlineProgressCsvPathBeforeSync = "files/temp/onlineProgress" + ".csv";
 
+		onlineStudents = studentService.getInstitutionStudetns(
+				InstallationType.Online, "5231874");
+		offlineStudents = studentService.getInstitutionStudetns(
+				InstallationType.Offline, "5231874");
+
 	}
 
 	@Test
@@ -51,8 +56,7 @@ public class ImportExportTests extends EdusoftWebTest {
 	}
 
 	@Test
-	public void testRunValidationAfterImportSetOnline()
-			throws Exception {
+	public void testRunValidationAfterImportSetOnline() throws Exception {
 
 		// 0. - setup: create new student in online for each test
 		String studentId = null;
@@ -135,8 +139,7 @@ public class ImportExportTests extends EdusoftWebTest {
 					offlineProgress.get(i).getUserId(), offlineProgress.get(i)
 							.getCourseId(), offlineProgress.get(i).getItemId(),
 					offlineProgress.get(i).getLastUpdate());
-			innerloop:
-				for (int j = 0; j < onlineProgress.size(); j++) {
+			innerloop: for (int j = 0; j < onlineProgress.size(); j++) {
 
 				StudentProgress onlineStudentProgress = new StudentProgress(
 						onlineProgress.get(i).getUserId(), onlineProgress
@@ -206,7 +209,7 @@ public class ImportExportTests extends EdusoftWebTest {
 				} else {
 					System.out
 							.println("Offline progress not found. progress not found:"
-									+  offlineStudentProgress.toString());
+									+ offlineStudentProgress.toString());
 				}
 				// check that lastupdate is latests
 
@@ -239,8 +242,7 @@ public class ImportExportTests extends EdusoftWebTest {
 					onlineTests.get(i).getTimesTaken());
 
 			// check if offline test in online
-			innerloop2: 
-				for (int j = 0; j < onlineTests.size(); j++) {
+			innerloop2: for (int j = 0; j < onlineTests.size(); j++) {
 
 				StudentTest onlineTest = new StudentTest(onlineTests.get(j)
 						.getUserId(), onlineTests.get(j)
@@ -312,17 +314,20 @@ public class ImportExportTests extends EdusoftWebTest {
 							offlineTest.getUserId(), offlineTest.getCourseId(),
 							offlineTest.getComponentSubComponentId(),
 							offlineTestsFromCsvFile);
-					double onlineAverage=getAverageFromList(
+					double onlineAverage = getAverageFromList(
 							onlineTest.getUserId(), onlineTest.getCourseId(),
 							onlineTest.getComponentSubComponentId(),
 							onlineTestsFromCsvFile);
-					
-					double expectedAverage=(offlineAverage+onlineAverage)/2;
-					
-					double offlineDbTestAvrage=Double.parseDouble(offlineTest.getAvarage());
-					double onlineDbTestAvrage=Double.parseDouble(onlineTest.getAvarage());
-					
-					testResultService.assertEquals(true,expectedAverage==onlineDbTestAvrage);
+
+					double expectedAverage = (offlineAverage + onlineAverage) / 2;
+
+					double offlineDbTestAvrage = Double.parseDouble(offlineTest
+							.getAvarage());
+					double onlineDbTestAvrage = Double.parseDouble(onlineTest
+							.getAvarage());
+
+					testResultService.assertEquals(true,
+							expectedAverage == onlineDbTestAvrage);
 
 					// double expectedAverage=
 
@@ -413,12 +418,12 @@ public class ImportExportTests extends EdusoftWebTest {
 
 	public double getAverageFromList(String studentId, String courseId,
 			String compId, List<StudentTest> list) {
-		
-		double average=0;
+
+		double average = 0;
 		for (int i = 0; i < list.size(); i++) {
 			if (courseId.equals(list.get(i).getCourseId())
 					&& compId.equals(list.get(i).getComponentSubComponentId())) {
-				 average = Double.valueOf(list.get(i).getAvarage());
+				average = Double.valueOf(list.get(i).getAvarage());
 				break;
 			}
 		}

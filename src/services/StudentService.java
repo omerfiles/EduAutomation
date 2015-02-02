@@ -162,16 +162,17 @@ public class StudentService extends GenericService {
 					System.out.println(progressRecords.get(i)[1]);
 					System.out.println(progressRecords.get(i)[2]);
 					System.out.println(progressRecords.get(i)[3]);
-					
+
 					DateTimeFormatter formatter = DateTimeFormat
 							.forPattern("yyyy-MM-dd HH:mm:ss.S");
-					
 
-					DateTime dt = formatter.parseDateTime(progressRecords.get(i)[3]);
-					
-					
-					StudentProgress progress = new StudentProgress(progressRecords.get(i)[0],
-							progressRecords.get(i)[1], progressRecords.get(i)[2], dt);
+					DateTime dt = formatter.parseDateTime(progressRecords
+							.get(i)[3]);
+
+					StudentProgress progress = new StudentProgress(
+							progressRecords.get(i)[0],
+							progressRecords.get(i)[1],
+							progressRecords.get(i)[2], dt);
 
 					progressList.add(progress);
 
@@ -224,6 +225,7 @@ public class StudentService extends GenericService {
 	public List<StudentTest> getMultipleStudentsTestsFromCsvFile(String csvPath)
 			throws Exception {
 		List<StudentTest> list = new ArrayList<StudentTest>();
+
 		List<String[]> csvList = textService.getStr2dimArrFromCsv(csvPath);
 		for (int i = 0; i < csvList.size(); i++) {
 
@@ -238,6 +240,34 @@ public class StudentService extends GenericService {
 			list.add(studentTest);
 		}
 		return list;
+	}
+
+	public String[] getInstitutionStudetns(InstallationType type,
+			String institutionId) {
+		if (type.equals(InstallationType.Offline)) {
+			dbService.setUseOfflineDB(true);
+		}
+		List<String[]> list = new ArrayList<String[]>();
+		String[] str = null;
+
+		try {
+
+			String sql = "select UserId from users where InstitutionId="
+					+ institutionId;
+			list = dbService.getStringListFromQuery(sql, 1, 1);
+			str = new String[list.size()];
+			for (int i = 0; i < list.size(); i++) {
+				str[i] = list.get(i)[0];
+			}
+
+		} catch (Exception e) {
+
+		} finally {
+			if (type.equals(InstallationType.Offline)) {
+				dbService.setUseOfflineDB(false);
+			}
+		}
+		return str;
 	}
 
 	// public StudentTest

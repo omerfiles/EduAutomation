@@ -14,6 +14,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.io.StringReader;
@@ -37,6 +38,7 @@ import jcifs.ntlmssp.NtlmMessage;
 import jcifs.smb.NtlmPasswordAuthentication;
 import jcifs.smb.SmbException;
 import jcifs.smb.SmbFile;
+import jcifs.smb.SmbFileInputStream;
 import jcifs.smb.SmbFileOutputStream;
 
 import org.apache.commons.io.FileUtils;
@@ -91,6 +93,11 @@ public class TextService extends SystemObjectImpl {
 
 	public List<String[]> getStr2dimArrFromCsv(String filePath)
 			throws Exception {
+		return getStr2dimArrFromCsv(filePath, false);
+	}
+
+	public List<String[]> getStr2dimArrFromCsv(String filePath, boolean useSmb)
+			throws Exception {
 		List<String[]> list = new ArrayList<String[]>();
 
 		BufferedReader br = null;
@@ -100,7 +107,15 @@ public class TextService extends SystemObjectImpl {
 
 		try {
 
-			br = new BufferedReader(new FileReader(filePath));
+			if (useSmb) {
+				SmbFile smbFile=new SmbFile(filePath,netService.getDomainAuth());
+				br = new BufferedReader(new InputStreamReader(
+						new SmbFileInputStream(smbFile)));
+			} else {
+				br = new BufferedReader(new FileReader(filePath));
+
+			}
+
 			while ((line = br.readLine()) != null) {
 				str = line.split(cvsSplitBy);
 				list.add(str);
@@ -376,7 +391,8 @@ public class TextService extends SystemObjectImpl {
 	public void writeArrayistToCSVFile(String path, List<String[]> list)
 			throws IOException {
 		String csv = path;
-		CSVWriter writer =  new CSVWriter(new FileWriter(csv), ',', CSVWriter.NO_QUOTE_CHARACTER);
+		CSVWriter writer = new CSVWriter(new FileWriter(csv), ',',
+				CSVWriter.NO_QUOTE_CHARACTER);
 		writer.writeAll(list);
 
 		writer.close();
@@ -468,8 +484,9 @@ public class TextService extends SystemObjectImpl {
 		outputStream.write(bytes);
 
 	}
-	
-	public void writeTxtFileWithText(String path, String text)throws IOException{
+
+	public void writeTxtFileWithText(String path, String text)
+			throws IOException {
 		File file = new File(path);
 		FileOutputStream outputStream = new FileOutputStream(file);
 		outputStream.write(text.getBytes());
