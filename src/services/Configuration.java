@@ -50,8 +50,11 @@ public class Configuration extends GenericService {
 		
 
 		try {
+//			globaConfigInput = new FileInputStream(
+//					"files/properties/global.properties");
+			
 			globaConfigInput = new FileInputStream(
-					"files/properties/global.properties");
+					"C:\\automation\\global.properties");
 			globalProperties.load(globaConfigInput);
 
 			// input = new FileInputStream("C:\\qa.properties");
