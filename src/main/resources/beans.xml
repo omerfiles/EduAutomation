@@ -22,16 +22,18 @@
 	<bean id="PageHelperService" class="services.PageHelperService" />
 
 
-	<bean id="configuration" class="services.Configuration" factory-method="getInstance" />
+	<bean id="configuration" class="services.Configuration"
+		factory-method="getInstance" />
 	<bean id="TextSerivce" class="services.TextService" />
 	<bean id="DbService" class="services.DbService">
-		<property name="dataSource" ref="dataSource" />
+		
+	</bean>
 	<bean id="NetService" class="services.NetService"></bean>
 	<bean id="EraterService" class="services.EraterService"></bean>
 	<bean id="InstitutionService" class="services.InstitutionService"></bean>
 	<bean id="AudioService" class="services.AudioService"></bean>
 	<bean id="TestResultService" class="services.TestResultService"></bean>
-	
+
 
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource"

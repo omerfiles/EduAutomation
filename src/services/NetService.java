@@ -66,7 +66,7 @@ import com.sun.mail.iap.Response;
 import jsystem.framework.system.SystemObjectImpl;
 import junit.framework.Assert;
 
-@Service
+@Service("NetService")
 public class NetService extends GenericService {
 
 	@Autowired

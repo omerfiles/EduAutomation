@@ -9,6 +9,7 @@ public abstract class GenericService {
 	
 	
 //	Reporter reporter;
+	TestRunnerType testRunner = null;
 
 	public GenericService() {
 		// TODO Auto-generated constructor stub
@@ -22,15 +23,21 @@ public abstract class GenericService {
 		Thread.sleep(seconds * 1000);
 	}
 	
+	
+	
 	public TestRunnerType getTestRunner() {
 		// if test is run in debug/development
-		TestRunnerType testRunner = null;
+		
 		if (System.getProperty("remote.machine") != null) {
 			testRunner = TestRunnerType.CI;
 		} else if (System.getProperty("remote.machine") == null) {
 			testRunner = TestRunnerType.local;
 		}
 		return testRunner;
+	}
+
+	public void setTestRunner(TestRunnerType testRunner) {
+		this.testRunner = testRunner;
 	}
 
 }
