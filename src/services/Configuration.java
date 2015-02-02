@@ -71,7 +71,7 @@ public class Configuration extends GenericService {
 
 			
 			if(getTestRunner().equals(TestRunnerType.CI)){
-				String path = "smb://10.1.0.83/automationConfig/"
+				String path = "smb://10.1.0.111/automationConfig/"
 						+ localPropertiesFile;
 				netService = new NetService();
 				NtlmPasswordAuthentication auto = netService.getAuth();
