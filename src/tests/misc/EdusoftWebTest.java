@@ -11,6 +11,7 @@ import org.openqa.selenium.logging.LogEntries;
 
 import services.AudioService;
 import services.PageHelperService;
+import services.StudentService;
 import Enums.AutoParams;
 import Enums.Browsers;
 import drivers.AndroidWebDriver;
@@ -26,6 +27,7 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 	protected GenericWebDriver webDriver;
 	public PageHelperService pageHelper;
 	public AudioService audioService;
+	public StudentService studentService;
 
 	String browser = null;
 
@@ -44,21 +46,24 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 			webDriver = (IEWebDriver) ctx.getBean("IEWebDriver");
 		} else if (browser.equals(Browsers.firefox.toString())) {
 			webDriver = (FirefoxWebDriver) ctx.getBean("FirefoxWebDriver");
-		}
-		else if(browser.equals(Browsers.android.toString())){
-			webDriver=(AndroidWebDriver)ctx.getBean("AndroidWebDriver");
+		} else if (browser.equals(Browsers.android.toString())) {
+			webDriver = (AndroidWebDriver) ctx.getBean("AndroidWebDriver");
 		}
 
 		if (webDriver == null) {
 			testResultService
 					.addFailTest("No webdriver found. Please check properties file or pom for webdriver name");
 		}
-//		webDriver.setReporter(report);
+		// webDriver.setReporter(report);
 
 		if (enableLoggin == true) {
 			webDriver.setEnableConsoleLog(true);
 		}
 		webDriver.init();
+		String timeout = configuration.getAutomationParam(AutoParams.timeout.toString(),
+				"timeOutCMD");
+		report.report("Default timeout was set to: "+timeout);
+		webDriver.setTimeout(Integer.valueOf(timeout));
 		webDriver.maximize();
 		try {
 
@@ -70,6 +75,7 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 		pageHelper = (PageHelperService) ctx.getBean("PageHelperService");
 		pageHelper.init(webDriver, autoInstitution, testResultService);
 		audioService = (AudioService) ctx.getBean("AudioService");
+		studentService = (StudentService) ctx.getBean("StudentService");
 
 		setEnableLoggin(true);
 		testResultService.setWebDriver(webDriver);
@@ -84,7 +90,7 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 
 			// print console log if browser was chrome
 			if (browser.equals(Browsers.chrome.toString())) {
-				webDriver.printConsoleLogs("", false);
+//				webDriver.printConsoleLogs("", false);
 			}
 
 			if (testResultService.hasFailedResults()) {

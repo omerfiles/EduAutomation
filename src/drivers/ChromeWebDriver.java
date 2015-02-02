@@ -61,7 +61,7 @@ public class ChromeWebDriver extends GenericWebDriver {
 					capabilities);
 			setPageLoadTimeOut();
 			setScriptLoadTimeOut();
-			initEyes();
+			
 
 		} catch (UnreachableBrowserException e) {
 			System.out.println("Browser unreachable");

@@ -7,7 +7,8 @@ import Enums.TestRunnerType;
 public abstract class GenericService {
 	
 	
-	Reporter reporter;
+	
+//	Reporter reporter;
 
 	public GenericService() {
 		// TODO Auto-generated constructor stub

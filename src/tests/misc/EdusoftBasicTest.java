@@ -135,7 +135,7 @@ public class EdusoftBasicTest extends TestCase {
 				.getBean("InstitutionService");
 		testResultService = (TestResultService) ctx
 				.getBean("testResultService");
-		report = (services.Reporter) ctx.getBean("reporter");
+		report = (services.Reporter) ctx.getBean("Reporter");
 		mailService = (MailService) ctx.getBean("MailService");
 		// report.init();
 		netService = (NetService) ctx.getBean("NetService");

@@ -35,7 +35,7 @@ import Enums.UserType;
 import Objects.Institution;
 import Objects.UserObject;
 
-@Service
+@Service("DbService")
 public class DbService extends SystemObjectImpl {
 
 	private static final String SQL_SERVER_DRIVER_CLASS = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
@@ -45,7 +45,18 @@ public class DbService extends SystemObjectImpl {
 	private String db_userid = null;
 	private String db_password = null;
 	private final int MAX_DB_TIMEOUT = 120;
+
+	private boolean useOfflineDB;
+
 	// private DataSource dataSou rce;
+
+	public boolean isUseOfflineDB() {
+		return useOfflineDB;
+	}
+
+	public void setUseOfflineDB(boolean useOfflineDB) {
+		this.useOfflineDB = useOfflineDB;
+	}
 
 	@Autowired
 	Configuration configuration;
@@ -66,253 +77,6 @@ public class DbService extends SystemObjectImpl {
 		jdbcTemplate = new JdbcTemplate();
 	}
 
-	@Autowired
-	public void setDataSource(DataSource dataSource) {
-		// this.dataSource = dataSource;
-	}
-
-	// public void runUpdateQuery(String query) throws Exception {
-	// try {
-	// report.startLevel("Running update query: " + query,
-	// EnumReportLevel.CurrentPlace);
-	// jdbcTemplate.update(query);
-	// } catch (Exception e) {
-	// fail("Update query failed");
-	// }
-	// report.stopLevel();
-	//
-	// }
-
-	public String getValue(String query, String columnName) throws Exception {
-		String str = null;
-		// report.startLevel("Getting results set from db for query: " + query,
-		// EnumReportLevel.CurrentPlace);
-		report.report("Query was:" + query);
-		// String result = (String) jdbcTemplate.queryForObject(query,
-		// String.class);
-		Statement statement = conn.createStatement();
-		String queryString = "select * from class where classId=500020001";
-		ResultSet rs = statement.executeQuery(queryString);
-		str = rs.getString(0);
-
-		return str;
-	}
-
-	// public void deleteValue(String tableName, String whereParam,
-	// String whereValue) throws Exception {
-	// String sql = "";
-	// try {
-	// sql = "delete from ";
-	// sql += tableName;
-	// sql += " where " + whereParam + " =" + whereValue + "";
-	// report.report("Query to run:" + sql);
-	// jdbcTemplate.update(sql);
-	// } catch (Exception e) {
-	// report.report(e.getMessage());
-	// Assert.fail("Sql delete failed. Query was:" + sql);
-	// }
-	// }
-
-	public SqlRowSet getValueRS(String query, String[] columnName,
-			int NumOfRowsExpected, int timeout) throws Exception {
-		// report.startLevel("Getting results set from db",
-		// EnumReportLevel.CurrentPlace);
-		report.report("Query was:" + query);
-		SqlRowSet sqlRowSet = null;
-		// ResultSet rs=null;
-		int elapsedTime = 0;
-		while (elapsedTime < timeout) {
-			sqlRowSet = jdbcTemplate.queryForRowSet(query);
-			report.report("SqlRowSet size is: " + sqlRowSet.getRow());
-			if (sqlRowSet.getRow() < 2) {
-				Thread.sleep(1000);
-				report.report("Sleeping for 1000ms. Timeout is: " + timeout);
-				elapsedTime++;
-				if (elapsedTime == timeout) {
-					Assert.fail("No records found");
-				}
-			} else
-				break;
-
-		}
-
-		String[] result = new String[columnName.length];
-		StringBuilder printResults = new StringBuilder("|| ");
-
-		// while (sqlRowSet.next()) {
-		// for (int i = 0; i < result.length; i++) {
-		// result[i] = sqlRowSet.getString(columnName[i]);
-		// sendResults.append(result[i]).append(" ||| ");
-		// }
-		// }
-		report.report("Query results are: " + printResults.toString());
-		return sqlRowSet;
-
-	}
-
-	public String[] getValue(String query, String[] columnName,
-			int NumOfRowsExpected, int timeout) throws Exception {
-		// report.startLevel("Getting results set from db",
-		// EnumReportLevel.CurrentPlace);
-		report.report("Query was:" + query);
-		System.out.println("query = " + query);
-		System.out.println("jdbcTemplate = " + jdbcTemplate);
-		SqlRowSet sqlRowSet = null;
-		int elapsedTime = 0;
-		while (elapsedTime < timeout) {
-			// sqlRowSet = jdbcTemplate.queryForRowSet(query);
-			// if(sqlRowSet.getString(columnName[0])==null)
-			// {
-			// Thread.sleep(1000);
-			// report.report("Sleeping for 1000ms");
-			// elapsedTime++;
-			// }
-			// else
-			// break;
-
-			try {
-				sqlRowSet = jdbcTemplate.queryForRowSet(query);
-				while (sqlRowSet.next()) {
-					report.report(sqlRowSet.getString(columnName[0]));
-					if (sqlRowSet.getString(columnName[0]) != null) {
-						elapsedTime = timeout;
-						break;
-					} else {
-
-					}
-				}
-				report.report("Sleeping for 1000ms");
-				Thread.sleep(1000);
-				elapsedTime++;
-			} catch (Exception e) {
-				report.report("Sleeping for 1000ms");
-				Thread.sleep(1000);
-				elapsedTime++;
-				continue;
-			}
-
-		}
-		if (getSqlRowSetRowsCount(sqlRowSet) > NumOfRowsExpected
-				&& NumOfRowsExpected != 0) {
-			Assert.fail("Too many rows returned in Quwey");
-		}
-		int rowSetSize = getSqlRowSetRowsCount(sqlRowSet);
-		String[] result = new String[rowSetSize];
-		StringBuilder printResults = new StringBuilder("|| ");
-		sqlRowSet.first();
-		// int i=0;
-		// while (sqlRowSet.next()) {
-		if (result.length > 0) {
-			for (int i = 0; i < rowSetSize; i++) {
-
-				result[i] = sqlRowSet.getString(columnName[0]);
-				printResults.append(result[i]).append(" ||| ");
-				sqlRowSet.next();
-				// i++;
-				// }
-				// }
-			}
-		}
-
-		report.report("Query results are: " + printResults.toString());
-		return result;
-
-	}
-
-	public String[] getValue(String query, String[] columnName,
-			int NumOfRowsExpected) throws Exception {
-
-		return getValue(query, columnName, NumOfRowsExpected, 20);
-
-	}
-
-	public SqlRowSet getValuesRs(String[] valuesToReturn, String tableName,
-			String[] whereParam, String[] whereValue, int numOfRowsExpected)
-			throws Exception {
-		String query = "select ";
-		try {
-			// report.startLevel("Starting to build sql query",
-			// Reporter.EnumReportLevel.CurrentPlace);
-			if (whereParam.length != whereValue.length
-					|| whereParam.length == 0) {
-				fail("Query params are missing or incorrect");
-			}
-
-			if (valuesToReturn.length == 1) {
-				query = query + valuesToReturn[0];
-			} else {
-				for (int i = 0; i < valuesToReturn.length; i++) {
-					query = query + valuesToReturn[i];
-					if (i < valuesToReturn.length - 1) {
-						query = query + ",";
-					}
-				}
-			}
-			report.report("Query string: " + query);
-			query = query + " from " + tableName + " where ";
-
-			query = query + whereParam[0] + "='" + whereValue[0] + "'";
-			if (whereParam.length > 1) {
-				for (int i = 1; i < whereParam.length; i++) {
-					query = query + " and ";
-					query = query + whereParam[i] + "='" + whereValue[i] + "'";
-				}
-			}
-			report.report(query);
-			report.stopLevel();
-			return getValueRS(query, valuesToReturn, numOfRowsExpected, 20);
-		} catch (Exception e) {
-			fail("Select query failed. Query was :" + query + ". Stack trace: "
-					+ e.getMessage());
-
-			e.printStackTrace();
-			throw e;
-		}
-	}
-
-	public String[] getValues(String[] valuesToReturn, String tableName,
-			String[] whereParam, String[] whereValue, int numOfRowsExpected)
-			throws Exception {
-		String query = "select ";
-		try {
-			// report.startLevel("Starting to build sql query",
-			// Reporter.EnumReportLevel.CurrentPlace);
-			if (whereParam.length != whereValue.length
-					|| whereParam.length == 0) {
-				fail("Query params are missing or incorrect");
-			}
-
-			if (valuesToReturn.length == 1) {
-				query = query + valuesToReturn[0];
-			} else {
-				for (int i = 0; i < valuesToReturn.length; i++) {
-					query = query + valuesToReturn[i];
-					if (i < valuesToReturn.length - 1) {
-						query = query + ",";
-					}
-				}
-			}
-			report.report("Query string: " + query);
-			query = query + " from " + tableName + " where ";
-
-			query = query + whereParam[0] + "='" + whereValue[0] + "'";
-			if (whereParam.length > 1) {
-				for (int i = 1; i < whereParam.length; i++) {
-					query = query + " and ";
-					query = query + whereParam[i] + "='" + whereValue[i] + "'";
-				}
-			}
-			report.report(query);
-			report.stopLevel();
-			return getValue(query, valuesToReturn, numOfRowsExpected);
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail("Select query failed. Query was :" + query + ". Stack trace: "
-					+ e.getMessage());
-			throw e;
-		}
-	}
-
 	public String sig(int size) throws Exception {
 		String str = sig();
 		return str.substring(str.length() - size, str.length());
@@ -322,47 +86,20 @@ public class DbService extends SystemObjectImpl {
 		return String.valueOf(System.currentTimeMillis());
 	}
 
-	public int getSqlRowSetRowsCount(SqlRowSet rs) throws Exception {
-		rs.first();
-		int count = 0;
-
-		try {
-			if (rs.getString(1) != null) {
-				count++;
-			}
-
-			while (rs.next()) {
-				count++;
-				// report.report("Number of rows is: " + count);
-			}
-		} catch (Exception e) {
-			report.report("zero rows found");
-
-		} finally {
-			return count;
-		}
-	}
-
-	public String getStringFromQuery(String sql, boolean allowNull)
-			throws Exception {
-		return getStringFromQuery(sql, 10, allowNull);
-	}
-
 	public String getStringFromQuery(String sql) throws Exception {
 		return getStringFromQuery(sql, 10, false);
 	}
 
 	public void runDeleteUpdateSql(String sql) throws Exception {
 		report.report("Query is: " + sql);
-		db_userid = configuration.getProperty("db.connection.username");
-		db_password = configuration.getProperty("db.connection.password");
+		// db_userid = configuration.getProperty("db.connection.username");
+		// db_password = configuration.getProperty("db.connection.password");
 
 		System.out.println(sql);
 		Statement statement = null;
 		try {
 			Class.forName(SQL_SERVER_DRIVER_CLASS);
-			conn = DriverManager.getConnection(getDbConnString(), db_userid,
-					db_password);
+			conn = getConnection();
 			System.out.println("connected");
 
 			if (conn.isClosed() == true) {
@@ -387,8 +124,8 @@ public class DbService extends SystemObjectImpl {
 		List<String[]> list = new ArrayList<String[]>();
 		report.report("Query is: " + sql + ". Max db time out is: "
 				+ MAX_DB_TIMEOUT);
-		db_userid = configuration.getProperty("db.connection.username");
-		db_password = configuration.getProperty("db.connection.password");
+		// db_userid = configuration.getProperty("db.connection.username");
+		// db_password = configuration.getProperty("db.connection.password");
 		System.out.println(sql);
 		ResultSet rs = null;
 		Statement statement = null;
@@ -397,8 +134,7 @@ public class DbService extends SystemObjectImpl {
 
 		try {
 			Class.forName(SQL_SERVER_DRIVER_CLASS);
-			conn = DriverManager.getConnection(getDbConnString(), db_userid,
-					db_password);
+			conn = getConnection();
 			System.out.println("connected");
 			if (conn.isClosed() == true) {
 				System.out.println("connection is closed");
@@ -583,8 +319,7 @@ public class DbService extends SystemObjectImpl {
 		try {
 			Class.forName(SQL_SERVER_DRIVER_CLASS);
 
-			conn = DriverManager.getConnection(getDbConnString(), db_userid,
-					db_password);
+			conn = getConnection();
 			System.out.println("connected");
 
 			if (conn.isClosed() == true) {
@@ -679,6 +414,13 @@ public class DbService extends SystemObjectImpl {
 	public String getDbConnString() {
 		return configuration.getProperty("db.connection");
 
+	}
+
+	public String getOfflineConnString() {
+		String conString = configuration.getGlobalProperties("offlinedb");
+		conString = conString.replace("%machine%",
+				configuration.getGlobalProperties("offline.ip"));
+		return conString;
 	}
 
 	public int getUsedLicensesPerClass(String className) {
@@ -804,10 +546,18 @@ public class DbService extends SystemObjectImpl {
 	}
 
 	public Connection getConnection() throws SQLException {
-		db_userid = configuration.getProperty("db.connection.username");
-		db_password = configuration.getProperty("db.connection.password");
-		conn = DriverManager.getConnection(getDbConnString(), db_userid,
-				db_password);
+
+		if (isUseOfflineDB()) {
+			db_userid = configuration.getGlobalProperties("offline.user");
+			db_password = configuration.getGlobalProperties("offline.pass");
+			conn = DriverManager.getConnection(getOfflineConnString(),
+					db_userid, db_password);
+		} else {
+			db_userid = configuration.getProperty("db.connection.username");
+			db_password = configuration.getProperty("db.connection.password");
+			conn = DriverManager.getConnection(getDbConnString(), db_userid,
+					db_password);
+		}
 
 		return conn;
 	}

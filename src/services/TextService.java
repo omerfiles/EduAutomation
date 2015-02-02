@@ -376,7 +376,7 @@ public class TextService extends SystemObjectImpl {
 	public void writeArrayistToCSVFile(String path, List<String[]> list)
 			throws IOException {
 		String csv = path;
-		CSVWriter writer = new CSVWriter(new FileWriter(csv));
+		CSVWriter writer =  new CSVWriter(new FileWriter(csv), ',', CSVWriter.NO_QUOTE_CHARACTER);
 		writer.writeAll(list);
 
 		writer.close();

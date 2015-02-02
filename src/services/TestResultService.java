@@ -15,16 +15,20 @@ import org.springframework.stereotype.Service;
 import drivers.GenericWebDriver;
 
 @Service("testResultService")
-public class TestResultService extends SystemObjectImpl {
+public class TestResultService {
 
 	List<String> results = new ArrayList<String>();
 	List<String> consoleLogEntries = new ArrayList<String>();
+	
+	@Autowired
+	Reporter reporter;
 
 	private GenericWebDriver webDriver;
 
 	public void addFailTest(String failCause, boolean terminateTest,
 			boolean takeScreenshot) throws Exception {
 		results.add(failCause);
+		reporter.report("Failure added: " + failCause);
 		if (takeScreenshot) {
 			webDriver.printScreen(failCause);
 		}
@@ -37,6 +41,7 @@ public class TestResultService extends SystemObjectImpl {
 
 	public void addFailTest(String failCause) {
 		System.out.println("Failure added: " + failCause);
+		reporter.report("Failure added: " + failCause);
 		results.add(failCause);
 
 	}

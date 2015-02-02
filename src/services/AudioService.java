@@ -24,8 +24,8 @@ import org.springframework.stereotype.Service;
 import Objects.Course;
 import Objects.Recording;
 
-@Service
-public class AudioService extends SystemObjectImpl {
+@Service("AudioService")
+public class AudioService  {
 
 	// *******************************************************************
 	// In order for this service to work you must install VB audio virtual cable
@@ -112,7 +112,7 @@ public class AudioService extends SystemObjectImpl {
 		sourceLine.drain();
 		sourceLine.close();
 		System.out.println("finished playing the file."+System.currentTimeMillis());
-		report.stopLevel();
+//		report.stopLevel();
 
 	}
 

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import jsystem.framework.report.Reporter.EnumReportLevel;
 
-@Service("reporter")
+@Service("Reporter")
 public class Reporter {
 
 	private static Reporter reporter = new Reporter();

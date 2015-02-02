@@ -2,10 +2,14 @@ package drivers;
 
 
 
+import io.selendroid.client.SelendroidDriver;
+import io.selendroid.standalone.SelendroidConfiguration;
+
 import java.net.URL;
 
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.CapabilityType;
@@ -33,7 +37,17 @@ public class AndroidWebDriver extends GenericWebDriver {
 		
 		
 		try {
+			SelendroidConfiguration configuration=new SelendroidConfiguration();
+			
+			DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+			SelendroidDriver selendroidDriver=new SelendroidDriver(capabilities);
+//			selendroidDriver.getScreenshotAs(target)
+			
+//			selendroidDriver.
+			
 			webDriver = new RemoteWebDriver(DesiredCapabilities.android());
+			setBrowserName("android");
+			setInitialized(true);
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -50,6 +64,15 @@ public class AndroidWebDriver extends GenericWebDriver {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public String printScreen(String message, String level) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+		
+	}
+	
+	
 	
 	
 }

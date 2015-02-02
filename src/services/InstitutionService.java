@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import Objects.AutoInstitution;
 import jsystem.framework.system.SystemObjectImpl;
 
-@Service
+@Service("InstitutionService")
 public class InstitutionService extends SystemObjectImpl {
 	
 	@Autowired

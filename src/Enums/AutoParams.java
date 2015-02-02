@@ -7,7 +7,8 @@ public enum AutoParams {
 	envFile("envFile"),
 	srdebug("srdebug"),
 	slaveName("slaveName"),
-	scenarioFile("scenarioFile")
+	scenarioFile("scenarioFile"),
+	timeout("timeout")
 	
 	;
 	

@@ -98,6 +98,7 @@ public abstract class GenericWebDriver extends GenericService {
 	private boolean failureAdded;
 
 	Eyes eyes = new Eyes();
+	boolean eyesOpen = false;
 
 	// This is your api key, make sure you use it in all your tests.
 
@@ -403,7 +404,9 @@ public abstract class GenericWebDriver extends GenericService {
 						+ "failed. " + e.toString());
 			}
 		}
-		eyes.close();
+		if (eyesOpen) {
+			eyes.close();
+		}
 
 	}
 
@@ -1074,7 +1077,7 @@ public abstract class GenericWebDriver extends GenericService {
 	public void selectElementFromComboBox(String comboboxName,
 			String optionValue) throws Exception {
 		waitUntilComboBoxIsPopulated(comboboxName);
-		selectElementFromComboBox(comboboxName, optionValue,ByTypes.id, false);
+		selectElementFromComboBox(comboboxName, optionValue, ByTypes.id, false);
 	}
 
 	public void selectElementFromComboBoByIndex(String comboboxName, int index)
@@ -1087,8 +1090,7 @@ public abstract class GenericWebDriver extends GenericService {
 		boolean selected = false;
 		{
 			try {
-				Select select = new Select(waitForElement(comboboxName,
-						byType));
+				Select select = new Select(waitForElement(comboboxName, byType));
 				List<WebElement> options = select.getOptions();
 				select.selectByIndex(index);
 
@@ -1108,21 +1110,22 @@ public abstract class GenericWebDriver extends GenericService {
 			System.out.println("Selected " + comboboxName + ": " + selected);
 		}
 	}
-	
+
 	public void selectElementFromComboBox(String comboboxName,
-			String optionValue, boolean contains) throws Exception{
-		selectElementFromComboBox(comboboxName,optionValue,ByTypes.id,contains);
+			String optionValue, boolean contains) throws Exception {
+		selectElementFromComboBox(comboboxName, optionValue, ByTypes.id,
+				contains);
 	}
 
 	public void selectElementFromComboBox(String comboboxName,
-			String optionValue,ByTypes byType, boolean contains) throws Exception {
+			String optionValue, ByTypes byType, boolean contains)
+			throws Exception {
 		boolean selected = false;
 
 		String[] optionValues = null;
 		{
 			try {
-				Select select = new Select(waitForElement(comboboxName,
-						byType));
+				Select select = new Select(waitForElement(comboboxName, byType));
 				// waitForElement(comboboxName, ByTypes.id);
 				List<WebElement> options = select.getOptions();
 				optionValues = new String[options.size()];
@@ -1322,6 +1325,7 @@ public abstract class GenericWebDriver extends GenericService {
 			e.printStackTrace();
 		}
 		System.out.println("Eyes init OK");
+		eyesOpen = true;
 	}
 
 	public void eyesCheckPage(String text) {
@@ -1399,4 +1403,29 @@ public abstract class GenericWebDriver extends GenericService {
 	public void initEyesTest(String appName, String testName) {
 		eyes.open(webDriver, appName, testName);
 	}
+
+	public void waitUntilTextIsLoadedInElement(final String xpath)
+			throws Exception {
+		new WebDriverWait(webDriver, 60)
+				.until(new ExpectedCondition<Boolean>() {
+					public Boolean apply(WebDriver w) {
+						return w.findElement(By.xpath(xpath)).getText()
+								.length() > 0;
+					}
+
+				});
+	}
+
+	public void waitUntilTextIsClearedFromElement(final String xpath)
+			throws Exception {
+		new WebDriverWait(webDriver, 60)
+				.until(new ExpectedCondition<Boolean>() {
+					public Boolean apply(WebDriver w) {
+						return w.findElement(By.xpath(xpath)).getText()
+								.length() == 0;
+					}
+
+				});
+	}
+
 }
