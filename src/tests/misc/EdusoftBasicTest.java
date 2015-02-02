@@ -175,7 +175,7 @@ public class EdusoftBasicTest extends TestCase {
 			TestRunnerType runner = configuration.getTestRunner();
 			if (runner == TestRunnerType.CI) {
 
-				String path = "smb://10.1.0.83/automationLogs/" + fileName;
+				String path = "smb://10.1.0.111/automationLogs/" + fileName;
 				textService.writeListToSmbFile(path, report.getReportLogs(),
 						netService.getAuth());
 			} else {
