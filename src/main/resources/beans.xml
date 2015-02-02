@@ -22,9 +22,7 @@
 	<bean id="PageHelperService" class="services.PageHelperService" />
 
 
-	<bean id="configuration" class="services.Configuration"
-
-		factory-method="getInstance" />
+	<bean id="configuration" class="services.Configuration" factory-method="getInstance" />
 	<bean id="TextSerivce" class="services.TextService" />
 	<bean id="DbService" class="services.DbService"/>
 	<bean id="NetService" class="services.NetService"></bean>
