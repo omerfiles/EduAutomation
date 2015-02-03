@@ -25,9 +25,7 @@
 	<bean id="configuration" class="services.Configuration"
 		factory-method="getInstance" />
 	<bean id="TextSerivce" class="services.TextService" />
-	<bean id="DbService" class="services.DbService">
-		
-	</bean>
+	<bean id="DbService" class="services.DbService"></bean>
 	<bean id="NetService" class="services.NetService"></bean>
 	<bean id="EraterService" class="services.EraterService"></bean>
 	<bean id="InstitutionService" class="services.InstitutionService"></bean>
