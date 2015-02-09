@@ -28,6 +28,8 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 	public PageHelperService pageHelper;
 	public AudioService audioService;
 	
+	String webDriverDefaultTimeOUt="10";
+	
 
 	String browser = null;
 
@@ -62,6 +64,9 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 		webDriver.init();
 		String timeout = configuration.getAutomationParam(AutoParams.timeout.toString(),
 				"timeOutCMD");
+		if(timeout.equals("")){
+			timeout=webDriverDefaultTimeOUt;
+		}
 		report.report("Default timeout was set to: "+timeout);
 		webDriver.setTimeout(Integer.valueOf(timeout));
 		webDriver.maximize();
