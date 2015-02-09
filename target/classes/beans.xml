@@ -2,52 +2,37 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:aop="http://www.springframework.org/schema/aop"
-	xsi:schemaLocation="
-	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
-            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
             http://jax-ws.dev.java.net/spring/core http://jax-ws.dev.java.net/spring/core.xsd
             http://jax-ws.dev.java.net/spring/servlet http://jax-ws.dev.java.net/spring/servlet.xsd">
-	<context:property-placeholder location="qa.properties" />
+	<context:property-placeholder location="nov14.properties" />
+	<context:annotation-config />
 
 	<context:component-scan base-package="services" />
 	<context:component-scan base-package="drivers" />
 
-	<bean id="ChromeWebDriver" class="drivers.ChromeWebDriver"/>
- 	<bean id="FirefoxWebDriver" class="drivers.FirefoxWebDriver"/>
-	<bean id="IEWebDriver" class="drivers.IEWebDriver"/>
-	<bean id="SafariWebDriver" class="drivers.SafariWebDriver"/>
-	
-	<bean id="PageHelperService" class="services.PageHelperService"/>
+	<bean id="ChromeWebDriver" class="drivers.ChromeWebDriver" />
+	<bean id="FirefoxWebDriver" class="drivers.FirefoxWebDriver" />
+	<bean id="IEWebDriver" class="drivers.IEWebDriver" />
+	<bean id="SafariWebDriver" class="drivers.SafariWebDriver" />
+	<bean id="AndroidWebDriver" class="drivers.AndroidWebDriver" />
+
+	<bean id="PageHelperService" class="services.PageHelperService" />
 
 
 	<bean id="configuration" class="services.Configuration"
-
 		factory-method="getInstance" />
 	<bean id="TextSerivce" class="services.TextService" />
-	<bean id="DbService" class="services.DbService">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
+	<bean id="DbService" class="services.DbService"></bean>
 	<bean id="NetService" class="services.NetService"></bean>
 	<bean id="EraterService" class="services.EraterService"></bean>
 	<bean id="InstitutionService" class="services.InstitutionService"></bean>
 	<bean id="AudioService" class="services.AudioService"></bean>
 	<bean id="TestResultService" class="services.TestResultService"></bean>
-	<bean id="Reporter" class="services.Reporter"></bean>
 
-	<bean id="dataSource"
-		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
-		scope="singleton">
-		<property name="driverClassName" value="net.sourceforge.jtds.jdbc.Driver" />
-		<property name="url" value="${db.connection}" />
 
-		<property name="username" value="${db.connection.username}" />
-		<property name="password" value="${db.connection.password}" />
-
-	</bean>
-
-	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-
-		<property name="dataSource" ref="dataSource"></property>
-	</bean>
+	
+	
 
 </beans>
