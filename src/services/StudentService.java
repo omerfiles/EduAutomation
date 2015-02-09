@@ -26,6 +26,9 @@ public class StudentService extends GenericService {
 
 	@Autowired
 	TextService textService;
+	
+	@Autowired
+	Configuration configuration;
 
 	public List<StudentObject> getStudentObjectsList(String studentId,
 			InstallationType type, StudentObjectType objectType) {
@@ -94,12 +97,21 @@ public class StudentService extends GenericService {
 		}
 		return list;
 	}
+	
+	public List<StudentProgress> getMultipleStudentsProgress(String[] studentIds, InstallationType type) throws Exception{
+		return getMultipleStudentsProgress(studentIds, type, configuration.getProperty("institution.id"));
+	}
+			
 
 	public List<StudentProgress> getMultipleStudentsProgress(
-			String[] studentIds, InstallationType type) throws Exception {
+			String[] studentIds, InstallationType type,String institutionId) throws Exception {
 		List<StudentProgress> list = new ArrayList<StudentProgress>();
 		for (int i = 0; i < studentIds.length; i++) {
-			list.addAll(getStudentProgress(studentIds[i], type));
+			List<StudentProgress>studentProgress=getStudentProgress(studentIds[i], type,institutionId);
+			if(studentProgress.size()>0){
+				list.addAll(studentProgress);
+			}
+			
 		}
 		return list;
 	}
@@ -145,23 +157,27 @@ public class StudentService extends GenericService {
 	}
 
 	public List<StudentProgress> getStudentProgress(String studentId,
-			InstallationType type) throws Exception {
+			InstallationType type,String institutionId) throws Exception {
 		List<StudentProgress> progressList = new ArrayList<StudentProgress>();
 		String sql = SQL_FOR_PROGRESS + studentId;
 		try {
 			if (type == InstallationType.Offline) {
 				dbService.setUseOfflineDB(true);
+				sql = sql + " and Synchronized is not null";
 
 			}
+//			if(type==InstallationType.Online){
+//				sql = sql + " and institutionId="+institutionId;
+//			}
 			List<String[]> progressRecords = dbService.getStringListFromQuery(
 					sql, 1, 4);
 			if (progressRecords.size() > 0) {
 				for (int i = 0; i < progressRecords.size(); i++) {
 
-					System.out.println(progressRecords.get(i)[0]);
-					System.out.println(progressRecords.get(i)[1]);
-					System.out.println(progressRecords.get(i)[2]);
-					System.out.println(progressRecords.get(i)[3]);
+//					System.out.println(progressRecords.get(i)[0]);
+//					System.out.println(progressRecords.get(i)[1]);
+//					System.out.println(progressRecords.get(i)[2]);
+//					System.out.println(progressRecords.get(i)[3]);
 
 					DateTimeFormatter formatter = DateTimeFormat
 							.forPattern("yyyy-MM-dd HH:mm:ss.S");
@@ -267,6 +283,7 @@ public class StudentService extends GenericService {
 				dbService.setUseOfflineDB(false);
 			}
 		}
+		System.out.println("Num of students="+str.length);
 		return str;
 	}
 

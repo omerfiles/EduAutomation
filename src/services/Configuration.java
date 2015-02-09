@@ -71,14 +71,14 @@ public class Configuration extends GenericService {
 
 			
 			
-			//TestRunnerType runnerType=getTestRunner();
+			TestRunnerType runnerType=getTestRunner();
 			
-			TestRunnerType runnerType=TestRunnerType.CI;
+//			TestRunnerType runnerType=TestRunnerType.CI;
 			
 			
 			
 			/////for debug
-			setTestRunner(TestRunnerType.CI);
+//			setTestRunner(TestRunnerType.CI);
 			
 			if(runnerType.equals(TestRunnerType.CI)){
 				String path = "smb://10.1.0.111/automationConfig/"

@@ -4,6 +4,8 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import services.TextService;
+
 public class StudentTest {
 
 	String userId;
@@ -64,5 +66,16 @@ public class StudentTest {
 				this.courseId, this.grade, this.lastUpdate.toString("yyyy-MM-dd HH:mm:ss.S"), this.avarage,
 				this.timesTaken };
 	}
+
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		TextService textService=new TextService();
+		
+		String str=textService.printStringArray(getStringArr());
+		return str;
+	}
+	
+	
 
 }

@@ -1,11 +1,14 @@
 package tests.offline.sync;
 
+import java.io.File;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
 import org.springframework.util.StringUtils;
 
+import Enums.InstallationType;
 import tests.misc.EdusoftBasicTest;
 
 public class CreateTestData extends EdusoftBasicTest {
@@ -40,20 +43,29 @@ public class CreateTestData extends EdusoftBasicTest {
 
 			if (!tempCompId.equals(componentId)) {
 				// new component
-				tempCompId = componentId;
+				try {
+					tempCompId = componentId;
 
-				System.out
-						.println("Create the query and add it to sqlTextForFile");
-				sql = sqlText;
-				sql = sql.replace("%userId%", list.get(i)[15].toString());
-				sql = sql.replace("%unitId%", list.get(i)[11].toString());
-				sql = sql.replace("%compId%", componentId);
-				sql = sql.replace("%marks%", getStringFromMarks(marks));
-				sql = sql.replace("%grade%", String.valueOf(calcGrade(marks)));
+					System.out
+							.println("Create the query and add it to sqlTextForFile");
+					sql = sqlText;
+					sql = sql.replace("%userId%", list.get(i)[15].toString());
+					sql = sql.replace("%unitId%", list.get(i)[11].toString());
+					sql = sql.replace("%compId%", componentId);
+					sql = sql.replace("%marks%", getStringFromMarks(marks));
+					sql = sql.replace("%grade%",
+							String.valueOf(calcGrade(marks)));
 
-				sqlTextForFile.add(sql);
-				System.out.println(sql);
-				marks.clear();
+					sqlTextForFile.add(sql);
+					System.out.println(sql);
+					marks.clear();
+				} catch (ArrayIndexOutOfBoundsException e) {
+					// TODO Auto-generated catch block
+					System.out
+							.println("A field may be missing from the CSV file");
+					testResultService
+							.addFailTest("A field may be missing from the CSV file");
+				}
 
 			} else {
 				// same component
@@ -240,5 +252,56 @@ public class CreateTestData extends EdusoftBasicTest {
 		// }
 		//
 		// return result;
+	}
+
+	public List<String> createProgressForMultipleStudents(
+			InstallationType type, String indstitutionId) throws Exception {
+		String[] students = studentService.getInstitutionStudetns(type,
+				indstitutionId);
+		List<String> spList = new ArrayList<String>();
+		for (int i = 0; i < students.length; i++) {
+			spList.addAll(createProgressSqlRecordsForStudent(students[i]));
+		}
+		return spList;
+	}
+
+	public List<String> createProgressSqlRecordsForStudent(String studentId)
+			throws Exception {
+		List<String> spList = new ArrayList<String>();
+		List<String[]> coursesDetails = textService
+				.getStr2dimArrFromCsv("files/offline/peru/PeruOfflineCoursesUnits.csv");
+		String sqlText = "exec SetProgress @CourseId=%courseId%,@ItemId=%itemId%,@UserId="
+				+ studentId
+
+				+ ",@Last=1,@Seconds=60,@Visited=1,@ComponentTypeId=1";
+		for (int i = 0; i < coursesDetails.size(); i++) {
+			String sqlForAdd = sqlText;
+			sqlForAdd = sqlForAdd.replace("%courseId%",
+					coursesDetails.get(i)[0]);
+			sqlForAdd = sqlForAdd.replace("%itemId%", coursesDetails.get(i)[1]);
+
+			spList.add(sqlForAdd);
+		}
+		return spList;
+
+	}
+
+	@Test
+	public void unitTestcreateProgressSqlRecordsForStudent() throws Exception {
+		String studentId="655054700082";
+		String instId="5231878";
+		String []studentIds=studentService.getInstitutionStudetns(InstallationType.Online, instId);
+		String filePath="files/offline/peru/"+instId+".sql";
+		File file=new File(filePath);
+		//clear file
+				PrintWriter writer = new PrintWriter(file);
+				writer.print("");
+				writer.close();
+		for(int i=0;i<studentIds.length;i++){
+		textService.writeListToCsvFile(filePath,
+				createProgressSqlRecordsForStudent(studentIds[i]),true);
+		}
+		// createProgressForMultipleStudents(InstallationType.Online,
+		// "5231874");
 	}
 }

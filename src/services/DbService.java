@@ -126,7 +126,7 @@ public class DbService extends SystemObjectImpl {
 				+ MAX_DB_TIMEOUT);
 		// db_userid = configuration.getProperty("db.connection.username");
 		// db_password = configuration.getProperty("db.connection.password");
-		System.out.println(sql);
+//		System.out.println(sql);
 		ResultSet rs = null;
 		Statement statement = null;
 		String str = null;
@@ -135,7 +135,7 @@ public class DbService extends SystemObjectImpl {
 		try {
 			Class.forName(SQL_SERVER_DRIVER_CLASS);
 			conn = getConnection();
-			System.out.println("connected");
+//			System.out.println("connected");
 			if (conn.isClosed() == true) {
 				System.out.println("connection is closed");
 			}
@@ -171,7 +171,7 @@ public class DbService extends SystemObjectImpl {
 
 	public List<String[]> getListFromPrepairedStmt(String sql, int columns)
 			throws SQLException {
-		System.out.println(sql);
+//		System.out.println(sql);
 		conn = getConnection();
 		PreparedStatement ps = conn.prepareStatement(sql);
 		ps.executeUpdate(); // do not use execute() here otherwise you may get

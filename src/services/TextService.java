@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -462,8 +463,13 @@ public class TextService extends SystemObjectImpl {
 		String lipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum";
 		return lipsum.substring(0, chars);
 	}
-
+	
 	public void writeListToCsvFile(String path, List<String> list)
+			throws IOException {
+		writeListToCsvFile(path, list,false);
+	}
+
+	public void writeListToCsvFile(String path, List<String> list,boolean append)
 			throws IOException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(baos);
@@ -480,7 +486,8 @@ public class TextService extends SystemObjectImpl {
 		// output.write(bytes);
 
 		File file = new File(path);
-		FileOutputStream outputStream = new FileOutputStream(file);
+		
+		FileOutputStream outputStream = new FileOutputStream(file, append);
 		outputStream.write(bytes);
 
 	}

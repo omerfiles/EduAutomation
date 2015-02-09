@@ -114,7 +114,7 @@ public class TestResultService {
 	public boolean assertEquals(boolean expected, boolean actual, String message)
 			throws Exception {
 		boolean result = true;
-		System.out.println("Asserting " + expected + ". and " + actual + ".");
+//		System.out.println("Asserting " + expected + ". and " + actual + ".");
 		if (expected != actual) {
 			System.out.println(message);
 			addFailTest("Expected boolean was: " + expected

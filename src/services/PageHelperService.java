@@ -440,18 +440,36 @@ public class PageHelperService extends SystemObjectImpl {
 
 	}
 
+	public void addStudentsToMultileClasses(int numOfStudents,
+			String[] classNames,String instId) throws Exception {
+
+		int studentsPerClass = numOfStudents / classNames.length;
+
+		for (int i = 0; i <classNames.length; i++) {
+			for (int j = 0; j < studentsPerClass; j++) {
+				addStudent("student" + dbService.sig(4),classNames[i],instId);
+			}
+
+		}
+	}
+
 	public void addStudent(String studentName) throws Exception {
 		addStudent(studentName, configuration.getProperty("classname"));
 	}
-
+	
 	public void addStudent(String studentName, String className)
+			throws Exception {
+		addStudent(studentName, className,configuration.getProperty("institution.id"));
+	}
+
+	public void addStudent(String studentName, String className,String instId)
 			throws Exception {
 
 		// ************Using API to create the user
 
 		createUserUsingApi(configuration.getProperty("sut.url"), studentName,
 				studentName, studentName, "12345",
-				autoInstitution.getInstitutionId(), className);
+				instId, className);
 	}
 
 	public void createUserUsingApi(String sut, String userName, String fname,

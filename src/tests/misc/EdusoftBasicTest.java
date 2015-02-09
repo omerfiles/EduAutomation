@@ -23,29 +23,31 @@ import services.ExtendedRunner;
 import services.InstitutionService;
 import services.MailService;
 import services.NetService;
+import services.StudentService;
 import services.TestResultService;
 import services.TextService;
 import Enums.TestRunnerType;
 import Objects.AutoInstitution;
+import Objects.GenericTestObject;
 import drivers.GenericWebDriver;
 
 @RunWith(ExtendedRunner.class)
 // @ContextConfiguration(locations={ "applicationContext-test.xml"})
-public class EdusoftBasicTest extends TestCase {
+public class EdusoftBasicTest extends GenericTestObject {
 
 	protected GenericWebDriver webDriver;
 
-	protected TextService textService;
+	
 	protected Configuration configuration;
-	protected DbService dbService;
-	protected NetService netService;
+	
 	protected EraterService eraterService;
 	protected InstitutionService institutionService;
-	protected TestResultService testResultService;
-	protected services.Reporter report;
+	public StudentService studentService;
+	
+//	protected services.Reporter report;
 	protected MailService mailService;
 	// protected static AudioService audioService;
-	public ClassPathXmlApplicationContext ctx;
+//	public ClassPathXmlApplicationContext ctx;
 	protected boolean enableLoggin = false;
 
 	protected String logFilter = null;
@@ -113,8 +115,8 @@ public class EdusoftBasicTest extends TestCase {
 	// public static Reporter report = ListenerstManager.getInstance();
 
 	@Before
-	public void setup() throws Exception {
-
+	public void setup()throws Exception  {
+		super.setup();
 		testCaseId = System.getProperty("testCaseId");
 		testCaseName = testName.getMethodName();
 		// System.out.println("Test case name:" + testCaseName);
@@ -123,19 +125,18 @@ public class EdusoftBasicTest extends TestCase {
 		System.out.println("url from maven command line: "
 				+ System.getProperty("URL"));
 
-		ctx = new ClassPathXmlApplicationContext("beans.xml");
+//		ctx = new ClassPathXmlApplicationContext("beans.xml");
 		configuration = (Configuration) ctx.getBean("configuration");
 		// webDriver=(GenericWebDriver)ctx.getBean("GenericWebDriver");
 
-		textService = (TextService) ctx.getBean("TextSerivce");
-		dbService = (DbService) ctx.getBean("DbService");
+		
 
 		eraterService = (EraterService) ctx.getBean("EraterService");
 		institutionService = (InstitutionService) ctx
 				.getBean("InstitutionService");
-		testResultService = (TestResultService) ctx
-				.getBean("testResultService");
-		report = (services.Reporter) ctx.getBean("Reporter");
+		studentService = (StudentService) ctx.getBean("StudentService");
+		
+//		report = (services.Reporter) ctx.getBean("Reporter");
 		mailService = (MailService) ctx.getBean("MailService");
 		// report.init();
 		netService = (NetService) ctx.getBean("NetService");

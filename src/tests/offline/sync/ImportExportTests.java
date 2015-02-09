@@ -42,9 +42,9 @@ public class ImportExportTests extends EdusoftWebTest {
 		onlineProgressCsvPathBeforeSync = "files/temp/onlineProgress" + ".csv";
 
 		onlineStudents = studentService.getInstitutionStudetns(
-				InstallationType.Online, "5231874");
+				InstallationType.Online, "5231878");
 		offlineStudents = studentService.getInstitutionStudetns(
-				InstallationType.Offline, "5231874");
+				InstallationType.Offline, "5231878");
 
 	}
 
@@ -133,86 +133,159 @@ public class ImportExportTests extends EdusoftWebTest {
 		// in offline
 
 		// ///**** checking progress
+		boolean offlineProgressFound = false;
 		for (int i = 0; i < offlineProgress.size(); i++) {
 
-			StudentProgress offlineStudentProgress = new StudentProgress(
-					offlineProgress.get(i).getUserId(), offlineProgress.get(i)
-							.getCourseId(), offlineProgress.get(i).getItemId(),
-					offlineProgress.get(i).getLastUpdate());
-			innerloop: for (int j = 0; j < onlineProgress.size(); j++) {
-
-				StudentProgress onlineStudentProgress = new StudentProgress(
-						onlineProgress.get(i).getUserId(), onlineProgress
-								.get(i).getCourseId(), onlineProgress.get(i)
-								.getItemId(), onlineProgress.get(i)
+			try {
+				StudentProgress offlineStudentProgress = new StudentProgress(
+						offlineProgress.get(i).getUserId(), offlineProgress
+								.get(i).getCourseId(), offlineProgress.get(i)
+								.getItemId(), offlineProgress.get(i)
 								.getLastUpdate());
+				innerloop: for (int j = 0; j < onlineProgress.size(); j++) {
 
-				// check that offline progress exist in online after sync
-				if (offlineStudentProgress.getUserId().equals(
-						onlineStudentProgress.getUserId())
-						&& offlineStudentProgress.getCourseId().equals(
-								onlineStudentProgress.getCourseId())
-						&& offlineStudentProgress.getItemId().equals(
-								onlineStudentProgress.getItemId())) {
-					System.out.println("progress found in online DB: "
-							+ offlineStudentProgress.getStringArr());
+					StudentProgress onlineStudentProgress = new StudentProgress(
+							onlineProgress.get(j).getUserId(), onlineProgress
+									.get(j).getCourseId(), onlineProgress
+									.get(j).getItemId(), onlineProgress.get(j)
+									.getLastUpdate());
 
-					DateTime offlineLastUpdate = getLastUpdateFromProgressList(
-							offlineStudentProgress.getUserId(),
-							offlineStudentProgress.getCourseId(),
-							offlineStudentProgress.getItemId(),
-							offlineProgressFromCsvFile);
+					// check that offline progress exist in online after sync
+					// if (offlineStudentProgress.getUserId().equals(
+					// onlineStudentProgress.getUserId())
+					// && offlineStudentProgress.getCourseId().equals(
+					// onlineStudentProgress.getCourseId())
+					// && offlineStudentProgress.getItemId().equals(
+					// onlineStudentProgress.getItemId())) {
 
-					DateTime onlineLastUpdate = getLastUpdateFromProgressList(
-							offlineStudentProgress.getUserId(),
-							offlineStudentProgress.getCourseId(),
-							offlineStudentProgress.getItemId(),
-							onlineeProgressFromCsvFile);
+					// System.out.println("offline progress user id: "+offlineStudentProgress.getUserId());
+					report.report("offline progress details: "
+							+ offlineStudentProgress.getUserId() + " "
+							+ offlineStudentProgress.getCourseId() + " "
+							+ offlineStudentProgress.getItemId());
+					report.report("online progress user id: "
+							+ onlineStudentProgress.getUserId() + " "
+							+ onlineStudentProgress.getCourseId() + " "
+							+ onlineStudentProgress.getItemId());
+					// System.out.println("online progress user id: "+onlineStudentProgress.getUserId());
+					if (offlineStudentProgress.getUserId().equals(
+							onlineStudentProgress.getUserId())) {
 
-					if (offlineLastUpdate.isAfter(onlineLastUpdate)) {
-						// offline progress is laests
-						testResultService.assertEquals(
-								true,
-								offlineStudentProgress.getLastUpdate().equals(
-										offlineLastUpdate));
+						if (offlineStudentProgress.getCourseId().equals(
+								onlineStudentProgress.getCourseId())) {
+							if (offlineStudentProgress.getItemId().equals(
+									onlineStudentProgress.getItemId())) {
 
-						testResultService.assertEquals(
-								true,
-								offlineStudentProgress.getLastUpdate().equals(
-										onlineStudentProgress.getLastUpdate()));
+								// all parameter matches
+								// System.out
+								// .println("progress found in online DB: "
+								// + offlineStudentProgress
+								// .getStringArr());
 
-					} else {
-						// online progress is latest
-						testResultService
-								.assertEquals(
-										true,
-										offlineStudentProgress.getLastUpdate()
-												.equals(onlineLastUpdate),
-										"Online lastupdate is not the latest: "
-												+ offlineStudentProgress
-														.getStringArr());
-						testResultService
-								.assertEquals(
-										true,
-										offlineStudentProgress.getLastUpdate()
-												.equals(onlineStudentProgress
-														.getLastUpdate()),
-										"online and offline last update do not match. online progress: "
-												+ onlineStudentProgress
-														.getStringArr()
-												+ ". offline progress: "
-												+ offlineStudentProgress
-														.getStringArr());
+								DateTime offlineLastUpdate = getLastUpdateFromProgressList(
+										offlineStudentProgress.getUserId(),
+										offlineStudentProgress.getCourseId(),
+										offlineStudentProgress.getItemId(),
+										offlineProgressFromCsvFile);
+
+								DateTime onlineLastUpdate = getLastUpdateFromProgressList(
+										offlineStudentProgress.getUserId(),
+										offlineStudentProgress.getCourseId(),
+										offlineStudentProgress.getItemId(),
+										onlineeProgressFromCsvFile);
+
+								if (offlineLastUpdate.getDayOfYear() > onlineLastUpdate
+										.getDayOfYear()) {
+									// offline progress is laests
+									testResultService
+											.assertEquals(
+													true,
+													onlineStudentProgress
+															.getLastUpdate()
+															.getDayOfYear() == offlineStudentProgress
+															.getLastUpdate()
+															.getDayOfYear(),
+													"offline and online last update do not match. online details: "
+															+ onlineStudentProgress
+																	.toString()
+															+ ", offline details: "
+															+ offlineStudentProgress
+																	.toString());
+
+									testResultService
+											.assertEquals(
+													true,
+													offlineLastUpdate
+															.getDayOfYear() == onlineStudentProgress
+															.getLastUpdate()
+															.getDayOfYear(),
+													"Online and offline progress last update do match to the latest last update (in online) . online details are: "
+															+ onlineStudentProgress
+																	.toString()
+															+ " ,offline details are; "
+															+ offlineStudentProgress
+																	.toString());
+
+								} else if (offlineLastUpdate.getDayOfYear() < onlineLastUpdate
+										.getDayOfYear()) {
+									// online progress is latest
+									testResultService
+											.assertEquals(
+													true,
+													offlineStudentProgress
+															.getLastUpdate()
+															.getDayOfYear() == onlineLastUpdate
+															.getDayOfYear(),
+													"Online lastupdate is not the latest: "
+															+ offlineStudentProgress
+																	.toString());
+									testResultService
+											.assertEquals(
+													true,
+													offlineStudentProgress
+															.getLastUpdate()
+															.equals(onlineStudentProgress
+																	.getLastUpdate()),
+													"online and offline last update do not match. online progress: "
+															+ onlineStudentProgress
+																	.toString()
+															+ ". offline progress: "
+															+ offlineStudentProgress
+																	.toString());
+								} else {
+									// online and offline last update are in the
+									// same day
+									testResultService
+											.assertEquals(
+													true,
+													offlineStudentProgress
+															.getLastUpdate()
+															.getDayOfYear() == onlineStudentProgress
+															.getLastUpdate()
+															.getDayOfYear(),
+													"online and offline last update do not match. online progress: ");
+
+								}
+								offlineProgressFound = true;
+								report.report("progress founnd");
+								break innerloop;
+
+							}
+						}
+
 					}
+					// move to next offline progress
+					// check that lastupdate is latests
 
-					break innerloop;
-				} else {
-					System.out
-							.println("Offline progress not found. progress not found:"
-									+ offlineStudentProgress.toString());
 				}
-				// check that lastupdate is latests
-
+				if (offlineProgressFound == false) {
+					// System.out.println("Offilne progress not found: "
+					// + offlineStudentProgress.toString());
+					report.report("progress not founnd");
+				}
+			} catch (OutOfMemoryError e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 
 		}
@@ -231,6 +304,7 @@ public class ImportExportTests extends EdusoftWebTest {
 
 		// 4.1.1 check that new tests are added
 		System.out.println("Iterate on offline tests");
+		boolean offlineTestFound = false;
 		// //************** checking tests **********************
 		for (int i = 0; i < offlineTests.size(); i++) {
 			// check if new test in online
@@ -262,9 +336,10 @@ public class ImportExportTests extends EdusoftWebTest {
 					int onlineGrade = Integer.parseInt(onlineTest.getGrade());
 					int offlineGrade = Integer.parseInt(offlineTest.getGrade());
 					testResultService.assertEquals(onlineGrade, offlineGrade,
-							"Grade do not match for course/compId: "
-									+ onlineTest.getCourseId() + " "
-									+ onlineTest.getComponentSubComponentId());
+							"Grade do not match Online test details are : "
+									+ onlineTest.toString()
+									+ ", offline test details are; "
+									+ offlineTest.toString());
 					// 4.1.2.1 - get highest score
 					int OfflineGradeFromDbBeforeSync = Integer
 							.valueOf(GetGradeFromList(offlineTest.getUserId(),
@@ -305,7 +380,11 @@ public class ImportExportTests extends EdusoftWebTest {
 										onlineTest.getLastUpdate())
 										&& offlineTest.getLastUpdate().equals(
 												lastUpdateFromOffline
-														.toString()));
+														.toString()),
+								"Last update in offline and online test do not match. online test details: "
+										+ onlineTest.toString()
+										+ ", offline test details: "
+										+ offlineTest.toString());
 					}
 
 					// 4.1.4 recalculate average
@@ -318,16 +397,6 @@ public class ImportExportTests extends EdusoftWebTest {
 							onlineTest.getUserId(), onlineTest.getCourseId(),
 							onlineTest.getComponentSubComponentId(),
 							onlineTestsFromCsvFile);
-
-					double expectedAverage = (offlineAverage + onlineAverage) / 2;
-
-					double offlineDbTestAvrage = Double.parseDouble(offlineTest
-							.getAvarage());
-					double onlineDbTestAvrage = Double.parseDouble(onlineTest
-							.getAvarage());
-
-					testResultService.assertEquals(true,
-							expectedAverage == onlineDbTestAvrage);
 
 					// double expectedAverage=
 
@@ -344,22 +413,48 @@ public class ImportExportTests extends EdusoftWebTest {
 					int expectedTimesTaken = offlineTimesTaken
 							+ onlineTimesTaken;
 
-					testResultService
-							.assertEquals(true, offlineTest.getTimesTaken()
-									.equals(onlineTest.getTimesTaken()));
+					// Assert times taken
+					testResultService.assertEquals(expectedTimesTaken,
+							Integer.valueOf(offlineTest.getTimesTaken()),
+							"offline times taked do not match expected");
+
+					// check average
+					double expectedAverage = ((offlineAverage * offlineTimesTaken) + (onlineAverage * onlineTimesTaken))
+							/ (offlineTimesTaken + onlineTimesTaken);
+
+					double offlineDbTestAvrage = Double.parseDouble(offlineTest
+							.getAvarage());
+					double onlineDbTestAvrage = Double.parseDouble(onlineTest
+							.getAvarage());
+
+					testResultService.assertEquals(true,
+							expectedAverage == offlineDbTestAvrage,
+							" online average do not match. expected:"
+									+ expectedAverage + ",actual is : "
+									+ onlineDbTestAvrage);
+
 					testResultService.assertEquals(
 							true,
 							offlineTest.getTimesTaken().equals(
-									String.valueOf(expectedTimesTaken)));
+									onlineTest.getTimesTaken()),
+							"Times taken do not match. offline is: "
+									+ offlineTest.getTimesTaken()
+									+ " and online is: "
+									+ onlineTest.getTimesTaken());
+					// testResultService.assertEquals(
+					// true,
+					// offlineTest.getTimesTaken().equals(
+					// String.valueOf(expectedTimesTaken)));
+					offlineTestFound = true;
 
 					break innerloop2;
 
-				} else {
-					System.out.println("Test not found"
-							+ offlineTest.getStringArr());
 				}
 			}
-
+			if (offlineTestFound == false) {
+				testResultService.addFailTest("Test not found: "
+						+ offlineTest.toString());
+			}
 		}
 
 	}
@@ -389,9 +484,14 @@ public class ImportExportTests extends EdusoftWebTest {
 			if (courseId.equals(list.get(i).getCourseId())
 					&& itemId.equals(list.get(i).getItemId())) {
 
+				// DateTimeFormatter formatter = DateTimeFormat
+				// .forPattern("yyyy-MM-dd HH:mm:ss.S");
+
 				DateTimeFormatter formatter = DateTimeFormat
-						.forPattern("yyyy-MM-dd HH:mm:ss.S");
+						.forPattern("yyyy-MM-dd");
+
 				DateTime dt = (list.get(i).getLastUpdate());
+
 				dateTime = dt;
 				break;
 			}
@@ -423,7 +523,12 @@ public class ImportExportTests extends EdusoftWebTest {
 		for (int i = 0; i < list.size(); i++) {
 			if (courseId.equals(list.get(i).getCourseId())
 					&& compId.equals(list.get(i).getComponentSubComponentId())) {
-				average = Double.valueOf(list.get(i).getAvarage());
+				if (list.get(i).getAvarage().equals("")) {
+					average = 0.0;
+				} else {
+					average = Double.valueOf(list.get(i).getAvarage());
+				}
+
 				break;
 			}
 		}

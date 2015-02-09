@@ -1,10 +1,12 @@
 package services;
 
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+
+import junit.framework.TestCase;
 import Enums.TestRunnerType;
+import Objects.GenericTestObject;
 
-public abstract class GenericService {
+public abstract class GenericService extends GenericTestObject {
 	
 	
 	

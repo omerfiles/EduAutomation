@@ -27,7 +27,7 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 	protected GenericWebDriver webDriver;
 	public PageHelperService pageHelper;
 	public AudioService audioService;
-	public StudentService studentService;
+	
 
 	String browser = null;
 
@@ -75,7 +75,7 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 		pageHelper = (PageHelperService) ctx.getBean("PageHelperService");
 		pageHelper.init(webDriver, autoInstitution, testResultService);
 		audioService = (AudioService) ctx.getBean("AudioService");
-		studentService = (StudentService) ctx.getBean("StudentService");
+		
 
 		setEnableLoggin(true);
 		testResultService.setWebDriver(webDriver);
