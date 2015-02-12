@@ -728,7 +728,7 @@ public abstract class GenericWebDriver extends GenericService {
 				String sFileName = "scr_" + dbService.sig(8)
 						+ message.replace(" ", "") + ".png";
 				SmbFile smbFile = new SmbFile(
-						"smb://10.1.0.83/automationScreenshots/" + sFileName,
+						"smb://"+configuration.getLogerver()+"/automationScreenshots/" + sFileName,
 						netService.getAuth());
 				SmbFileOutputStream smbFileOutputStream = new SmbFileOutputStream(
 						smbFile);
@@ -1192,7 +1192,8 @@ public abstract class GenericWebDriver extends GenericService {
 			// SmbFile sFile = new SmbFile(tempCsvFile);
 			// textService.writeArrayistToCSVFile(tempCsvFile, logList);
 			NtlmPasswordAuthentication auto = netService.getAuth();
-			String path = "smb://10.1.0.83/automationLogs/consoleLog"
+			
+			String path = "smb://"+configuration.getLogerver()+"/automationLogs/consoleLog"
 					+ dbService.sig() + ".csv";
 			textService.writeListToSmbFile(path, logList, netService.getAuth());
 

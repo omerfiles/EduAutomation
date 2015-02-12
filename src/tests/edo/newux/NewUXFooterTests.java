@@ -14,5 +14,14 @@ public class NewUXFooterTests extends BasicNewUxTest {
 		
 		testResultService.assertEquals("http://www.edusoftlearning.com/", currentUrl,"about site is not displayed");
 	}
+	
+	@Test
+	@TestCaseParams(testCaseID = { "18443" })
+	public void testFooterPrivacyStatement()throws Exception{
+		newUxHomePage.clickOnPrivacyStatement();
+		String title=newUxHomePage.getOcModalTitleText();
+		System.out.println(title);
+		
+	}
 
 }
