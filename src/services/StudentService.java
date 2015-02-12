@@ -26,7 +26,7 @@ public class StudentService extends GenericService {
 
 	@Autowired
 	TextService textService;
-	
+
 	@Autowired
 	Configuration configuration;
 
@@ -97,21 +97,24 @@ public class StudentService extends GenericService {
 		}
 		return list;
 	}
-	
-	public List<StudentProgress> getMultipleStudentsProgress(String[] studentIds, InstallationType type) throws Exception{
-		return getMultipleStudentsProgress(studentIds, type, configuration.getProperty("institution.id"));
-	}
-			
 
 	public List<StudentProgress> getMultipleStudentsProgress(
-			String[] studentIds, InstallationType type,String institutionId) throws Exception {
+			String[] studentIds, InstallationType type) throws Exception {
+		return getMultipleStudentsProgress(studentIds, type,
+				configuration.getProperty("institution.id"));
+	}
+
+	public List<StudentProgress> getMultipleStudentsProgress(
+			String[] studentIds, InstallationType type, String institutionId)
+			throws Exception {
 		List<StudentProgress> list = new ArrayList<StudentProgress>();
 		for (int i = 0; i < studentIds.length; i++) {
-			List<StudentProgress>studentProgress=getStudentProgress(studentIds[i], type,institutionId);
-			if(studentProgress.size()>0){
+			List<StudentProgress> studentProgress = getStudentProgress(
+					studentIds[i], type, institutionId);
+			if (studentProgress.size() > 0) {
 				list.addAll(studentProgress);
 			}
-			
+
 		}
 		return list;
 	}
@@ -157,7 +160,7 @@ public class StudentService extends GenericService {
 	}
 
 	public List<StudentProgress> getStudentProgress(String studentId,
-			InstallationType type,String institutionId) throws Exception {
+			InstallationType type, String institutionId) throws Exception {
 		List<StudentProgress> progressList = new ArrayList<StudentProgress>();
 		String sql = SQL_FOR_PROGRESS + studentId;
 		try {
@@ -166,18 +169,18 @@ public class StudentService extends GenericService {
 				sql = sql + " and Synchronized is not null";
 
 			}
-//			if(type==InstallationType.Online){
-//				sql = sql + " and institutionId="+institutionId;
-//			}
+			// if(type==InstallationType.Online){
+			// sql = sql + " and institutionId="+institutionId;
+			// }
 			List<String[]> progressRecords = dbService.getStringListFromQuery(
 					sql, 1, 4);
 			if (progressRecords.size() > 0) {
 				for (int i = 0; i < progressRecords.size(); i++) {
 
-//					System.out.println(progressRecords.get(i)[0]);
-//					System.out.println(progressRecords.get(i)[1]);
-//					System.out.println(progressRecords.get(i)[2]);
-//					System.out.println(progressRecords.get(i)[3]);
+					// System.out.println(progressRecords.get(i)[0]);
+					// System.out.println(progressRecords.get(i)[1]);
+					// System.out.println(progressRecords.get(i)[2]);
+					// System.out.println(progressRecords.get(i)[3]);
 
 					DateTimeFormatter formatter = DateTimeFormat
 							.forPattern("yyyy-MM-dd HH:mm:ss.S");
@@ -269,7 +272,8 @@ public class StudentService extends GenericService {
 		try {
 
 			String sql = "select UserId from users where InstitutionId="
-					+ institutionId;
+					+ institutionId
+					+ " and UserTypeId=1 and FirstName!='Admin'";
 			list = dbService.getStringListFromQuery(sql, 1, 1);
 			str = new String[list.size()];
 			for (int i = 0; i < list.size(); i++) {
@@ -283,10 +287,175 @@ public class StudentService extends GenericService {
 				dbService.setUseOfflineDB(false);
 			}
 		}
-		System.out.println("Num of students="+str.length);
+		System.out.println("Num of students=" + str.length);
 		return str;
 	}
 
+	public int getTestNumOfQuestions(String testId) throws Exception {
+		String csvPath = "files/offline/peru/TestsQuestions.csv";
+		List<String[]> testsList = textService.getStr2dimArrFromCsv(csvPath);
+		int questions = 0;
+		for (int i = 0; i < testsList.size(); i++) {
+			if (testsList.get(i)[0].equals(testId)) {
+				questions++;
+			}
+		}
+		return questions;
+	}
+
+	public List<String> createAndRunProgressSqlRecordsForStudent(
+			String studentId, boolean executeQuery) throws Exception {
+		List<String> spList = new ArrayList<String>();
+		List<String[]> coursesDetails = textService
+				.getStr2dimArrFromCsv("files/offline/peru/PeruOfflineCoursesUnits.csv");
+		String sqlText = "exec SetProgress @CourseId=%courseId%,@ItemId=%itemId%,@UserId="
+				+ studentId
+
+				+ ",@Last=1,@Seconds=60,@Visited=1,@ComponentTypeId=1";
+		for (int i = 0; i < coursesDetails.size(); i++) {
+			String sqlForAdd = sqlText;
+			sqlForAdd = sqlForAdd.replace("%courseId%",
+					coursesDetails.get(i)[0]);
+			sqlForAdd = sqlForAdd.replace("%itemId%", coursesDetails.get(i)[1]);
+			//
+			// spList.add(sqlForAdd);
+			dbService.runStorePrecedure(sqlForAdd, executeQuery);
+
+		}
+		return spList;
+
+	}
+
+	public void createAndRunSetSubmitTestSqlRecordsForStudent(String studentId,
+			boolean offlineDB) throws Exception {
+		List<String[]> coursesDetails = textService
+				.getStr2dimArrFromCsv("files/offline/peru/peruOfflineTests.csv");
+
+		String sql = "exec SubmitTest @UserId="
+				+ studentId
+				+ ",@UnitId=%unitId%,@ComponentId=%compId%,@Grade=%grade%,@Marks='%marks%',@SetId='23277|23278|23279|23280|23281|',@VisitedItems='[1][2][3][4][5]',@TimeOver=0,@UserState=0x7B2261223A5B7B2269436F6465223A22623372706C6F74303031222C22694964223A32333237372C22695479706,@TestTime=3200";
+
+		for (int i = 0; i < coursesDetails.size(); i++) {
+			int grade = dbService.getRandonNumber(0, 100);
+			List<String> marks = generateMarks(getTestNumOfQuestions(coursesDetails
+					.get(i)[1]));
+			String sp = sql;
+			sp = sp.replace("%unitId%", coursesDetails.get(i)[0]);
+			sp = sp.replace("%compId%", coursesDetails.get(i)[1]);
+			sp = sp.replace("%marks%", getStringFromMarks(marks));
+			sp = sp.replace("%grade%", String.valueOf(calcGrade(marks)));
+
+			// System.out.println(sp);
+			dbService.runStorePrecedure(sp, offlineDB);
+		}
+
+	}
+
+	private List<String> generateMarks(int testNumOfQuestions) {
+		// TODO Auto-generated method stub
+		List<String> marks = new ArrayList<String>();
+		for (int i = 0; i < testNumOfQuestions; i++) {
+			marks.add(String.valueOf(dbService.getRandonNumber(0, 100)));
+		}
+		return marks;
+	}
+
+	public String getStringFromMarks(List<String> marks) {
+		String result = "";
+		for (int i = 0; i < marks.size(); i++) {
+			result += marks.get(i) + "|";
+		}
+		// result += "'";
+		return result;
+	}
+
+	public void setProgress(String studentId, String courseId, String itemId)
+			throws Exception {
+		setProgress(studentId, courseId, itemId, InstallationType.Online);
+	}
+
+	public void setProgress(String studentId, String courseId, String itemId,
+			InstallationType type) throws Exception {
+
+		try {
+			if (type == InstallationType.Offline) {
+				dbService.setUseOfflineDB(true);
+			}
+			String sqlText = "exec SetProgress @CourseId=" + courseId
+					+ ",@ItemId=" + itemId + ",@UserId=" + studentId
+					+ ",@Last=1,@Seconds=60,@Visited=1,@ComponentTypeId=1";
+			if (type == InstallationType.Offline) {
+				dbService.setUseOfflineDB(true);
+				dbService.runStorePrecedure(sqlText, true);
+			} else {
+				dbService.runStorePrecedure(sqlText, false);
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			if (type == InstallationType.Offline) {
+				dbService.setUseOfflineDB(false);
+			}
+		}
+	}
+
+	public int calcGrade(List<String> marks) {
+		int counter = marks.size();
+		double sum = 0;
+		for (int i = 0; i < marks.size(); i++) {
+			sum += Double.valueOf(marks.get(i));
+		}
+		double result = sum / counter;
+
+		result = Math.round(result);
+		System.out.println(result);
+		return (int) result;
+		// int result = 0;
+		// switch (counter) {
+		// case 0:
+		// result = 0;
+		// case 1:
+		// result = 20;
+		// case 2:
+		// result = 40;
+		// case 3:
+		// result = 60;
+		// case 4:
+		// result = 80;
+		// case 5:
+		// result = 100;
+		// }
+		//
+		// return result;
+	}
+	public void checkStudentProgress(String studentId, String courseId,
+			String itemId) throws Exception {
+		checkStudentProgress(studentId, courseId, itemId,InstallationType.Online);
+	}
+	
+
+	public void checkStudentProgress(String studentId, String courseId,
+			String itemId,InstallationType installationType) throws Exception {
+		try {
+			if(installationType==InstallationType.Offline){
+				dbService.setUseOfflineDB(true);
+			}
+			String sql = "select progressId from Progress where UserId="+studentId+" and CourseId="+courseId+" and ItemId="+itemId;
+			String result=dbService.getStringFromQuery(sql);
+			
+			assertNotNull(result);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally{
+			if(installationType==InstallationType.Offline){
+				dbService.setUseOfflineDB(false);
+			}
+		}
+	}
 	// public StudentTest
 	// getTestresultByCompSubCompIdCourseIdAndStudentId(String subCompId,
 	// String courseId, String UserId) throws Exception {

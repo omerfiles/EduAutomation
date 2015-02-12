@@ -25,6 +25,7 @@ public class GenericTestObject extends TestCase {
 	@Before
 	public void setup() throws Exception {
 		ctx = new ClassPathXmlApplicationContext("beans.xml");
+		System.out.println(ctx.toString());
 
 		report = (services.Reporter) ctx.getBean("Reporter");
 //		configuration=(Configuration)ctx.getBean("configuration");
@@ -32,6 +33,8 @@ public class GenericTestObject extends TestCase {
 		dbService = (DbService) ctx.getBean("DbService");
 		testResultService = (TestResultService) ctx
 				.getBean("testResultService");
+		
+		System.out.println();
 		
 
 	}

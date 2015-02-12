@@ -418,8 +418,8 @@ public class DbService extends SystemObjectImpl {
 
 	public String getOfflineConnString() {
 		String conString = configuration.getGlobalProperties("offlinedb");
-		conString = conString.replace("%machine%",
-				configuration.getGlobalProperties("offline.ip"));
+//		conString = conString.replace("%machine%",
+//				configuration.getGlobalProperties("offline.ip"));
 		return conString;
 	}
 
@@ -562,14 +562,37 @@ public class DbService extends SystemObjectImpl {
 		return conn;
 	}
 
-	public void runStorePrecedure(String precedureName, String... params)
-			throws SQLException {
-		String SPsql = "EXEC " + precedureName + " ?,?,?"; // for stored proc
-															// taking 2
-															// parameters
-		conn = getConnection();
-		CallableStatement statement = conn.prepareCall(SPsql);
-		// statement.registerOutParameter(0, params[0]);
+//	public void runStorePrecedure(String precedureName, String... params)
+//			throws SQLException {
+//		String SPsql = "EXEC " + precedureName + " ?,?,?"; // for stored proc
+//															// taking 2
+//															// parameters
+//		conn = getConnection();
+//		CallableStatement statement = conn.prepareCall(SPsql);
+//		// statement.registerOutParameter(0, params[0]);
+//	}
+	
+	public void runStorePrecedure(String sp)throws SQLException{
+		runStorePrecedure(sp,false);
+	}
+	
+	public void runStorePrecedure(String sp,boolean executeQuery)throws SQLException{
+		try {
+			conn = getConnection();
+			CallableStatement statement = conn.prepareCall(sp);
+			if(executeQuery==true){
+				//for offline DB
+				statement.executeQuery();
+			}
+			else{
+				statement.executeUpdate();
+			}
+			
+			conn.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public List<String> getUnitNamesByCourse(String courseId) throws Exception {

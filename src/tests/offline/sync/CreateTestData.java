@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.util.StringUtils;
 
@@ -12,8 +13,10 @@ import Enums.InstallationType;
 import tests.misc.EdusoftBasicTest;
 
 public class CreateTestData extends EdusoftBasicTest {
+	
+	
 
-	@Test
+	
 	public void setSubmitTestForOffline() throws Exception {
 		String csvFilePath = "smb://storage//QA//Automation//testData//forOffline//input//submitTest.csv";
 		List<String[]> list = new ArrayList<String[]>();
@@ -52,9 +55,9 @@ public class CreateTestData extends EdusoftBasicTest {
 					sql = sql.replace("%userId%", list.get(i)[15].toString());
 					sql = sql.replace("%unitId%", list.get(i)[11].toString());
 					sql = sql.replace("%compId%", componentId);
-					sql = sql.replace("%marks%", getStringFromMarks(marks));
+					sql = sql.replace("%marks%", studentService.getStringFromMarks(marks));
 					sql = sql.replace("%grade%",
-							String.valueOf(calcGrade(marks)));
+							String.valueOf(studentService.calcGrade(marks)));
 
 					sqlTextForFile.add(sql);
 					System.out.println(sql);
@@ -82,7 +85,7 @@ public class CreateTestData extends EdusoftBasicTest {
 
 	}
 
-	@Test
+	
 	public void setSubmitTestForOnline() throws Exception {
 		String csvFilePath = "smb://storage//QA//Automation//testData//forOnline//input//submitTest.csv";
 		List<String[]> list = new ArrayList<String[]>();
@@ -120,8 +123,8 @@ public class CreateTestData extends EdusoftBasicTest {
 				sql = sql.replace("%userId%", list.get(i)[15].toString());
 				sql = sql.replace("%unitId%", list.get(i)[11].toString());
 				sql = sql.replace("%compId%", componentId);
-				sql = sql.replace("%marks%", getStringFromMarks(marks));
-				sql = sql.replace("%grade%", String.valueOf(calcGrade(marks)));
+				sql = sql.replace("%marks%", studentService.getStringFromMarks(marks));
+				sql = sql.replace("%grade%", String.valueOf(studentService.calcGrade(marks)));
 
 				sqlTextForFile.add(sql);
 				System.out.println(sql);
@@ -142,7 +145,7 @@ public class CreateTestData extends EdusoftBasicTest {
 
 	}
 
-	@Test
+
 	public void setStudentProgressForOffline() throws Exception {
 		// String csvFilePath =
 		// "\\\\storage\\QA\\Automation\\testData\\forOffline\\input\\setProgress.csv";
@@ -180,7 +183,7 @@ public class CreateTestData extends EdusoftBasicTest {
 
 	}
 
-	@Test
+
 	public void setStudentProgressForOnline() throws Exception {
 		String csvFilePath = "smb://storage//QA//Automation//testData//forOnline//input//setProgress.csv";
 		List<String[]> list = new ArrayList<String[]>();
@@ -215,93 +218,127 @@ public class CreateTestData extends EdusoftBasicTest {
 
 	}
 
-	public String getStringFromMarks(List<String> marks) {
-		String result = "'";
-		for (int i = 0; i < marks.size(); i++) {
-			result += marks.get(i) + "|";
-		}
-		result += "'";
-		return result;
-	}
+	
 
-	public int calcGrade(List<String> marks) {
-		int counter = marks.size();
-		double sum = 0;
-		for (int i = 0; i < marks.size(); i++) {
-			sum += Double.valueOf(marks.get(i));
-		}
-		double result = sum / counter;
 
-		result = Math.round(result);
-		System.out.println(result);
-		return (int) result;
-		// int result = 0;
-		// switch (counter) {
-		// case 0:
-		// result = 0;
-		// case 1:
-		// result = 20;
-		// case 2:
-		// result = 40;
-		// case 3:
-		// result = 60;
-		// case 4:
-		// result = 80;
-		// case 5:
-		// result = 100;
-		// }
-		//
-		// return result;
-	}
 
-	public List<String> createProgressForMultipleStudents(
-			InstallationType type, String indstitutionId) throws Exception {
-		String[] students = studentService.getInstitutionStudetns(type,
-				indstitutionId);
-		List<String> spList = new ArrayList<String>();
-		for (int i = 0; i < students.length; i++) {
-			spList.addAll(createProgressSqlRecordsForStudent(students[i]));
-		}
-		return spList;
-	}
+//	public List<String> createProgressForMultipleStudents(
+//			InstallationType type, String isstitutionId) throws Exception {
+//		String[] students = studentService.getInstitutionStudetns(type,
+//				isstitutionId);
+//		List<String> spList = new ArrayList<String>();
+//		for (int i = 0; i < students.length; i++) {
+//			spList.addAll(studentService
+//					.createAndRunProgressSqlRecordsForStudent(students[i]));
+//		}
+//		return spList;
+//	}
 
-	public List<String> createProgressSqlRecordsForStudent(String studentId)
-			throws Exception {
-		List<String> spList = new ArrayList<String>();
-		List<String[]> coursesDetails = textService
-				.getStr2dimArrFromCsv("files/offline/peru/PeruOfflineCoursesUnits.csv");
-		String sqlText = "exec SetProgress @CourseId=%courseId%,@ItemId=%itemId%,@UserId="
-				+ studentId
+	// public List<String> createAndRunProgressSqlRecordsForStudent(
+	// String studentId) throws Exception {
+	// List<String> spList = new ArrayList<String>();
+	// List<String[]> coursesDetails = textService
+	// .getStr2dimArrFromCsv("files/offline/peru/PeruOfflineCoursesUnits.csv");
+	// String sqlText =
+	// "exec SetProgress @CourseId=%courseId%,@ItemId=%itemId%,@UserId="
+	// + studentId
+	//
+	// + ",@Last=1,@Seconds=60,@Visited=1,@ComponentTypeId=1";
+	// for (int i = 0; i < coursesDetails.size(); i++) {
+	// String sqlForAdd = sqlText;
+	// sqlForAdd = sqlForAdd.replace("%courseId%",
+	// coursesDetails.get(i)[0]);
+	// sqlForAdd = sqlForAdd.replace("%itemId%", coursesDetails.get(i)[1]);
+	// //
+	// // spList.add(sqlForAdd);
+	// dbService.runStorePrecedure(sqlForAdd);
+	//
+	// }
+	// return spList;
+	//
+	// }
 
-				+ ",@Last=1,@Seconds=60,@Visited=1,@ComponentTypeId=1";
-		for (int i = 0; i < coursesDetails.size(); i++) {
-			String sqlForAdd = sqlText;
-			sqlForAdd = sqlForAdd.replace("%courseId%",
-					coursesDetails.get(i)[0]);
-			sqlForAdd = sqlForAdd.replace("%itemId%", coursesDetails.get(i)[1]);
+	
 
-			spList.add(sqlForAdd);
-		}
-		return spList;
-
-	}
+	
 
 	@Test
 	public void unitTestcreateProgressSqlRecordsForStudent() throws Exception {
-		String studentId="655054700082";
-		String instId="5231878";
-		String []studentIds=studentService.getInstitutionStudetns(InstallationType.Online, instId);
-		String filePath="files/offline/peru/"+instId+".sql";
-		File file=new File(filePath);
-		//clear file
-				PrintWriter writer = new PrintWriter(file);
-				writer.print("");
-				writer.close();
-		for(int i=0;i<studentIds.length;i++){
-		textService.writeListToCsvFile(filePath,
-				createProgressSqlRecordsForStudent(studentIds[i]),true);
-		}
+		// String studentId="655054700082";
+		// String instId="5231878";
+		// String
+		// []studentIds=studentService.getInstitutionStudetns(InstallationType.Online,
+		// instId);
+		// String filePath="files/offline/peru/"+instId+".sql";
+		// File file=new File(filePath);
+		// //clear file
+		// PrintWriter writer = new PrintWriter(file);
+		// writer.print("");
+		// writer.close();
+		// for(int i=0;i<studentIds.length;i++){
+		// textService.writeListToCsvFile(filePath,
+		// createProgressSqlRecordsForStudent(studentIds[i]),true);
+		// }
 		// createProgressForMultipleStudents(InstallationType.Online,
 		// "5231874");
+		boolean executeQuery;
+		boolean offlineDB=true;
+		
+		if(offlineDB){
+			executeQuery=true;
+		}
+		else{
+			executeQuery=false;
+		}
+		
+		dbService.setUseOfflineDB(offlineDB);
+		
+//		String []students=new String[]{"6550999"};
+		String[]students=studentService.getInstitutionStudetns(InstallationType.Offline, "6550467");
+		dbService.setUseOfflineDB(offlineDB);
+		for(int i=0;i<students.length;i++){
+			studentService.createAndRunProgressSqlRecordsForStudent(students[i],executeQuery);
+		}
+		
+
+	}
+	
+	@Test
+	public void unitTestcreateTestResultsSqlRecordsForStudent() throws Exception {
+		// String studentId="655054700082";
+		// String instId="5231878";
+		// String
+		// []studentIds=studentService.getInstitutionStudetns(InstallationType.Online,
+		// instId);
+		// String filePath="files/offline/peru/"+instId+".sql";
+		// File file=new File(filePath);
+		// //clear file
+		// PrintWriter writer = new PrintWriter(file);
+		// writer.print("");
+		// writer.close();
+		// for(int i=0;i<studentIds.length;i++){
+		// textService.writeListToCsvFile(filePath,
+		// createProgressSqlRecordsForStudent(studentIds[i]),true);
+		// }
+		// createProgressForMultipleStudents(InstallationType.Online,
+		// "5231874");
+		boolean executeQuery;
+		boolean offlineDB=true;
+		
+		if(offlineDB){
+			executeQuery=true;
+		}
+		else{
+			executeQuery=false;
+		}
+		
+//		String []students=new String[]{"655078100084","655078100085"};
+		String[]students=studentService.getInstitutionStudetns(InstallationType.Offline, "6550467");
+		dbService.setUseOfflineDB(true);
+		for(int i=0;i<students.length;i++){
+			studentService.createAndRunSetSubmitTestSqlRecordsForStudent(students[i],executeQuery);
+		}
+		
+
 	}
 }
