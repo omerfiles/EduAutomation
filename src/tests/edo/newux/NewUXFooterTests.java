@@ -23,5 +23,12 @@ public class NewUXFooterTests extends BasicNewUxTest {
 		testResultService.assertEquals("Privacy Statement", title);
 		
 	}
+	
+	@Test
+	@TestCaseParams(testCaseID = { "18448" })
+	public void testFooterLegalNoticePopup()throws Exception{
+		newUxHomePage.clickOnLegalNotice();String title=newUxHomePage.getOcModalTitleText();
+		testResultService.assertEquals("Legal Notice", title);
+	}
 
 }
