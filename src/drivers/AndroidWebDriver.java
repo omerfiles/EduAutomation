@@ -23,7 +23,7 @@ import services.DbService;
 public class AndroidWebDriver extends GenericWebDriver {
 
 	@Override
-	public void init(String remoteUrl, String folderName) throws Exception {
+	public void init(String remoteUrl, boolean useProxy) throws Exception {
 //		System.out.println("remote url in chrome webdriver: " + remoteUrl);
 //		DesiredCapabilities capa = SelendroidCapabilities.android();
 //		SelendroidDriver selendroidDriver  = new SelendroidDriver("http://localhost:5555/wd/hub",capa);

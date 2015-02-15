@@ -38,14 +38,14 @@ public class IEWebDriver extends GenericWebDriver {
 	// and should be created if it is not present. Important: Inside this key,
 	// create a DWORD value named iexplore.exe with the value of 0.
 	@Override
-	public void init(String remoteUrl, String folderName) throws Exception {
+	public void init(String remoteUrl, boolean useProxy) throws Exception {
 //		killAllBrowsersInstances();
 		setTimeout(30);
 		setBrowserName("Internet Exporer");
 		setInitialized(true);
 		dbService = new DbService();
 		reporter.report("Remote url from pom file is: " + remoteUrl);
-		logsFolder = folderName;
+//		logsFolder = folderName;
 		try {
 
 			DesiredCapabilities capabilities = DesiredCapabilities

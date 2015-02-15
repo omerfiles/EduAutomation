@@ -66,7 +66,7 @@ public class SRLoadTest extends tests.edo.speechRecognition.SpeechRecognitionBas
 			driver.init(
 					configuration.getAutomationParam(
 							AutoParams.remoteMachine.toString(), "machine"),
-					null);
+					false);
 			driver.setTimeout(timeOut);
 			webDriverList.add(driver);
 		}
@@ -190,7 +190,7 @@ public class SRLoadTest extends tests.edo.speechRecognition.SpeechRecognitionBas
 		// threadGuard.protect(webDriver.getWebDriver());
 		for (int i = 0; i < numberOfInstances; i++) {
 			ChromeWebDriver driver = new ChromeWebDriver();
-			driver.init(configuration.getProperty("remote.machine"), null);
+			driver.init(configuration.getProperty("remote.machine"), false);
 			webDriverList.add(driver);
 		}
 

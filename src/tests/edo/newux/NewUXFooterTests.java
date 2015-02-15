@@ -20,7 +20,7 @@ public class NewUXFooterTests extends BasicNewUxTest {
 	public void testFooterPrivacyStatement()throws Exception{
 		newUxHomePage.clickOnPrivacyStatement();
 		String title=newUxHomePage.getOcModalTitleText();
-		System.out.println(title);
+		testResultService.assertEquals("Privacy Statement", title);
 		
 	}
 

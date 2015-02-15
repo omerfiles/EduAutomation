@@ -1,7 +1,9 @@
 package drivers;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +14,14 @@ import java.util.concurrent.TimeUnit;
 import jcifs.smb.NtlmPasswordAuthentication;
 import jcifs.smb.SmbFile;
 import jcifs.smb.SmbFileOutputStream;
+import net.lightbody.bmp.core.har.Har;
+import net.lightbody.bmp.proxy.ProxyServer;
 
 import org.apache.http.HttpHost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHttpEntityEnclosingRequest;
 import org.apache.http.util.EntityUtils;
+//import org.browsermob.proxy.ProxyServer;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.openqa.selenium.Alert;
@@ -29,6 +34,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
+import org.openqa.selenium.Proxy;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.UnhandledAlertException;
@@ -82,6 +88,10 @@ public abstract class GenericWebDriver extends GenericService {
 	protected DbService dbService;
 	protected String remoteMachine;
 	protected boolean enableConsoleLog;
+	protected boolean useProxy;
+
+	Proxy proxy;
+	ProxyServer server;
 
 	@Autowired
 	private services.Configuration configuration;
@@ -102,7 +112,10 @@ public abstract class GenericWebDriver extends GenericService {
 
 	// This is your api key, make sure you use it in all your tests.
 
-	abstract public void init(String remoteUrl, String folderName)
+//	abstract public void init(String remoteUrl, String folderName)
+//			throws Exception;
+	
+	abstract public void init(String remoteUrl,boolean startProxy)
 			throws Exception;
 
 	public void init() throws Exception {
@@ -141,7 +154,7 @@ public abstract class GenericWebDriver extends GenericService {
 		setSutSubDomain(configuration.getProperty("institution.name"));
 		setInstitutionName(configuration.getProperty("institution.name"));
 
-		init(remoteMachine, null);
+		init(remoteMachine, false);
 	}
 
 	public String getSutUrl() {
@@ -727,8 +740,9 @@ public abstract class GenericWebDriver extends GenericService {
 				NetService netService = new NetService();
 				String sFileName = "scr_" + dbService.sig(8)
 						+ message.replace(" ", "") + ".png";
-				SmbFile smbFile = new SmbFile(
-						"smb://"+configuration.getLogerver()+"/automationScreenshots/" + sFileName,
+				SmbFile smbFile = new SmbFile("smb://"
+						+ configuration.getLogerver()
+						+ "/automationScreenshots/" + sFileName,
 						netService.getAuth());
 				SmbFileOutputStream smbFileOutputStream = new SmbFileOutputStream(
 						smbFile);
@@ -1192,9 +1206,9 @@ public abstract class GenericWebDriver extends GenericService {
 			// SmbFile sFile = new SmbFile(tempCsvFile);
 			// textService.writeArrayistToCSVFile(tempCsvFile, logList);
 			NtlmPasswordAuthentication auto = netService.getAuth();
-			
-			String path = "smb://"+configuration.getLogerver()+"/automationLogs/consoleLog"
-					+ dbService.sig() + ".csv";
+
+			String path = "smb://" + configuration.getLogerver()
+					+ "/automationLogs/consoleLog" + dbService.sig() + ".csv";
 			textService.writeListToSmbFile(path, logList, netService.getAuth());
 
 			// SmbFileOutputStream outputStream = new
@@ -1427,6 +1441,34 @@ public abstract class GenericWebDriver extends GenericService {
 					}
 
 				});
+	}
+
+	public void startProxyServer() {
+		String PROXY = "localhost:4040";
+		server = new ProxyServer(4040);
+		server.start();
+		proxy = server.seleniumProxy();
+		proxy.setHttpProxy(PROXY).setSslProxy(PROXY);
+
+	}
+
+	public void startProxyLister(String site) {
+		server.newHar(site);
+	}
+
+	public void stopProxyListen() throws IOException {
+		Har har = server.getHar();
+		FileOutputStream fos = new FileOutputStream("files/proxyOutput.txt");
+		har.writeTo(fos);
+		server.stop();
+	}
+
+	public boolean isUseProxy() {
+		return useProxy;
+	}
+
+	public void setUseProxy(boolean useProxy) {
+		this.useProxy = useProxy;
 	}
 
 }

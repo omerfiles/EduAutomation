@@ -12,12 +12,12 @@ import services.DbService;
 public class SafariWebDriver extends GenericWebDriver {
 
 		@Override
-		public void init(String remoteUrl, String folderName) throws Exception {
+		public void init(String remoteUrl, boolean useProxy) throws Exception {
 			setBrowserName("safari");
 			setInitialized(true);
 			dbService = new DbService();
 			reporter.report("Remote url from pom file is: " + remoteUrl);
-			logsFolder = folderName;
+//			logsFolder = folderName;
 			try {
 				if (remoteUrl == null) {
 					// remoteUrl = configuration.getProperty("remote.machine");

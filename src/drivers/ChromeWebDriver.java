@@ -32,16 +32,20 @@ public class ChromeWebDriver extends GenericWebDriver {
 	}
 
 	@Override
-	public void init(String remoteUrl, String folderName) throws Exception {
+	public void init(String remoteUrl, boolean userProxy) throws Exception {
 		System.out.println("remote url in chrome webdriver: " + remoteUrl);
 		setBrowserName("chrome");
 		setInitialized(true);
 		dbService = new DbService();
 		// setRemoteMachine(remoteUrl);
 		DesiredCapabilities capabilities = DesiredCapabilities.chrome();
-		logsFolder = folderName;
+//		logsFolder = folderName;
 		try {
-
+			if(userProxy){
+				startProxyServer();
+				capabilities.setCapability(CapabilityType.PROXY, proxy);
+			}
+			
 			System.out.println("Initializing ChromeWebDriver");
 
 			if (enableConsoleLog == true) {

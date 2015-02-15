@@ -26,14 +26,14 @@ import services.DbService;
 public class FirefoxWebDriver extends GenericWebDriver {
 
 	@Override
-	public void init(String remoteUrl, String folderName) throws Exception {
+	public void init(String remoteUrl, boolean useProxy) throws Exception {
 		this.timeout = 10;
 		setBrowserName("firefox");
 		setInitialized(true);
 		dbService = new DbService();
 		reporter.report("Remote url from pom file is: " + remoteUrl);
 
-		logsFolder = folderName;
+//		logsFolder = folderName;
 		try {
 			if (remoteUrl == null) {
 				// remoteUrl = configuration.getProperty("remote.machine");
