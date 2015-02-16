@@ -112,10 +112,10 @@ public abstract class GenericWebDriver extends GenericService {
 
 	// This is your api key, make sure you use it in all your tests.
 
-//	abstract public void init(String remoteUrl, String folderName)
-//			throws Exception;
-	
-	abstract public void init(String remoteUrl,boolean startProxy)
+	// abstract public void init(String remoteUrl, String folderName)
+	// throws Exception;
+
+	abstract public void init(String remoteUrl, boolean startProxy)
 			throws Exception;
 
 	public void init() throws Exception {
@@ -1469,6 +1469,10 @@ public abstract class GenericWebDriver extends GenericService {
 
 	public void setUseProxy(boolean useProxy) {
 		this.useProxy = useProxy;
+	}
+
+	public List<WebElement> getElementsByXpath(String xpath) throws Exception {
+		return webDriver.findElements(By.xpath(xpath));
 	}
 
 }
