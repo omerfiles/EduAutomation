@@ -1113,6 +1113,7 @@
 							<testClassesDirectory>${project.basedir}/target/classes/</testClassesDirectory>
 							<includes>
 								<include>**/NewUXFooterTests.java</include>
+								<include>**/CustomFooterTests.java</include>
 						
 
 							</includes>
