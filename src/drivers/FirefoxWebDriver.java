@@ -83,6 +83,14 @@ public class FirefoxWebDriver extends GenericWebDriver {
 
 	}
 
+	@Override
+	public void highlightElement(WebElement element) {
+		//do nothing if     fi   refox
+		
+	}
+	
+	
+
 	// }
 
 }
