@@ -126,7 +126,7 @@ public class DbService extends SystemObjectImpl {
 				+ MAX_DB_TIMEOUT);
 		// db_userid = configuration.getProperty("db.connection.username");
 		// db_password = configuration.getProperty("db.connection.password");
-//		System.out.println(sql);
+		// System.out.println(sql);
 		ResultSet rs = null;
 		Statement statement = null;
 		String str = null;
@@ -135,7 +135,7 @@ public class DbService extends SystemObjectImpl {
 		try {
 			Class.forName(SQL_SERVER_DRIVER_CLASS);
 			conn = getConnection();
-//			System.out.println("connected");
+			// System.out.println("connected");
 			if (conn.isClosed() == true) {
 				System.out.println("connection is closed");
 			}
@@ -171,7 +171,7 @@ public class DbService extends SystemObjectImpl {
 
 	public List<String[]> getListFromPrepairedStmt(String sql, int columns)
 			throws SQLException {
-//		System.out.println(sql);
+		// System.out.println(sql);
 		conn = getConnection();
 		PreparedStatement ps = conn.prepareStatement(sql);
 		ps.executeUpdate(); // do not use execute() here otherwise you may get
@@ -418,8 +418,8 @@ public class DbService extends SystemObjectImpl {
 
 	public String getOfflineConnString() {
 		String conString = configuration.getGlobalProperties("offlinedb");
-//		conString = conString.replace("%machine%",
-//				configuration.getGlobalProperties("offline.ip"));
+		// conString = conString.replace("%machine%",
+		// configuration.getGlobalProperties("offline.ip"));
 		return conString;
 	}
 
@@ -562,33 +562,44 @@ public class DbService extends SystemObjectImpl {
 		return conn;
 	}
 
-//	public void runStorePrecedure(String precedureName, String... params)
-//			throws SQLException {
-//		String SPsql = "EXEC " + precedureName + " ?,?,?"; // for stored proc
-//															// taking 2
-//															// parameters
-//		conn = getConnection();
-//		CallableStatement statement = conn.prepareCall(SPsql);
-//		// statement.registerOutParameter(0, params[0]);
-//	}
-	
-	public void runStorePrecedure(String sp)throws SQLException{
-		runStorePrecedure(sp,false);
+	// public void runStorePrecedure(String precedureName, String... params)
+	// throws SQLException {
+	// String SPsql = "EXEC " + precedureName + " ?,?,?"; // for stored proc
+	// // taking 2
+	// // parameters
+	// conn = getConnection();
+	// CallableStatement statement = conn.prepareCall(SPsql);
+	// // statement.registerOutParameter(0, params[0]);
+	// }
+
+	public void runStorePrecedure(String sp) throws SQLException {
+		runStorePrecedure(sp, false, false);
 	}
 	
-	public void runStorePrecedure(String sp,boolean executeQuery)throws SQLException{
+	public void runStorePrecedure(String sp, boolean executeQuery
+			) throws SQLException {
+		runStorePrecedure(sp, executeQuery,false);
+	}
+
+	public void runStorePrecedure(String sp, boolean executeQuery,
+			boolean executeBatch) throws SQLException {
 		try {
 			conn = getConnection();
 			CallableStatement statement = conn.prepareCall(sp);
-			System.out.println("SP was: "+sp);
-			if(executeQuery==true){
-				//for offline DB
-				statement.executeQuery();
+			System.out.println("SP was: " + sp);
+			if (executeBatch == false) {
+				if (executeQuery == true) {
+					// for offline DB
+					statement.executeQuery();
+				} else {
+					statement.executeUpdate();
+				}
+			} else {
+				PreparedStatement ps = conn.prepareStatement(sp);
+				ps.execute();
+				conn.commit();
+				ps.clearBatch();
 			}
-			else{
-				statement.executeUpdate();
-			}
-			
 			conn.close();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

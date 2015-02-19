@@ -264,7 +264,7 @@ public class CreateTestData extends EdusoftBasicTest {
 	
 
 	@Test
-	@TestCaseParams(testCaseID = { "" })
+	@TestCaseParams(testCaseID = { "" },testTimeOut="10000")
 	public void unitTestcreateProgressSqlRecordsForStudent() throws Exception {
 		// String studentId="655054700082";
 		// String instId="5231878";
@@ -334,8 +334,8 @@ public class CreateTestData extends EdusoftBasicTest {
 			executeQuery=false;
 		}
 		
-//		String []students=new String[]{"655025100216"};
-		String[]students=studentService.getInstitutionStudetns(InstallationType.Offline, "6550370");
+		String []students=new String[]{"655069500042"};
+//		String[]students=studentService.getInstitutionStudetns(InstallationType.Offline, "6550370");
 		if(offlineDB){
 			dbService.setUseOfflineDB(true);
 		}
@@ -348,8 +348,22 @@ public class CreateTestData extends EdusoftBasicTest {
 
 	}
 	@Test
-	public void setCourseTestGrades()throws Exception{
-		String studentId="655025100324";
+	public void setCourseTestGradesOffline()throws Exception{
+		String studentId="655069500199";
+		String courseId="3797";
+		String testId="20164";
+		String unitId="22015";
+		String[]grades=new String[]{"0","20","40","60","40"};
+		String []marks=new String[]{"'0|0|0|0|0|0|0|0|'","'100|0|0|0|0|'","'100|0|0|0|100|'","'100|0|100|0|100|'","'100|0|0|0|100|'"};
+		String []testComp=new String[]{"27260","27257","27258","27256","27259"};
+		
+		studentService.createStudenCourseTestGrade(studentId, testId, courseId, unitId, testComp, InstallationType.Offline);
+	}
+	
+	
+	@Test
+	public void setCourseTestGradesOnline()throws Exception{
+		String studentId="655069500199";
 		String courseId="3797";
 		String testId="20164";
 		String unitId="22015";
@@ -361,15 +375,27 @@ public class CreateTestData extends EdusoftBasicTest {
 	}
 	
 	@Test
-	public void setCourseMidTermTestGrades()throws Exception{
-		String studentId="655009100044";
+	public void setCourseMidTermTestGradesOnline()throws Exception{
+		String studentId="655069500196";
 		String courseId="3797";
-		String testId="20144";
+		String testId="20164";
+		String unitId="22014";
+//		String[]grades=new String[]{"0","20","40","60","40"};
+//		String []marks=new String[]{"'0|0|0|0|0|0|0|0|'","'100|0|0|0|0|'","'100|0|0|0|100|'","'100|0|100|0|100|'","'100|0|0|0|100|'"};
+		String []testComp=new String[]{"27251","27252","27253","27254","27255"};
+		
+		studentService.createStudenCourseTestGrade(studentId, testId, courseId, unitId, testComp, InstallationType.Online);
+	}
+	@Test
+	public void setCourseMidTermTestGradesOffline()throws Exception{
+		String studentId="655069500196";
+		String courseId="3797";
+		String testId="20164";
 		String unitId="22014";
 		String[]grades=new String[]{"0","20","40","60","40"};
 		String []marks=new String[]{"'0|0|0|0|0|0|0|0|'","'100|0|0|0|0|'","'100|0|0|0|100|'","'100|0|100|0|100|'","'100|0|0|0|100|'"};
 		String []testComp=new String[]{"27251","27252","27253","27254","27255"};
 		
-		studentService.createStudenCourseTestGrade(studentId, testId, courseId, unitId, testComp, InstallationType.Online);
+		studentService.createStudenCourseTestGrade(studentId, testId, courseId, unitId, testComp, InstallationType.Offline);
 	}
 }

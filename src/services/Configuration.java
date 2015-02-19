@@ -339,7 +339,7 @@ public class Configuration extends GenericService {
 				// System.out.println("got from global properties: " + value);
 				return value;
 			} else {
-				// System.out.println("value "+paramName+" not found");
+				 System.out.println("value "+paramName+" not found");
 				// org.junit.Assert.fail("Auto param value not found. Check properties file or maven CMD param");
 			}
 		} catch (Exception e) {
