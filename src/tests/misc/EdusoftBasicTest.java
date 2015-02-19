@@ -3,8 +3,6 @@ package tests.misc;
 import java.util.concurrent.TimeUnit;
 
 import jsystem.framework.report.Reporter.EnumReportLevel;
-import junit.framework.TestCase;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -14,19 +12,13 @@ import org.junit.rules.TestWatcher;
 import org.junit.rules.Timeout;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
 import services.Configuration;
-import services.DbService;
 import services.EraterService;
 import services.ExtendedRunner;
 import services.InstitutionService;
 import services.MailService;
-import services.MultiBrowserRunner;
 import services.NetService;
 import services.StudentService;
-import services.TestResultService;
-import services.TextService;
 import Enums.Browsers;
 import Enums.TestRunnerType;
 import Objects.AutoInstitution;
