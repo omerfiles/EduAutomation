@@ -17,6 +17,7 @@
 	<bean id="IEWebDriver" class="drivers.IEWebDriver" />
 	<bean id="SafariWebDriver" class="drivers.SafariWebDriver" />
 	<bean id="AndroidWebDriver" class="drivers.AndroidWebDriver" />
+	<bean id="HeadlessBrowser" class="drivers.HeadlessBrowser"/>
 
 	<bean id="PageHelperService" class="services.PageHelperService" />
 

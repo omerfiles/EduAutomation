@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.springframework.util.StringUtils;
 
 import Enums.InstallationType;
+import Interfaces.TestCaseParams;
 import tests.misc.EdusoftBasicTest;
 
 public class CreateTestData extends EdusoftBasicTest {
@@ -263,6 +264,7 @@ public class CreateTestData extends EdusoftBasicTest {
 	
 
 	@Test
+	@TestCaseParams(testCaseID = { "" })
 	public void unitTestcreateProgressSqlRecordsForStudent() throws Exception {
 		// String studentId="655054700082";
 		// String instId="5231878";
@@ -293,8 +295,8 @@ public class CreateTestData extends EdusoftBasicTest {
 		
 		dbService.setUseOfflineDB(offlineDB);
 		
-//		String []students=new String[]{"6550999"};
-		String[]students=studentService.getInstitutionStudetns(InstallationType.Offline, "6550467");
+//		String []students=new String[]{"655025100216"};
+		String[]students=studentService.getInstitutionStudetns(InstallationType.Offline, "6550370");
 		dbService.setUseOfflineDB(offlineDB);
 		for(int i=0;i<students.length;i++){
 			studentService.createAndRunProgressSqlRecordsForStudent(students[i],executeQuery);
@@ -332,13 +334,42 @@ public class CreateTestData extends EdusoftBasicTest {
 			executeQuery=false;
 		}
 		
-//		String []students=new String[]{"655078100084","655078100085"};
-		String[]students=studentService.getInstitutionStudetns(InstallationType.Offline, "6550467");
-		dbService.setUseOfflineDB(true);
+//		String []students=new String[]{"655025100216"};
+		String[]students=studentService.getInstitutionStudetns(InstallationType.Offline, "6550370");
+		if(offlineDB){
+			dbService.setUseOfflineDB(true);
+		}
+		
+		
 		for(int i=0;i<students.length;i++){
 			studentService.createAndRunSetSubmitTestSqlRecordsForStudent(students[i],executeQuery);
 		}
 		
 
+	}
+	@Test
+	public void setCourseTestGrades()throws Exception{
+		String studentId="655025100324";
+		String courseId="3797";
+		String testId="20164";
+		String unitId="22015";
+		String[]grades=new String[]{"0","20","40","60","40"};
+		String []marks=new String[]{"'0|0|0|0|0|0|0|0|'","'100|0|0|0|0|'","'100|0|0|0|100|'","'100|0|100|0|100|'","'100|0|0|0|100|'"};
+		String []testComp=new String[]{"27260","27257","27258","27256","27259"};
+		
+		studentService.createStudenCourseTestGrade(studentId, testId, courseId, unitId, testComp, InstallationType.Online);
+	}
+	
+	@Test
+	public void setCourseMidTermTestGrades()throws Exception{
+		String studentId="655009100044";
+		String courseId="3797";
+		String testId="20144";
+		String unitId="22014";
+		String[]grades=new String[]{"0","20","40","60","40"};
+		String []marks=new String[]{"'0|0|0|0|0|0|0|0|'","'100|0|0|0|0|'","'100|0|0|0|100|'","'100|0|100|0|100|'","'100|0|0|0|100|'"};
+		String []testComp=new String[]{"27251","27252","27253","27254","27255"};
+		
+		studentService.createStudenCourseTestGrade(studentId, testId, courseId, unitId, testComp, InstallationType.Online);
 	}
 }

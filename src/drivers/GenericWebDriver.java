@@ -59,6 +59,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.applitools.eyes.Eyes;
+import com.applitools.eyes.RectangleSize;
 import com.google.common.base.Predicate;
 
 import Enums.AutoParams;
@@ -1333,7 +1334,7 @@ public abstract class GenericWebDriver extends GenericService {
 
 	public void initEyes(String appName, String testName) {
 		try {
-			initEyesTest(appName, testName);
+//			initEyesTest(appName, testName);
 			eyes.setSaveNewTests(true);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -1342,10 +1343,27 @@ public abstract class GenericWebDriver extends GenericService {
 		System.out.println("Eyes init OK");
 		eyesOpen = true;
 	}
+//	public void initEyes(String appName, String testName,
+//			RectangleSize rectangleSize) {
+//		try {
+//			if (rectangleSize == null) {
+//				initEyesTest(appName, testName);
+//			} else {
+//				initEyesTest(appName, testName, rectangleSize);
+//			}
+//
+//			eyes.setSaveNewTests(true);
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		System.out.println("Eyes init OK");
+//		eyesOpen = true;
+//	}
 
-	public void eyesCheckPage(String text) {
-		eyes.checkWindow(text);
-	}
+//	public void eyesCheckPage(String text) {
+//		eyes.checkWindow(text);
+//	}
 
 	public void highlightElement(WebElement element) {
 		JavascriptExecutor js = (JavascriptExecutor) webDriver;
@@ -1415,9 +1433,14 @@ public abstract class GenericWebDriver extends GenericService {
 		}
 	}
 
-	public void initEyesTest(String appName, String testName) {
-		eyes.open(webDriver, appName, testName);
-	}
+//	public void initEyesTest(String appName, String testName) {
+//		eyes.open(webDriver, appName, testName);
+//	}
+//	public void initEyesTest(String appName, String testName,
+//			RectangleSize rectangleSize) {
+//
+//		eyes.open(webDriver, appName, testName, rectangleSize);
+//	}
 
 	public void waitUntilTextIsLoadedInElement(final String xpath)
 			throws Exception {

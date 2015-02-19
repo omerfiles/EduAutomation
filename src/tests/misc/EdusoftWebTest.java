@@ -24,33 +24,43 @@ import drivers.SafariWebDriver;
 
 public class EdusoftWebTest extends EdusoftBasicTest {
 
-	protected GenericWebDriver webDriver;
+//	protected GenericWebDriver webDriver;
 	public PageHelperService pageHelper;
 	public AudioService audioService;
-	
-	String webDriverDefaultTimeOUt="10";
-	
 
-	String browser = null;
+	String webDriverDefaultTimeOUt = "10";
+	
+	public String []testedBrowser=new String[]{"chrome","firefox","IE"};
+
+//	String browser = null;
 
 	@Override
 	public void setup() throws Exception {
 		super.setup();
 		enableLoggin = true;
 
-		browser = configuration.getAutomationParam("browser", "browserCMD");
-
-		if (browser.equals(Browsers.chrome.toString())) {
-			webDriver = (ChromeWebDriver) ctx.getBean("ChromeWebDriver");
-		} else if (browser.equals(Browsers.safari.toString())) {
-			webDriver = (SafariWebDriver) ctx.getBean("SafariWebDriver");
-		} else if (browser.equals(Browsers.IE.toString())) {
-			webDriver = (IEWebDriver) ctx.getBean("IEWebDriver");
-		} else if (browser.equals(Browsers.firefox.toString())) {
-			webDriver = (FirefoxWebDriver) ctx.getBean("FirefoxWebDriver");
-		} else if (browser.equals(Browsers.android.toString())) {
-			webDriver = (AndroidWebDriver) ctx.getBean("AndroidWebDriver");
-		}
+		
+		selectBrowser();
+		
+//		if (System.getProperty("browserParam") == null) {
+//
+//			browser = configuration.getAutomationParam("browser", "browserCMD");
+//		}
+//		else{
+//			browser=System.getProperty("browserParam");
+//		}
+//
+//		if (browser.equals(Browsers.chrome.toString())) {
+//			webDriver = (ChromeWebDriver) ctx.getBean("ChromeWebDriver");
+//		} else if (browser.equals(Browsers.safari.toString())) {
+//			webDriver = (SafariWebDriver) ctx.getBean("SafariWebDriver");
+//		} else if (browser.equals(Browsers.IE.toString())) {
+//			webDriver = (IEWebDriver) ctx.getBean("IEWebDriver");
+//		} else if (browser.equals(Browsers.firefox.toString())) {
+//			webDriver = (FirefoxWebDriver) ctx.getBean("FirefoxWebDriver");
+//		} else if (browser.equals(Browsers.android.toString())) {
+//			webDriver = (AndroidWebDriver) ctx.getBean("AndroidWebDriver");
+//		}
 
 		if (webDriver == null) {
 			testResultService
@@ -62,12 +72,13 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 			webDriver.setEnableConsoleLog(true);
 		}
 		webDriver.init();
-		String timeout = configuration.getAutomationParam(AutoParams.timeout.toString(),
-				"timeOutCMD");
-		if(timeout.equals("")){
-			timeout=webDriverDefaultTimeOUt;
+//		headlessBrowser.init(webDriver.getRemoteMachine(), false);
+		String timeout = configuration.getAutomationParam(
+				AutoParams.timeout.toString(), "timeOutCMD");
+		if (timeout.equals("")) {
+			timeout = webDriverDefaultTimeOUt;
 		}
-		report.report("Default timeout was set to: "+timeout);
+		report.report("Default timeout was set to: " + timeout);
 		webDriver.setTimeout(Integer.valueOf(timeout));
 		webDriver.maximize();
 		try {
@@ -80,7 +91,6 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 		pageHelper = (PageHelperService) ctx.getBean("PageHelperService");
 		pageHelper.init(webDriver, autoInstitution, testResultService);
 		audioService = (AudioService) ctx.getBean("AudioService");
-		
 
 		setEnableLoggin(true);
 		testResultService.setWebDriver(webDriver);
@@ -95,7 +105,7 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 
 			// print console log if browser was chrome
 			if (browser.equals(Browsers.chrome.toString())) {
-//				webDriver.printConsoleLogs("", false);
+				// webDriver.printConsoleLogs("", false);
 			}
 
 			if (testResultService.hasFailedResults()) {

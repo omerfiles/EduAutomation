@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import drivers.GenericWebDriver;
+import drivers.HeadlessBrowser;
 import pageObjects.EdoHomePage;
 import pageObjects.EdoLoginPage;
 import pageObjects.edo.NewUxHomePage;
@@ -53,8 +54,11 @@ public class PageHelperService extends GenericTestObject {
 
 	@Autowired
 	DbService dbService;
+	
+	@Autowired
+	HeadlessBrowser headlessBrowser;
 
-//	TestResultService testResultService;
+	// TestResultService testResultService;
 
 	// @Autowired
 	// AudioService audioService;
@@ -443,13 +447,13 @@ public class PageHelperService extends GenericTestObject {
 	}
 
 	public void addStudentsToMultileClasses(int numOfStudents,
-			String[] classNames,String instId) throws Exception {
+			String[] classNames, String instId) throws Exception {
 
 		int studentsPerClass = numOfStudents / classNames.length;
 
-		for (int i = 0; i <classNames.length; i++) {
+		for (int i = 0; i < classNames.length; i++) {
 			for (int j = 0; j < studentsPerClass; j++) {
-				addStudent("student" + dbService.sig(4),classNames[i],instId);
+				addStudent("student" + dbService.sig(4), classNames[i], instId);
 			}
 
 		}
@@ -458,20 +462,20 @@ public class PageHelperService extends GenericTestObject {
 	public void addStudent(String studentName) throws Exception {
 		addStudent(studentName, configuration.getProperty("classname"));
 	}
-	
+
 	public void addStudent(String studentName, String className)
 			throws Exception {
-		addStudent(studentName, className,configuration.getProperty("institution.id"));
+		addStudent(studentName, className,
+				configuration.getProperty("institution.id"));
 	}
 
-	public void addStudent(String studentName, String className,String instId)
+	public void addStudent(String studentName, String className, String instId)
 			throws Exception {
 
 		// ************Using API to create the user
 
 		createUserUsingApi(configuration.getProperty("sut.url"), studentName,
-				studentName, studentName, "12345",
-				instId, className);
+				studentName, studentName, "12345", instId, className);
 	}
 
 	public void createUserUsingApi(String sut, String userName, String fname,
@@ -535,24 +539,27 @@ public class PageHelperService extends GenericTestObject {
 		System.out.println("Seconds left: " + myDuration.getStandardSeconds());
 		Thread.sleep(myDuration.getMillis() + 60000);
 	}
-	public NewUxHomePage openCILatestUXLink() throws Exception {
-		webDriver.openUrl("http://vstf2013:9010/WebUX");
 
-	String link=	webDriver
+	public NewUxHomePage openCILatestUXLink() throws Exception {
+
+//		HeadlessBrowser headlessBrowser = new HeadlessBrowser();
+		headlessBrowser.init(webDriver.getRemoteMachine(), false);
+
+		headlessBrowser.openUrl("http://vstf2013:9010/WebUX");
+
+		String link = headlessBrowser
 				.waitForElement(
 						"//div[@class='container']//table//tbody//tr[1]//td//div[1]//div//a",
 						ByTypes.xpath).getAttribute("href");
 		webDriver.openUrl(link);
 		return new NewUxHomePage(webDriver, testResultService);
-//		System.out.println("opened");
+		// System.out.println("opened");
 	}
-	
+
 	public NewUxHomePage openCILatestUXLink(String version) throws Exception {
-		
-		webDriver.openUrl("http://ci-srv:9010/WebUX_CI_"+version+"/#/home");
+
+		webDriver.openUrl("http://ci-srv:9010/WebUX_CI_" + version + "/#/home");
 		return new NewUxHomePage(webDriver, testResultService);
-		
-		
-		
+
 	}
 }

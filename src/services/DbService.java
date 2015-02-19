@@ -580,6 +580,7 @@ public class DbService extends SystemObjectImpl {
 		try {
 			conn = getConnection();
 			CallableStatement statement = conn.prepareCall(sp);
+			System.out.println("SP was: "+sp);
 			if(executeQuery==true){
 				//for offline DB
 				statement.executeQuery();

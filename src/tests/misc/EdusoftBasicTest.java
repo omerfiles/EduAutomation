@@ -22,37 +22,46 @@ import services.EraterService;
 import services.ExtendedRunner;
 import services.InstitutionService;
 import services.MailService;
+import services.MultiBrowserRunner;
 import services.NetService;
 import services.StudentService;
 import services.TestResultService;
 import services.TextService;
+import Enums.Browsers;
 import Enums.TestRunnerType;
 import Objects.AutoInstitution;
 import Objects.GenericTestObject;
+import drivers.AndroidWebDriver;
+import drivers.ChromeWebDriver;
+import drivers.FirefoxWebDriver;
 import drivers.GenericWebDriver;
+import drivers.HeadlessBrowser;
+import drivers.IEWebDriver;
+import drivers.SafariWebDriver;
 
 @RunWith(ExtendedRunner.class)
+//@RunWith(MultiBrowserRunner.class)
 // @ContextConfiguration(locations={ "applicationContext-test.xml"})
 public class EdusoftBasicTest extends GenericTestObject {
 
 	protected GenericWebDriver webDriver;
+	protected HeadlessBrowser  headlessBrowser;
 
-	
 	protected Configuration configuration;
-	
+
 	protected EraterService eraterService;
 	protected InstitutionService institutionService;
 	public StudentService studentService;
-	
-//	protected services.Reporter report;
+
+	// protected services.Reporter report;
 	protected MailService mailService;
 	// protected static AudioService audioService;
-//	public ClassPathXmlApplicationContext ctx;
+	// public ClassPathXmlApplicationContext ctx;
 	protected boolean enableLoggin = false;
 
 	protected String logFilter = null;
-	private int testTimeoutInSeconds = 3000;
-
+	private int testTimeoutInMinutes = Integer.parseInt(System.getProperty("testTimeOut")) ;
+//	private int testTimeoutInSeconds=20;
 	protected boolean inStep = false;
 	protected String testCaseId = null;
 	public String testStatus = null;
@@ -66,6 +75,8 @@ public class EdusoftBasicTest extends GenericTestObject {
 	private boolean hasFailures;
 	private String testCaseId1;
 	private String testCaseName;
+
+	String browser = null;
 
 	@Rule
 	public TestWatcher watcher = new TestWatcher() {
@@ -107,16 +118,20 @@ public class EdusoftBasicTest extends GenericTestObject {
 	// @Rule
 	// public Timeout timeout=new Timeout(300000);//5 minutes timeout
 
+	
+	
 	@Rule
 	public final TestRule testTimeOut = Timeout.builder()
-			.withTimeout(testTimeoutInSeconds, TimeUnit.SECONDS)
-			.withLookingForStuckThread(true).build();
+	
+			.withTimeout(testTimeoutInMinutes, TimeUnit.MINUTES)
+			.withLookingForStuckThread(false).build();
 
 	// public static Reporter report = ListenerstManager.getInstance();
 
 	@Before
-	public void setup()throws Exception  {
+	public void setup() throws Exception {
 		super.setup();
+		
 		testCaseId = System.getProperty("testCaseId");
 		testCaseName = testName.getMethodName();
 		// System.out.println("Test case name:" + testCaseName);
@@ -125,21 +140,21 @@ public class EdusoftBasicTest extends GenericTestObject {
 		System.out.println("url from maven command line: "
 				+ System.getProperty("URL"));
 
-//		ctx = new ClassPathXmlApplicationContext("beans.xml");
+		// ctx = new ClassPathXmlApplicationContext("beans.xml");
 		configuration = (Configuration) ctx.getBean("configuration");
 		// webDriver=(GenericWebDriver)ctx.getBean("GenericWebDriver");
-
-		
 
 		eraterService = (EraterService) ctx.getBean("EraterService");
 		institutionService = (InstitutionService) ctx
 				.getBean("InstitutionService");
 		studentService = (StudentService) ctx.getBean("StudentService");
-		
-//		report = (services.Reporter) ctx.getBean("Reporter");
+
+		// report = (services.Reporter) ctx.getBean("Reporter");
 		mailService = (MailService) ctx.getBean("MailService");
 		// report.init();
 		netService = (NetService) ctx.getBean("NetService");
+		
+		headlessBrowser=(HeadlessBrowser)ctx.getBean("HeadlessBrowser");
 		// audioService = (AudioService) ctx.getBean("AudioService");
 		report.writelogger("Test name:" + testCaseName);
 		int institutionId;
@@ -248,7 +263,33 @@ public class EdusoftBasicTest extends GenericTestObject {
 	}
 
 	public void setTestTimeoutInSeconds(int testTimeoutInSeconds) {
-		this.testTimeoutInSeconds = testTimeoutInSeconds;
+		this.testTimeoutInMinutes = testTimeoutInSeconds;
+	}
+	
+	
+
+	public void selectBrowser() {
+
+		if (System.getProperty("browserParam") == null
+				|| System.getProperty("browserParam").equals(
+						Browsers.empty.toString())) {
+
+			browser = configuration.getAutomationParam("browser", "browserCMD");
+		} else {
+			browser = System.getProperty("browserParam");
+		}
+
+		if (browser.equals(Browsers.chrome.toString())) {
+			webDriver = (ChromeWebDriver) ctx.getBean("ChromeWebDriver");
+		} else if (browser.equals(Browsers.safari.toString())) {
+			webDriver = (SafariWebDriver) ctx.getBean("SafariWebDriver");
+		} else if (browser.equals(Browsers.IE.toString())) {
+			webDriver = (IEWebDriver) ctx.getBean("IEWebDriver");
+		} else if (browser.equals(Browsers.firefox.toString())) {
+			webDriver = (FirefoxWebDriver) ctx.getBean("FirefoxWebDriver");
+		} else if (browser.equals(Browsers.android.toString())) {
+			webDriver = (AndroidWebDriver) ctx.getBean("AndroidWebDriver");
+		}
 	}
 
 }

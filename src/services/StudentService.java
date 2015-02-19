@@ -29,6 +29,12 @@ public class StudentService extends GenericService {
 
 	@Autowired
 	Configuration configuration;
+	
+	@Autowired
+	TestResultService testResultService;
+	
+	@Autowired
+	Reporter report;
 
 	public List<StudentObject> getStudentObjectsList(String studentId,
 			InstallationType type, StudentObjectType objectType) {
@@ -273,7 +279,7 @@ public class StudentService extends GenericService {
 
 			String sql = "select UserId from users where InstitutionId="
 					+ institutionId
-					+ " and UserTypeId=1 and FirstName!='Admin'";
+					+ " and UserTypeId=1 and FirstName not in('Admin','st1') ";
 			list = dbService.getStringListFromQuery(sql, 1, 1);
 			str = new String[list.size()];
 			for (int i = 0; i < list.size(); i++) {
@@ -430,31 +436,103 @@ public class StudentService extends GenericService {
 		//
 		// return result;
 	}
-	public void checkStudentProgress(String studentId, String courseId,
-			String itemId) throws Exception {
-		checkStudentProgress(studentId, courseId, itemId,InstallationType.Online);
-	}
-	
 
 	public void checkStudentProgress(String studentId, String courseId,
-			String itemId,InstallationType installationType) throws Exception {
+			String itemId) throws Exception {
+		checkStudentProgress(studentId, courseId, itemId,
+				InstallationType.Online);
+	}
+
+	public void checkStudentProgress(String studentId, String courseId,
+			String itemId, InstallationType installationType) throws Exception {
 		try {
-			if(installationType==InstallationType.Offline){
+			if (installationType == InstallationType.Offline) {
 				dbService.setUseOfflineDB(true);
 			}
-			String sql = "select progressId from Progress where UserId="+studentId+" and CourseId="+courseId+" and ItemId="+itemId;
-			String result=dbService.getStringFromQuery(sql);
-			
+			String sql = "select progressId from Progress where UserId="
+					+ studentId + " and CourseId=" + courseId + " and ItemId="
+					+ itemId;
+			String result = dbService.getStringFromQuery(sql);
+
 			assertNotNull(result);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		finally{
-			if(installationType==InstallationType.Offline){
+		} finally {
+			if (installationType == InstallationType.Offline) {
 				dbService.setUseOfflineDB(false);
 			}
 		}
+	}
+
+	public void createStudenCourseTestGrade(String studentID, String testId,
+			String courseId,String unitId, String[] testComponents,
+			InstallationType installationType) throws Exception {
+
+		boolean useOfflineDB = false;
+		List<String> marks;
+//		if (testComponents.length != grades.length) {
+//			testResultService
+//					.addFailTest(
+//							"test components and grades arrays length is not the same. please check test inputes",
+//							true, false);
+//		}
+
+		if (installationType == InstallationType.Offline) {
+			dbService.setUseOfflineDB(true);
+			useOfflineDB = true;
+		}
+		try {
+
+			report.startLevel("set didTest");
+			String startTestSP = "exec  StartExitTest " + studentID;
+			dbService.runStorePrecedure(startTestSP, true);
+
+			report.startLevel("set StartExitTest");
+			String didTestTSP = "exec  SetDidTest " + studentID;
+			dbService.runStorePrecedure(didTestTSP, true);
+
+			report.startLevel("Submit test and setExitTestGrades for all components");
+			String submitTestSPbase="exec SubmitTest @UserId=%userid%,@UnitId=%unitId%,@ComponentId=%compId%,@Grade=%grade%,@Marks='%marks%',@SetId='61145|61146|61147|61148|61149|61150|61151|61152|',@VisitedItems='',@TimeOver=0,@UserState=0x7B2261223A5B7B2269436F6465223A2262317265616C743031222C22694964223A36313134352C226954797065223A35312C226D223A302C227561223A5B5D7D2C7B2269436F6465223A2262317265616C743032222C22694964223A36313134362C226954797065223A35312C226D223A302C227561223A5B5D7D2C7B2269436F6465223A2262317265616C743033222C22694964223A36313134372C226954797065223A35312C226D223A302C227561223A5B5D7D2C7B2269436F6465223A2262317265616C743034222C22694964223A36313134382C226954797065223A35312C226D223A302C227561223A5B5D7D2C7B2269436F6465223A2262317265616C743035222C22694964223A36313134392C226954797065223A35312C226D223A302C227561223A5B5D7D2C7B2269436F6465223A2262317265616C743036222C22694964223A36313135302C226954797065223A35312C226D223A302C227561223A5B5D7D2C7B2269436F6465223A2262317265616C743037222C22694964223A36313135312C226954797065223A32332C226D223A302C227561223A5B5D7D2C7B2269436F6465223A2262317265616C743038222C22694964223A36313135322C226954797065223A35312C226D223A302C227561223A5B5D7D5D2C226D223A302C2274223A33323030307D,@TestTime=32000";
+			String setExitTestGradeSpbase="exec SetExitTestGrade %userid%,%testId%,%courseId%,%grade%";
+			int avgGrade=0;
+			for(int i=0;i<testComponents.length;i++){
+				marks=generateMarks(5);
+				avgGrade+=calcGrade(marks);
+				String grade=String.valueOf(calcGrade(marks));
+				report.startLevel("prepair and run submit test SP");
+				String submitTestSp=submitTestSPbase;
+				submitTestSp=submitTestSp.replace("%userid%", studentID);
+				submitTestSp=submitTestSp.replace("%unitId%", unitId);
+				submitTestSp=submitTestSp.replace("%grade%", grade);
+				submitTestSp=submitTestSp.replace("%marks%",getStringFromMarks(marks));
+				submitTestSp=submitTestSp.replace("%compId%", testComponents[i]);
+				
+				dbService.runStorePrecedure(submitTestSp, useOfflineDB);
+				
+				report.startLevel("prepair and run SetExitTestGrade SP");
+				String SetExitTestGradeSP=setExitTestGradeSpbase;
+				SetExitTestGradeSP=SetExitTestGradeSP.replace("%userid%", studentID);
+				SetExitTestGradeSP=SetExitTestGradeSP.replace("%testId%", testId);
+				SetExitTestGradeSP=SetExitTestGradeSP.replace("%courseId%", courseId);
+				SetExitTestGradeSP=SetExitTestGradeSP.replace("%grade%", grade);
+				
+				dbService.runStorePrecedure(SetExitTestGradeSP, useOfflineDB);
+				
+				
+				
+			}
+			System.out.println("Expected grade in DB is: "+avgGrade/testComponents.length);
+			
+			
+		} catch (Exception e) {
+
+		} finally {
+			if (installationType == InstallationType.Offline) {
+				dbService.setUseOfflineDB(false);
+			}
+		}
+
 	}
 	// public StudentTest
 	// getTestresultByCompSubCompIdCourseIdAndStudentId(String subCompId,
