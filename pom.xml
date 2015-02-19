@@ -336,12 +336,17 @@
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
-			<version>20090211</version>
+			<version>20140107</version>
 		</dependency>
 		<dependency>
 			<groupId>com.applitools</groupId>
-			<artifactId>eyes-selenium-java</artifactId>
-			<version>RELEASE</version>
+			<artifactId>eyes-sdk-java</artifactId>
+			<version>2.9</version>
+		</dependency>
+		<dependency>
+			<groupId>com.applitools</groupId>
+			<artifactId>eyes-java</artifactId>
+			<version>2.33</version>
 		</dependency>
 
 		<dependency>
@@ -406,6 +411,38 @@
 			<artifactId>browsermob-proxy</artifactId>
 			<version>2.0.0</version>
 		</dependency>
+		<dependency>
+			<groupId>pl.pragmatists</groupId>
+			<artifactId>JUnitParams</artifactId>
+			<version>1.0.4</version>
+			<exclusions>
+				<exclusion>  <!-- declare the exclusion here -->
+					<groupId>Junit</groupId>
+					<artifactId>Junit</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.0-beta1</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpcore</artifactId>
+			<version>4.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.4</version>
+		</dependency>
+
+
+
 
 
 
@@ -1068,8 +1105,8 @@
 			</build>
 
 		</profile>
-		
-			<profile>
+
+		<profile>
 			<activation>
 
 			</activation>
@@ -1114,7 +1151,7 @@
 							<includes>
 								<include>**/NewUXFooterTests.java</include>
 								<include>**/CustomFooterTests.java</include>
-						
+
 
 							</includes>
 
@@ -1188,8 +1225,8 @@
 			</build>
 
 		</profile>
-		
-		
+
+
 		<profile>
 			<activation>
 
