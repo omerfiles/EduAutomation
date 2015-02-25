@@ -708,15 +708,15 @@ public abstract class GenericWebDriver extends GenericService {
 			byte[] decodedScreenshot = org.apache.commons.codec.binary.Base64
 					.decodeBase64(((TakesScreenshot) driver).getScreenshotAs(
 							OutputType.BASE64).getBytes());
-			TestRunnerType runner = getTestRunner();
-
+//			TestRunnerType runner = getTestRunner();
+			TestRunnerType runner = TestRunnerType.CI;
 			// If test is running using jenkins ci
 			if (runner == TestRunnerType.CI) {
 
 				newFileName = configuration.getGlobalProperties("logserver")
 						+ "\\\\"
 						+ configuration.getProperty("screenshotFolder")
-						+ "\\\\ScreenShot" + message.replace(" ", "") + sig
+						+ "\\ScreenShot" + message.replace(" ", "") + sig
 						+ ".png";
 				System.out.println("File path is :" + newFileName);
 
