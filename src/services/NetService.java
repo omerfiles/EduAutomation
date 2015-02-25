@@ -178,26 +178,31 @@ public class NetService extends GenericService {
 			throws Exception {
 		List<String[]> arrList = new ArrayList<String[]>();
 		JSONObject jsonObject = new JSONObject(jsonString);
-		JSONArray jsonArray = jsonObject.getJSONArray(firstArrayName);
-		for (int i = 0; i < jsonArray.length(); i++) {
-			String[] str = new String[names.length];
-			JSONObject detailsObj = jsonArray.getJSONObject(i);
-			JSONArray feedbacks = detailsObj.getJSONArray(secondArrayName);
-			for (int j = 0; j < feedbacks.length(); j++) {
+		try {
+			JSONArray jsonArray = jsonObject.getJSONArray(firstArrayName);
+			for (int i = 0; i < jsonArray.length(); i++) {
+				String[] str = new String[names.length];
+				JSONObject detailsObj = jsonArray.getJSONObject(i);
+				JSONArray feedbacks = detailsObj.getJSONArray(secondArrayName);
+				for (int j = 0; j < feedbacks.length(); j++) {
 
-				JSONObject feedbackObject = feedbacks.getJSONObject(j);
-				str = new String[names.length];
-				for (int y = 0; y < names.length; y++) {
+					JSONObject feedbackObject = feedbacks.getJSONObject(j);
+					str = new String[names.length];
+					for (int y = 0; y < names.length; y++) {
 
-					str[y] = feedbackObject.getString(names[y]);
+						str[y] = feedbackObject.getString(names[y]);
 
-				}
-				if (str[0] != null) {
-					arrList.add(str);
+					}
+					if (str[0] != null) {
+						arrList.add(str);
+					}
+
 				}
 
 			}
-
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 		return arrList;

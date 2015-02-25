@@ -42,37 +42,16 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 		
 		selectBrowser();
 		
-//		if (System.getProperty("browserParam") == null) {
-//
-//			browser = configuration.getAutomationParam("browser", "browserCMD");
-//		}
-//		else{
-//			browser=System.getProperty("browserParam");
-//		}
-//
-//		if (browser.equals(Browsers.chrome.toString())) {
-//			webDriver = (ChromeWebDriver) ctx.getBean("ChromeWebDriver");
-//		} else if (browser.equals(Browsers.safari.toString())) {
-//			webDriver = (SafariWebDriver) ctx.getBean("SafariWebDriver");
-//		} else if (browser.equals(Browsers.IE.toString())) {
-//			webDriver = (IEWebDriver) ctx.getBean("IEWebDriver");
-//		} else if (browser.equals(Browsers.firefox.toString())) {
-//			webDriver = (FirefoxWebDriver) ctx.getBean("FirefoxWebDriver");
-//		} else if (browser.equals(Browsers.android.toString())) {
-//			webDriver = (AndroidWebDriver) ctx.getBean("AndroidWebDriver");
-//		}
 
 		if (webDriver == null) {
 			testResultService
 					.addFailTest("No webdriver found. Please check properties file or pom for webdriver name");
 		}
-		// webDriver.setReporter(report);
 
 		if (enableLoggin == true) {
 			webDriver.setEnableConsoleLog(true);
 		}
 		webDriver.init();
-//		headlessBrowser.init(webDriver.getRemoteMachine(), false);
 		String timeout = configuration.getAutomationParam(
 				AutoParams.timeout.toString(), "timeOutCMD");
 		if (timeout.equals("")) {

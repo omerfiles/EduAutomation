@@ -357,7 +357,7 @@ public class Configuration extends GenericService {
 
 	}
 	public String getLogerver(){
-		String logServer=getGlobalProperties("logServer");
+		String logServer=getGlobalProperties("logserver");
 		logServer=logServer.replace("\\\\", "");
 		return logServer;
 	}
