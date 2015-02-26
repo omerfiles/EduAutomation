@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import drivers.IEWebDriver;
 import Enums.Browsers;
+import Interfaces.TestCaseParams;
 import tests.misc.EdusoftWebTest;
 
 public class WebDriverUnitTests extends EdusoftWebTest {
@@ -20,9 +21,9 @@ public class WebDriverUnitTests extends EdusoftWebTest {
 	}
 
 	@Test
+	@TestCaseParams(testCaseID = { "" },testedBrowser=Browsers.IE)
 	public void testOpenIE() throws Exception {
-		setBrowser(Browsers.IE.toString());
-		super.setup();
+		
 		Assert.assertTrue(webDriver instanceof IEWebDriver);
 
 	}
