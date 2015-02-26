@@ -18,7 +18,7 @@ public class DBUnitTests extends EdusoftBasicTest {
 	@Test
 	public void testGetResultFromQuery()throws Exception
 	{
-		String sql="select UserId from users where username='student6'";
+		String sql="select Top 1 * from Users ";
 		String result=dbService.getStringFromQuery(sql);
 		Assert.assertNotNull(result);
 	}

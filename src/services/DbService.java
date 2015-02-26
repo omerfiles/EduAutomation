@@ -36,7 +36,7 @@ import Objects.Institution;
 import Objects.UserObject;
 
 @Service("DbService")
-public class DbService extends SystemObjectImpl {
+public class DbService extends GenericService {
 
 	private static final String SQL_SERVER_DRIVER_CLASS = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
 	private JdbcTemplate jdbcTemplate;

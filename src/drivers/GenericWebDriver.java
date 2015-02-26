@@ -81,6 +81,8 @@ public abstract class GenericWebDriver extends GenericService {
 	private String sutUrl = null;
 	private String sutSubDomain = null;
 	private String institutionnName = null;
+	
+	private String CIServerName=null;
 
 	protected RemoteWebDriver webDriver;
 	protected int timeout = 10;
@@ -123,31 +125,7 @@ public abstract class GenericWebDriver extends GenericService {
 	public void init() throws Exception {
 		// this.testResultService = testResultService;
 		eyes.setApiKey("tsN45rbyinZ1084MxMVSzumAgD106Qn3MOpBcr101hiyVEpSY110");
-		// String remoteMachine = null;
-
-		// getting remote machine from maven command line
-		// remoteMachine = System.getProperty("machine");
-		// if (remoteMachine != null) {
-		// System.out.println("got remote machine from maven cmd: "+remoteMachine);
-		// }
-		//
-		// // getting remote machine from pom profile while executing tests
-		// using
-		// // maven/Jenkins
-		//
-		// if (remoteMachine == null) {
-		// remoteMachine = configuration.getProperty("remote.machine");
-		// }
-		// if (remoteMachine == null) {
-		// // getting remote machine from pom file
-		// remoteMachine = System.getProperty("remote.machine");
-		// }
-		// if (remoteMachine == null) {
-		// Assert.fail("Remote machine value is null");
-		// }
-		// if (enableConsoleLog == true) {
-		// enableConsoleLog = true;
-		// }
+		
 		textService = new TextService();
 		remoteMachine = configuration.getAutomationParam(
 				AutoParams.remoteMachine.toString(), "machine");
@@ -156,6 +134,8 @@ public abstract class GenericWebDriver extends GenericService {
 		setSutSubDomain(configuration.getProperty("institution.name"));
 		setInstitutionName(configuration.getProperty("institution.name"));
 
+	
+		
 		init(remoteMachine, false);
 	}
 
