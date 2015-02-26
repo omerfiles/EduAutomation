@@ -69,6 +69,9 @@ public class DbService extends GenericService {
 	@Autowired
 	InstitutionService institutionService;
 
+	@Autowired
+	services.Reporter report;
+
 	Connection conn;
 
 	// private static final Logger logger = Logger.getLogger(DbService.class);
