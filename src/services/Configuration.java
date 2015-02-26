@@ -69,7 +69,7 @@ public class Configuration extends GenericService {
 			localPropertiesFile = getAutomationParam(
 					AutoParams.envFile.toString(), "envFileCMD");
 
-			
+			System.out.println("properties file was :"+localPropertiesFile);
 			
 			TestRunnerType runnerType=getTestRunner();
 			
@@ -309,22 +309,17 @@ public class Configuration extends GenericService {
 
 	public String getAutomationParam(String paramName, String mavenCmdParam) {
 		String value = null;
-		System.out.println("Maven cmd param:" + mavenCmdParam);
 		// check in maven command line
 		try {
 			value = System.getProperty(mavenCmdParam);
 			// check in properties file
 			if (value != null) {
-				System.out.println("got param from maven cmd: " + value);
+//				System.out.println("got param from maven cmd: " + value);
 				return value;
 			}
 			// check in properties file
 			value = getProperty(paramName);
 			if (value != null) {
-				// System.out.println("got param from properties file: " +
-				// value);
-				// reporter.startLevel("got param from properties file: " +
-				// value);
 				return value;
 			}
 			// check in pom profile
@@ -343,7 +338,6 @@ public class Configuration extends GenericService {
 				// org.junit.Assert.fail("Auto param value not found. Check properties file or maven CMD param");
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

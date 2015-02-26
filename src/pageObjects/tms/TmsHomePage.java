@@ -245,10 +245,9 @@ public class TmsHomePage extends GenericPage {
 		enterStudentFname(studentName);
 
 		enterStudentLname(studentName);
-		
+
 		enterStudentUserName(studentName);
 
-		
 		webDriver.waitForElement("//input[@value='Add']", ByTypes.xpath)
 				.click();
 		return this;
@@ -261,9 +260,9 @@ public class TmsHomePage extends GenericPage {
 	public void enterStudentLname(String name) throws Exception {
 		webDriver.waitForElement("LastName", ByTypes.name).sendKeys(name);
 	}
-	public void enterStudentUserName(String userName)throws Exception{
-		webDriver.waitForElement("UserName", ByTypes.name)
-		.sendKeys(userName);
+
+	public void enterStudentUserName(String userName) throws Exception {
+		webDriver.waitForElement("UserName", ByTypes.name).sendKeys(userName);
 	}
 
 	public TmsHomePage enterStudentPassword(String userId, String password)
@@ -610,7 +609,9 @@ public class TmsHomePage extends GenericPage {
 	}
 
 	public void clickOnTeacherFeedbackContinueButton() throws Exception {
-		webDriver.waitForElement("Continue", ByTypes.linkText,"Problem finding Continue button in teacher's feedback").click();
+		webDriver.waitForElement("Continue", ByTypes.linkText,
+				"Problem finding Continue button in teacher's feedback")
+				.click();
 	}
 
 	public void clickOnImport() throws Exception {
@@ -867,8 +868,8 @@ public class TmsHomePage extends GenericPage {
 
 	public void clickOnInstitutionDetails(String testSchoolId) throws Exception {
 		webDriver.waitForElement(
-				"//tbody[@id='con']//tr[@id='tr" + testSchoolId + "']//td//a//img",
-				ByTypes.xpath).click();
+				"//tbody[@id='con']//tr[@id='tr" + testSchoolId
+						+ "']//td//a//img", ByTypes.xpath).click();
 
 	}
 
@@ -903,13 +904,34 @@ public class TmsHomePage extends GenericPage {
 	}
 
 	public String getPopupText() {
-		return  webDriver.getAlertText(10);
-		
+		return webDriver.getAlertText(10);
+
 	}
 
 	public void checkPopupText(String string) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
+	public void clickOnSyncStartButton() throws Exception {
+		webDriver.waitForElement("//a[text()='Start']", ByTypes.xpath).click();
+
+	}
+
+	public void clickOnSyncSyncronizeButton() throws Exception {
+		webDriver.waitForElement("//a[text()='Synchronize']", ByTypes.xpath)
+				.click();
+
+	}
+
+	public boolean checkForSyncFile(String institutionId, String sutUrl)
+			throws Exception {
+		// String xpath = "//a[@href='" + sutUrl + "/sync/" + institutionId
+		// + "/output/edo_offline_sync.zip']";
+		// WebElement element = webDriver.waitForElement(xpath, ByTypes.xpath);
+
+		WebElement element = webDriver.waitForElement("edo_offline_sync.zip",
+				ByTypes.linkText);
+		return element.isDisplayed();
+	}
 }

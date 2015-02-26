@@ -19,16 +19,18 @@ import Interfaces.TestCaseParams;
 
 ;
 
-public class ExtendedRunner extends JUnitParamsRunner {
+public class ExtendedRunner extends BlockJUnit4ClassRunner {
 
 	private String testId;
 	String defaultTestTimeOut = "10";
-	private ParameterisedTestClassRunner parameterisedRunner;
+//	private ParameterisedTestClassRunner parameterisedRunner;
+//	private ExtendedParamsTestsClassRunner extendedParamsTestsClassRunner;
 
 	public ExtendedRunner(Class<?> klass)
 			throws org.junit.runners.model.InitializationError {
 		super(klass);
-		parameterisedRunner = new ParameterisedTestClassRunner(getTestClass());
+//		parameterisedRunner = new ParameterisedTestClassRunner(getTestClass());
+//		extendedParamsTestsClassRunner=new ExtendedParamsTestsClassRunner(getTestClass());
 	}
 
 	public String getTestId() {
@@ -92,8 +94,8 @@ public class ExtendedRunner extends JUnitParamsRunner {
 	protected Statement methodBlock(FrameworkMethod method) {
 		// TODO Auto-generated method stub
 
-		TestMethod testMethod = parameterisedRunner.testMethodFor(method);
-		getBrowserParam(testMethod);
+//		TestMethod testMethod = extendedParamsTestsClassRunner.testMethodFor(method);
+//		getBrowserParam(testMethod);
 
 		TestCaseParams params = method.getAnnotation(TestCaseParams.class);
 		if (params != null) {
@@ -135,6 +137,18 @@ public class ExtendedRunner extends JUnitParamsRunner {
 
 		return super.methodBlock(method);
 	}
+	
+	
+	
+
+//	@Override
+//	protected List<FrameworkMethod> computeTestMethods() {
+//		// TODO Auto-generated method stub
+//		 return extendedParamsTestsClassRunner.computeFrameworkMethods();
+//	}
+	
+	
+	
 
 	@Override
 	protected void validatePublicVoidNoArgMethods(
@@ -146,6 +160,15 @@ public class ExtendedRunner extends JUnitParamsRunner {
 //	            eachTestMethod.validatePublicVoidNoArg(isStatic, errors);
 //	        }
 	}
+
+//	@Override
+//	protected List<FrameworkMethod> computeTestMethods() {
+//		// TODO Auto-generated method stub
+////		return super.computeTestMethods();
+//		return extendedParamsTestsClassRunner.computeFrameworkMethods();
+//	}
+	
+	
 }
 
 // }

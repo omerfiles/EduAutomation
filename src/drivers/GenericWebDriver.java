@@ -26,6 +26,7 @@ import org.json.JSONObject;
 import org.junit.Assert;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.InvalidElementStateException;
@@ -708,8 +709,8 @@ public abstract class GenericWebDriver extends GenericService {
 			byte[] decodedScreenshot = org.apache.commons.codec.binary.Base64
 					.decodeBase64(((TakesScreenshot) driver).getScreenshotAs(
 							OutputType.BASE64).getBytes());
-//			TestRunnerType runner = getTestRunner();
-			TestRunnerType runner = TestRunnerType.CI;
+			TestRunnerType runner = getTestRunner();
+//			TestRunnerType runner = TestRunnerType.CI;
 			// If test is running using jenkins ci
 			if (runner == TestRunnerType.CI) {
 
@@ -1496,6 +1497,11 @@ public abstract class GenericWebDriver extends GenericService {
 
 	public List<WebElement> getElementsByXpath(String xpath) throws Exception {
 		return webDriver.findElements(By.xpath(xpath));
+	}
+	public String getBrowserVersion(){
+		Capabilities capabilities=webDriver.getCapabilities();
+		String version=capabilities.getVersion();
+		return version;
 	}
 
 }

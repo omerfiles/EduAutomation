@@ -73,13 +73,15 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 
 		setEnableLoggin(true);
 		testResultService.setWebDriver(webDriver);
+		
+		System.out.println("Browser version is: "+webDriver.getBrowserVersion());
 
 	}
 
 	@After
 	public void tearDown() throws Exception {
 
-		System.out.println("Start of EdusoftWebTest teardown");
+//		System.out.println("Start of EdusoftWebTest teardown");
 		try {
 
 			// print console log if browser was chrome
@@ -98,7 +100,7 @@ public class EdusoftWebTest extends EdusoftBasicTest {
 		} finally {
 			webDriver.quitBrowser();
 		}
-		System.out.println("end of EdusoftWebTest teardown");
+//		System.out.println("end of EdusoftWebTest teardown");
 		super.tearDown();
 	}
 

@@ -541,7 +541,7 @@ public class DbService extends SystemObjectImpl {
 
 	public int getRandonNumber(int min, int max) {
 		Random r = new Random();
-		int i1 = r.nextInt(max - min);
+		int i1 = r.nextInt(max - min + 1) + min;
 		return i1;
 	}
 
@@ -575,10 +575,10 @@ public class DbService extends SystemObjectImpl {
 	public void runStorePrecedure(String sp) throws SQLException {
 		runStorePrecedure(sp, false, false);
 	}
-	
-	public void runStorePrecedure(String sp, boolean executeQuery
-			) throws SQLException {
-		runStorePrecedure(sp, executeQuery,false);
+
+	public void runStorePrecedure(String sp, boolean executeQuery)
+			throws SQLException {
+		runStorePrecedure(sp, executeQuery, false);
 	}
 
 	public void runStorePrecedure(String sp, boolean executeQuery,
@@ -612,5 +612,13 @@ public class DbService extends SystemObjectImpl {
 				+ " order by Sequence";
 
 		return getArrayListFromQuery(sql, 1);
+	}
+
+	public void setInstitutionLastOfflineSyncToNull(String institutionId)
+			throws Exception {
+		String sql = "update Institutions set LastOfflineSync =null where InstitutionId="
+				+ institutionId;
+		runDeleteUpdateSql(sql);
+
 	}
 }

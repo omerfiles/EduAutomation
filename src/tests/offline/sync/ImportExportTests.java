@@ -31,6 +31,8 @@ public class ImportExportTests extends EdusoftWebTest {
 	List<StudentProgress> offlineProgressFromDb;
 	List<StudentProgress> onlineProgressFromDb;
 
+	private String institutionId = "6550231";
+
 	@Before
 	public void setup() throws Exception {
 		super.setup();
@@ -42,9 +44,74 @@ public class ImportExportTests extends EdusoftWebTest {
 		onlineProgressCsvPathBeforeSync = "files/temp/onlineProgress" + ".csv";
 
 		onlineStudents = studentService.getInstitutionStudetns(
-				InstallationType.Online, "5231878");
+				InstallationType.Online, institutionId);
 		offlineStudents = studentService.getInstitutionStudetns(
-				InstallationType.Offline, "5231878");
+				InstallationType.Offline, institutionId);
+
+	}
+
+	@Test
+	public void testCompareOfflineAndOnlineTestResults() throws Exception {
+
+		System.out.println("Tested institution is; " + institutionId);
+		report.report("Get online test results");
+
+		List<StudentTest> onlineTests = studentService
+				.getMultipleStudentsTests(onlineStudents,
+						InstallationType.Online);
+
+		report.report("Get offline test results");
+		List<StudentTest> offlineTests = studentService
+				.getMultipleStudentsTests(offlineStudents,
+						InstallationType.Offline);
+		report.report("Check if lists lengs is the same");
+		if (offlineTests.size() != onlineTests.size()) {
+			testResultService
+					.addFailTest(
+							"offline tests and online tests entries size is not the same",
+							true, false);
+		}
+		report.report("Iterate on offline progree and search for matching entries in Online DB");
+
+
+		outerloop: for (int i = 0; i < offlineTests.size(); i++) {
+			StudentTest offlineTest = offlineTests.get(i);
+			report.report("offline test details are: "+offlineTest.toString());
+			// System.out.println("Offline test details: "
+			// + offlineTest.toString());
+			innerloop: for (int j = 0; j < onlineTests.size(); j++) {
+				StudentTest onlineTest = onlineTests.get(j);
+				if (offlineTest.getComponentSubComponentId().equals(
+						onlineTest.getComponentSubComponentId())
+						&& offlineTest.getUserId().equals(
+								onlineTest.getUserId())) {
+					System.out.println("Tests with same compid found");
+					report.report("Online test details are: "+onlineTest.toString());
+					testResultService.assertEquals(offlineTest.getAvarage(),
+							onlineTest.getAvarage(),
+							"AVG of offline and onlien tests is not the same");
+
+					testResultService
+							.assertEquals(offlineTest.getTimesTaken(),
+									onlineTest.getTimesTaken(),
+									"Times taken of offline and onlien tests is not the same");
+					testResultService
+							.assertEquals(offlineTest.getGrade(),
+									onlineTest.getGrade(),
+									"Grade of offline and onlien tests is not the same");
+
+					testResultService
+							.assertEquals(offlineTest.getLastUpdate()
+									.toString(), onlineTest.getLastUpdate()
+									.toString(),
+									"Last update of offline and onlien tests is not the same");
+
+					break innerloop;
+				}
+
+			}
+
+		}
 
 	}
 

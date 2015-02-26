@@ -325,7 +325,7 @@ public class CreateTestData extends EdusoftBasicTest {
 			executeQuery = false;
 		}
 
-		String[] students = new String[] { "655004100096" };
+		String[] students = new String[] { "655023100059","655023100060","655023100061" };
 		// String[]students=studentService.getInstitutionStudetns(InstallationType.Offline,
 		// "6550370");
 		if (offlineDB) {

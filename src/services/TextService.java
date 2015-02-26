@@ -303,7 +303,7 @@ public class TextService extends SystemObjectImpl {
 		for (int i = 0; i < str.length; i++) {
 			output = output + seperator + str[i];
 		}
-		System.out.println("Strings are:" + output);
+//		System.out.println("Strings are:" + output);
 		report.report("String are:" + output);
 		return output;
 	}

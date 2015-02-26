@@ -25,6 +25,11 @@ public class WebDriverUnitTests extends EdusoftWebTest {
 		Assert.assertTrue(webDriver instanceof IEWebDriver);
 		
 	}
+	
+	@Test
+	public void testTakeScreenShot(){
+		
+	}
 	@After
 	public void tearDown()throws Exception{
 		super.tearDown();

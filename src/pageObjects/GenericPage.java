@@ -6,18 +6,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import Objects.GenericTestObject;
 import services.AudioService;
 import services.Configuration;
 import services.DbService;
 import services.TestResultService;
 import drivers.GenericWebDriver;
 
-public abstract class GenericPage extends SystemObjectImpl {
+public abstract class GenericPage extends GenericTestObject {
 	@Autowired
 	protected GenericWebDriver webDriver;
 	
-	@Autowired
-	protected Configuration configuration;
+//	@Autowired
+//	protected Configuration configuration;
 	
 //	@Autowired
 	protected TestResultService  testResultService;

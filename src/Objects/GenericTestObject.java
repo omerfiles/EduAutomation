@@ -19,14 +19,18 @@ public class GenericTestObject extends TestCase {
 	protected NetService netService;
 	protected TestResultService testResultService;
 	protected TextService textService;
+	protected Configuration configuration;
 
 	public ClassPathXmlApplicationContext ctx;
 
 	@Before
 	public void setup() throws Exception {
 		try {
+			
+			System.out.println("******    Test details and used configuration  **********");
+			
 			ctx = new ClassPathXmlApplicationContext("beans.xml");
-
+			configuration = (Configuration) ctx.getBean("configuration");
 			report = (services.Reporter) ctx.getBean("Reporter");
 			// configuration=(Configuration)ctx.getBean("configuration");
 			textService = (TextService) ctx.getBean("TextSerivce");

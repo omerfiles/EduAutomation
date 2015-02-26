@@ -22,6 +22,7 @@ import drivers.GenericWebDriver;
 import drivers.HeadlessBrowser;
 import pageObjects.EdoHomePage;
 import pageObjects.EdoLoginPage;
+import pageObjects.edo.NewUXLoginPage;
 import pageObjects.edo.NewUxHomePage;
 import pageObjects.tms.TmsHomePage;
 import pageObjects.tms.TmsLoginPage;
@@ -538,6 +539,20 @@ public class PageHelperService extends GenericTestObject {
 				localDateTime.toDateTime());
 		System.out.println("Seconds left: " + myDuration.getStandardSeconds());
 		Thread.sleep(myDuration.getMillis() + 60000);
+	}
+	
+	public NewUXLoginPage openCILatestLoginPage() throws Exception {
+		headlessBrowser.init(webDriver.getRemoteMachine(), false);
+
+		headlessBrowser.openUrl("http://vstf2013:9010/WebUX");
+
+		String link = headlessBrowser
+				.waitForElement(
+						"//div[@class='container']//table//tbody//tr[1]//td//div[1]//div//a",
+						ByTypes.xpath).getAttribute("href");
+		link=link+"/login.html";
+		webDriver.openUrl(link);
+		return new NewUXLoginPage(webDriver, testResultService);
 	}
 
 	public NewUxHomePage openCILatestUXLink() throws Exception {

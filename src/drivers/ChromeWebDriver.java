@@ -8,6 +8,7 @@ import java.util.logging.Level;
 
 import jsystem.framework.report.Reporter;
 
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.logging.LogType;
@@ -46,7 +47,7 @@ public class ChromeWebDriver extends GenericWebDriver {
 				capabilities.setCapability(CapabilityType.PROXY, proxy);
 			}
 			
-			System.out.println("Initializing ChromeWebDriver");
+//			System.out.println("Initializing ChromeWebDriver");
 
 			if (enableConsoleLog == true) {
 				LoggingPreferences logPrefs = new LoggingPreferences();
@@ -61,7 +62,12 @@ public class ChromeWebDriver extends GenericWebDriver {
 			options.addArguments("--start-maximized");
 			options.addArguments("--use-fake-ui-for-media-stream");
 			capabilities.setCapability(ChromeOptions.CAPABILITY, options);
+			
+			
+			
 			webDriver = new RemoteWebDriver(new URL(remoteUrl + "/wd/hub"),
+					
+					
 					capabilities);
 			setPageLoadTimeOut();
 			setScriptLoadTimeOut();
@@ -98,6 +104,8 @@ public class ChromeWebDriver extends GenericWebDriver {
 	public void killAllBrowsersInstances() throws IOException {
 		Runtime.getRuntime().exec("taskkill /im chromedriver.exe /f");
 	}
+	
+	
 	
 
 }

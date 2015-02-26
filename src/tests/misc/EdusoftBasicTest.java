@@ -39,7 +39,7 @@ public class EdusoftBasicTest extends GenericTestObject {
 	protected GenericWebDriver webDriver;
 	protected HeadlessBrowser  headlessBrowser;
 
-	protected Configuration configuration;
+	
 
 	protected EraterService eraterService;
 	protected InstitutionService institutionService;
@@ -129,11 +129,11 @@ public class EdusoftBasicTest extends GenericTestObject {
 		// System.out.println("Test case name:" + testCaseName);
 		// System.out.println("Test case is in edusoftBasicTest:" + testCaseId);
 
-		System.out.println("url from maven command line: "
-				+ System.getProperty("URL"));
+//		System.out.println("url from maven command line: "
+//				+ System.getProperty("URL"));
 
 		// ctx = new ClassPathXmlApplicationContext("beans.xml");
-		configuration = (Configuration) ctx.getBean("configuration");
+		
 		// webDriver=(GenericWebDriver)ctx.getBean("GenericWebDriver");
 
 		eraterService = (EraterService) ctx.getBean("EraterService");
@@ -203,7 +203,7 @@ public class EdusoftBasicTest extends GenericTestObject {
 			testResultService.printAllFailures();
 		}
 
-		System.out.println("test passed?: " + testStatus);
+//		System.out.println("test passed?: " + testStatus);
 		if (testHasFailedResult) {
 			System.out.println("Test failed due to some errors");
 			// Assert.fail("Test failed due to some errors");
