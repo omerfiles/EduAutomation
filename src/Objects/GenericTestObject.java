@@ -3,6 +3,7 @@ package Objects;
 import org.junit.Before;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import Enums.TestRunnerType;
 import services.Configuration;
 import services.DbService;
 import services.NetService;
@@ -22,6 +23,8 @@ public class GenericTestObject extends TestCase {
 	protected Configuration configuration;
 
 	public ClassPathXmlApplicationContext ctx;
+	
+	public TestRunnerType runnerType;
 
 	@Before
 	public void setup() throws Exception {
@@ -43,6 +46,17 @@ public class GenericTestObject extends TestCase {
 					+ e.toString());
 		}
 
+	}
+	
+	public TestRunnerType getTestRunner() {
+		// if test is run in debug/development
+		
+		if (System.getProperty("remote.machine") != null) {
+			runnerType = TestRunnerType.CI;
+		} else if (System.getProperty("remote.machine") == null) {
+			runnerType = TestRunnerType.local;
+		}
+		return runnerType;
 	}
 
 }

@@ -27,16 +27,16 @@ public abstract class GenericService extends GenericTestObject {
 	
 	
 	
-	public TestRunnerType getTestRunner() {
-		// if test is run in debug/development
-		
-		if (System.getProperty("remote.machine") != null) {
-			testRunner = TestRunnerType.CI;
-		} else if (System.getProperty("remote.machine") == null) {
-			testRunner = TestRunnerType.local;
-		}
-		return testRunner;
-	}
+//	public TestRunnerType getTestRunner() {
+//		// if test is run in debug/development
+//		
+//		if (System.getProperty("remote.machine") != null) {
+//			testRunner = TestRunnerType.CI;
+//		} else if (System.getProperty("remote.machine") == null) {
+//			testRunner = TestRunnerType.local;
+//		}
+//		return testRunner;
+//	}
 
 	public void setTestRunner(TestRunnerType testRunner) {
 		this.testRunner = testRunner;
