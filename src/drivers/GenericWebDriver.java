@@ -753,7 +753,7 @@ public abstract class GenericWebDriver extends GenericService {
 				// fos.write(decodedScreenshot);
 				smbFileOutputStream.write(decodedScreenshot);
 				smbFileOutputStream.close();
-				System.out.println("http://jenkins/automationScreenshots/"
+				System.out.println("http://newjenkins/automationScreenshots/"
 						+ sFileName);
 			} else {
 				newFileName = System.getProperty("user.dir") + "/log//current/"
