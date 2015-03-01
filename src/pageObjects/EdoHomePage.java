@@ -63,8 +63,13 @@ public class EdoHomePage extends GenericPage {
 	}
 
 	public EdoHomePage clickOnCourseByName(String courseName) throws Exception {
-		report.report("Clicking on couse: " + courseName);
-		webDriver.waitForElementAndClick(courseName, ByTypes.linkText);
+		try {
+			report.report("Clicking on couse: " + courseName);
+			webDriver.waitForElementAndClick(courseName, ByTypes.linkText);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return this;
 	}
 

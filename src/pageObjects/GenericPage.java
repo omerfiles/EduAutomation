@@ -1,15 +1,11 @@
 package pageObjects;
 
-import jsystem.framework.system.SystemObjectImpl;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import Objects.GenericTestObject;
-import services.AudioService;
-import services.Configuration;
-import services.DbService;
+import services.Reporter;
 import services.TestResultService;
 import drivers.GenericWebDriver;
 
@@ -29,6 +25,8 @@ public abstract class GenericPage extends GenericTestObject {
 //	@Autowired
 //	protected DbService dbService;
 	private String sutUrl=null;
+	
+	Reporter report;
 
 	
 	protected static final Logger logger = LoggerFactory.getLogger(GenericPage.class);
@@ -36,8 +34,11 @@ public abstract class GenericPage extends GenericTestObject {
 	public GenericPage(GenericWebDriver webDriver,TestResultService testResultService){
 		this.webDriver=webDriver;
 		this.testResultService=testResultService;
+		this.report=webDriver.getReporter();
+//		System.out.println(report.toString());
 //		this.dbService=webDriver.getDbService();
 //		textService=new TextService();
+		
 	
 	}
 	public abstract GenericPage waitForPageToLoad()throws Exception;

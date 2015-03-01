@@ -1,5 +1,6 @@
 package drivers;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -10,6 +11,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+
+import javax.imageio.ImageIO;
 
 import jcifs.smb.NtlmPasswordAuthentication;
 import jcifs.smb.SmbFile;
@@ -66,9 +69,13 @@ import com.google.common.base.Predicate;
 import Enums.AutoParams;
 import Enums.ByTypes;
 import Enums.TestRunnerType;
+import ru.yandex.qatools.ashot.AShot;
+import ru.yandex.qatools.ashot.Screenshot;
+import ru.yandex.qatools.ashot.screentaker.ViewportPastingStrategy;
 import services.DbService;
 import services.GenericService;
 import services.NetService;
+import services.Reporter;
 import services.TestResultService;
 import services.TextService;
 import junit.framework.SystemTestCaseImpl;
@@ -81,8 +88,8 @@ public abstract class GenericWebDriver extends GenericService {
 	private String sutUrl = null;
 	private String sutSubDomain = null;
 	private String institutionnName = null;
-	
-	private String CIServerName=null;
+
+	private String CIServerName = null;
 
 	protected RemoteWebDriver webDriver;
 	protected int timeout = 10;
@@ -125,7 +132,7 @@ public abstract class GenericWebDriver extends GenericService {
 	public void init() throws Exception {
 		// this.testResultService = testResultService;
 		eyes.setApiKey("tsN45rbyinZ1084MxMVSzumAgD106Qn3MOpBcr101hiyVEpSY110");
-		
+
 		textService = new TextService();
 		remoteMachine = configuration.getAutomationParam(
 				AutoParams.remoteMachine.toString(), "machine");
@@ -134,8 +141,6 @@ public abstract class GenericWebDriver extends GenericService {
 		setSutSubDomain(configuration.getProperty("institution.name"));
 		setInstitutionName(configuration.getProperty("institution.name"));
 
-	
-		
 		init(remoteMachine, false);
 	}
 
@@ -686,67 +691,19 @@ public abstract class GenericWebDriver extends GenericService {
 		try {
 			WebDriver driver = webDriver;
 			driver = new Augmenter().augment(driver);
-			byte[] decodedScreenshot = org.apache.commons.codec.binary.Base64
-					.decodeBase64(((TakesScreenshot) driver).getScreenshotAs(
-							OutputType.BASE64).getBytes());
+			// byte[] decodedScreenshot = org.apache.commons.codec.binary.Base64
+			// .decodeBase64(((TakesScreenshot) driver).getScreenshotAs(
+			// OutputType.BASE64).getBytes());
+
+			File screenshot = ((TakesScreenshot) driver)
+					.getScreenshotAs(OutputType.FILE);
+			BufferedImage fullImg = ImageIO.read(screenshot);
+
+			saveImage(message, fullImg);
+
 			TestRunnerType runner = getTestRunner();
-//			TestRunnerType runner = TestRunnerType.CI;
+			// TestRunnerType runner = TestRunnerType.CI;
 			// If test is running using jenkins ci
-			if (runner == TestRunnerType.CI) {
-
-				newFileName = configuration.getGlobalProperties("logserver")
-						+ "\\\\"
-						+ configuration.getProperty("screenshotFolder")
-						+ "\\ScreenShot" + message.replace(" ", "") + sig
-						+ ".png";
-				System.out.println("File path is :" + newFileName);
-
-				path = "http://"
-						+ configuration.getGlobalProperties("logserver")
-								.replace("\\", "") + "/"
-						+ configuration.getProperty("screenshotFolder")
-						+ "/ScreenShot" + message.replace(" ", "") + sig
-						+ ".png";
-
-			} else if (runner == TestRunnerType.local) {
-				newFileName = System.getProperty("user.dir") + "/log//current/"
-						+ "ScreenShot" + message.replace(" ", "") + sig
-						+ ".png";
-				path = System.getProperty("user.dir") + "//" + "log//current//"
-						+ "ScreenShot" + message.replace(" ", "") + sig
-						+ ".png";
-			}
-
-			if (runner == TestRunnerType.CI) {
-				// **printscreen using smbFile
-				NetService netService = new NetService();
-				String sFileName = "scr_" + dbService.sig(8)
-						+ message.replace(" ", "") + ".png";
-				SmbFile smbFile = new SmbFile("smb://"
-						+ configuration.getLogerver()
-						+ "/automationScreenshots/" + sFileName,
-						netService.getAuth());
-				SmbFileOutputStream smbFileOutputStream = new SmbFileOutputStream(
-						smbFile);
-				// FileOutputStream fos = new FileOutputStream(new
-				// File(newFileName));
-				// fos.write(decodedScreenshot);
-				smbFileOutputStream.write(decodedScreenshot);
-				smbFileOutputStream.close();
-				System.out.println("http://newjenkins/automationScreenshots/"
-						+ sFileName);
-			} else {
-				newFileName = System.getProperty("user.dir") + "/log//current/"
-						+ "ScreenShot" + message.replace(" ", "") + sig
-						+ ".png";
-				path = System.getProperty("user.dir") + "//" + "log//current//"
-						+ "ScreenShot" + message.replace(" ", "") + sig
-						+ ".png";
-
-				FileOutputStream fos = new FileOutputStream(new File(
-						newFileName));
-				fos.write(decodedScreenshot);
-			}
 
 		} catch (Exception e) {
 			System.out.println("Taking the screenshot failed: " + e.toString());
@@ -1315,7 +1272,7 @@ public abstract class GenericWebDriver extends GenericService {
 
 	public void initEyes(String appName, String testName) {
 		try {
-//			initEyesTest(appName, testName);
+			// initEyesTest(appName, testName);
 			eyes.setSaveNewTests(true);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -1324,27 +1281,28 @@ public abstract class GenericWebDriver extends GenericService {
 		System.out.println("Eyes init OK");
 		eyesOpen = true;
 	}
-//	public void initEyes(String appName, String testName,
-//			RectangleSize rectangleSize) {
-//		try {
-//			if (rectangleSize == null) {
-//				initEyesTest(appName, testName);
-//			} else {
-//				initEyesTest(appName, testName, rectangleSize);
-//			}
-//
-//			eyes.setSaveNewTests(true);
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		System.out.println("Eyes init OK");
-//		eyesOpen = true;
-//	}
 
-//	public void eyesCheckPage(String text) {
-//		eyes.checkWindow(text);
-//	}
+	// public void initEyes(String appName, String testName,
+	// RectangleSize rectangleSize) {
+	// try {
+	// if (rectangleSize == null) {
+	// initEyesTest(appName, testName);
+	// } else {
+	// initEyesTest(appName, testName, rectangleSize);
+	// }
+	//
+	// eyes.setSaveNewTests(true);
+	// } catch (Exception e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	// System.out.println("Eyes init OK");
+	// eyesOpen = true;
+	// }
+
+	// public void eyesCheckPage(String text) {
+	// eyes.checkWindow(text);
+	// }
 
 	public void highlightElement(WebElement element) {
 		JavascriptExecutor js = (JavascriptExecutor) webDriver;
@@ -1414,14 +1372,14 @@ public abstract class GenericWebDriver extends GenericService {
 		}
 	}
 
-//	public void initEyesTest(String appName, String testName) {
-//		eyes.open(webDriver, appName, testName);
-//	}
-//	public void initEyesTest(String appName, String testName,
-//			RectangleSize rectangleSize) {
-//
-//		eyes.open(webDriver, appName, testName, rectangleSize);
-//	}
+	// public void initEyesTest(String appName, String testName) {
+	// eyes.open(webDriver, appName, testName);
+	// }
+	// public void initEyesTest(String appName, String testName,
+	// RectangleSize rectangleSize) {
+	//
+	// eyes.open(webDriver, appName, testName, rectangleSize);
+	// }
 
 	public void waitUntilTextIsLoadedInElement(final String xpath)
 			throws Exception {
@@ -1478,10 +1436,85 @@ public abstract class GenericWebDriver extends GenericService {
 	public List<WebElement> getElementsByXpath(String xpath) throws Exception {
 		return webDriver.findElements(By.xpath(xpath));
 	}
-	public String getBrowserVersion(){
-		Capabilities capabilities=webDriver.getCapabilities();
-		String version=capabilities.getVersion();
+
+	public String getBrowserVersion() {
+		Capabilities capabilities = webDriver.getCapabilities();
+		String version = capabilities.getVersion();
 		return version;
+	}
+
+	public Screenshot takeElementScreenShot(WebElement element)
+			throws Exception {
+		Screenshot screenshot = new AShot().takeScreenshot(webDriver, element);
+		BufferedImage image = screenshot.getImage();
+		File file = new File(System.getProperty("user.dir") + "/log//current/"
+				+ element.getAttribute("name") + dbService.sig(6) + ".jpg");
+		ImageIO.write(image, "jpg", file);
+
+		return screenshot;
+	}
+
+	public void saveImage(String message, BufferedImage bufferedImage) throws Exception {
+		String fileExt="jpg";
+		TestRunnerType runner = getTestRunner();
+		String sig = dbService.sig();
+		String newFileName;
+		String path;
+		if (runner == TestRunnerType.CI) {
+
+			newFileName = configuration.getGlobalProperties("logserver")
+					+ "\\\\" + configuration.getProperty("screenshotFolder")
+					+ "\\ScreenShot" + message.replace(" ", "") + sig + ".png";
+			System.out.println("File path is :" + newFileName);
+
+			path = "http://"
+					+ configuration.getGlobalProperties("logserver").replace(
+							"\\", "") + "/"
+					+ configuration.getProperty("screenshotFolder")
+					+ "/ScreenShot" + message.replace(" ", "") + sig + ".png";
+
+		} else if (runner == TestRunnerType.local) {
+			newFileName = System.getProperty("user.dir") + "/log//current/"
+					+ "ScreenShot" + message.replace(" ", "") + sig + ".png";
+			path = System.getProperty("user.dir") + "//" + "log//current//"
+					+ "ScreenShot" + message.replace(" ", "") + sig + ".png";
+		}
+
+		if (runner == TestRunnerType.CI) {
+			// **printscreen using smbFile
+			NetService netService = new NetService();
+			String sFileName = "scr_" + dbService.sig(8)
+					+ message.replace(" ", "") + ".png";
+			SmbFile smbFile = new SmbFile("smb://"
+					+ configuration.getLogerver() + "/automationScreenshots/"
+					+ sFileName, netService.getAuth());
+			SmbFileOutputStream smbFileOutputStream = new SmbFileOutputStream(
+					smbFile);
+			// FileOutputStream fos = new FileOutputStream(new
+			// File(newFileName));
+			// fos.write(decodedScreenshot);
+			// smbFileOutputStream.write(decodedScreenshot);
+			smbFileOutputStream.close();
+
+			ImageIO.write(bufferedImage, "jpg", smbFileOutputStream);
+			System.out.println("http://newjenkins/automationScreenshots/"
+					+ sFileName);
+		} else {
+			newFileName = System.getProperty("user.dir") + "/log//current/"
+					+ "ScreenShot" + message.replace(" ", "") + sig + ".png";
+			path = System.getProperty("user.dir") + "//" + "log//current//"
+					+ "ScreenShot" + message.replace(" ", "") + sig + ".png";
+
+			File file = new File(path);
+			// FileOutputStream fos = new FileOutputStream(new File(
+			// newFileName));
+			// fos.write(decodedScreenshot);
+			ImageIO.write(bufferedImage, "jpg", file);
+		}
+	}
+	
+	public Reporter getReporter(){
+		return this.reporter;
 	}
 
 }

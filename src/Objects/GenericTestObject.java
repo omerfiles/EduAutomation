@@ -59,4 +59,6 @@ public class GenericTestObject extends TestCase {
 		return runnerType;
 	}
 
+	
+
 }

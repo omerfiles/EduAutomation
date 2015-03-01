@@ -934,4 +934,9 @@ public class TmsHomePage extends GenericPage {
 				ByTypes.linkText);
 		return element.isDisplayed();
 	}
+
+	public void clickOnRegistration() throws Exception {
+		webDriver.waitForElement("Registration", ByTypes.linkText).click();
+		
+	}
 }
