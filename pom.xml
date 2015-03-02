@@ -1154,6 +1154,9 @@
 							<includes>
 								<include>**/NewUXFooterTests.java</include>
 								<include>**/CustomFooterTests.java</include>
+								<include>**/NewUxLoginTestsClientSide.java</include>
+								
+								
 
 
 							</includes>
