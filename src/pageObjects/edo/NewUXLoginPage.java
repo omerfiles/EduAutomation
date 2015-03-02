@@ -62,7 +62,7 @@ public class NewUXLoginPage extends GenericPage {
 	}
 
 	public boolean isSubmitButtonEnabled() throws Exception {
-		return webDriver.waitForElement(SUBMIT, ByTypes.id).isEnabled();
+		return webDriver.waitForElement(SUBMIT, ByTypes.id,webDriver.getTimeout(),false).isEnabled();
 	}
 
 	public boolean isLogOutDisplayed() throws Exception {

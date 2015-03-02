@@ -11,7 +11,7 @@ import Interfaces.TestCaseParams;
 import pageObjects.edo.NewUXLoginPage;
 import tests.misc.EdusoftWebTest;
 
-public class NewUxLoginTestsClientSide extends EdusoftWebTest {
+public class NewUxLoginTestsClientSide extends BasicNewUxTest {
 
 	NewUXLoginPage loginPage;
 
@@ -26,7 +26,7 @@ public class NewUxLoginTestsClientSide extends EdusoftWebTest {
 	@Before
 	public void setup() throws Exception {
 		super.setup();
-		loginPage = pageHelper.openCILatestLoginPage();
+		// loginPage = pageHelper.openCILatestLoginPage();
 	}
 
 	@Test
@@ -36,8 +36,10 @@ public class NewUxLoginTestsClientSide extends EdusoftWebTest {
 		report.report("Test Blank user name");
 		// submit button is disabled when username or password are blank
 		// validateThatNoUserNameErrorMessageIsDIsplayed();
-		System.out.println("Submit button enabled? "
-				+ loginPage.isSubmitButtonEnabled());
+		// System.out.println("Submit button enabled? "
+		// + loginPage.isSubmitButtonEnabled());
+
+		loginPage = new NewUXLoginPage(webDriver, testResultService);
 
 		testResultService.assertEquals(false,
 				loginPage.isSubmitButtonEnabled(), "Submit button was enabled");
@@ -129,13 +131,21 @@ public class NewUxLoginTestsClientSide extends EdusoftWebTest {
 
 		messageText = messageText.replace("&nbsp;", " ");
 		WebElement errorElement = webDriver.waitForElement(
-				"//li[@class='siteLogin__messageText'][contains(@ng-show,'"
-						+ errorType + "')]", ByTypes.xpath);
-		testResultService.assertEquals(messageText, errorElement.getText(),
-				"Text did not mached");
+				"//li[@class='siteLogin__messageText ng-binding'][contains(@ng-show,'"
+						+ errorType + "')]", ByTypes.xpath,
+				webDriver.getTimeout(), false);
+		
+
+		
+			
+		
 		if (errorElement == null || errorElement.isDisplayed() == false) {
 			testResultService.addFailTest("Error with text: " + messageText
 					+ " was not found " + validatationStage);
+		}
+		else{
+			testResultService.assertEquals(messageText, errorElement.getText(),
+					"Text did not mached");
 		}
 
 	}
