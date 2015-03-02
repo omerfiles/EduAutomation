@@ -1145,7 +1145,7 @@
 								</property>
 								<property>
 									<name>envFile</name>
-									<value>nov14.properties</value>
+									<value>newux.properties</value>
 								</property>
 
 							</systemProperties>
@@ -1155,7 +1155,7 @@
 								<include>**/NewUXFooterTests.java</include>
 								<include>**/CustomFooterTests.java</include>
 								<include>**/NewUxLoginTestsClientSide.java</include>
-								
+								<include>**/testNavigationBar.java</include>
 								
 
 
