@@ -566,7 +566,7 @@ public class PageHelperService extends GenericTestObject {
 				.waitForElement(
 						"//div[@class='container']//table//tbody//tr[1]//td//div[1]//div//a",
 						ByTypes.xpath).getAttribute("href");
-		webDriver.openUrl(link+"/qa");
+		webDriver.openUrl(link);
 		return new NewUxHomePage(webDriver, testResultService);
 		// System.out.println("opened");
 	}

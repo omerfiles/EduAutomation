@@ -5,10 +5,12 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -24,6 +26,7 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -109,7 +112,8 @@ public class TextService extends SystemObjectImpl {
 		try {
 
 			if (useSmb) {
-				SmbFile smbFile=new SmbFile(filePath,netService.getDomainAuth());
+				SmbFile smbFile = new SmbFile(filePath,
+						netService.getDomainAuth());
 				br = new BufferedReader(new InputStreamReader(
 						new SmbFileInputStream(smbFile)));
 			} else {
@@ -303,7 +307,7 @@ public class TextService extends SystemObjectImpl {
 		for (int i = 0; i < str.length; i++) {
 			output = output + seperator + str[i];
 		}
-//		System.out.println("Strings are:" + output);
+		// System.out.println("Strings are:" + output);
 		report.report("String are:" + output);
 		return output;
 	}
@@ -449,9 +453,26 @@ public class TextService extends SystemObjectImpl {
 
 	public void copyFileToFolder(String sourcePath, String destinationPath)
 			throws IOException {
+		copyFileToFolder(sourcePath, destinationPath, false, null);
+
+	}
+
+	public void copyFileToFolder(String sourcePath, String destinationPath,
+			boolean useSMB, NtlmPasswordAuthentication auth) throws IOException {
 		try {
-			FileUtils.copyFileToDirectory(new File(sourcePath), new File(
-					destinationPath));
+
+			if (useSMB == true) {
+				SmbFile smbFile=new SmbFile(destinationPath,auth);
+				SmbFileOutputStream outputStream=new SmbFileOutputStream(smbFile);
+//				File file=new File(sourcePath);
+//				BufferedInputStream inputStream=new BufferedInputStream(file);
+//				FileInputStream inputStream=file.
+				Path path=Paths.get(sourcePath);
+				outputStream.write(Files.readAllBytes(path));
+			} else {
+				FileUtils.copyFileToDirectory(new File(sourcePath), new File(
+						destinationPath));
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -463,14 +484,14 @@ public class TextService extends SystemObjectImpl {
 		String lipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum";
 		return lipsum.substring(0, chars);
 	}
-	
+
 	public void writeListToCsvFile(String path, List<String> list)
 			throws IOException {
-		writeListToCsvFile(path, list,false);
+		writeListToCsvFile(path, list, false);
 	}
 
-	public void writeListToCsvFile(String path, List<String> list,boolean append)
-			throws IOException {
+	public void writeListToCsvFile(String path, List<String> list,
+			boolean append) throws IOException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(baos);
 		String nl = System.getProperty("line.separator");
@@ -486,7 +507,7 @@ public class TextService extends SystemObjectImpl {
 		// output.write(bytes);
 
 		File file = new File(path);
-		
+
 		FileOutputStream outputStream = new FileOutputStream(file, append);
 		outputStream.write(bytes);
 

@@ -11,6 +11,7 @@ import tests.edo.newux.BasicNewUxTest;
 
 public class NewUXLoginPage extends GenericPage {
 
+	private static final String LOGOUT_XPATH = "//button[@ng-click='logout()']";
 	private static final String SUBMIT = "submit1";
 
 	public NewUXLoginPage(GenericWebDriver webDriver,
@@ -18,9 +19,9 @@ public class NewUXLoginPage extends GenericPage {
 		super(webDriver, testResultService);
 		// TODO Auto-generated constructor stub
 	}
-	
-	private String userNameTextbox="userName";
-	private String passwordTextbox="password";
+
+	private String userNameTextbox = "userName";
+	private String passwordTextbox = "password";
 
 	@Override
 	public GenericPage waitForPageToLoad() throws Exception {
@@ -33,44 +34,67 @@ public class NewUXLoginPage extends GenericPage {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	public void enterUserName(String userName)throws Exception{
+
+	public void enterUserName(String userName) throws Exception {
 		clearUserName();
-		webDriver.waitForElement(userNameTextbox, ByTypes.name).sendKeys(userName);
+		webDriver.waitForElement(userNameTextbox, ByTypes.name).sendKeys(
+				userName);
 		webDriver.sendKey(Keys.TAB);
 	}
-	public void enterPassowrd(String password)throws Exception{
+
+	public void enterPassowrd(String password) throws Exception {
 		clearPassword();
-		webDriver.waitForElement(passwordTextbox, ByTypes.name).sendKeys(password );
+		webDriver.waitForElement(passwordTextbox, ByTypes.name).sendKeys(
+				password);
 	}
-	public void clickOnSubmit()throws Exception{
+
+	public void clickOnSubmit() throws Exception {
 		webDriver.waitForElement(SUBMIT, ByTypes.id).click();
 	}
 
 	public void clearUserName() throws Exception {
 		webDriver.waitForElement(userNameTextbox, ByTypes.name).clear();
-		
+
 	}
-	public void clearPassword()throws Exception{
+
+	public void clearPassword() throws Exception {
 		webDriver.waitForElement(passwordTextbox, ByTypes.name).clear();
 	}
-	
-	public boolean isSubmitButtonEnabled()throws Exception{
+
+	public boolean isSubmitButtonEnabled() throws Exception {
 		return webDriver.waitForElement(SUBMIT, ByTypes.id).isEnabled();
 	}
 
 	public boolean isLogOutDisplayed() throws Exception {
-		WebElement webElement=webDriver.waitForElement("//button[@ng-click='logout()']", ByTypes.xpath);
+		WebElement webElement = webDriver.waitForElement(LOGOUT_XPATH,
+				ByTypes.xpath);
 		return webElement.isDisplayed();
-		
+
 	}
-	
-	
-//	public String getUserNameErrorMessage()throws Exception{
-//		
-//	}
-//	public String getPasswordErrorMessage()throws Exception{
-//		
-//	}
+
+	public void clickOnLogout() throws Exception {
+		webDriver.waitForElement(LOGOUT_XPATH, ByTypes.xpath).click();
+	}
+
+	public NewUxHomePage loginAsStudent() throws Exception {
+		return loginAsStudent(configuration.getProperty("student"),
+				configuration.getProperty("student.user.password"));
+	}
+
+	public NewUxHomePage loginAsStudent(String userName, String password)
+			throws Exception {
+		enterUserName(userName);
+		enterPassowrd(password);
+		clickOnSubmit();
+
+		return new NewUxHomePage(webDriver, testResultService);
+	}
+
+	// public String getUserNameErrorMessage()throws Exception{
+	//
+	// }
+	// public String getPasswordErrorMessage()throws Exception{
+	//
+	// }
 
 }

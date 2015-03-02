@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import Objects.GenericTestObject;
+import services.Configuration;
 import services.Reporter;
 import services.TestResultService;
 import drivers.GenericWebDriver;
@@ -26,6 +27,8 @@ public abstract class GenericPage extends GenericTestObject {
 //	protected DbService dbService;
 	private String sutUrl=null;
 	
+	protected Configuration configuration;
+	
 	Reporter report;
 
 	
@@ -35,6 +38,7 @@ public abstract class GenericPage extends GenericTestObject {
 		this.webDriver=webDriver;
 		this.testResultService=testResultService;
 		this.report=webDriver.getReporter();
+		this.configuration=webDriver.getConfiguration();
 //		System.out.println(report.toString());
 //		this.dbService=webDriver.getDbService();
 //		textService=new TextService();

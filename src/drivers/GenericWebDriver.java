@@ -1589,4 +1589,8 @@ public abstract class GenericWebDriver extends GenericService {
 
 	}
 
+	public services.Configuration getConfiguration() {
+		return configuration;
+	}
+
 }

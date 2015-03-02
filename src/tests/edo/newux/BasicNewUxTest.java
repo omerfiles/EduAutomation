@@ -14,5 +14,9 @@ public class BasicNewUxTest extends EdusoftWebTest {
 		super.setup();
 		newUxHomePage = pageHelper.openCILatestUXLink();
 	}
+	
+	public void loginAsStudent(){
+		
+	}
 
 }
