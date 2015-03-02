@@ -101,6 +101,8 @@ public abstract class GenericWebDriver extends GenericService {
 	protected boolean enableConsoleLog;
 	protected boolean useProxy;
 
+	String scrFileExt = "jpg";
+
 	Proxy proxy;
 	ProxyServer server;
 
@@ -691,23 +693,73 @@ public abstract class GenericWebDriver extends GenericService {
 		try {
 			WebDriver driver = webDriver;
 			driver = new Augmenter().augment(driver);
-			// byte[] decodedScreenshot = org.apache.commons.codec.binary.Base64
-			// .decodeBase64(((TakesScreenshot) driver).getScreenshotAs(
-			// OutputType.BASE64).getBytes());
-
-			File screenshot = ((TakesScreenshot) driver)
-					.getScreenshotAs(OutputType.FILE);
-			BufferedImage fullImg = ImageIO.read(screenshot);
-
-			saveImage(message, fullImg);
-
+			byte[] decodedScreenshot = org.apache.commons.codec.binary.Base64
+					.decodeBase64(((TakesScreenshot) driver).getScreenshotAs(
+							OutputType.BASE64).getBytes());
 			TestRunnerType runner = getTestRunner();
-			// TestRunnerType runner = TestRunnerType.CI;
+//			TestRunnerType runner = TestRunnerType.CI;
 			// If test is running using jenkins ci
+			if (runner == TestRunnerType.CI) {
+
+				newFileName = configuration.getGlobalProperties("logserver")
+						+ "\\\\"
+						+ configuration.getProperty("screenshotFolder")
+						+ "\\ScreenShot" + message.replace(" ", "") + sig
+						+ ".png";
+				System.out.println("File path is :" + newFileName);
+
+				path = "http://"
+						+ configuration.getGlobalProperties("logserver")
+								.replace("\\", "") + "/"
+						+ configuration.getProperty("screenshotFolder")
+						+ "/ScreenShot" + message.replace(" ", "") + sig
+						+ ".png";
+
+			} else if (runner == TestRunnerType.local) {
+				newFileName = System.getProperty("user.dir") + "/log//current/"
+						+ "ScreenShot" + message.replace(" ", "") + sig
+						+ ".png";
+				path = System.getProperty("user.dir") + "//" + "log//current//"
+						+ "ScreenShot" + message.replace(" ", "") + sig
+						+ ".png";
+			}
+
+			if (runner == TestRunnerType.CI) {
+				// **printscreen using smbFile
+				NetService netService = new NetService();
+				String sFileName = "scr_" + dbService.sig(8)
+						+ message.replace(" ", "") + ".png";
+				SmbFile smbFile = new SmbFile("smb://"
+						+ configuration.getLogerver()
+						+ "/automationScreenshots/" + sFileName,
+						netService.getAuth());
+				SmbFileOutputStream smbFileOutputStream = new SmbFileOutputStream(
+						smbFile);
+				// FileOutputStream fos = new FileOutputStream(new
+				// File(newFileName));
+				// fos.write(decodedScreenshot);
+				smbFileOutputStream.write(decodedScreenshot);
+				smbFileOutputStream.close();
+				System.out.println("http://newjenkins/automationScreenshots/"
+						+ sFileName);
+			} else {
+				newFileName = System.getProperty("user.dir") + "/log//current/"
+						+ "ScreenShot" + message.replace(" ", "") + sig
+						+ ".png";
+				path = System.getProperty("user.dir") + "//" + "log//current//"
+						+ "ScreenShot" + message.replace(" ", "") + sig
+						+ ".png";
+
+				FileOutputStream fos = new FileOutputStream(new File(
+						newFileName));
+				fos.write(decodedScreenshot);
+			}
 
 		} catch (Exception e) {
 			System.out.println("Taking the screenshot failed: " + e.toString());
 		}
+
+		
 
 		return path;
 
@@ -1454,66 +1506,82 @@ public abstract class GenericWebDriver extends GenericService {
 		return screenshot;
 	}
 
-	public void saveImage(String message, BufferedImage bufferedImage) throws Exception {
-		String fileExt="jpg";
+	public void saveImage(String message, BufferedImage bufferedImage)
+			throws Exception {
+		String fileExt = "jpg";
 		TestRunnerType runner = getTestRunner();
 		String sig = dbService.sig();
 		String newFileName;
 		String path;
-		if (runner == TestRunnerType.CI) {
+		// runner=runnerType.CI;
 
-			newFileName = configuration.getGlobalProperties("logserver")
-					+ "\\\\" + configuration.getProperty("screenshotFolder")
-					+ "\\ScreenShot" + message.replace(" ", "") + sig + ".png";
-			System.out.println("File path is :" + newFileName);
+		try {
+			if (runner == TestRunnerType.CI) {
 
-			path = "http://"
-					+ configuration.getGlobalProperties("logserver").replace(
-							"\\", "") + "/"
-					+ configuration.getProperty("screenshotFolder")
-					+ "/ScreenShot" + message.replace(" ", "") + sig + ".png";
+				newFileName = configuration.getGlobalProperties("logserver")
+						+ "\\\\"
+						+ configuration.getProperty("screenshotFolder")
+						+ "\\ScreenShot" + message.replace(" ", "") + sig + "."
+						+ scrFileExt;
+				System.out.println("File path is :" + newFileName);
 
-		} else if (runner == TestRunnerType.local) {
-			newFileName = System.getProperty("user.dir") + "/log//current/"
-					+ "ScreenShot" + message.replace(" ", "") + sig + ".png";
-			path = System.getProperty("user.dir") + "//" + "log//current//"
-					+ "ScreenShot" + message.replace(" ", "") + sig + ".png";
-		}
+				path = "http://"
+						+ configuration.getGlobalProperties("logserver")
+								.replace("\\", "") + "/"
+						+ configuration.getProperty("screenshotFolder")
+						+ "/ScreenShot" + message.replace(" ", "") + sig + "."
+						+ scrFileExt;
 
-		if (runner == TestRunnerType.CI) {
-			// **printscreen using smbFile
-			NetService netService = new NetService();
-			String sFileName = "scr_" + dbService.sig(8)
-					+ message.replace(" ", "") + ".png";
-			SmbFile smbFile = new SmbFile("smb://"
-					+ configuration.getLogerver() + "/automationScreenshots/"
-					+ sFileName, netService.getAuth());
-			SmbFileOutputStream smbFileOutputStream = new SmbFileOutputStream(
-					smbFile);
-			// FileOutputStream fos = new FileOutputStream(new
-			// File(newFileName));
-			// fos.write(decodedScreenshot);
-			// smbFileOutputStream.write(decodedScreenshot);
-			smbFileOutputStream.close();
+			} else if (runner == TestRunnerType.local) {
+				newFileName = System.getProperty("user.dir") + "/log//current/"
+						+ "ScreenShot" + message.replace(" ", "") + sig + "."
+						+ scrFileExt;
+				path = System.getProperty("user.dir") + "//" + "log//current//"
+						+ "ScreenShot" + message.replace(" ", "") + sig + "."
+						+ scrFileExt;
+			}
 
-			ImageIO.write(bufferedImage, "jpg", smbFileOutputStream);
-			System.out.println("http://newjenkins/automationScreenshots/"
-					+ sFileName);
-		} else {
-			newFileName = System.getProperty("user.dir") + "/log//current/"
-					+ "ScreenShot" + message.replace(" ", "") + sig + ".png";
-			path = System.getProperty("user.dir") + "//" + "log//current//"
-					+ "ScreenShot" + message.replace(" ", "") + sig + ".png";
+			if (runner == TestRunnerType.CI) {
+				// **printscreen using smbFile
+				NetService netService = new NetService();
+				String sFileName = "scr_" + dbService.sig(8)
+						+ message.replace(" ", "") + "." + scrFileExt;
+				SmbFile smbFile = new SmbFile("smb://"
+						+ configuration.getLogerver()
+						+ "/automationScreenshots/" + sFileName,
+						netService.getAuth());
+				SmbFileOutputStream smbFileOutputStream = new SmbFileOutputStream(
+						smbFile);
+				// FileOutputStream fos = new FileOutputStream(new
+				// File(newFileName));
+				// fos.write(decodedScreenshot);
+				// smbFileOutputStream.write(decodedScreenshot);
+				smbFileOutputStream.close();
 
-			File file = new File(path);
-			// FileOutputStream fos = new FileOutputStream(new File(
-			// newFileName));
-			// fos.write(decodedScreenshot);
-			ImageIO.write(bufferedImage, "jpg", file);
+				ImageIO.write(bufferedImage, scrFileExt, smbFileOutputStream);
+				System.out.println("http://newjenkins/automationScreenshots/"
+						+ sFileName);
+			} else {
+				newFileName = System.getProperty("user.dir") + "/log//current/"
+						+ "ScreenShot" + message.replace(" ", "") + sig + "."
+						+ scrFileExt;
+				path = System.getProperty("user.dir") + "//" + "log//current//"
+						+ "ScreenShot" + message.replace(" ", "") + sig + "."
+						+ scrFileExt;
+
+				File file = new File(path);
+				// FileOutputStream fos = new FileOutputStream(new File(
+				// newFileName));
+				// fos.write(decodedScreenshot);
+				ImageIO.write(bufferedImage, scrFileExt, file);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
-	
-	public Reporter getReporter(){
+
+	public Reporter getReporter() {
 		return this.reporter;
 	}
 

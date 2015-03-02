@@ -550,7 +550,7 @@ public class PageHelperService extends GenericTestObject {
 				.waitForElement(
 						"//div[@class='container']//table//tbody//tr[1]//td//div[1]//div//a",
 						ByTypes.xpath).getAttribute("href");
-		link=link+"/login.html";
+		link=link+"/qa";
 		webDriver.openUrl(link);
 		return new NewUXLoginPage(webDriver, testResultService);
 	}

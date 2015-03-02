@@ -1,5 +1,8 @@
 package pageObjects.edo;
 
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
+
 import Enums.ByTypes;
 import drivers.GenericWebDriver;
 import pageObjects.GenericPage;
@@ -7,6 +10,8 @@ import services.TestResultService;
 import tests.edo.newux.BasicNewUxTest;
 
 public class NewUXLoginPage extends GenericPage {
+
+	private static final String SUBMIT = "submit1";
 
 	public NewUXLoginPage(GenericWebDriver webDriver,
 			TestResultService testResultService) {
@@ -32,13 +37,14 @@ public class NewUXLoginPage extends GenericPage {
 	public void enterUserName(String userName)throws Exception{
 		clearUserName();
 		webDriver.waitForElement(userNameTextbox, ByTypes.name).sendKeys(userName);
+		webDriver.sendKey(Keys.TAB);
 	}
 	public void enterPassowrd(String password)throws Exception{
 		clearPassword();
 		webDriver.waitForElement(passwordTextbox, ByTypes.name).sendKeys(password );
 	}
 	public void clickOnSubmit()throws Exception{
-		webDriver.waitForElement("submit", ByTypes.id).click();
+		webDriver.waitForElement(SUBMIT, ByTypes.id).click();
 	}
 
 	public void clearUserName() throws Exception {
@@ -50,7 +56,13 @@ public class NewUXLoginPage extends GenericPage {
 	}
 	
 	public boolean isSubmitButtonEnabled()throws Exception{
-		return webDriver.waitForElement("submit", ByTypes.id).isEnabled();
+		return webDriver.waitForElement(SUBMIT, ByTypes.id).isEnabled();
+	}
+
+	public boolean isLogOutDisplayed() throws Exception {
+		WebElement webElement=webDriver.waitForElement("//button[@ng-click='logout()']", ByTypes.xpath);
+		return webElement.isDisplayed();
+		
 	}
 	
 	

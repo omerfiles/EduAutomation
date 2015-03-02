@@ -29,10 +29,10 @@ public class StudentService extends GenericService {
 
 	@Autowired
 	Configuration configuration;
-	
+
 	@Autowired
 	TestResultService testResultService;
-	
+
 	@Autowired
 	Reporter report;
 
@@ -319,16 +319,27 @@ public class StudentService extends GenericService {
 
 				+ ",@Last=1,@Seconds=60,@Visited=1,@ComponentTypeId=1";
 		for (int i = 0; i < coursesDetails.size(); i++) {
-			String sqlForAdd = sqlText;
-			sqlForAdd = sqlForAdd.replace("%courseId%",
-					coursesDetails.get(i)[0]);
-			sqlForAdd = sqlForAdd.replace("%itemId%", coursesDetails.get(i)[1]);
-			//
-			// spList.add(sqlForAdd);
-			dbService.runStorePrecedure(sqlForAdd, executeQuery,false);
+			// String sqlForAdd = sqlText;
+			// sqlForAdd = sqlForAdd.replace("%courseId%",
+			// coursesDetails.get(i)[0]);
+			// sqlForAdd = sqlForAdd.replace("%itemId%",
+			// coursesDetails.get(i)[1]);
+			// //
+			// // spList.add(sqlForAdd);
+			// dbService.runStorePrecedure(sqlForAdd, executeQuery,false);
+			createSingleProgressRecored(studentId, coursesDetails.get(i)[0],
+					coursesDetails.get(i)[1], executeQuery);
 
 		}
 		return spList;
+
+	}
+
+	public void createSingleProgressRecored(String studentId, String courseId,
+			String itemId, boolean executeQuery) throws Exception {
+		String sqlText = "exec SetProgress @CourseId=" + courseId + ",@ItemId="
+				+ itemId + ",@UserId=" + studentId;
+		dbService.runStorePrecedure(sqlText, executeQuery, false);
 
 	}
 
@@ -466,17 +477,18 @@ public class StudentService extends GenericService {
 	}
 
 	public void createStudenCourseTestGrade(String studentID, String testId,
-			String courseId,String unitId, String[] testComponents,
-			String[] setIds, int[] numsofmarks, InstallationType installationType) throws Exception {
+			String courseId, String unitId, String[] testComponents,
+			String[] setIds, int[] numsofmarks,
+			InstallationType installationType) throws Exception {
 
 		boolean useOfflineDB = false;
 		List<String> marks;
-//		if (testComponents.length != grades.length) {
-//			testResultService
-//					.addFailTest(
-//							"test components and grades arrays length is not the same. please check test inputes",
-//							true, false);
-//		}
+		// if (testComponents.length != grades.length) {
+		// testResultService
+		// .addFailTest(
+		// "test components and grades arrays length is not the same. please check test inputes",
+		// true, false);
+		// }
 
 		if (installationType == InstallationType.Offline) {
 			dbService.setUseOfflineDB(true);
@@ -490,53 +502,58 @@ public class StudentService extends GenericService {
 
 			report.startLevel("set StartExitTest");
 			String didTestTSP = "exec  SetDidTest " + studentID;
-			if(useOfflineDB){
-				dbService.runStorePrecedure(didTestTSP, true,true);
-			}
-			else{
-				dbService.runStorePrecedure(didTestTSP, true,true);
+			if (useOfflineDB) {
+				dbService.runStorePrecedure(didTestTSP, true, true);
+			} else {
+				dbService.runStorePrecedure(didTestTSP, true, true);
 			}
 
 			report.startLevel("Submit test and setExitTestGrades for all components");
-			String submitTestSPbase="exec SubmitTest @UserId=%userid%,@UnitId=%unitId%,@ComponentId=%compId%,@Grade=%grade%,@Marks='%marks%',@SetId=%setIds%,@VisitedItems='%visitedItems%',@TimeOver=0,@UserState=0x7B2261223A5B7B2269436F6465223A2262317265616C743031222C22694964223A36313134352C226954797065223A35312C226D223A302C227561223A5B5D7D2C7B2269436F6465223A2262317265616C743032222C22694964223A36313134362C226954797065223A35312C226D223A302C227561223A5B5D7D2C7B2269436F6465223A2262317265616C743033222C22694964223A36313134372C226954797065223A35312C226D223A302C227561223A5B5D7D2C7B2269436F6465223A2262317265616C743034222C22694964223A36313134382C226954797065223A35312C226D223A302C227561223A5B5D7D2C7B2269436F6465223A2262317265616C743035222C22694964223A36313134392C226954797065223A35312C226D223A302C227561223A5B5D7D2C7B2269436F6465223A2262317265616C743036222C22694964223A36313135302C226954797065223A35312C226D223A302C227561223A5B5D7D2C7B2269436F6465223A2262317265616C743037222C22694964223A36313135312C226954797065223A32332C226D223A302C227561223A5B5D7D2C7B2269436F6465223A2262317265616C743038222C22694964223A36313135322C226954797065223A35312C226D223A302C227561223A5B5D7D5D2C226D223A302C2274223A33323030307D,@TestTime=32000";
-			String setExitTestGradeSpbase="exec SetExitTestGrade %userid%,%testId%,%courseId%,%grade%";
-			int avgGrade=0;
-			for(int i=0;i<testComponents.length;i++){
-				marks=generateMarks(numsofmarks[i]);
-				avgGrade+=calcGrade(marks);
-				String grade=String.valueOf(calcGrade(marks));
+			String submitTestSPbase = "exec SubmitTest @UserId=%userid%,@UnitId=%unitId%,@ComponentId=%compId%,@Grade=%grade%,@Marks='%marks%',@SetId=%setIds%,@VisitedItems='%visitedItems%',@TimeOver=0,@UserState=0x7B2261223A5B7B2269436F6465223A2262317265616C743031222C22694964223A36313134352C226954797065223A35312C226D223A302C227561223A5B5D7D2C7B2269436F6465223A2262317265616C743032222C22694964223A36313134362C226954797065223A35312C226D223A302C227561223A5B5D7D2C7B2269436F6465223A2262317265616C743033222C22694964223A36313134372C226954797065223A35312C226D223A302C227561223A5B5D7D2C7B2269436F6465223A2262317265616C743034222C22694964223A36313134382C226954797065223A35312C226D223A302C227561223A5B5D7D2C7B2269436F6465223A2262317265616C743035222C22694964223A36313134392C226954797065223A35312C226D223A302C227561223A5B5D7D2C7B2269436F6465223A2262317265616C743036222C22694964223A36313135302C226954797065223A35312C226D223A302C227561223A5B5D7D2C7B2269436F6465223A2262317265616C743037222C22694964223A36313135312C226954797065223A32332C226D223A302C227561223A5B5D7D2C7B2269436F6465223A2262317265616C743038222C22694964223A36313135322C226954797065223A35312C226D223A302C227561223A5B5D7D5D2C226D223A302C2274223A33323030307D,@TestTime=32000";
+			String setExitTestGradeSpbase = "exec SetExitTestGrade %userid%,%testId%,%courseId%,%grade%";
+			int avgGrade = 0;
+			for (int i = 0; i < testComponents.length; i++) {
+				marks = generateMarks(numsofmarks[i]);
+				avgGrade += calcGrade(marks);
+				String grade = String.valueOf(calcGrade(marks));
 				report.startLevel("prepair and run submit test SP");
-				String submitTestSp=submitTestSPbase;
-				submitTestSp=submitTestSp.replace("%userid%", studentID);
-				submitTestSp=submitTestSp.replace("%unitId%", unitId);
-				submitTestSp=submitTestSp.replace("%grade%", grade);
-				submitTestSp=submitTestSp.replace("%marks%",getStringFromMarks(marks));
-				submitTestSp=submitTestSp.replace("%compId%", testComponents[i]);
-				submitTestSp=submitTestSp.replace("%setIds%", setIds[i]);
-				submitTestSp=submitTestSp.replace("%visitedItems%", generateVisitedItemsString(numsofmarks[i]));
-				
+				String submitTestSp = submitTestSPbase;
+				submitTestSp = submitTestSp.replace("%userid%", studentID);
+				submitTestSp = submitTestSp.replace("%unitId%", unitId);
+				submitTestSp = submitTestSp.replace("%grade%", grade);
+				submitTestSp = submitTestSp.replace("%marks%",
+						getStringFromMarks(marks));
+				submitTestSp = submitTestSp.replace("%compId%",
+						testComponents[i]);
+				submitTestSp = submitTestSp.replace("%setIds%", setIds[i]);
+				submitTestSp = submitTestSp.replace("%visitedItems%",
+						generateVisitedItemsString(numsofmarks[i]));
+
 				dbService.runStorePrecedure(submitTestSp, useOfflineDB);
-				
+
 				report.startLevel("prepair and run SetExitTestGrade SP");
-				String SetExitTestGradeSP=setExitTestGradeSpbase;
-				SetExitTestGradeSP=SetExitTestGradeSP.replace("%userid%", studentID);
-				SetExitTestGradeSP=SetExitTestGradeSP.replace("%testId%", testId);
-				SetExitTestGradeSP=SetExitTestGradeSP.replace("%courseId%", courseId);
-				SetExitTestGradeSP=SetExitTestGradeSP.replace("%grade%", grade);
-				
-				if(useOfflineDB){
-				dbService.runStorePrecedure(SetExitTestGradeSP, useOfflineDB,true);
+				String SetExitTestGradeSP = setExitTestGradeSpbase;
+				SetExitTestGradeSP = SetExitTestGradeSP.replace("%userid%",
+						studentID);
+				SetExitTestGradeSP = SetExitTestGradeSP.replace("%testId%",
+						testId);
+				SetExitTestGradeSP = SetExitTestGradeSP.replace("%courseId%",
+						courseId);
+				SetExitTestGradeSP = SetExitTestGradeSP.replace("%grade%",
+						grade);
+
+				if (useOfflineDB) {
+					dbService.runStorePrecedure(SetExitTestGradeSP,
+							useOfflineDB, true);
+				} else {
+					dbService.runStorePrecedure(SetExitTestGradeSP,
+							useOfflineDB);
 				}
-				else{
-					dbService.runStorePrecedure(SetExitTestGradeSP, useOfflineDB);
-				}
-				
-				
-				
+
 			}
-			System.out.println("Expected grade in DB is: "+avgGrade/testComponents.length);
-			
-			
+			System.out.println("Expected grade in DB is: " + avgGrade
+					/ testComponents.length);
+
 		} catch (Exception e) {
 
 		} finally {
@@ -546,6 +563,7 @@ public class StudentService extends GenericService {
 		}
 
 	}
+
 	// public StudentTest
 	// getTestresultByCompSubCompIdCourseIdAndStudentId(String subCompId,
 	// String courseId, String UserId) throws Exception {
@@ -560,11 +578,11 @@ public class StudentService extends GenericService {
 	private String generateVisitedItemsString(int numbderOfItems) {
 		// TODO Auto-generated method stub
 		String str = "";
-		for(int i=1;i<numbderOfItems+1;i++){
-			str+="["+i+"]";
+		for (int i = 1; i < numbderOfItems + 1; i++) {
+			str += "[" + i + "]";
 		}
-//		str+="'";
-		
+		// str+="'";
+
 		return str;
 	}
 }
