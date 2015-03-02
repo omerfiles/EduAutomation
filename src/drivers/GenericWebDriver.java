@@ -697,7 +697,7 @@ public abstract class GenericWebDriver extends GenericService {
 					.decodeBase64(((TakesScreenshot) driver).getScreenshotAs(
 							OutputType.BASE64).getBytes());
 			TestRunnerType runner = getTestRunner();
-//			TestRunnerType runner = TestRunnerType.CI;
+			// TestRunnerType runner = TestRunnerType.CI;
 			// If test is running using jenkins ci
 			if (runner == TestRunnerType.CI) {
 
@@ -758,8 +758,6 @@ public abstract class GenericWebDriver extends GenericService {
 		} catch (Exception e) {
 			System.out.println("Taking the screenshot failed: " + e.toString());
 		}
-
-		
 
 		return path;
 
@@ -1583,6 +1581,12 @@ public abstract class GenericWebDriver extends GenericService {
 
 	public Reporter getReporter() {
 		return this.reporter;
+	}
+
+	public void switchToNextTab() {
+		List<String> tabs = new ArrayList<String>(webDriver.getWindowHandles());
+		webDriver.switchTo().window(tabs.get(1));
+
 	}
 
 }

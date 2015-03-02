@@ -32,7 +32,7 @@ public class NewUxHomePage extends GenericPage {
 	public String getOcModalTitleText() throws Exception {
 		String text = webDriver
 				.waitForElement(
-						"//div[@class='ngsb-container']//h2[contains(@class,'title layout__text')]",
+						"//div[@class='modal-header ng-scope']//h2[contains(@class,'title layout__text')]",
 						ByTypes.xpath).getText();
 
 		return text;
