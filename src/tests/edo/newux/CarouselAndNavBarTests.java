@@ -16,9 +16,11 @@ public class CarouselAndNavBarTests extends BasicNewUxTest {
 	@Before
 	public void setup() throws Exception {
 		super.setup();
+		String studentId = configuration.getProperty("student");
 		NewUXLoginPage loginPage = new NewUXLoginPage(webDriver,
 				testResultService);
-		// pageHelper.setUserLoginToNull("5230643000004");
+//		pageHelper.setUserLoginToNull(dbService.getUserIdByUserName(studentId,
+//				configuration.getProperty("institution.id")));
 		homePage = loginPage.loginAsStudent();
 	}
 
@@ -39,12 +41,10 @@ public class CarouselAndNavBarTests extends BasicNewUxTest {
 	@Test
 	@TestCaseParams(testCaseID = { "20035" })
 	public void testNavigationBar() throws Exception {
-	
+
 		report.report("Check that the nav bar is open");
 		IsNavBarOpen();
-		
-		
-		
+
 		homePage.clickToOpenNavigationBar();
 		homePage.getNavigationBarStatus();
 
@@ -53,28 +53,45 @@ public class CarouselAndNavBarTests extends BasicNewUxTest {
 				"Number of notifications not found");
 
 		checkffNavBarItemDisabled("3");
-		
+
 		checkIfNavBarItemAlerted("2");
-		
+
 		report.report("close the nav bar");
 		homePage.clickToOpenNavigationBar();
 		IsNavBarClosed();
 
 	}
 
-	private void IsNavBarOpen() throws Exception {
-		boolean isNavBarOpen=homePage.isNavBarOpen();
-		testResultService.assertEquals(true, isNavBarOpen,"Nav bar is not dislayed");
+	@Test
+	@TestCaseParams(testCaseID = { "19966" })
+	public void testUserData() throws Exception {
+		String userDataText = homePage.getUserDataText();
+
+		// String userFirstName =
+		// dbService.getUserFirstNameByUserId(configuration
+		// .getProperty("student"));
+		String userFirstName = "student1";
+
+		testResultService.assertEquals("Hello " + userFirstName,
+				homePage.getUserDataText(), "User data not found");
 	}
+
+	private void IsNavBarOpen() throws Exception {
+		boolean isNavBarOpen = homePage.isNavBarOpen();
+		testResultService.assertEquals(true, isNavBarOpen,
+				"Nav bar is not dislayed");
+	}
+
 	private void IsNavBarClosed() throws Exception {
-		boolean isNavBarOpen=homePage.isNavBarOpen();
-		testResultService.assertEquals(false, isNavBarOpen,"Nav bar is not closed");
+		boolean isNavBarOpen = homePage.isNavBarOpen();
+		testResultService.assertEquals(false, isNavBarOpen,
+				"Nav bar is not closed");
 	}
 
 	private void checkIfNavBarItemAlerted(String id) throws Exception {
 		boolean isEnabled = homePage.isNavBarItemAlerted(id);
 		testResultService.assertEquals(true, isEnabled);
-		
+
 	}
 
 	private void checkffNavBarItemDisabled(String id) throws Exception {

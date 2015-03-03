@@ -624,4 +624,12 @@ public class DbService extends GenericService {
 		runDeleteUpdateSql(sql);
 
 	}
+
+	public String getUserFirstNameByUserId(String userId) throws Exception {
+		String sql = "select FirstName from Users where UserId=" + userId;
+
+		String firstName = getStringFromQuery(sql);
+
+		return firstName;
+	}
 }

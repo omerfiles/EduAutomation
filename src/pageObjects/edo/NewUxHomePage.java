@@ -43,7 +43,8 @@ public class NewUxHomePage extends GenericPage {
 
 	public void checkCustomAboutLink(String url, String label) throws Exception {
 		String expectedText = webDriver.waitForElement(
-				"//ul//li//a[@href='" + url + "']", ByTypes.xpath,webDriver.getTimeout(),false).getText();
+				"//ul//li//a[@href='" + url + "']", ByTypes.xpath,
+				webDriver.getTimeout(), false).getText();
 
 		testResultService.assertEquals(expectedText, label);
 	}
@@ -55,8 +56,8 @@ public class NewUxHomePage extends GenericPage {
 
 	public void checkCustomLogo(String logoLink, String imageFileName)
 			throws Exception {
-//		webDriver
-//				.waitForElement("//a[@href='" + logoLink + "']", ByTypes.xpath);
+		// webDriver
+		// .waitForElement("//a[@href='" + logoLink + "']", ByTypes.xpath);
 		webDriver.waitForElement("//a/img[@src='Images/General/"
 				+ imageFileName + "']", ByTypes.xpath);
 	}
@@ -194,5 +195,12 @@ public class NewUxHomePage extends GenericPage {
 		} else {
 			return false;
 		}
+	}
+
+	public String getUserDataText() throws Exception {
+		WebElement element = webDriver.waitForElement(
+				"//span[@class='home__userName']", ByTypes.xpath,
+				webDriver.getTimeout(), false);
+		return element.getText();
 	}
 }
