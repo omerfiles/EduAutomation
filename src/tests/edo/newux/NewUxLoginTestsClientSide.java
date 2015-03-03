@@ -94,7 +94,7 @@ public class NewUxLoginTestsClientSide extends BasicNewUxTest {
 		report.report("Wrong username");
 
 		report.report("Valid user name and password");
-		loginPage.enterUserName("st2");
+		loginPage.enterUserName(configuration.getStudentUserName());
 		loginPage.enterPassowrd("12345");
 		testResultService.assertEquals(true, loginPage.isSubmitButtonEnabled(),
 				"Submit button was enabled");
