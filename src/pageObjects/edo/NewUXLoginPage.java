@@ -62,7 +62,24 @@ public class NewUXLoginPage extends GenericPage {
 	}
 
 	public boolean isSubmitButtonEnabled() throws Exception {
-		return webDriver.waitForElement(SUBMIT, ByTypes.id,webDriver.getTimeout(),false).isEnabled();
+
+//		boolean result = true;
+		try {
+
+			WebElement element = webDriver.waitForElement(SUBMIT, ByTypes.id,
+					webDriver.getTimeout(), false);
+			if (element.getAttribute("disabled").equals("disabled")) {
+				return false;
+			} else {
+				return true;
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			testResultService.addFailTest("Submit button not enabled", false,
+					true);
+		}
+		return false;
 	}
 
 	public boolean isLogOutDisplayed() throws Exception {

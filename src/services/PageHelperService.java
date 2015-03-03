@@ -562,17 +562,22 @@ public class PageHelperService extends GenericTestObject {
 
 		headlessBrowser.openUrl("http://vstf2013:9010/WebUX");
 
-		String link = headlessBrowser
-				.waitForElement(
-						"//div[@class='container']//table//tbody//tr[1]//td//div[1]//div//a",
-						ByTypes.xpath).getAttribute("href");
-		link=link.replace("qa", "automation");
+		String link = getLatestCILinkUX();
 		webDriver.openUrl(link);
 		return new NewUxHomePage(webDriver, testResultService);
 		// System.out.println("opened");
 	}
 
-	public NewUxHomePage openCILatestUXLink(String version) throws Exception {
+	public String getLatestCILinkUX() throws Exception {
+		String link = headlessBrowser
+				.waitForElement(
+						"//div[@class='container']//table//tbody//tr[1]//td//div[1]//div//a",
+						ByTypes.xpath).getAttribute("href");
+		link=link.replace("qa", "automation");
+		return link;
+	}
+
+	public NewUxHomePage getCILatestUXLink(String version) throws Exception {
 
 		webDriver.openUrl("http://ci-srv:9010/WebUX_CI_" + version + "/#/home");
 		return new NewUxHomePage(webDriver, testResultService);

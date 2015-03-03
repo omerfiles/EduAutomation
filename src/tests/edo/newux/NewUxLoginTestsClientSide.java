@@ -6,6 +6,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
 
+import drivers.ChromeWebDriver;
+import drivers.FirefoxWebDriver;
+import drivers.GenericWebDriver;
 import Enums.ByTypes;
 import Interfaces.TestCaseParams;
 import pageObjects.edo.NewUXLoginPage;
@@ -104,6 +107,56 @@ public class NewUxLoginTestsClientSide extends BasicNewUxTest {
 
 	}
 
+	@Test
+	@TestCaseParams(testCaseID = { "18280" })
+	public void testLogin2ParallalSessions() throws Exception {
+
+		ChromeWebDriver chromeWebDriver = null;
+		FirefoxWebDriver firefoxWebDriver = null;
+
+		try {
+			webDriver.quitBrowser();
+			report.report("Open chrome");
+			chromeWebDriver = (ChromeWebDriver) ctx.getBean("ChromeWebDriver");
+			chromeWebDriver.init();
+
+			chromeWebDriver.openUrl(pageHelper.getLatestCILinkUX());
+			NewUXLoginPage loginPage = new NewUXLoginPage(chromeWebDriver,
+					testResultService);
+			loginPage.enterUserName(configuration.getStudentUserName());
+			loginPage.enterPassowrd("12345");
+
+			loginPage.clickOnSubmit();
+
+			report.report("Open firefox");
+			firefoxWebDriver = (FirefoxWebDriver) ctx
+					.getBean("FirefoxWebDriver");
+			firefoxWebDriver.init();
+
+			firefoxWebDriver.openUrl(pageHelper.getLatestCILinkUX());
+			NewUXLoginPage loginPageFF = new NewUXLoginPage(firefoxWebDriver,
+					testResultService);
+			loginPageFF.enterUserName(configuration.getStudentUserName());
+			loginPageFF.enterPassowrd("12345");
+			// testResultService.assertEquals(true,
+			// loginPage.isSubmitButtonEnabled(),
+			// "Submit button was not enabled");
+			loginPageFF.clickOnSubmit();
+
+			report.report("Check for popup message");
+//			System.out.println(firefoxWebDriver.getPopUpText());
+			testResultService.assertEquals("this user already in use",
+					firefoxWebDriver.getPopUpText(),
+					"Popup message about parallal user is not displayed");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			firefoxWebDriver.quitBrowser();
+			chromeWebDriver.quitBrowser();
+		}
+	}
+
 	private void validateThatNoUserNameErrorMessageIsDIsplayed()
 			throws Exception {
 		WebElement errorElement = webDriver.waitForElement(
@@ -134,16 +187,11 @@ public class NewUxLoginTestsClientSide extends BasicNewUxTest {
 				"//li[@class='siteLogin__messageText ng-binding'][contains(@ng-show,'"
 						+ errorType + "')]", ByTypes.xpath,
 				webDriver.getTimeout(), false);
-		
 
-		
-			
-		
 		if (errorElement == null || errorElement.isDisplayed() == false) {
 			testResultService.addFailTest("Error with text: " + messageText
 					+ " was not found " + validatationStage);
-		}
-		else{
+		} else {
 			testResultService.assertEquals(messageText, errorElement.getText(),
 					"Text did not mached");
 		}

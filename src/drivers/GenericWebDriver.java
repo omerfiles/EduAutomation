@@ -133,17 +133,22 @@ public abstract class GenericWebDriver extends GenericService {
 
 	public void init() throws Exception {
 		// this.testResultService = testResultService;
-		eyes.setApiKey("tsN45rbyinZ1084MxMVSzumAgD106Qn3MOpBcr101hiyVEpSY110");
+		try {
+			eyes.setApiKey("tsN45rbyinZ1084MxMVSzumAgD106Qn3MOpBcr101hiyVEpSY110");
 
-		textService = new TextService();
-		remoteMachine = configuration.getAutomationParam(
-				AutoParams.remoteMachine.toString(), "machine");
-		setSutUrl(configuration.getAutomationParam(
-				AutoParams.sutUrl.toString(), "suturl"));
-		setSutSubDomain(configuration.getProperty("institution.name"));
-		setInstitutionName(configuration.getProperty("institution.name"));
+			textService = new TextService();
+			remoteMachine = configuration.getAutomationParam(
+					AutoParams.remoteMachine.toString(), "machine");
+			setSutUrl(configuration.getAutomationParam(
+					AutoParams.sutUrl.toString(), "suturl"));
+			setSutSubDomain(configuration.getProperty("institution.name"));
+			setInstitutionName(configuration.getProperty("institution.name"));
 
-		init(remoteMachine, false);
+			init(remoteMachine, false);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public String getSutUrl() {
