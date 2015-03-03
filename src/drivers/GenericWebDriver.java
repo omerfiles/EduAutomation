@@ -1585,12 +1585,27 @@ public abstract class GenericWebDriver extends GenericService {
 
 	public void switchToNextTab() {
 		List<String> tabs = new ArrayList<String>(webDriver.getWindowHandles());
+		// System.out.println("Number of tabs: "+tabs.size());
 		webDriver.switchTo().window(tabs.get(1));
 
 	}
 
 	public services.Configuration getConfiguration() {
 		return configuration;
+	}
+
+	public String waitForSpecificCurrentUrl(String currentUrl, String prefix)
+			throws Exception {
+		for (int i = 0; i < timeout; i++) {
+			currentUrl = getUrl();
+			// System.out.println("currentUrl: "+currentUrl);
+			if (currentUrl.contains(prefix)) {
+				break;
+			} else {
+				sleep(1);
+			}
+		}
+		return currentUrl;
 	}
 
 }
