@@ -2,6 +2,7 @@ package tests.edo.newux;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import drivers.GenericWebDriver;
@@ -20,7 +21,7 @@ public class CustomFooterTests extends BasicNewUxTest {
 //		newUxHomePage = pageHelper.openCILatestUXLink("20150217.8");
 	}
 		
-	@Test
+	@Ignore
 	@TestCaseParams(testCaseID = { "4564564","4564465" })
 	public void CustomFooterEdusoft() throws Exception {
 			

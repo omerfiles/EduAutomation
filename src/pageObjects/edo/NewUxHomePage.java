@@ -42,8 +42,10 @@ public class NewUxHomePage extends GenericPage {
 	}
 
 	public void checkCustomAboutLink(String url, String label) throws Exception {
-		testResultService.assertElementText(webDriver.waitForElement(
-				"//a[@href='" + url + "']", ByTypes.xpath), label);
+		String expectedText = webDriver.waitForElement(
+				"//ul//li//a[@href='" + url + "']", ByTypes.xpath,webDriver.getTimeout(),false).getText();
+
+		testResultService.assertEquals(expectedText, label);
 	}
 
 	public void checkCustomContactUsLink(String mailto) throws Exception {
@@ -53,8 +55,8 @@ public class NewUxHomePage extends GenericPage {
 
 	public void checkCustomLogo(String logoLink, String imageFileName)
 			throws Exception {
-		webDriver
-				.waitForElement("//a[@href='" + logoLink + "']", ByTypes.xpath);
+//		webDriver
+//				.waitForElement("//a[@href='" + logoLink + "']", ByTypes.xpath);
 		webDriver.waitForElement("//a/img[@src='Images/General/"
 				+ imageFileName + "']", ByTypes.xpath);
 	}
@@ -134,24 +136,27 @@ public class NewUxHomePage extends GenericPage {
 	public void clickOnLogOut() throws Exception {
 		// TODO Auto-generated method stub
 
-		webDriver.waitForElement(LOGOUT_XPATH, ByTypes.xpath,webDriver.getTimeout(),false).click();
+		webDriver.waitForElement(LOGOUT_XPATH, ByTypes.xpath,
+				webDriver.getTimeout(), false).click();
 
 	}
 
 	public void clickToOpenNavigationBar() throws Exception {
-		webDriver.waitForElement(MENU_BTN, ByTypes.id,webDriver.getTimeout(),false).click();
+		webDriver.waitForElement(MENU_BTN, ByTypes.id, webDriver.getTimeout(),
+				false).click();
 
 	}
 
 	public void getNavigationBarStatus() throws Exception {
 		webDriver.waitForElement("//nav[contains(@class, 'layout__siteNav')]",
-				ByTypes.xpath,webDriver.getTimeout(),false);
+				ByTypes.xpath, webDriver.getTimeout(), false);
 
 	}
 
 	public String getNavBarItemsNotification(String id) throws Exception {
 		WebElement element = webDriver.waitForElement(
-				"//ul[@class='sitemenu__menu']//li[" + id + "]", ByTypes.xpath,webDriver.getTimeout(),false);
+				"//ul[@class='sitemenu__menu']//li[" + id + "]", ByTypes.xpath,
+				webDriver.getTimeout(), false);
 		return element.getText();
 
 	}
@@ -159,7 +164,8 @@ public class NewUxHomePage extends GenericPage {
 	public boolean isNavBarItemEnabled(String id) throws Exception {
 		WebElement element = webDriver.waitForElement(
 				"//ul[@class='sitemenu__menu']//li[" + id
-						+ "][@class='sitemenu__item disabled']", ByTypes.xpath,webDriver.getTimeout(),false);
+						+ "][@class='sitemenu__item disabled']", ByTypes.xpath,
+				webDriver.getTimeout(), false);
 		if (element != null) {
 			return true;
 		} else {
@@ -181,7 +187,8 @@ public class NewUxHomePage extends GenericPage {
 
 	public boolean isNavBarOpen() throws Exception {
 		WebElement element = webDriver.waitForElement(
-				"//ul[@class='sitemenu__menu']", ByTypes.xpath,webDriver.getTimeout(),false);
+				"//ul[@class='sitemenu__menu']", ByTypes.xpath,
+				webDriver.getTimeout(), false);
 		if (element != null) {
 			return true;
 		} else {

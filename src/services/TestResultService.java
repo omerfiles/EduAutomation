@@ -69,7 +69,7 @@ public class TestResultService {
 	public void assertElementText(WebElement element, String expectedText) throws Exception {
 		String actualText = element.getText();
 
-		if (assertEquals(expectedText, actualText,
+		if (!assertEquals(expectedText, actualText,
 				"Text do not match for element: " + element.getAttribute("id"))) {
 			webDriver.highlightElement(element);
 			webDriver.printScreen("elementTextDoNotMatch");
