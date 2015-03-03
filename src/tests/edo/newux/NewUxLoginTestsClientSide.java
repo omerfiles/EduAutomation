@@ -109,7 +109,7 @@ public class NewUxLoginTestsClientSide extends BasicNewUxTest {
 
 	@Test
 	@TestCaseParams(testCaseID = { "18280" })
-	public void testLogin2ParallalSessions() throws Exception {
+	public void testNoAbilityFor2ParallelSessions() throws Exception {
 
 		ChromeWebDriver chromeWebDriver = null;
 		FirefoxWebDriver firefoxWebDriver = null;
