@@ -338,7 +338,9 @@ public class StudentService extends GenericService {
 	public void createSingleProgressRecored(String studentId, String courseId,
 			String itemId, boolean executeQuery) throws Exception {
 		String sqlText = "exec SetProgress @CourseId=" + courseId + ",@ItemId="
-				+ itemId + ",@UserId=" + studentId;
+				+ itemId + ",@UserId=" + studentId
+				+ ",@Last=1,@Seconds=60,@Visited=1,@ComponentTypeId=1";
+		;
 		dbService.runStorePrecedure(sqlText, executeQuery, false);
 
 	}

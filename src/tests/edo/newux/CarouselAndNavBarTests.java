@@ -24,7 +24,7 @@ public class CarouselAndNavBarTests extends BasicNewUxTest {
 		homePage = loginPage.loginAsStudent();
 	}
 
-	@Ignore
+	@Test
 	@TestCaseParams(testCaseID = { "19135" })
 	public void CaruselMavigation() throws Exception {
 		homePage.carouselNavigateNext();
