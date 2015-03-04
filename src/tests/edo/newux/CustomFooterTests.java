@@ -21,10 +21,12 @@ public class CustomFooterTests extends BasicNewUxTest {
 //		newUxHomePage = pageHelper.openCILatestUXLink("20150217.8");
 	}
 		
-	@Ignore
-	@TestCaseParams(testCaseID = { "4564564","4564465" })
+
+	@Test
+	@TestCaseParams(testCaseID = { "18451" })
+
 	public void CustomFooterEdusoft() throws Exception {
-			
+	
 	//Verify 'About' link & label
 	String label = "About Edusoft";	
 	String url = "http://www.edusoftlearning.com/"; 
@@ -35,7 +37,7 @@ public class CustomFooterTests extends BasicNewUxTest {
 	newUxHomePage.checkCustomContactUsLink(mailto);
 	
 	//Verify LOGO image & link
-	String logoLink = "http://www.edusoftlearning.com/?o=edo";
+	String logoLink = "http://www.edusoftlearning.com/";
 	String imageFileName = "edusoftNew.svg";
 	newUxHomePage.checkCustomLogo(logoLink, imageFileName);
 	 

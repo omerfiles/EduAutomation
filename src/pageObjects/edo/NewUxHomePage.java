@@ -17,7 +17,7 @@ public class NewUxHomePage extends GenericPage {
 	public NewUxHomePage(GenericWebDriver webDriver,
 			TestResultService testResultService) {
 		super(webDriver, testResultService);
-		// TODO Auto-generated constructor stub
+		// TODO Auto-generated cbbbbonstructor stub
 	}
 
 	public void clickOnAboutEdusoft() throws Exception {
@@ -42,11 +42,12 @@ public class NewUxHomePage extends GenericPage {
 	}
 
 	public void checkCustomAboutLink(String url, String label) throws Exception {
+
 		String expectedText = webDriver.waitForElement(
-				"//ul//li//a[@href='" + url + "']", ByTypes.xpath,
-				webDriver.getTimeout(), false).getText();
+				"//ul//li//a[@href='" + url + "']", ByTypes.xpath).getText();
 
 		testResultService.assertEquals(expectedText, label);
+
 	}
 
 	public void checkCustomContactUsLink(String mailto) throws Exception {
@@ -64,42 +65,41 @@ public class NewUxHomePage extends GenericPage {
 
 	public void checkCustomPrivacyLegal(String whiteLabel) throws Exception {
 		this.clickOnPrivacyStatement();
-		testResultService
-				.assertEquals(
-						whiteLabel,
-						(webDriver
-								.waitForElement(
-										"/html/body/div[2]/div/div[2]/div[2]/div/div[1]/div/div/table/tbody/tr/td/span[2]",
-										ByTypes.xpath).getText()));
-		List<WebElement> WLList = webDriver
-				.getElementsByXpath("//span[@class='disclamer" + whiteLabel
-						+ "ng-binding']");
-		for (int i = 0; i < WLList.size(); i++) {
+		
+		testResultService.assertEquals(
+				whiteLabel,
+				(webDriver.waitForElement("//span[@class='disclamer"
+						+ whiteLabel + "']", ByTypes.xpath).getText()));
+		
+		List<WebElement> WLList = webDriver.getElementsByXpath("//span[@class='disclamer" + whiteLabel + "']");
+
+//		for (int i = 0; i < WLList.size(); i++)
+		for (int i = 0; i < 10; i++)	
+		
+		{
+				
 			String text = WLList.get(i).getText();
+			
 			testResultService.assertEquals(whiteLabel, text);
+
 		}
 
-		webDriver.waitForElement("//div[2]/div[2]/div/div/a", ByTypes.xpath)
-				.click();
+		webDriver.waitForElement("//a[@title='Close']", ByTypes.xpath).click();
 
 		webDriver.sleep(3);
 
 		this.clickOnLegalNotice();
+		int whiteLabelength = whiteLabel.length();
 		int startIndex = webDriver
-				.waitForElement(
-						"/html/body/div[2]/div/div[2]/div[2]/div/div[1]/div/div/div",
+				.waitForElement("//div[@class='stext ng-binding']",
 						ByTypes.xpath).getText()
 				.indexOf(whiteLabel + " Web Sites");
-		testResultService
-				.assertEquals(
-						whiteLabel,
-						(webDriver
-								.waitForElement(
-										"/html/body/div[2]/div/div[2]/div[2]/div/div[1]/div/div/div",
-										ByTypes.xpath).getText().substring(
-								startIndex, startIndex + 3)));
-		webDriver.waitForElement("//div[2]/div[2]/div/div/a", ByTypes.xpath)
-				.click();
+		testResultService.assertEquals(
+				whiteLabel,
+				(webDriver.waitForElement("//div[@class='stext ng-binding']",
+						ByTypes.xpath).getText().substring(startIndex,
+						startIndex + whiteLabelength)));
+		webDriver.waitForElement("//a[@title='Close']", ByTypes.xpath).click();
 
 	}
 
