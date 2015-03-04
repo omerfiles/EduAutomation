@@ -345,6 +345,25 @@ public class StudentService extends GenericService {
 
 	}
 
+	public void setProgressForCourse(String courseId, String studentId)
+			throws Exception {
+		List<String> items = dbService.getCoursItems(courseId);
+		for (int i = 0; i < items.size(); i++) {
+			createSingleProgressRecored(studentId, courseId, items.get(i),
+					false);
+		}
+	}
+
+	public void setProgressForUnit(String unitId, String courseId,
+			String StudentId) throws Exception {
+		List<String> items = dbService.getUnitItems(unitId);
+		for (int i = 0; i < items.size(); i++) {
+			createSingleProgressRecored(StudentId, courseId, items.get(i),
+					false);
+		}
+
+	}
+
 	public void createAndRunSetSubmitTestSqlRecordsForStudent(String studentId,
 			boolean offlineDB) throws Exception {
 		List<String[]> coursesDetails = textService
