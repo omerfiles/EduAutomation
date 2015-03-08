@@ -17,6 +17,7 @@ public @interface TestCaseParams {
 	Browsers testedBrowser() default Browsers.empty;
 	boolean ignoreTestTimeout()default false;
 	String testTimeOut()default "0";
+	String envFile()default "";
 	
 
 

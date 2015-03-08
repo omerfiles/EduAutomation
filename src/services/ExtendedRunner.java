@@ -23,14 +23,17 @@ public class ExtendedRunner extends BlockJUnit4ClassRunner {
 
 	private String testId;
 	String defaultTestTimeOut = "10";
-//	private ParameterisedTestClassRunner parameterisedRunner;
-//	private ExtendedParamsTestsClassRunner extendedParamsTestsClassRunner;
+
+	// private ParameterisedTestClassRunner parameterisedRunner;
+	// private ExtendedParamsTestsClassRunner extendedParamsTestsClassRunner;
 
 	public ExtendedRunner(Class<?> klass)
 			throws org.junit.runners.model.InitializationError {
 		super(klass);
-//		parameterisedRunner = new ParameterisedTestClassRunner(getTestClass());
-//		extendedParamsTestsClassRunner=new ExtendedParamsTestsClassRunner(getTestClass());
+		// parameterisedRunner = new
+		// ParameterisedTestClassRunner(getTestClass());
+		// extendedParamsTestsClassRunner=new
+		// ExtendedParamsTestsClassRunner(getTestClass());
 	}
 
 	public String getTestId() {
@@ -63,8 +66,9 @@ public class ExtendedRunner extends BlockJUnit4ClassRunner {
 
 	public void getBrowserParam(TestMethod method) {
 		if (method.parametersSets().length > 0) {
-			
-			System.out.println("Got browser param: "+ method.parametersSets()[count].toString());
+
+			System.out.println("Got browser param: "
+					+ method.parametersSets()[count].toString());
 			System.setProperty("browserParam",
 					method.parametersSets()[nextCount()].toString());
 		}
@@ -78,24 +82,23 @@ public class ExtendedRunner extends BlockJUnit4ClassRunner {
 	// getBrowserParam(testMethod);
 	// return super.methodBlock(method);
 	// }
-	
-	
-//	@Override
-//	protected Statement methodBlock(FrameworkMethod method) {
-//		// TODO Auto-generated method stub
-//
-//		TestMethod testMethod = parameterisedRunner.testMethodFor(method);
-//		getBrowserParam(testMethod);
-//		return super.methodBlock(method);
-//	}
-	
-	
+
+	// @Override
+	// protected Statement methodBlock(FrameworkMethod method) {
+	// // TODO Auto-generated method stub
+	//
+	// TestMethod testMethod = parameterisedRunner.testMethodFor(method);
+	// getBrowserParam(testMethod);
+	// return super.methodBlock(method);
+	// }
+
 	@Override
 	protected Statement methodBlock(FrameworkMethod method) {
 		// TODO Auto-generated method stub
 
-//		TestMethod testMethod = extendedParamsTestsClassRunner.testMethodFor(method);
-//		getBrowserParam(testMethod);
+		// TestMethod testMethod =
+		// extendedParamsTestsClassRunner.testMethodFor(method);
+		// getBrowserParam(testMethod);
 
 		TestCaseParams params = method.getAnnotation(TestCaseParams.class);
 		if (params != null) {
@@ -113,6 +116,10 @@ public class ExtendedRunner extends BlockJUnit4ClassRunner {
 
 			if (params.ignoreTestTimeout() == true) {
 				System.setProperty("ignoreTineOut", "true");
+			}
+
+			if (!params.envFile().equals("")) {
+				System.setProperty("nevFileParam", params.envFile());
 			}
 
 		}
@@ -137,38 +144,32 @@ public class ExtendedRunner extends BlockJUnit4ClassRunner {
 
 		return super.methodBlock(method);
 	}
-	
-	
-	
 
-//	@Override
-//	protected List<FrameworkMethod> computeTestMethods() {
-//		// TODO Auto-generated method stub
-//		 return extendedParamsTestsClassRunner.computeFrameworkMethods();
-//	}
-	
-	
-	
+	// @Override
+	// protected List<FrameworkMethod> computeTestMethods() {
+	// // TODO Auto-generated method stub
+	// return extendedParamsTestsClassRunner.computeFrameworkMethods();
+	// }
 
 	@Override
 	protected void validatePublicVoidNoArgMethods(
 			Class<? extends Annotation> annotation, boolean isStatic,
 			List<Throwable> errors) {
-		 List<FrameworkMethod> methods = getTestClass().getAnnotatedMethods(annotation);
+		List<FrameworkMethod> methods = getTestClass().getAnnotatedMethods(
+				annotation);
 
-//	        for (FrameworkMethod eachTestMethod : methods) {
-//	            eachTestMethod.validatePublicVoidNoArg(isStatic, errors);
-//	        }
+		// for (FrameworkMethod eachTestMethod : methods) {
+		// eachTestMethod.validatePublicVoidNoArg(isStatic, errors);
+		// }
 	}
 
-//	@Override
-//	protected List<FrameworkMethod> computeTestMethods() {
-//		// TODO Auto-generated method stub
-////		return super.computeTestMethods();
-//		return extendedParamsTestsClassRunner.computeFrameworkMethods();
-//	}
-	
-	
+	// @Override
+	// protected List<FrameworkMethod> computeTestMethods() {
+	// // TODO Auto-generated method stub
+	// // return super.computeTestMethods();
+	// return extendedParamsTestsClassRunner.computeFrameworkMethods();
+	// }
+
 }
 
 // }

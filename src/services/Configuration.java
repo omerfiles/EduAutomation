@@ -34,11 +34,11 @@ public class Configuration extends GenericService {
 	@Resource
 	@Qualifier("Reporter")
 	private Reporter report;
-	
-//	@Autowired
-//	public void setReporter(Reporter report){
-//		this.report=report;
-//	}
+
+	// @Autowired
+	// public void setReporter(Reporter report){
+	// this.report=report;
+	// }
 
 	@Autowired
 	NetService netService;
@@ -46,13 +46,11 @@ public class Configuration extends GenericService {
 	public Configuration() {
 		InputStream input = null;
 		InputStream globaConfigInput = null;
-		
-		
 
 		try {
-//			globaConfigInput = new FileInputStream(
-//					"files/properties/global.properties");
-			
+			// globaConfigInput = new FileInputStream(
+			// "files/properties/global.properties");
+
 			globaConfigInput = new FileInputStream(
 					"C:\\automation\\global.properties");
 			globalProperties.load(globaConfigInput);
@@ -66,21 +64,25 @@ public class Configuration extends GenericService {
 		// load a properties file
 		try {
 
-			localPropertiesFile = getAutomationParam(
-					AutoParams.envFile.toString(), "envFileCMD");
+			String envFile=System.getProperty("nevFileParam");
+			
+			if (envFile!=null) {
+				localPropertiesFile = System.getProperty("nevFileParam");
+			} else {
+				localPropertiesFile = getAutomationParam(
+						AutoParams.envFile.toString(), "envFileCMD");
+			}
 
-			System.out.println("properties file was :"+localPropertiesFile);
-			
-			TestRunnerType runnerType=getTestRunner();
-			
-//			TestRunnerType runnerType=TestRunnerType.CI;
-			
-			
-			
-			/////for debug
-//			setTestRunner(TestRunnerType.CI);
-			
-			if(runnerType.equals(TestRunnerType.CI)){
+			System.out.println("properties file was :" + localPropertiesFile);
+
+			TestRunnerType runnerType = getTestRunner();
+
+			// TestRunnerType runnerType=TestRunnerType.CI;
+
+			// ///for debug
+			// setTestRunner(TestRunnerType.CI);
+
+			if (runnerType.equals(TestRunnerType.CI)) {
 				String path = "smb://10.1.0.111/automationConfig/"
 						+ localPropertiesFile;
 				netService = new NetService();
@@ -90,14 +92,11 @@ public class Configuration extends GenericService {
 				// input = new FileInputStream(smbFile.getPath());
 				SmbFileInputStream inputStream = new SmbFileInputStream(smbFile);
 				properties.load(inputStream);
-			}
-			else{
-				String path="C:\\automation\\"+localPropertiesFile;
+			} else {
+				String path = "C:\\automation\\" + localPropertiesFile;
 				input = new FileInputStream(path);
 				properties.load(input);
 			}
-			
-			
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -314,7 +313,7 @@ public class Configuration extends GenericService {
 			value = System.getProperty(mavenCmdParam);
 			// check in properties file
 			if (value != null) {
-//				System.out.println("got param from maven cmd: " + value);
+				// System.out.println("got param from maven cmd: " + value);
 				return value;
 			}
 			// check in properties file
@@ -334,7 +333,7 @@ public class Configuration extends GenericService {
 				// System.out.println("got from global properties: " + value);
 				return value;
 			} else {
-				 System.out.println("value "+paramName+" not found");
+				System.out.println("value " + paramName + " not found");
 				// org.junit.Assert.fail("Auto param value not found. Check properties file or maven CMD param");
 			}
 		} catch (Exception e) {
@@ -350,9 +349,10 @@ public class Configuration extends GenericService {
 	public void savePropertiesToFile() {
 
 	}
-	public String getLogerver(){
-		String logServer=getGlobalProperties("logserver");
-		logServer=logServer.replace("\\\\", "");
+
+	public String getLogerver() {
+		String logServer = getGlobalProperties("logserver");
+		logServer = logServer.replace("\\\\", "");
 		return logServer;
 	}
 }
