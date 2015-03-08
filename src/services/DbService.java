@@ -656,4 +656,35 @@ public class DbService extends GenericService {
 		return units;
 
 	}
+
+	public List<String> getComponentItems(String componentsId) throws Exception {
+		String sql = "select ItemId from Item where ComponentSubComponentId in (select ComponentSubComponentId from ComponentSubComponents where ComponentId ="
+				+ componentsId + ")";
+		List<String> units = getArrayListFromQuery(sql, 1);
+		return units;
+	}
+
+	public String getFirstItemInComponent(String componentId) throws Exception {
+		String sql = "select TOP 1 * from Item where ComponentSubComponentId in (select ComponentSubComponentId from ComponentSubComponents where ComponentId =20448) and Instructions is not null ORDER BY Sequence asc";
+		String item = getStringFromQuery(sql);
+		return item;
+
+	}
+
+	public String getLastItemInComponent(String componentId) throws Exception {
+		String sql = "select TOP 1 * from Item where ComponentSubComponentId in (select ComponentSubComponentId from ComponentSubComponents where ComponentId =20448) and Instructions is not null ORDER BY Sequence desc";
+		String item = getStringFromQuery(sql);
+		return item;
+
+	}
+
+	public String getComponentItemBySequence(String componentId, String seqIndex)
+			throws Exception {
+		String sql = "select ItemId from Item where ComponentSubComponentId in (select ComponentSubComponentId from ComponentSubComponents where ComponentId ="
+				+ componentId
+				+ ") and Instructions is not null and Sequence="
+				+ seqIndex;
+		String item = getStringFromQuery(sql);
+		return item;
+	}
 }
