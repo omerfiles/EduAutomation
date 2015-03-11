@@ -338,9 +338,66 @@ public class StudentService extends GenericService {
 	public void createSingleProgressRecored(String studentId, String courseId,
 			String itemId, boolean executeQuery) throws Exception {
 		String sqlText = "exec SetProgress @CourseId=" + courseId + ",@ItemId="
-				+ itemId + ",@UserId=" + studentId;
+				+ itemId + ",@UserId=" + studentId
+				+ ",@Last=1,@Seconds=60,@Visited=1,@ComponentTypeId=1";
+		;
 		dbService.runStorePrecedure(sqlText, executeQuery, false);
 
+	}
+
+	public void setProgressForCourse(String courseId, String studentId)
+			throws Exception {
+		List<String> items = dbService.getCoursItems(courseId);
+		setProgressForItems(courseId, studentId, items);
+	}
+
+	private void setProgressForItems(String courseId, String studentId,
+			List<String> items) throws Exception {
+
+		for (int i = 0; i < items.size(); i++) {
+			createSingleProgressRecored(studentId, courseId, items.get(i),
+					false);
+		}
+
+	}
+
+	public void setProgressForUnit(String unitId, String courseId,
+			String StudentId) throws Exception {
+		List<String> items = dbService.getUnitItems(unitId);
+		setProgressForItems(courseId, StudentId, items);
+
+	}
+
+	public void setProgressForComponents(String unitId, String componentId,
+			String courseId, String studentId) throws Exception {
+		List<String> items = dbService.getComponentItems(componentId);
+		setProgressForItems(courseId, studentId, items);
+	}
+
+	public void setProgressForCompenentInSequence(String componentId,
+			String courseId, String studentId, String sequence)
+			throws Exception {
+		String itemId = dbService.getComponentItemBySequence(componentId,
+				sequence);
+		List<String> items = new ArrayList<>();
+		items.add(itemId);
+		setProgressForItems(courseId, studentId, items);
+	}
+
+	public void setProgressForComponentFirstItem(String componentId,
+			String courseId, String studentId) throws Exception {
+		String itemId = dbService.getLastItemInComponent(componentId);
+		List<String> items = new ArrayList<>();
+		items.add(itemId);
+		setProgressForItems(courseId, studentId, items);
+	}
+
+	public void setProgressForComponentLastItem(String componentId,
+			String courseId, String studentId) throws Exception {
+		String itemId = dbService.getFirstItemInComponent(componentId);
+		List<String> items = new ArrayList<>();
+		items.add(itemId);
+		setProgressForItems(courseId, studentId, items);
 	}
 
 	public void createAndRunSetSubmitTestSqlRecordsForStudent(String studentId,
@@ -585,4 +642,6 @@ public class StudentService extends GenericService {
 
 		return str;
 	}
+	
+	
 }

@@ -632,4 +632,59 @@ public class DbService extends GenericService {
 
 		return firstName;
 	}
+
+	public List<String> getCoursItems(String courseId) throws Exception {
+		String sql = "select ItemId from Item where ComponentSubComponentId in (select ComponentSubComponentId from ComponentSubComponents where ComponentId in(select ComponentId from UnitComponents where UnitId in (select unitId from units where CourseId="
+				+ courseId + ")))";
+		List<String> items = getArrayListFromQuery(sql, 1);
+		return items;
+
+	}
+
+	public List<String> getUnitItems(String unitId) throws Exception {
+		String sql = "select ItemId from Item where ComponentSubComponentId in (select ComponentSubComponentId from ComponentSubComponents where ComponentId in(select ComponentId from UnitComponents where UnitId="
+				+ unitId + "))";
+
+		List<String> items = getArrayListFromQuery(sql, 1);
+		return items;
+
+	}
+
+	public List<String> getCourseUnits(String courseId) throws Exception {
+		String sql = "select unitId from units where CourseId=" + courseId;
+		List<String> units = getArrayListFromQuery(sql, 1);
+		return units;
+
+	}
+
+	public List<String> getComponentItems(String componentsId) throws Exception {
+		String sql = "select ItemId from Item where ComponentSubComponentId in (select ComponentSubComponentId from ComponentSubComponents where ComponentId ="
+				+ componentsId + ")";
+		List<String> units = getArrayListFromQuery(sql, 1);
+		return units;
+	}
+
+	public String getFirstItemInComponent(String componentId) throws Exception {
+		String sql = "select TOP 1 * from Item where ComponentSubComponentId in (select ComponentSubComponentId from ComponentSubComponents where ComponentId =20448) and Instructions is not null ORDER BY Sequence asc";
+		String item = getStringFromQuery(sql);
+		return item;
+
+	}
+
+	public String getLastItemInComponent(String componentId) throws Exception {
+		String sql = "select TOP 1 * from Item where ComponentSubComponentId in (select ComponentSubComponentId from ComponentSubComponents where ComponentId =20448) and Instructions is not null ORDER BY Sequence desc";
+		String item = getStringFromQuery(sql);
+		return item;
+
+	}
+
+	public String getComponentItemBySequence(String componentId, String seqIndex)
+			throws Exception {
+		String sql = "select ItemId from Item where ComponentSubComponentId in (select ComponentSubComponentId from ComponentSubComponents where ComponentId ="
+				+ componentId
+				+ ") and Instructions is not null and Sequence="
+				+ seqIndex;
+		String item = getStringFromQuery(sql);
+		return item;
+	}
 }

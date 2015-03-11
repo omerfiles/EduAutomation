@@ -128,7 +128,7 @@ public class NewUxHomePage extends GenericPage {
 
 	public String getUnitName() throws Exception {
 		WebElement webElement = webDriver.waitForElement(
-				"//div[@class='carousel-inner']", ByTypes.xpath);
+				"//div[@class='carouselCaptions ng-scope']", ByTypes.xpath);
 		System.out.println(webDriver.getElementHTML(webElement));
 		return webElement.getText();
 
