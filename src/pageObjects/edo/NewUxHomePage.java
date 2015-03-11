@@ -46,7 +46,7 @@ public class NewUxHomePage extends GenericPage {
 		String expectedText = webDriver.waitForElement(
 				"//ul//li//a[@href='" + url + "']", ByTypes.xpath).getText();
 
-		testResultService.assertEquals(expectedText, label);
+		testResultService.assertEquals(label, expectedText);
 
 	}
 
@@ -203,4 +203,98 @@ public class NewUxHomePage extends GenericPage {
 				webDriver.getTimeout(), false);
 		return element.getText();
 	}
+	
+	
+	
+	public boolean isCourseCompletionWidgetExist() throws Exception {
+	
+		WebElement element = webDriver.waitForElement("//div[contains(@class,'home__studentWidgetCompletion')]", ByTypes.xpath);
+		
+	return element.isDisplayed();
+	
+	}
+	
+	public String getCourseCompletionWidgetUnitItem () throws Exception {
+	
+		WebElement element = webDriver.waitForElement("//div[@class = 'layout__pull itemUnit']", ByTypes.xpath);
+		
+	return element.getText();
+	
+	}
+	
+	public String getCourseCompletionWidgetLabel (String CompletionLabel) throws Exception {
+		
+		WebElement element = webDriver.waitForElement("//span[@title = '"+CompletionLabel+"']", ByTypes.xpath);
+		
+	return element.getText();
+	
+	}
+	
+	public boolean isScoreWidgetExist() throws Exception {
+		
+		WebElement element = webDriver.waitForElement("//div[contains(@class,'home__studentWidgetTestScores')]", ByTypes.xpath);
+		
+	return element.isDisplayed();
+	
+	}
+	
+	public String getScoreWidgetUnitItem () throws Exception {
+	
+		WebElement element = webDriver.waitForElement("//div[@class = 'layout__pull itemUnit']", ByTypes.xpath);
+		
+	return element.getText();
+	
+	}
+	
+	public String getScoreWidgetLabel (String ScoreLabel) throws Exception {
+		
+		WebElement element = webDriver.waitForElement("//span[@title = '"+ScoreLabel+"']", ByTypes.xpath);
+		
+	return element.getText();
+	
+	}
+	
+	public boolean isTimeWidgetExist() throws Exception {
+		
+		WebElement element = webDriver.waitForElement("//div[contains(@class,'home__studentWidgetTimeOnTask')]", ByTypes.xpath);
+		
+	return element.isDisplayed();
+	
+	}
+	
+	public String getTimeWidgetUnitsDelimiter () throws Exception {
+	
+		WebElement element = webDriver.waitForElement("//span[@class = 'home__studentWidgetHrMinDots']", ByTypes.xpath);
+		
+	return element.getText();
+	
+	}
+	
+	public String getTimeWidgetHoursLabel() throws Exception {
+		
+		WebElement element = webDriver.waitForElement("//span[1][@class = 'home__studentWidgetHrMinHrTxt']", ByTypes.xpath);
+		
+	return element.getText();
+	
+	}
+	
+	public String getTimeWidgetMinLabel() throws Exception {
+		
+		WebElement element = webDriver.waitForElement("//span[3][@class = 'home__studentWidgetHrMinHrTxt']", ByTypes.xpath);
+		
+	return element.getText();
+	
+	}
+	
+	public String getTimeWidgetLabel (String TimeLabel) throws Exception {
+		
+		WebElement element = webDriver.waitForElement("//span[@title = '"+TimeLabel+"']", ByTypes.xpath);
+		
+	return element.getText();
+	
+	}
+	
+
+	
+	
 }
