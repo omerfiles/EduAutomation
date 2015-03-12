@@ -1156,6 +1156,7 @@
 								<include>**/CustomFooterTests.java</include>
 								<include>**/NewUxLoginTestsClientSide.java</include>
 								<include>**/testNavigationBar.java</include>
+								<include>**/CourseStatisticsWidgets.java</include>
 								
 
 

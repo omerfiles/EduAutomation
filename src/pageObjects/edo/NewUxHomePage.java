@@ -69,9 +69,9 @@ public class NewUxHomePage extends GenericPage {
 		testResultService.assertEquals(
 				whiteLabel,
 				(webDriver.waitForElement("//span[@class='disclamer"
-						+ whiteLabel + "']", ByTypes.xpath).getText()));
+						+ whiteLabel + " ng-binding']", ByTypes.xpath).getText()));
 		
-		List<WebElement> WLList = webDriver.getElementsByXpath("//span[@class='disclamer" + whiteLabel + "']");
+		List<WebElement> WLList = webDriver.getElementsByXpath("//span[@class='disclamer" + whiteLabel + " ng-binding']");
 
 //		for (int i = 0; i < WLList.size(); i++)
 		for (int i = 0; i < 10; i++)	
@@ -84,22 +84,22 @@ public class NewUxHomePage extends GenericPage {
 
 		}
 
-		webDriver.waitForElement("//a[@title='Close']", ByTypes.xpath).click();
+		webDriver.waitForElement("//a[@title='Close window']", ByTypes.xpath).click();
 
 		webDriver.sleep(3);
 
 		this.clickOnLegalNotice();
 		int whiteLabelength = whiteLabel.length();
 		int startIndex = webDriver
-				.waitForElement("//div[@class='stext ng-binding']",
+				.waitForElement("//td[@class='ng-binding']",
 						ByTypes.xpath).getText()
 				.indexOf(whiteLabel + " Web Sites");
 		testResultService.assertEquals(
 				whiteLabel,
-				(webDriver.waitForElement("//div[@class='stext ng-binding']",
+				(webDriver.waitForElement("//td[@class='ng-binding']",
 						ByTypes.xpath).getText().substring(startIndex,
 						startIndex + whiteLabelength)));
-		webDriver.waitForElement("//a[@title='Close']", ByTypes.xpath).click();
+		webDriver.waitForElement("//a[@title='Close window']", ByTypes.xpath).click();
 
 	}
 
