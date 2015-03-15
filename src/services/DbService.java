@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Random;
 
 import javax.sql.DataSource;
+import javax.sql.rowset.CachedRowSet;
 
 import jsystem.framework.report.Reporter;
 import jsystem.framework.report.Reporter.EnumReportLevel;
@@ -44,7 +45,7 @@ public class DbService extends GenericService {
 	// "jdbc:sqlserver://BACKQA:1433;databaseName=EDODOTNet3;";
 	private String db_userid = null;
 	private String db_password = null;
-	private final int MAX_DB_TIMEOUT = 120;
+	protected int MAX_DB_TIMEOUT = 120;
 
 	private boolean useOfflineDB;
 
@@ -59,7 +60,7 @@ public class DbService extends GenericService {
 	}
 
 	@Autowired
-	Configuration configuration;
+	protected Configuration configuration;
 
 	// private String db_connect_string = configuration
 	// .getProperty("db.connection");
@@ -70,7 +71,7 @@ public class DbService extends GenericService {
 	InstitutionService institutionService;
 
 	@Autowired
-	services.Reporter report;
+	protected services.Reporter report;
 
 	Connection conn;
 
@@ -120,6 +121,38 @@ public class DbService extends GenericService {
 			}
 		}
 
+	}
+
+	public List<String[]> getListFromSP(String sp, int columns)
+			throws Exception {
+		List<String[]> list = new ArrayList<String[]>();
+		try {
+			conn = getConnection();
+			PreparedStatement pps = conn.prepareStatement(sp);
+			System.out.println("SP was: " + sp);
+			pps.setEscapeProcessing(true);
+			pps.setQueryTimeout(60);
+//			pps.
+
+			// pps.getMoreResults();
+			ResultSet resultSet = pps.executeQuery();
+			System.out.println(resultSet.first());
+
+			while (resultSet.next()) {
+
+				String[] strArr = new String[columns];
+				for (int i = 1; i <= columns; i++) {
+					strArr[i - 1] = resultSet.getString(i);
+				}
+				list.add(strArr);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			conn.close();
+		}
+		return list;
 	}
 
 	public List<String[]> getStringListFromQuery(String sql, int intervals,
@@ -357,7 +390,7 @@ public class DbService extends GenericService {
 		// institutionService.getInstitution().getInstitutionId();
 		String sql = "select UserId from users where UserName='" + userName
 				+ "' and institutionid=" + institutionId;
-		String result = getStringFromQuery(sql);
+		String result = getStringFromQuery(sql,MAX_DB_TIMEOUT,true);
 		return result;
 	}
 
@@ -379,7 +412,7 @@ public class DbService extends GenericService {
 
 	public String getInstituteIdByName(String name) throws Exception {
 		String sql = "select institutionId from institutions where name='"
-				+ name + "'";
+				+ name + "' and visible=1";
 		String result = getStringFromQuery(sql);
 		return result;
 	}
@@ -610,11 +643,12 @@ public class DbService extends GenericService {
 		}
 	}
 
-	public List<String> getUnitNamesByCourse(String courseId) throws Exception {
-		String sql = "	select UnitName from Units where CourseId=" + courseId
+	public List<String[]> getUnitNamesByCourse(String courseId)
+			throws Exception {
+		String sql = "	select UnitName,unitId from Units where CourseId=" + courseId
 				+ " order by Sequence";
 
-		return getArrayListFromQuery(sql, 1);
+		return getStringListFromQuery(sql, 1, 2);
 	}
 
 	public void setInstitutionLastOfflineSyncToNull(String institutionId)
@@ -633,13 +667,23 @@ public class DbService extends GenericService {
 		return firstName;
 	}
 
-	public List<String> getCoursItems(String courseId) throws Exception {
+	public List<String> getCourseItems(String courseId) throws Exception {
 		String sql = "select ItemId from Item where ComponentSubComponentId in (select ComponentSubComponentId from ComponentSubComponents where ComponentId in(select ComponentId from UnitComponents where UnitId in (select unitId from units where CourseId="
 				+ courseId + ")))";
 		List<String> items = getArrayListFromQuery(sql, 1);
 		return items;
 
 	}
+	
+	public List<String> getCourseTestItems(String courseId) throws Exception {
+		String sql = "select ItemId from Item where ComponentSubComponentId in (select ComponentSubComponentId from ComponentSubComponents where ComponentId in(select ComponentId from UnitComponents where UnitId in (select unitId from units where CourseId="
+				+ courseId + ")))";
+		List<String> items = getArrayListFromQuery(sql, 1);
+		return items;
+
+	}
+	
+	
 
 	public List<String> getUnitItems(String unitId) throws Exception {
 		String sql = "select ItemId from Item where ComponentSubComponentId in (select ComponentSubComponentId from ComponentSubComponents where ComponentId in(select ComponentId from UnitComponents where UnitId="
@@ -664,6 +708,13 @@ public class DbService extends GenericService {
 		return units;
 	}
 
+	public List<String[]> getComponentDetailsByUnitId(String unitId)
+			throws Exception {
+		String sql = " select Name,ComponentId from Component where ComponentId in( select ComponentId from UnitComponents where UnitId="
+				+ unitId + ")";
+		return getStringListFromQuery(sql, 1, 2);
+	}
+
 	public String getFirstItemInComponent(String componentId) throws Exception {
 		String sql = "select TOP 1 * from Item where ComponentSubComponentId in (select ComponentSubComponentId from ComponentSubComponents where ComponentId =20448) and Instructions is not null ORDER BY Sequence asc";
 		String item = getStringFromQuery(sql);
@@ -686,5 +737,54 @@ public class DbService extends GenericService {
 				+ seqIndex;
 		String item = getStringFromQuery(sql);
 		return item;
+	}
+
+	public List<String[]> getInstitutionCourses(String institutionId)
+			throws Exception {
+		String sql = " select Name from Course where CourseId in(select courseId from PackageDetails where PackageId in ( select PackageId from InstitutionPackages where InstitutionId="
+				+ institutionId
+				+ "  and EndDate<CURRENT_TIMESTAMP)) order by Sequence";
+		System.out.println(sql);
+		// return getArrayListFromQuery(sql, 1);
+		return getStringListFromQuery(sql, 1, 1);
+	}
+
+	public String getUnitIdByName(String unitName) throws Exception {
+		String sql = " select unitId from Units where unitName='" + unitName
+				+ "'";
+
+		return getStringFromQuery(sql);
+	}
+
+	public List<String[]> getSubComponentsDetailsByComponentId(
+			String componentId) throws Exception {
+		String sql = "select SubComponent.Name,ComponentSubComponents.ComponentSubComponentId from SubComponent,ComponentSubComponents where ComponentSubComponents.ComponentId="
+				+ componentId
+				+ " and ComponentSubComponents.SubComponentId=SubComponent.SubComponentId order by SubComponent.Sequence";
+		List<String[]> subComponents = getStringListFromQuery(sql, 1, 2);
+		return subComponents;
+	}
+
+	public List<String> getSubComponentItems(String subComponentId)
+			throws Exception {
+		String sql = " select itemId from item where ComponentSubComponentId="
+				+ subComponentId;
+		return getArrayListFromQuery(sql, 1);
+	}
+
+	public String getUserClassId(String studentId) throws Exception {
+		// TODO Auto-generated method stub
+		String sql = " select classId from ClassUsers where UserId="
+				+ studentId;
+		return getStringFromQuery(sql,10,true);
+	}
+
+	public List<String[]> getClassCourses(String classId) throws Exception {
+		// String sp = " exec GetClassCoursePlan " + classId;
+		// return getListFromSP(sp,1);
+
+		String sql = " select Name,CourseId from Course where CourseId in(select CourseId from PackageDetails where PackageId in(select PackageId from InstitutionPackages where InstitutionPackageId in( select InstitutionPackageId from ClassAssignedPackages where ClassId="
+				+ classId + " )))  order by Sequence";
+		return getStringListFromQuery(sql, 1, 2);
 	}
 }

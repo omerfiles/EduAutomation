@@ -83,7 +83,7 @@ public class DashboardHeaderTests extends DashboardBasicTest {
 	@TestCaseParams(testCaseID = { "17493" })
 	public void testNavigateToDashboardUsingTheHomeButtonAsSchoolAdmin()
 			throws Exception {
-		startStep("Login as a teacher and open the dashboard");
+		startStep("Login as a school admin and open the dashboard");
 		EdoHomePage edoHomePage = pageHelper.loginAsSchoolAdmin();
 		sleep(5);
 		webDriver.closeAlertByAccept();

@@ -43,7 +43,12 @@ public class Configuration extends GenericService {
 	@Autowired
 	NetService netService;
 
-	public Configuration() {
+	public Configuration()  {
+		System.out.println("Setup of Configuration");
+		LoadConfig();
+	}
+
+	public void LoadConfig() {
 		InputStream input = null;
 		InputStream globaConfigInput = null;
 
@@ -112,8 +117,8 @@ public class Configuration extends GenericService {
 	private static final String LIST_FORMAT = "       %1$-70s| %2$s%n";
 	public static final String OVERRIDE_PROPERTIES_FILENAME = "";
 
-	private Properties properties = new Properties();
-	private Properties globalProperties = new Properties();
+	protected Properties properties = new Properties();
+	protected Properties globalProperties = new Properties();
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(Configuration.class);

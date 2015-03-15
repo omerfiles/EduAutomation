@@ -1084,8 +1084,13 @@ public abstract class GenericWebDriver extends GenericService {
 
 	public void selectElementFromComboBox(String comboboxName,
 			String optionValue) throws Exception {
-		waitUntilComboBoxIsPopulated(comboboxName);
-		selectElementFromComboBox(comboboxName, optionValue, ByTypes.id, false);
+		selectElementFromComboBox(comboboxName, ByTypes.id, optionValue);
+	}
+
+	public void selectElementFromComboBox(String comboboxName, ByTypes byType,
+			String optionValue) throws Exception {
+		waitUntilComboBoxIsPopulated(comboboxName, byType);
+		selectElementFromComboBox(comboboxName, optionValue, byType, false);
 	}
 
 	public void selectElementFromComboBoByIndex(String comboboxName, int index)
@@ -1266,8 +1271,14 @@ public abstract class GenericWebDriver extends GenericService {
 	}
 
 	public void waitUntilComboBoxIsPopulated(String comboBoxId)
+
+	throws Exception {
+		waitUntilComboBoxIsPopulated(comboBoxId,ByTypes.id);
+	}
+
+	public void waitUntilComboBoxIsPopulated(String comboBoxId, ByTypes byType)
 			throws Exception {
-		final Select combo = new Select(waitForElement(comboBoxId, ByTypes.id));
+		final Select combo = new Select(waitForElement(comboBoxId, byType));
 		try {
 			new FluentWait<WebDriver>(webDriver)
 					.withTimeout(20, TimeUnit.SECONDS)
@@ -1611,6 +1622,20 @@ public abstract class GenericWebDriver extends GenericService {
 			}
 		}
 		return currentUrl;
+	}
+
+	public void setCheckBoxState(boolean setChecked, String id)
+			throws Exception {
+
+		WebElement checkboxElemnt = waitForElement(id, ByTypes.id);
+		boolean state = checkboxElemnt.isSelected();
+		if (state == false && setChecked == true) {
+			// click to check
+			checkboxElemnt.click();
+		} else if (state == true && setChecked == false) {
+			// click to uncheck
+			checkboxElemnt.click();
+		}
 	}
 
 }

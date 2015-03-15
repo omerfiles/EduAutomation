@@ -204,6 +204,7 @@ public class PageHelperService extends GenericTestObject {
 			edoLoginPage.OpenPage(getSutAndSubDomain());
 			schoolAdmin.setPassword(configuration
 					.getProperty("schoolAdmin.pass"));
+			schoolAdmin.setUserName(configuration.getProperty("schoolAdmin.user"));
 			setUserLoginToNull(dbService.getUserIdByUserName(
 					schoolAdmin.getUserName(),
 					autoInstitution.getInstitutionId()));

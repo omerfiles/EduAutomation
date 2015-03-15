@@ -2,19 +2,27 @@ package pageObjects.tms;
 
 import java.util.Calendar;
 
+import jsystem.framework.report.Reporter.EnumReportLevel;
+
 import org.junit.Assert;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
+import Enums.AutoParams;
 import Enums.ByTypes;
+import Enums.SchoolImpTypes;
 import Objects.Institution;
+import Objects.SchoolAdmin;
+import Objects.UserObject;
 import drivers.GenericWebDriver;
 import pageObjects.EdoHomePage;
 import pageObjects.GenericPage;
 import services.TestResultService;
 
 public class TmsHomePage extends GenericPage {
+
+	private String mainWindow;
 
 	public TmsHomePage(GenericWebDriver webDriver,
 			TestResultService testResultService) {
@@ -297,7 +305,8 @@ public class TmsHomePage extends GenericPage {
 	public TmsHomePage clickOnAddNewSchool() throws Exception {
 		webDriver.waitForElementAndClick("//input[@value='Add New School']",
 				ByTypes.xpath);
-		webDriver.switchToNewWindow();
+
+		mainWindow = webDriver.switchToNewWindow();
 		Thread.sleep(1000);
 		return this;
 
@@ -312,27 +321,63 @@ public class TmsHomePage extends GenericPage {
 				institution.getPhone());
 		webDriver.waitForElement("Dname", ByTypes.id).sendKeys(
 				institution.getHost());
+
+		webDriver.waitForElement("Address", ByTypes.name).sendKeys(
+				institution.getAddress());
+
+		webDriver.selectElementFromComboBox("CountryCode", ByTypes.name,
+				institution.getCountry());
+
 		webDriver.waitForElement("NumOfCustomComp", ByTypes.id).sendKeys(
 				institution.getNumberOfComonents());
-		webDriver.waitForElement("NumOfUsers", ByTypes.id).sendKeys(
-				institution.getNumberOfUsers());
-		webDriver.waitForElement("NumOfConc", ByTypes.id).sendKeys(
-				institution.getConcurrentUsers());
-		webDriver.waitForElement("impType", ByTypes.id).click();
-		String implType = null;
-		switch (institution.getSchoolImpType()) {
-		case additional:
-			implType = "3";
-			;
-			break;
-		case blended:
-			implType = "1";
-			;
-			break;
-		case distance:
-			implType = "2";
-			break;
+		if (institution.getNumberOfUsers().equals("Unlimited")) {
+			webDriver.setCheckBoxState(true, "UsersLimitation");
+		} else {
+			webDriver.waitForElement("NumOfUsers", ByTypes.id).sendKeys(
+					institution.getNumberOfUsers());
 		}
+
+		if (institution.getConcurrentUsers().equals("Unlimited")) {
+			webDriver.setCheckBoxState(true, "ConcLimitation");
+		} else {
+			webDriver.waitForElement("NumOfConc", ByTypes.id).sendKeys(
+					institution.getConcurrentUsers());
+		}
+
+		if (institution.getActiveLicences().equals("Unlimited")) {
+			webDriver.setCheckBoxState(true, "ActLicLimitation");
+		} else {
+			webDriver.waitForElement("NumOfActLic", ByTypes.id).sendKeys(
+					institution.getActiveLicences());
+		}
+		webDriver.waitForElement("impType", ByTypes.id).click();
+
+		webDriver.waitForElement("contactUsVal", ByTypes.id).sendKeys(
+				institution.getEmail());
+		String implType = null;
+
+		if (institution.getSchoolImpType().equals("Blended")) {
+			implType = "1";
+		} else if (institution.getSchoolImpType().equals("Distance")) {
+			implType = "2";
+		} else if (institution.getSchoolImpType().equals("Additional")) {
+			implType = "3";
+		}
+
+		// switch (institution.getSchoolImpType()) {
+		// case additional:
+		// implType = "3";
+		// ;
+		// break;
+		// case blended:
+		// implType = "1";
+		// ;
+		// break;
+		// case distance:
+		// implType = "2";
+		// break;
+		// }
+
 		webDriver.waitForElement(
 				"//select[@id='impType']//option[@value=" + implType + "]",
 				ByTypes.xpath).click();
@@ -342,18 +387,21 @@ public class TmsHomePage extends GenericPage {
 		webDriver.switchToFrame("FormFrame");
 
 		webDriver.waitForElement("FirstName", ByTypes.name).sendKeys(
-				institution.getSchoolAdmin().getName());
+				institution.getSchoolAdmin().getFirstName());
 		webDriver.waitForElement("LastName", ByTypes.name).sendKeys(
-				institution.getSchoolAdmin().getName());
+				institution.getSchoolAdmin().getLastname());
 		webDriver.waitForElement("UserName", ByTypes.name).sendKeys(
 				institution.getSchoolAdmin().getUserName());
 		webDriver.waitForElement("Password", ByTypes.name).sendKeys(
 				institution.getSchoolAdmin().getPassword());
 		webDriver.waitForElement("Email", ByTypes.name).sendKeys(
 				institution.getSchoolAdmin().getEmail());
+		webDriver.waitForElement("SalesManager", ByTypes.name).sendKeys(
+				institution.getSalesManager());
 		webDriver.switchToTopMostFrame();
 		webDriver.waitForElement("Submitbutton", ByTypes.name).click();
 
+		// webDriver.switchToTopMostFrame();
 		return this;
 
 	}
@@ -937,6 +985,59 @@ public class TmsHomePage extends GenericPage {
 
 	public void clickOnRegistration() throws Exception {
 		webDriver.waitForElement("Registration", ByTypes.linkText).click();
-		
+
+	}
+
+	public void createInstitution(String name, String phone,
+			String concurrentUsers, String numOfComponents,
+			String numberOfUsers, String impType, String host,
+			String adminUserName, String adminPass, String adminEmail,
+			String address, String country, String activeLicenses,
+			String adminFirstName, String adminLastName, String contactUsEmail,
+			String salesManager) throws Exception {
+
+		clickOnAddNewSchool();
+
+		Institution institution = new Institution();
+		institution.setName(name);
+
+		institution.setPhone(phone);
+		institution.setConcurrentUsers(concurrentUsers);
+		institution.setNumberOfComonents(numOfComponents);
+		institution.setNumberOfUsers(numberOfUsers);
+		institution.setSchoolImpType(impType);
+		institution.setHost(host);
+		institution.setSalesManager(salesManager);
+		institution.setActiveLicenes(activeLicenses);
+		institution.setCountry(country);
+		institution.setAddress(address);
+		SchoolAdmin schoolAdmin = new SchoolAdmin();
+		// String adminUserName = adminUserName;
+		schoolAdmin.setUserName(adminUserName);
+		schoolAdmin.setName(adminFirstName);
+		schoolAdmin.setPassword(adminPass);
+		schoolAdmin.setEmail(adminEmail);
+		schoolAdmin.setFirstName(adminFirstName);
+		schoolAdmin.setLastname(adminLastName);
+		institution.setSchoolAdmin(schoolAdmin);
+		institution.setEmail(contactUsEmail);
+		enterNewSchoolDetails(institution);
+
+		System.out.println("Created institution: " + institution.getName());
+
+		webDriver.switchToMainWindow(mainWindow);
+		webDriver.switchToFrame("mainFrame");
+		// webDriver.switchToTopMostFrame();
+
+		// dbService.verifyInstitutionCreated(institution);
+
+	}
+
+	public String getMainWindow() {
+		return mainWindow;
+	}
+
+	public void setMainWindow(String mainWindow) {
+		this.mainWindow = mainWindow;
 	}
 }

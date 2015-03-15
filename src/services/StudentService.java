@@ -9,6 +9,7 @@ import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import services.AppServices.AppDbService;
 import Enums.InstallationType;
 import Enums.StudentObjectType;
 import Objects.StudentObject;
@@ -22,7 +23,7 @@ public class StudentService extends GenericService {
 	private static final String SQL_FOR_TESTS = "select  UserId, ComponentSubComponentId,CourseId,Grade,LastUpdate,Average,TimesTaken from TestResults  where userId=";
 
 	@Autowired
-	DbService dbService;
+	protected DbService dbService;
 
 	@Autowired
 	TextService textService;
@@ -347,7 +348,7 @@ public class StudentService extends GenericService {
 
 	public void setProgressForCourse(String courseId, String studentId)
 			throws Exception {
-		List<String> items = dbService.getCoursItems(courseId);
+		List<String> items = dbService.getCourseItems(courseId);
 		setProgressForItems(courseId, studentId, items);
 	}
 
@@ -366,6 +367,12 @@ public class StudentService extends GenericService {
 		List<String> items = dbService.getUnitItems(unitId);
 		setProgressForItems(courseId, StudentId, items);
 
+	}
+
+	public void setProgressForSubComponent(String subComponentId,
+			String studentId, String courseId) throws Exception {
+		List<String> items = dbService.getSubComponentItems(subComponentId);
+		setProgressForItems(courseId, studentId, items);
 	}
 
 	public void setProgressForComponents(String unitId, String componentId,
@@ -632,6 +639,96 @@ public class StudentService extends GenericService {
 	// StudentTest studentTest
 	// }
 
+	public void submitTest(String studentId, String unitId, String componentId,
+			List<String> items) throws Exception {
+		submitTest(studentId, unitId, componentId, items, "100",null);
+	}
+
+	public void submitTest(String studentId, String unitId, String componentId,
+			List<String> items, String grade,List<String>marksList) throws Exception {
+
+		String testItems = "";
+		String visitedItems = "";
+		int index = 1;
+		// int grade = grade;
+		String marks = "";
+
+		
+			for (int i = 0; i < items.size(); i++) {
+				testItems += items.get(i) + "|";
+				visitedItems += "[" + index + "]";
+				if(marksList.equals(null)){
+				marks += "100|";
+				}
+				else{
+					marks+=marksList.get(i)+"|";
+				}
+
+				index++;
+			}
+		
+		
+		String sql = "exec SubmitTest @UserId="
+				+ studentId
+				+ ",@UnitId="
+				+ unitId
+				+ ",@ComponentId="
+				+ componentId
+				+ ",@Grade="
+				+ grade
+				+ ",@Marks='"
+				+ marks
+				+ "',@SetId='"
+				+ testItems
+				+ "',@VisitedItems='"
+				+ visitedItems
+				+ "',@TimeOver=0,@UserState=0x7B2261223A5B7B2269436F6465223A22623372706C6F74303031222C22694964223A32333237372C22695479706,@TestTime=3200";
+		System.out.println(sql);
+		dbService.runStorePrecedure(sql);
+
+	}
+
+	public List<String> getMarksByGrade(int grade, int length) {
+		// TODO Auto-generated method stub
+		List<String> marks = new ArrayList<String>();
+		double level = 100 / length;
+		for (double i = 1; i < length + 1; i++) {
+			if (i * level <= grade) {
+				marks.add("100");
+			} else {
+				marks.add("0");
+			}
+		}
+		System.out.println(marks.toString());
+		return marks;
+
+	}
+
+	public List<String> getCourseUnits(String courseId) throws Exception {
+		String sql = "select unitId from units where CourseId=" + courseId;
+		return dbService.getArrayListFromQuery(sql, 1);
+	}
+
+	public List<String> getUnitComponents(String unitId) throws Exception {
+		String sql = "select ComponentId from UnitComponents where UnitId="
+				+ unitId;
+		return dbService.getArrayListFromQuery(sql, 1);
+	}
+
+	public List<String> getCourseTestComponents(String courseId)
+			throws Exception {
+		String sql = "(select ComponentId from ComponentSubComponents where SubComponentId=3 and ComponentId in(select ComponentId from UnitComponents where UnitId in (select unitId from units where CourseId="
+				+ courseId + ")))";
+		return dbService.getArrayListFromQuery(sql, 1);
+	}
+
+	public List<String> getComponentTestItems(String componentId)
+			throws Exception {
+		String sql = "select itemId from item where ComponentSubComponentId=(select ComponentSubComponentId from ComponentSubComponents where SubComponentId=3 and ComponentId="
+				+ componentId + ")";
+		return dbService.getArrayListFromQuery(sql, 1);
+	}
+
 	private String generateVisitedItemsString(int numbderOfItems) {
 		// TODO Auto-generated method stub
 		String str = "";
@@ -642,6 +739,6 @@ public class StudentService extends GenericService {
 
 		return str;
 	}
-	
+
 	
 }

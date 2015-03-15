@@ -200,7 +200,7 @@ public class TmsTests extends EdusoftWebTest {
 		institution.setConcurrentUsers("100");
 		institution.setNumberOfComonents("20");
 		institution.setNumberOfUsers("100");
-		institution.setSchoolImpType(SchoolImpTypes.blended);
+		institution.setSchoolImpType("Blended");
 		institution.setHost(configuration.getAutomationParam(
 				AutoParams.sutUrl.toString(),
 				AutoParams.sutUrl.toString() + "CMD").replace("http://", "")
@@ -293,7 +293,7 @@ public class TmsTests extends EdusoftWebTest {
 		institution.setConcurrentUsers("100");
 		institution.setNumberOfComonents("20");
 		institution.setNumberOfUsers("100");
-		institution.setSchoolImpType(SchoolImpTypes.blended);
+		institution.setSchoolImpType("Blended");
 		institution.setHost(configuration.getProperty("sut.url").replace(
 				"http://", "")
 				+ institution.getName());
