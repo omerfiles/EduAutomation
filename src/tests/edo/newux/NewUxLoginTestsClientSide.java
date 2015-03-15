@@ -12,6 +12,7 @@ import drivers.GenericWebDriver;
 import Enums.ByTypes;
 import Interfaces.TestCaseParams;
 import pageObjects.edo.NewUXLoginPage;
+import pageObjects.tms.DashboardPage;
 import tests.misc.EdusoftWebTest;
 
 public class NewUxLoginTestsClientSide extends BasicNewUxTest {
@@ -108,6 +109,29 @@ public class NewUxLoginTestsClientSide extends BasicNewUxTest {
 	}
 
 	@Test
+	@TestCaseParams(testCaseID = { "18236" }, envFile = "newux.properties")
+	public void testTeacherValidUserNameAndPassword() throws Exception {
+		report.report("Open New UX login page");
+		loginPage = new NewUXLoginPage(webDriver, testResultService);
+		pageHelper.setUserLoginToNull(dbService.getUserIdByUserName(
+				configuration.getProperty("teacher.username"),
+				configuration.getProperty("institution.id")));
+		
+		
+		report.report("Enter Teacher's user name and password");
+		loginPage.enterTeacherUserAndPassword();
+		
+		
+		report.report("Check that the dashbaord is displayed");
+		DashboardPage dashboardPage = new DashboardPage(webDriver,
+				testResultService);
+		dashboardPage.swithchToMainFrame();
+		testResultService.assertEquals(true,
+				dashboardPage.getDashboardNavBarDisplayStatus(),
+				"Dashboard is not displayed");
+	}
+
+	@Test
 	@TestCaseParams(testCaseID = { "18280" })
 	public void testNoAbilityFor2ParallelSessions() throws Exception {
 
@@ -144,7 +168,7 @@ public class NewUxLoginTestsClientSide extends BasicNewUxTest {
 			loginPageFF.clickOnSubmit();
 
 			report.report("Check for popup message");
-//			System.out.println(firefoxWebDriver.getPopUpText());
+			// System.out.println(firefoxWebDriver.getPopUpText());
 			testResultService.assertEquals("this user already in use",
 					firefoxWebDriver.getPopUpText(),
 					"Popup message about parallal user is not displayed");

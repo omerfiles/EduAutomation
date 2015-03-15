@@ -360,4 +360,9 @@ public class Configuration extends GenericService {
 		logServer = logServer.replace("\\\\", "");
 		return logServer;
 	}
+
+	public String getSutUrl() {
+		// TODO Auto-generated method stub
+		return getProperty("sut.url");
+	}
 }

@@ -2,6 +2,7 @@ package services;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -55,7 +56,7 @@ public class PageHelperService extends GenericTestObject {
 
 	@Autowired
 	DbService dbService;
-	
+
 	@Autowired
 	HeadlessBrowser headlessBrowser;
 
@@ -204,7 +205,8 @@ public class PageHelperService extends GenericTestObject {
 			edoLoginPage.OpenPage(getSutAndSubDomain());
 			schoolAdmin.setPassword(configuration
 					.getProperty("schoolAdmin.pass"));
-			schoolAdmin.setUserName(configuration.getProperty("schoolAdmin.user"));
+			schoolAdmin.setUserName(configuration
+					.getProperty("schoolAdmin.user"));
 			setUserLoginToNull(dbService.getUserIdByUserName(
 					schoolAdmin.getUserName(),
 					autoInstitution.getInstitutionId()));
@@ -494,6 +496,20 @@ public class PageHelperService extends GenericTestObject {
 
 	}
 
+	public void createClassUsingSP(String sut, String className,
+			String institutionId, String packageName)
+			throws Exception {
+		
+//		String request = sut + "/api/template/CreateClass.aspx?InstId="
+//				+ institutionId + "&ClassName=" + className + "&PackageName="
+//				+ packageName + "&startDate=" + startDate;
+//		System.out.println(request);
+//		netService.sendHttpRequest(request);
+		
+		String sp="APICreateClass "+institutionId+",'"+className+"','"+packageName+"','"+getDateString()+"'";
+		dbService.runStorePrecedure(sp,true,false);
+	}
+
 	public boolean[] randomizeCorrectAndIncorrectAnswers(int answersNumber) {
 		int rand = dbService.getRandonNumber(1, 1000);
 		System.out.println("Randon number is: " + rand);
@@ -541,7 +557,7 @@ public class PageHelperService extends GenericTestObject {
 		System.out.println("Seconds left: " + myDuration.getStandardSeconds());
 		Thread.sleep(myDuration.getMillis() + 60000);
 	}
-	
+
 	public NewUXLoginPage openCILatestLoginPage() throws Exception {
 		headlessBrowser.init(webDriver.getRemoteMachine(), false);
 
@@ -551,14 +567,14 @@ public class PageHelperService extends GenericTestObject {
 				.waitForElement(
 						"//div[@class='container']//table//tbody//tr[1]//td//div[1]//div//a",
 						ByTypes.xpath).getAttribute("href");
-		link=link+"/qa";
+		link = link + "/qa";
 		webDriver.openUrl(link);
 		return new NewUXLoginPage(webDriver, testResultService);
 	}
 
 	public NewUxHomePage openCILatestUXLink() throws Exception {
 
-//		HeadlessBrowser headlessBrowser = new HeadlessBrowser();
+		// HeadlessBrowser headlessBrowser = new HeadlessBrowser();
 		headlessBrowser.init(webDriver.getRemoteMachine(), false);
 
 		headlessBrowser.openUrl("http://vstf2013:9010/WebUX");
@@ -574,7 +590,7 @@ public class PageHelperService extends GenericTestObject {
 				.waitForElement(
 						"//div[@class='container']//table//tbody//tr[1]//td//div[1]//div//a",
 						ByTypes.xpath).getAttribute("href");
-		link=link.replace("qa", "automation");
+		link = link.replace("qa", "automation");
 		return link;
 	}
 
@@ -583,5 +599,15 @@ public class PageHelperService extends GenericTestObject {
 		webDriver.openUrl("http://ci-srv:9010/WebUX_CI_" + version + "/#/home");
 		return new NewUxHomePage(webDriver, testResultService);
 
+	}
+
+	public String getDateString() {
+		java.text.SimpleDateFormat df1 = new java.text.SimpleDateFormat("MM");
+		
+		String str="";
+		str+=Calendar.getInstance().get(Calendar.YEAR);
+		str+=df1.format(Calendar.getInstance().getTime());
+		str+=Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+		return str;
 	}
 }

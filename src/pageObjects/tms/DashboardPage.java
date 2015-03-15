@@ -337,5 +337,9 @@ public class DashboardPage extends TmsHomePage {
 				.click();
 
 	}
+	public boolean getDashboardNavBarDisplayStatus() throws Exception{
+	return	webDriver.waitForElement("tmsDashNav", ByTypes.id)
+		.isDisplayed();
+	}
 
 }

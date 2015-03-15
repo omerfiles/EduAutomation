@@ -63,7 +63,7 @@ public class NewUXLoginPage extends GenericPage {
 
 	public boolean isSubmitButtonEnabled() throws Exception {
 
-//		boolean result = true;
+		// boolean result = true;
 		try {
 
 			WebElement element = webDriver.waitForElement(SUBMIT, ByTypes.id,
@@ -105,6 +105,12 @@ public class NewUXLoginPage extends GenericPage {
 		clickOnSubmit();
 
 		return new NewUxHomePage(webDriver, testResultService);
+	}
+
+	public void enterTeacherUserAndPassword() throws Exception {
+		enterUserName(configuration.getProperty("teacher.username"));
+		enterPassowrd(configuration.getProperty("teacher.password"));
+		clickOnSubmit();
 	}
 
 	// public String getUserNameErrorMessage()throws Exception{
