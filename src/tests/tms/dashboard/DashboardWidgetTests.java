@@ -211,7 +211,7 @@ public class DashboardWidgetTests extends DashboardBasicTest {
 		startStep("Select class1 and Basic 1");
 
 		// get all units in course
-		List<String> unitNames = dbService.getUnitNamesByCourse(dbService
+		List<String[]> unitNames = dbService.getUnitNamesByCourse(dbService
 				.getCourseIdByName("Basic 2 V1"));
 		boolean tpsButtonClicked = false;
 		for (int i = 0; i < unitNames.size(); i++) {
