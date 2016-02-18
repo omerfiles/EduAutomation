@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 import drivers.GenericWebDriver;
 import pageObjects.EdoHomePage;
 import pageObjects.EdoLoginPage;
-import pageObjects.edo.newUxHomePage;
+import pageObjects.edo.NewUxHomePage;
 import pageObjects.tms.TmsHomePage;
 import pageObjects.tms.TmsLoginPage;
 import Enums.AutoParams;
@@ -535,7 +535,7 @@ public class PageHelperService extends GenericTestObject {
 		System.out.println("Seconds left: " + myDuration.getStandardSeconds());
 		Thread.sleep(myDuration.getMillis() + 60000);
 	}
-	public newUxHomePage openCILatestUXLink() throws Exception {
+	public NewUxHomePage openCILatestUXLink() throws Exception {
 		webDriver.openUrl("http://vstf2013:9010/WebUX");
 
 	String link=	webDriver
@@ -543,7 +543,16 @@ public class PageHelperService extends GenericTestObject {
 						"//div[@class='container']//table//tbody//tr[1]//td//div[1]//div//a",
 						ByTypes.xpath).getAttribute("href");
 		webDriver.openUrl(link);
-		return new newUxHomePage(webDriver, testResultService);
+		return new NewUxHomePage(webDriver, testResultService);
 //		System.out.println("opened");
+	}
+	
+	public NewUxHomePage openCILatestUXLink(String version) throws Exception {
+		
+		webDriver.openUrl("http://ci-srv:9010/WebUX_CI_"+version+"/#/home");
+		return new NewUxHomePage(webDriver, testResultService);
+		
+		
+		
 	}
 }
